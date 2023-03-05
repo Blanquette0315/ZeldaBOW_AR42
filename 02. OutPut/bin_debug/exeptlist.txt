@@ -1,0 +1,5 @@
+CScriptMgr.h
+CScriptMgr.cpp
+Scriptdefine.h
+Scriptstruct.h
+ScriptFunc.h

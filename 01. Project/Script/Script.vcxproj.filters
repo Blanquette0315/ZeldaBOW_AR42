@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Default">
+      <UniqueIdentifier>{5fb1d9d1-7d9d-43ea-a359-73efb2208fda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{fcca8f6f-f5d1-4208-a54b-8b2a186e4109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ScriptMgr">
+      <UniqueIdentifier>{a81e4175-ff5a-4f4e-b463-42820809320a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{e95e5319-d12b-4352-ab82-ccf7e5eef93b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="CScriptMgr.h">
+      <Filter>ScriptMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Scriptdefine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Scriptstruct.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptFunc.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerScript.h" />
+    <ClInclude Include="CMonsterScript.h" />
+    <ClInclude Include="CMissileScript.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CScriptMgr.cpp">
+      <Filter>ScriptMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptFunc.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerScript.cpp" />
+    <ClCompile Include="CMonsterScript.cpp" />
+    <ClCompile Include="CMissileScript.cpp" />
+  </ItemGroup>
+</Project>

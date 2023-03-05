@@ -1,0 +1,18 @@
+0.98823, 0.8784, 0.88627
+252,206,226 WindowBg
+
+
+252, 115, 153 (TitleBgActive)
+
+253, 183, 186 (MenuBarBg)
+
+
+
+Ptr<CTexture> AtlasTex
+Vec2 m_vTileCount
+
+슬라이스와 좌상단 정보
+
+
+Selectables/In columns
+타일 수가 적다면 이걸로 채크하도록 만들 수 있을 것같다.
