@@ -135,7 +135,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MinFilesInUnityFile>10</MinFilesInUnityFile>
       <MaxFilesInUnityFile>20</MaxFilesInUnityFile>
-      <UnityFilesDirectory>$(ProjectDir)</UnityFilesDirectory>
+      <UnityFilesDirectory>$(SolutionDir)GitIgnore\</UnityFilesDirectory>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -159,7 +159,7 @@ call EngineCopy.bat</Command>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MinFilesInUnityFile>10</MinFilesInUnityFile>
       <MaxFilesInUnityFile>20</MaxFilesInUnityFile>
-      <UnityFilesDirectory>$(ProjectDir)</UnityFilesDirectory>
+      <UnityFilesDirectory>$(SolutionDir)GitIgnore\</UnityFilesDirectory>
     </ClCompile>
     <Link>
       <SubSystem>

@@ -454,12 +454,15 @@ FodyWeavers.xsd
 *.bmp
 *.dib
 
-# ICO
-*.ico
-
 # 3D Images
 *.3dm
 *.max
 
 # SoundFile
 *.wav
+
+*.exe
+*.idb
+*.ini
+
+GitIgnore/
