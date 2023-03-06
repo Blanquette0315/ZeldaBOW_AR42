@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <queue>
+#include <fstream>
 
 using std::vector;
 using std::list;
@@ -23,6 +24,15 @@ using std::queue;
 #include <experimental/filesystem>
 using namespace std::experimental;
 using namespace std::experimental::filesystem;
+
+// yaml
+#include <yaml-cpp/yaml.h>
+
+#ifdef _DEBUG
+#pragma comment(lib, "yaml_cpp/libyaml-cppmdd.lib")
+#else
+#pragma comment(lib, "yaml_cpp/yaml-cpp.lib")
+#endif
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
