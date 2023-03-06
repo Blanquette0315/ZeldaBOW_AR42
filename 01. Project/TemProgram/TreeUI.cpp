@@ -16,6 +16,8 @@
 #include "CSaveLoadMgr.h"
 #include "ContentUI.h"
 
+#include "PopupUI.h"
+
 // ============
 // = TreeNode =
 // ============
@@ -146,126 +148,72 @@ void TreeNode::render_update()
 
 		}
 
-		// 아웃 라이너 노드일 때 우클릭 (오브젝트)
-		if (ImGui::BeginPopup("##OutLinerNode"))
+		// OutLinerNode Popup 생성
 		{
-			// 빈 오브젝트 생성
-			if (ImGui::Selectable("New Object"))
-			{
-				CGameObject* pObj = new CGameObject;
-				pObj->SetName(L"New Object");
+			static PopupUI* OutLiner = new PopupUI("##OutLinerNode");
 
-				tEvent CreateObj;
-				CreateObj.eType = EVENT_TYPE::CREATE_OBJECT;
-				CreateObj.wParam = (DWORD_PTR)pObj;
-				CreateObj.lParam = 0;
+			tFUNC tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_0;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_0 = (FUNC_0)&PopupUI::Func_NewObj;
+			OutLiner->AddSelectable("New Object", tFunc);
 
-				CEventMgr::GetInst()->AddEvent(CreateObj);
-			}
+			tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_1;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_1 = (FUNC_1)&PopupUI::Func_DeleteObj;
+			tFunc.lFactor = (DWORD_PTR)m_data;
+			OutLiner->AddSelectable("Delete Object", tFunc);
 
-			ImGui::Separator();
+			tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_1;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_1 = (FUNC_1)&PopupUI::Func_ChangePrefab;
+			tFunc.lFactor = (DWORD_PTR)m_data;
+			OutLiner->AddSelectable("Change Prefab", tFunc);
 
-			// 오브젝트 삭제
-			if (ImGui::Selectable("Delete Object"))
-			{
-				CGameObject* pObj = ((CGameObject*)m_data);
-				pObj->Destroy();
+			tFunc = {};
+			tFunc.eHeadType = HEAD_TYPE::MENU;
+			tFunc.eMenuType = MENU_TYPE::ADD_COMPONENT;
+			tFunc.lFactor = (DWORD_PTR)m_data;
+			OutLiner->AddSelectable("Add Component", tFunc);
 
-				/*tEvent DelObject;
-				DelObject.eType = EVENT_TYPE::DELETE_OBJECT;
-				DelObject.wParam = (DWORD_PTR)pObj;
+			tFunc = {};
+			tFunc.eHeadType = HEAD_TYPE::MENU;
+			tFunc.eMenuType = MENU_TYPE::ADD_SCRIPT;
+			OutLiner->AddSelectable("Add Script", tFunc);
 
-				CEventMgr::GetInst()->AddEvent(DelObject);*/
-			}
-
-			ImGui::Separator();
-
-			// 선택 오브젝트 프리펩 전환
-			if (ImGui::Selectable("Change Prefab"))
-			{
-				CGameObject* pObj = ((CGameObject*)m_data);
-
-				tEvent ChangePreFab;
-				ChangePreFab.eType = EVENT_TYPE::CHANGE_PREFAB;
-				ChangePreFab.wParam = m_data;
-
-				CEventMgr::GetInst()->AddEvent(ChangePreFab);
-			}
-
-			ImGui::Separator();
-
-			// 오브젝트에 컴포넌트 추가
-			if (ImGui::BeginMenu("Add Component"))
-			{
-				static bool toggles[(UINT)COMPONENT_TYPE::END] = {};
-				CGameObject* pTargetObj = (CGameObject*)m_data;
-				for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
-				{
-					string strName = ToString((COMPONENT_TYPE)i);
-
-					CComponent* pComponent = pTargetObj->GetComponent((COMPONENT_TYPE)i);
-
-					if (nullptr != pComponent)
-					{
-						toggles[i] = true;
-					}
-					else
-					{
-						toggles[i] = false;
-					}
-
-					// 선택이 되면 false true를 확인해서 Add Component와 Delete Component를 하면 된다.
-					if (ImGui::MenuItem(strName.c_str(), "", &toggles[i]))
-					{
-						// 타입별로 분기처리해 알맞은 컴포넌트를 추가해 준다.
-						// 눌러서 true로 바뀌면 AddComponent, false로 바뀌면 ReleaseComponent
-						AddReleaseComponent((COMPONENT_TYPE)i, toggles[i], pTargetObj);
-					}
-				}
-				
-				ImGui::EndMenu();
-			}
-
-			// 오브젝트에 Script 추가
-			if (ImGui::BeginMenu("Add Script"))
-			{
-				vector<wstring> vecScriptName;
-				CScriptMgr::GetScriptInfo(vecScriptName);
-
-				for (size_t i = 0; i < vecScriptName.size(); ++i)
-				{
-					string strScriptName = WStringToString(vecScriptName[i]);
-					if (ImGui::MenuItem(strScriptName.c_str()))
-					{
-						InspectorUI* pInspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
-						CGameObject* pTargetObject = pInspector->GetTargetObject();
-						if (nullptr != pTargetObject)
-						{
-							pTargetObject->AddComponent(CScriptMgr::GetScript(vecScriptName[i]));
-							pInspector->SetTargetObject(pTargetObject);
-						}
-					}
-				}
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndPopup();
+			OutLiner->render_update();
 		}
 
-		// ContentUI Tree이고, Level 노드일 때 우클릭
-		if (ImGui::BeginPopup("##LevelNode"))
+		// LevelNode Popup 생성
 		{
-			// 빈 레벨 생성
-			if (ImGui::Selectable("New Level"))
-			{
-				// 레벨 이름이 겹치면 레벨 저장시 문제가 발생하기 때문에 이름을 정해줄 수 있는 창 띄우기
-				bOpenLevelName = true;
-			}
+			static PopupUI* LevelNode = new PopupUI("##LevelNode");
 
-			ImGui::EndPopup();
+			tFUNC tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_1;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_1 = (FUNC_1)&PopupUI::Func_NewLevel;
+			tFunc.lFactor = (DWORD_PTR)&bOpenLevelName;
+			LevelNode->AddSelectable("New Level", tFunc);
+
+			LevelNode->render_update();
 		}
 
+		// MtrlNode Popup 생성
+		{
+			static PopupUI* MaterialNode = new PopupUI("##MtrlNode");
+
+			tFUNC tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_0;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_0 = (FUNC_0)&PopupUI::Func_NewMaterial;
+			MaterialNode->AddSelectable("New Material", tFunc);
+
+			MaterialNode->render_update();
+		}
+
+		// Create Level? Modal Popup 열어주는 파트
 		if (bOpenLevelName)
 			ImGui::OpenPopup("Create Level?");
 
@@ -273,6 +221,7 @@ void TreeNode::render_update()
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
+		// Create Level? Modal Popup 생성 파트
 		if (ImGui::BeginPopupModal("Create Level?", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			bOpenLevelName = false;
@@ -302,24 +251,6 @@ void TreeNode::render_update()
 			{
 				ImGui::CloseCurrentPopup();
 			}
-			ImGui::EndPopup();
-		}
-
-		// ContentUI Tree이고, Mtrl 노드일 때 우클릭 (리소스들)
-		if (ImGui::BeginPopup("##MtrlNode"))
-		{
-			// 새로운 Mtrl 생성
-			if (ImGui::Selectable("New Material"))
-			{
-				Ptr<CMaterial> pMtrl = new CMaterial;
-				wstring strKey = CResMgr::GetInst()->GetNewResName<CMaterial>();
-				pMtrl->SetName(strKey);
-				CResMgr::GetInst()->AddRes<CMaterial>(strKey, pMtrl.Get());
-
-				ContentUI* pContentUI = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
-				pContentUI->ResetContent();
-			}
-
 			ImGui::EndPopup();
 		}
 

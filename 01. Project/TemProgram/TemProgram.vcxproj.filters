@@ -120,6 +120,9 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\Light3DUI">
       <UniqueIdentifier>{314c15e9-770b-4e9c-b780-273ed895e09e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\ModuleUI\ComboBoxUI">
+      <UniqueIdentifier>{0813d703-d448-46f5-8ce2-c8ce3f904ba8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
