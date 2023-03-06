@@ -3,6 +3,8 @@
 
 #include <Engine/CMeshRender.h>
 
+class ComboBoxUI;
+
 class MeshRenderUI :
     public ComponentUI
 {

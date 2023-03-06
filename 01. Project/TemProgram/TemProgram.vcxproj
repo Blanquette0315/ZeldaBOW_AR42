@@ -166,6 +166,7 @@
     <ClInclude Include="CGrid2DScript.h" />
     <ClInclude Include="CImGuiMgr.h" />
     <ClInclude Include="Collider2DUI.h" />
+    <ClInclude Include="ComboBoxUI.h" />
     <ClInclude Include="ComponentUI.h" />
     <ClInclude Include="ContentUI.h" />
     <ClInclude Include="CreateTestLevel.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="CGrid2DScript.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
     <ClCompile Include="Collider2DUI.cpp" />
+    <ClCompile Include="ComboBoxUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
     <ClCompile Include="ContentUI.cpp" />
     <ClCompile Include="CreateTestLevel.cpp" />
