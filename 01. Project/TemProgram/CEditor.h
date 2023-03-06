@@ -1,5 +1,7 @@
 #pragma once
 
+// Editor Branch
+
 class CGameObjectEX;
 
 class CEditor
