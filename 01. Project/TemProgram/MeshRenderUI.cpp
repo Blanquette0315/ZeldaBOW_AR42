@@ -9,6 +9,8 @@
 #include "ListUI.h"
 #include "TreeUI.h"
 
+#include "ComboBoxUI.h"
+
 MeshRenderUI::MeshRenderUI()
 	: ComponentUI("MeshRender", COMPONENT_TYPE::MESHRENDER)
 {

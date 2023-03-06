@@ -120,6 +120,9 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\Light3DUI">
       <UniqueIdentifier>{314c15e9-770b-4e9c-b780-273ed895e09e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\ModuleUI\ComboBoxUI">
+      <UniqueIdentifier>{bf48d095-7111-40c2-b5c2-99479ae0c5f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -278,6 +281,9 @@
     <ClInclude Include="Light3DUI.h">
       <Filter>03. UI\01. Inspector\ComponentUI\Light3DUI</Filter>
     </ClInclude>
+    <ClInclude Include="ComboBoxUI.h">
+      <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -418,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="Light3DUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\Light3DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComboBoxUI.cpp">
+      <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
