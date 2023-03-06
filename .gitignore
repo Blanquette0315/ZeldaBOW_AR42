@@ -466,3 +466,7 @@ FodyWeavers.xsd
 *.ini
 
 GitIgnore/
+
+03. External/Library/Engine/TemProgram_debug.lib
+03. External/Library/Engine/Engine_debug.lib
+03. External/Library/Script/Script_debug.lib
