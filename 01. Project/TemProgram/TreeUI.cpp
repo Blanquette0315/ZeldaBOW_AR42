@@ -17,6 +17,7 @@
 #include "ContentUI.h"
 
 #include "PopupUI.h"
+#include "InputTextUI.h"
 
 // ============
 // = TreeNode =
@@ -215,44 +216,20 @@ void TreeNode::render_update()
 
 		// Create Level? Modal Popup 열어주는 파트
 		if (bOpenLevelName)
+		{
 			ImGui::OpenPopup("Create Level?");
+			bOpenLevelName = false;
+		}
+			
 
 		// 레벨 생성 전 이름 정하기 팝업 띄우기
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-		// Create Level? Modal Popup 생성 파트
-		if (ImGui::BeginPopupModal("Create Level?", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			bOpenLevelName = false;
-
-			static char TemName[128] = "";
-			ImGui::InputText("Input Level Name", TemName, IM_ARRAYSIZE(TemName));
-
-			ImGui::Separator();
-
-			if (ImGui::Button("OK", ImVec2(120, 0)))
-			{
-				string NewName = TemName;
-				wstring wNewName = wstring(NewName.begin(), NewName.end());
-
-				CLevel* pLevel = new CLevel;
-				pLevel->SetName(wNewName);
-
-				CSaveLoadMgr::GetInst()->SaveLevel(pLevel);
-				delete pLevel;
-
-				ImGui::CloseCurrentPopup();
-
-			}
-			ImGui::SetItemDefaultFocus();
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
+		// InputTextPopup 생성
+		static InputTextUI* pPopupTextUI = new InputTextUI("##CreateLevel");
+		pPopupTextUI->SetFunc_1((FUNC_1)&InputTextUI::CreateLevel);
+		pPopupTextUI->CreateTextPopup("Create Level?", "Input Level Name");
 
 		// 자식 노드들까지 재귀적 호출을 해준다.
 		for (size_t i = 0; i < m_vecChildNode.size(); ++i)
