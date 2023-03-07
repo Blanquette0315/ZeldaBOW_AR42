@@ -9,7 +9,6 @@
 #include "CStructuredBuffer.h"
 
 #include "CTransform.h"
-
 CParticleSystem::CParticleSystem()
 	: CRenderComponent(COMPONENT_TYPE::PARTICLESYSTEM)
 	, m_iMaxCount(1)
@@ -162,67 +161,71 @@ void CParticleSystem::SetMaxCount(UINT _MaxCount)
 	}
 }
 
-
-
-
-
-
-
-
-void CParticleSystem::SaveToFile(FILE* _File)
+void CParticleSystem::SaveToYAML(YAML::Emitter& _emitter)
 {
-	CRenderComponent::SaveToFile(_File);
-
-	// 컴퓨트 셰읻더 정보 저장
+	_emitter << YAML::Key << "PARTICLESYSTEM";
+	_emitter << YAML::Value << YAML::BeginMap;
+	CRenderComponent::SaveToYAML(_emitter);
+	// 컴퓨트 셰이더 정보 저장
 	bool bCS = !!m_UpdateCS.Get();
-	fwrite(&bCS, sizeof(bool), 1, _File);
-
+	_emitter << YAML::Key << "CS_Exist";
+	_emitter << YAML::Value << bCS;
 	if (bCS)
 	{
-		SaveWStringToFile(m_UpdateCS->GetKey(), _File);
+		_emitter << YAML::Key << "ComputeShader";
+		_emitter << YAML::Value << WStringToString(m_UpdateCS->GetKey());
 	}
-
 	// 파티클 옵션
-	fwrite(&m_iMaxCount, sizeof(UINT), 1, _File);
-	fwrite(&m_iAliveCount, sizeof(UINT), 1, _File);
-	fwrite(&m_vStartScale, sizeof(Vec4), 1, _File);
-	fwrite(&m_vEndScale, sizeof(Vec4), 1, _File);
-	fwrite(&m_vStartColor, sizeof(Vec4), 1, _File);
-	fwrite(&m_vEndColor, sizeof(Vec4), 1, _File);
-	fwrite(&m_vMinMaxSpeed, sizeof(Vec2), 1, _File);
-	fwrite(&m_vMinMaxLifeTime, sizeof(Vec2), 1, _File);
-	fwrite(&m_fSpawnRange, sizeof(float), 1, _File);
-	fwrite(&m_Frequency, sizeof(float), 1, _File);
-	fwrite(&m_fAccTime, sizeof(float), 1, _File);
-	fwrite(&m_WorldSpawn, sizeof(int), 1, _File);
+	_emitter << YAML::Key << "MaxCount";
+	_emitter << YAML::Value << m_iMaxCount;
+	_emitter << YAML::Key << "AliveCount";
+	_emitter << YAML::Value << m_iAliveCount;
+	_emitter << YAML::Key << "StartScale";
+	_emitter << YAML::Value << m_vStartScale;
+	_emitter << YAML::Key << "EndScale";
+	_emitter << YAML::Value << m_vEndScale;
+	_emitter << YAML::Key << "StartColor";
+	_emitter << YAML::Value << m_vStartColor;
+	_emitter << YAML::Key << "EndColor";
+	_emitter << YAML::Value << m_vEndColor;
+	_emitter << YAML::Key << "MinMaxSpeed";
+	_emitter << YAML::Value << m_vMinMaxSpeed;
+	_emitter << YAML::Key << "MinMaxLifeTime";
+	_emitter << YAML::Value << m_vMinMaxLifeTime;
+	_emitter << YAML::Key << "SpawnRange";
+	_emitter << YAML::Value << m_fSpawnRange;
+	_emitter << YAML::Key << "Frequency";
+	_emitter << YAML::Value << m_Frequency;
+	_emitter << YAML::Key << "AccTime";
+	_emitter << YAML::Value << m_fAccTime;
+	_emitter << YAML::Key << "WorldSpawn";
+	_emitter << YAML::Value << m_WorldSpawn;
+
+	_emitter << YAML::EndMap;
 }
 
-void CParticleSystem::LoadFromFile(FILE* _File)
+void CParticleSystem::LoadFromYAML(YAML::Node& _node)
 {
-	CRenderComponent::LoadFromFile(_File);
-
+	YAML::Node node = _node["PARTICLESYSTEM"];
+	CRenderComponent::LoadFromYAML(node);
 	// 컴퓨트 셰이더 참조
-	bool bCS = false;
-	fread(&bCS, sizeof(bool), 1, _File);
-
+	bool bCS = node["CS_Exist"].as<bool>();
 	if (bCS)
 	{
-		wstring strKey;
-		LoadWStringFromFile(strKey, _File);
+		wstring strKey = StringToWString(node["ComputeShader"].as<string>());
 		m_UpdateCS = dynamic_cast<CParticleUpdateShader*>(CResMgr::GetInst()->FindRes<CComputeShader>(strKey).Get());
 	}
-
 	// 파티클 옵션
-	fread(&m_iMaxCount, sizeof(UINT), 1, _File);
-	fread(&m_iAliveCount, sizeof(UINT), 1, _File);
-	fread(&m_vStartScale, sizeof(Vec4), 1, _File);
-	fread(&m_vEndScale, sizeof(Vec4), 1, _File);
-	fread(&m_vStartColor, sizeof(Vec4), 1, _File);
-	fread(&m_vEndColor, sizeof(Vec4), 1, _File);
-	fread(&m_vMinMaxSpeed, sizeof(Vec2), 1, _File);
-	fread(&m_vMinMaxLifeTime, sizeof(Vec2), 1, _File);
-	fread(&m_fSpawnRange, sizeof(float), 1, _File);
-	fread(&m_Frequency, sizeof(float), 1, _File);
-	fread(&m_fAccTime, sizeof(float), 1, _File);
-	fread(&m_WorldSpawn, sizeof(int), 1, _File);
+	m_iMaxCount = node["MaxCount"].as<UINT>();
+	m_iAliveCount = node["AliveCount"].as<UINT>();
+	m_vStartScale = node["StartScale"].as<Vec4>();
+	m_vEndScale = node["EndScale"].as<Vec4>();
+	m_vStartColor = node["StartColor"].as<Vec4>();
+	m_vEndColor = node["EndColor"].as<Vec4>();
+	m_vMinMaxSpeed = node["MinMaxSpeed"].as<Vec2>();
+	m_vMinMaxLifeTime = node["MinMaxLifeTime"].as<Vec2>();
+	m_fSpawnRange = node["SpawnRange"].as<float>();
+	m_Frequency = node["Frequency"].as<float>();
+	m_fAccTime = node["AccTime"].as<float>();
+	m_WorldSpawn = node["WorldSpawn"].as<int>();
 }

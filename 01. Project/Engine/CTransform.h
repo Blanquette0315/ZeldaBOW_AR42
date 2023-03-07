@@ -56,8 +56,8 @@ public:
     void UpdateData();
 
 public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile);
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
     CLONE(CTransform);
 public:

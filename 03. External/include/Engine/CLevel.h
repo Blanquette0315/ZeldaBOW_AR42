@@ -49,8 +49,8 @@ public:
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
     const wstring& GetRelativePath() { return m_strRelativePath; }
 
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile);
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
     CLONE_DUMMY(CLevel);
  

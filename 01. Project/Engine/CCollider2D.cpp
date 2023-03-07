@@ -93,26 +93,23 @@ void CCollider2D::EndOverlap(CCollider2D* _pOther)
 	}
 }
 
-
-
-
-void CCollider2D::SaveToFile(FILE* _File)
-{
-	COMPONENT_TYPE type = GetType();
-	fwrite(&type, sizeof(UINT), 1, _File);
-
-	fwrite(&m_vOffsetPos, sizeof(Vec2), 1, _File);
-	fwrite(&m_vScale, sizeof(Vec2), 1, _File);
-	fwrite(&m_vRot, sizeof(Vec3), 1, _File);
-	fwrite(&m_eType, sizeof(UINT), 1, _File);
-	fwrite(&m_bIgnorObjectScale, sizeof(bool), 1, _File);
-}
-
-void CCollider2D::LoadFromFile(FILE* _File)
-{
-	fread(&m_vOffsetPos, sizeof(Vec2), 1, _File);
-	fread(&m_vScale, sizeof(Vec2), 1, _File);
-	fread(&m_vRot, sizeof(Vec3), 1, _File);
-	fread(&m_eType, sizeof(UINT), 1, _File);
-	fread(&m_bIgnorObjectScale, sizeof(bool), 1, _File);
-}
+//void CCollider2D::SaveToFile(FILE* _File)
+//{
+//	COMPONENT_TYPE type = GetType();
+//	fwrite(&type, sizeof(UINT), 1, _File);
+//
+//	fwrite(&m_vOffsetPos, sizeof(Vec2), 1, _File);
+//	fwrite(&m_vScale, sizeof(Vec2), 1, _File);
+//	fwrite(&m_vRot, sizeof(Vec3), 1, _File);
+//	fwrite(&m_eType, sizeof(UINT), 1, _File);
+//	fwrite(&m_bIgnorObjectScale, sizeof(bool), 1, _File);
+//}
+//
+//void CCollider2D::LoadFromFile(FILE* _File)
+//{
+//	fread(&m_vOffsetPos, sizeof(Vec2), 1, _File);
+//	fread(&m_vScale, sizeof(Vec2), 1, _File);
+//	fread(&m_vRot, sizeof(Vec3), 1, _File);
+//	fread(&m_eType, sizeof(UINT), 1, _File);
+//	fread(&m_bIgnorObjectScale, sizeof(bool), 1, _File);
+//}

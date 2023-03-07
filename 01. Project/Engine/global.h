@@ -54,3 +54,4 @@ using namespace DirectX::SimpleMath;
 #include "define.h"
 #include "struct.h"
 #include "func2.h"
+#include "YAML.h"

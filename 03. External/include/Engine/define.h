@@ -30,6 +30,8 @@ typedef Vector4 Vec4;
 
 #define MAX_LAYER 32
 
+#define SAFE_LOAD_FROM_YAML(type, variable, node) if(node.IsDefined()) { variable = node.as<type>(); }
+
 enum class SAMPLER_TYPE
 {
 	ANISOTROPIC, // �̹漺
@@ -146,7 +148,7 @@ enum class COMPONENT_TYPE
 	PARTICLESYSTEM,
 	SKYBOX,
 	DECAL,
-	LANDSPACE,
+	LANDSCAPE,
 
 
 	END,

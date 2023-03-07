@@ -15,8 +15,8 @@ public:
 	const wstring& GetName() { return m_strName; }
 
 public:
-	virtual void SaveToFile(FILE* _pFile);
-	virtual void LoadFromFile(FILE* _pFile);
+	virtual void SaveToYAML(YAML::Emitter& _emitter);
+	virtual void LoadFromYAML(YAML::Node& _node);
 
 	virtual CEntity* Clone() = 0;
 

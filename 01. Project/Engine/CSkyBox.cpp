@@ -61,3 +61,25 @@ void CSkyBox::SetType(SKYBOX_TYPE _type)
 		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
 	}
 }
+
+void CSkyBox::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "SKYBOX";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "SkyBoxTexture";
+	_emitter << YAML::Value << YAML::BeginMap;
+	SaveResourceRef<CTexture>(m_pSkyBoxTex, _emitter);
+	_emitter << YAML::EndMap;
+	_emitter << YAML::Key << "SkyBoxType";
+	_emitter << YAML::Value << (UINT)m_eSkyBoxType;
+
+	_emitter << YAML::EndMap;
+}
+
+void CSkyBox::LoadFromYAML(YAML::Node& _node)
+{
+	SetType((SKYBOX_TYPE)(_node["SKYBOX"]["SkyBoxType"].as<UINT>()));
+	YAML::Node node = _node["SKYBOX"]["SkyBoxTexture"];
+	LoadResourceRef<CTexture>(m_pSkyBoxTex, node);
+}

@@ -166,46 +166,25 @@ const vector<CGameObject*> CLevel::GetGameObjects()
 	return temVec;
 }
 
-void CLevel::SaveToFile(FILE* _pFile)
+void CLevel::SaveToYAML(YAML::Emitter& _emitter)
 {
-	CEntity::SaveToFile(_pFile);
-
-	SaveWStringToFile(m_strRelativePath, _pFile);
-
-	// 충돌 설정을 지정한 갯수 저장
-	size_t vecCount = m_vecLayerCollsionSet.size();
-	fwrite(&vecCount, sizeof(size_t), 1, _pFile);
-
-	// 반복문을 돌면서 실제로 설정한 레이어 충돌 저장
-	for (size_t i = 0; i < m_vecLayerCollsionSet.size(); ++i)
-	{
-		fwrite(&m_vecLayerCollsionSet[i], sizeof(tLayerCollision), 1, _pFile);
-	}
+	CEntity::SaveToYAML(_emitter);
+	_emitter << YAML::Key << "RelativePath";
+	_emitter << YAML::Value << WStringToString(m_strRelativePath);
+	_emitter << YAML::Key << "LayerCollisionSet";
+	_emitter << YAML::Value << m_vecLayerCollsionSet;
 }
 
-void CLevel::LoadFromFile(FILE* _pFile)
+void CLevel::LoadFromYAML(YAML::Node& _node)
 {
-	CEntity::LoadFromFile(_pFile);
-
-	LoadWStringFromFile(m_strRelativePath, _pFile);
-
-	// 충돌 설정 지정 갯수 읽기
-	size_t vecCount = 0;
-	fread(&vecCount, sizeof(size_t), 1, _pFile);
-
-	// 반복문을 돌면서 실제로 설정한 레이어 충돌 읽기
-	for (size_t i = 0; i < vecCount; ++i)
-	{
-		tLayerCollision Temp = {};
-		fread(&Temp, sizeof(tLayerCollision), 1, _pFile);
-		m_vecLayerCollsionSet.push_back(Temp);
-	}
+	CEntity::LoadFromYAML(_node);
+	m_strRelativePath = StringToWString(_node["RelativePath"].as<string>());
+	m_vecLayerCollsionSet = _node["LayerCollisionSet"].as<vector<tLayerCollision>>();
 
 	// 레이어 설정해주기
 	for (size_t i = 0; i < m_vecLayerCollsionSet.size(); ++i)
 	{
 		CCollisionMgr::GetInst()->CollisionLayerCheck(m_vecLayerCollsionSet[i].iLeft, m_vecLayerCollsionSet[i].iRight);
 	}
-	
 }
 

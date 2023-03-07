@@ -221,6 +221,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CTileMap.h" />
     <ClInclude Include="CTimeMgr.h" />
     <ClInclude Include="CTransform.h" />
+    <ClInclude Include="YAML.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Func.h" />
@@ -232,6 +233,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="struct.h" />
+    <ClInclude Include="YAML.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAnimation2D.cpp" />
@@ -293,6 +295,7 @@ call EngineCopy.bat</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="YAML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\03. External\include\DirectXTex\DirectXTex.inl" />

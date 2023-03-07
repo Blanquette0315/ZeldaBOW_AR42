@@ -23,11 +23,11 @@ CSaveLoadMgr::~CSaveLoadMgr()
 
 void CSaveLoadMgr::init()
 {
-	CPrefab::Save_GameObject_Func = &CSaveLoadMgr::SaveGameObject;
-	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;
+	/*CPrefab::Save_GameObject_Func = &CSaveLoadMgr::SaveGameObject;
+	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;*/
 }
 
-void CSaveLoadMgr::SaveLevel(CLevel* _Level)//, wstring _strRelativePath)
+void CSaveLoadMgr::SaveLevel(CLevel* _Level)
 {
 	assert(_Level);
 
@@ -43,36 +43,48 @@ void CSaveLoadMgr::SaveLevel(CLevel* _Level)//, wstring _strRelativePath)
 	_Level->SetRelativePath(RelativePath);
 
 	// 파일 쓰기
-	FILE* pFile = nullptr;
-	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+	YAML::Emitter emitter;
+	emitter << YAML::BeginMap;
 
 	// 레벨 이름 및 상대 경로 저장
-	_Level->SaveToFile(pFile);
+	emitter << YAML::Key << "Level";
+	emitter << YAML::Value << YAML::BeginMap;
+	_Level->SaveToYAML(emitter);
+	emitter << YAML::EndMap;
 
 	// 레벨의 레이어 저장
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
+		emitter << YAML::Key << "Layer" + to_string(i);
+		emitter << YAML::Value << YAML::BeginMap;
 		// 레이어 이름 저장
 		CLayer* pLayer = _Level->GetLayer(i);
-		pLayer->SaveToFile(pFile);
+		pLayer->SaveToYAML(emitter);
 
 		// 레이어에 있는 부모 오브젝트 저장
 		const vector<CGameObject*>& vecParentObj = pLayer->GetParentObject();
 
 		size_t iObjectCount = vecParentObj.size();
-		fwrite(&iObjectCount, sizeof(size_t), 1, pFile);
-
+		emitter << YAML::Key << "Size";
+		emitter << YAML::Value << iObjectCount;
+		emitter << YAML::Key << "ParentObj";
+		emitter << YAML::Value << YAML::BeginMap;
 		for (size_t j = 0; j < vecParentObj.size(); ++j)
 		{
-			SaveGameObject(vecParentObj[j], pFile);
+			emitter << YAML::Key << "ParentObj" + to_string(j);
+			emitter << YAML::Value << YAML::BeginMap;
+			SaveGameObject(vecParentObj[j], emitter);
+			emitter << YAML::EndMap;
 		}
+		emitter << YAML::EndMap;
+
+		emitter << YAML::EndMap;
 	}
 
-	// 충돌 메니저 설정 값
-	// 해당 부분은 Level이 지니고있고, Level에서 저장하도록 변경하였음.
-	//CCollisionMgr::GetInst()->SaveToFile(pFile);
+	emitter << YAML::EndMap;
 
-	fclose(pFile);
+	std::ofstream fout(strFilePath);
+	fout << emitter.c_str();
 }
 
 CLevel* CSaveLoadMgr::LoadLevel(wstring _strRelativePath)
@@ -81,175 +93,185 @@ CLevel* CSaveLoadMgr::LoadLevel(wstring _strRelativePath)
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
 
+	string strPath = WStringToString(strFilePath);
 	// 파일 읽기
-	FILE* pFile = nullptr;
-	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
-
+	YAML::Node rootNode = YAML::LoadFile(strPath);
+	
 	// 레벨 이름 및 상대 경로 로딩
+	
 	CLevel* pLevel = new CLevel;
-	pLevel->LoadFromFile(pFile);
+	YAML::Node node = rootNode["Level"];
+	pLevel->LoadFromYAML(node);
 
 	// 레벨의 레이어
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
 		// 레이어 이름
 		CLayer* pLayer = pLevel->GetLayer(i);
-		pLayer->LoadFromFile(pFile);
+		node = rootNode["Layer" + to_string(i)];
+		pLayer->LoadFromYAML(node);
 
 		// 레이어에 있는 부모 오브젝트
-		size_t iObjectCount = 0;
-		fread(&iObjectCount, sizeof(size_t), 1, pFile);
+		size_t iObjectCount = rootNode["Layer" + to_string(i)]["Size"].as<size_t>();
 
 		for (size_t j = 0; j < iObjectCount; ++j)
 		{
-			CGameObject* pObject = LoadGameObject(pFile);
+			YAML::Node ParentObjNode = rootNode["Layer" + to_string(i)]["ParentObj"]["ParentObj" + to_string(j)];
+			CGameObject* pObject = LoadGameObject(ParentObjNode);
 			pLayer->AddGameObject(pObject);
 		}
 	}
-
-	// 충돌 메니저 설정값
-	// 해당 부분은 Level이 지니고있고, Level에서 저장하도록 변경하였음.
-	//CCollisionMgr::GetInst()->LoadFromFile(pFile);
-
-	fclose(pFile);
-
 	return pLevel;
 }
 
-void CSaveLoadMgr::SaveGameObject(CGameObject* _Object, FILE* _File)
+void CSaveLoadMgr::SaveGameObject(CGameObject* _Object, YAML::Emitter& _emitter)
 {
 	// 오브젝트 이름 저장
-	_Object->SaveToFile(_File);
+	_Object->SaveToYAML(_emitter);
 
 	// 오브젝트 소유 컴포넌트 저장
+	_emitter << YAML::Key << "Component";
+	_emitter << YAML::Value << YAML::BeginMap;
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		CComponent* pComponent = _Object->GetComponent((COMPONENT_TYPE)i);
 		if (nullptr != pComponent)
 		{
-			pComponent->SaveToFile(_File);
+			pComponent->SaveToYAML(_emitter);
 		}
 	}
-
-	COMPONENT_TYPE ComponentEnd = COMPONENT_TYPE::END;
-	fwrite(&ComponentEnd, sizeof(UINT), 1, _File);
+	_emitter << YAML::EndMap;
 
 	// Script 개수, 각 각의 Script 이름을 저장한다.
+	_emitter << YAML::Key << "Script";
+	_emitter << YAML::Value << YAML::BeginMap;
 	const vector<CScript*>& vecScript = _Object->GetScripts();
 	size_t iScriptCount = vecScript.size();
-	fwrite(&iScriptCount, sizeof(size_t), 1, _File);
+	_emitter << YAML::Key << "ScriptCount";
+	_emitter << YAML::Value << iScriptCount;
 
 	for (size_t i = 0; i < vecScript.size(); ++i)
 	{
+		_emitter << YAML::Key << "Script" + to_string(i);
+		_emitter << YAML::Value << YAML::BeginMap;
 		// Script의 이름을 저장한다.
 		// Script의 enum값을 저장해버리면, 스크립트가 추가될때마다 순서가 바뀌어서 문제가 되어 이름을 저장해
 		// 이름으로 Script를 찾아오도록 만들었다.
-		SaveWStringToFile(CScriptMgr::GetScriptName(vecScript[i]), _File);
+		_emitter << YAML::Key << "ScriptName";
+		_emitter << YAML::Value << WStringToString(CScriptMgr::GetScriptName(vecScript[i]));
+
 		// Script의 데이터를 저장한다.
-		vecScript[i]->SaveToFile(_File);
+		vecScript[i]->SaveToYAML(_emitter);
+		_emitter << YAML::EndMap;
 	}
+	_emitter << YAML::EndMap;
 
 	// 자식 오브젝트
 	const vector<CGameObject*> vecChild = _Object->GetChildObject();
 
 	// 마찬가지로 자식 오브젝트 vector를 가져와서 개수를 저장한다.
+	_emitter << YAML::Key << "ChildObj";
+	_emitter << YAML::Value << YAML::BeginMap;
 	size_t iChildCount = vecChild.size();
-	fwrite(&iChildCount, sizeof(size_t), 1, _File);
+	_emitter << YAML::Key << "ChildCount";
+	_emitter << YAML::Value << iChildCount;
 
 	// 이후 반복문을 돌면서 SaveGameObject를 호출해 재귀적으로 호출하면서 모든 자식을 순회한다.
 	for (size_t i = 0; i < iChildCount; ++i)
 	{
-		SaveGameObject(vecChild[i], _File);
+		_emitter << YAML::Key << "ChildObj" + to_string(i);
+		_emitter << YAML::Value << YAML::BeginMap;
+		SaveGameObject(vecChild[i], _emitter);
+		_emitter << YAML::EndMap;
 	}
-
+	_emitter << YAML::EndMap;
 }
 
-CGameObject* CSaveLoadMgr::LoadGameObject(FILE* _File)
+CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 {
 	CGameObject* pObject = new CGameObject;
 
 	// 오브젝트 이름
-	pObject->LoadFromFile(_File);
+	pObject->LoadFromYAML(_node);
 
 	// 오브젝트 소유 컴포넌트
-	bool bProgress = true;
-	while (true)
+	
+
+	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
-		// Component 타입 확인
-		COMPONENT_TYPE type = COMPONENT_TYPE::END;
-		fread(&type, sizeof(UINT), 1, _File);
-
-		// 타입에 해당하는 컴포넌트 로딩 및 추가
-		CComponent* pComponent = nullptr;
-
-		switch (type)
+		COMPONENT_TYPE type = (COMPONENT_TYPE)i;
+		string strComponentName = ToString(type);
+		if (_node["Component"][strComponentName].IsDefined())
 		{
-		case COMPONENT_TYPE::TRANSFORM:
-			pComponent = new CTransform;
-			break;
+			CComponent* pComponent = nullptr;
 
-		case COMPONENT_TYPE::CAMERA:
-			pComponent = new CCamera;
-			break;
+			switch (type)
+			{
+			case COMPONENT_TYPE::TRANSFORM:
+				pComponent = new CTransform;
+				break;
 
-		case COMPONENT_TYPE::COLLIDER2D:
-			pComponent = new CCollider2D;
-			break;
+			case COMPONENT_TYPE::CAMERA:
+				pComponent = new CCamera;
+				break;
 
-		case COMPONENT_TYPE::ANIMATOR2D:
-			pComponent = new CAnimator2D;
-			break;
+			case COMPONENT_TYPE::COLLIDER2D:
+				break;
 
-		case COMPONENT_TYPE::LIGHT2D:
-			pComponent = new CLight2D;
-			break;
+			case COMPONENT_TYPE::ANIMATOR2D:
+				break;
 
-		case COMPONENT_TYPE::MESHRENDER:
-			pComponent = new CMeshRender;
-			break;
+			case COMPONENT_TYPE::LIGHT2D:
+				pComponent = new CLight2D;
+				break;
 
-		case COMPONENT_TYPE::TILEMAP:
-			pComponent = new CTileMap;
-			break;
+			case COMPONENT_TYPE::MESHRENDER:
+				pComponent = new CMeshRender;
+				break;
 
-		case COMPONENT_TYPE::PARTICLESYSTEM:
-			pComponent = new CParticleSystem;
-			break;
+			case COMPONENT_TYPE::TILEMAP:
+				pComponent = new CTileMap;
+				break;
 
-		case COMPONENT_TYPE::LIGHT3D:
-			break;
-		case COMPONENT_TYPE::COLLIDER3D:
-			break;
-		case COMPONENT_TYPE::ANIMATOR3D:
-			break;
-		case COMPONENT_TYPE::SKYBOX:
-			break;
-		case COMPONENT_TYPE::DECAL:
-			break;
-		case COMPONENT_TYPE::END:
-			bProgress = false;
-			break;
+			case COMPONENT_TYPE::PARTICLESYSTEM:
+				pComponent = new CParticleSystem;
+				break;
+
+			case COMPONENT_TYPE::LIGHT3D:
+				pComponent = new CLight3D;
+				break;
+			case COMPONENT_TYPE::COLLIDER3D:
+				break;
+			case COMPONENT_TYPE::ANIMATOR3D:
+				break;
+			case COMPONENT_TYPE::SKYBOX:
+				pComponent = new CSkyBox;
+				break;
+			case COMPONENT_TYPE::DECAL:
+				pComponent = new CDecal;
+				break;
+			case COMPONENT_TYPE::LANDSCAPE:
+				pComponent = new CLandScape;
+				break;
+			}
+			YAML::Node componentNode = _node["Component"];
+			pComponent->LoadFromYAML(componentNode);
+			pObject->AddComponent(pComponent);
 		}
-
-		if (!bProgress)
-			break;
-
-		pComponent->LoadFromFile(_File);
-		pObject->AddComponent(pComponent);
 	}
 
 	// Script
-	size_t iScriptCount = 0;
-	fread(&iScriptCount, sizeof(size_t), 1, _File);
+	size_t iScriptCount = _node["Script"]["ScriptCount"].as<size_t>();
 
 	for (size_t i = 0; i < iScriptCount; ++i)
 	{
 		// 이름 로딩
-		wstring strScriptName;
-		LoadWStringFromFile(strScriptName, _File);
+		wstring strScriptName = StringToWString(_node["Script"]["Script" + to_string(i)]["ScriptName"].as<string>());
+
 		// 알아낸 이름으로 스크립트 가져오기
 		CScript* pNewScript = CScriptMgr::GetScript(strScriptName);
-		pNewScript->LoadFromFile(_File);
+		YAML::Node ScriptNode = _node["Script"]["Script" + to_string(i)];
+		pNewScript->LoadFromYAML(ScriptNode);
 
 		// 오브젝트에 스크립트 넣어주기
 		pObject->AddComponent(pNewScript);
@@ -257,12 +279,12 @@ CGameObject* CSaveLoadMgr::LoadGameObject(FILE* _File)
 
 
 	// 자식 오브젝트
-	size_t iChildCount = 0;
-	fread(&iChildCount, sizeof(size_t), 1, _File);
+	size_t iChildCount = _node["ChildObj"]["ChildCount"].as<size_t>();
 
 	for (size_t i = 0; i < iChildCount; ++i)
 	{
-		CGameObject* pChild = LoadGameObject(_File);
+		YAML::Node ChildObjNode = _node["ChildObj"]["ChildObj" + to_string(i)];
+		CGameObject* pChild = LoadGameObject(ChildObjNode);
 		pObject->AddChild(pChild);
 	}
 

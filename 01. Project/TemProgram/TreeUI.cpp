@@ -456,7 +456,7 @@ void TreeNode::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObje
 		break;
 	case COMPONENT_TYPE::DECAL:
 		break;
-	case COMPONENT_TYPE::LANDSPACE:
+	case COMPONENT_TYPE::LANDSCAPE:
 		break;
 	}
 

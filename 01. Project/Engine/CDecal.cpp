@@ -56,3 +56,26 @@ void CDecal::render()
 	// ·»´õ¸µ
 	GetMesh()->render();
 }
+
+void CDecal::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "DECAL";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "DecalTexture";
+	_emitter << YAML::Value << YAML::BeginMap;
+	SaveResourceRef<CTexture>(m_pDecalTex, _emitter);
+	_emitter << YAML::EndMap;
+	_emitter << YAML::Key << "LightingMethod";
+	_emitter << YAML::Value << m_bLighting;
+
+	_emitter << YAML::EndMap;
+}
+
+void CDecal::LoadFromYAML(YAML::Node& _node)
+{
+	SetRenderType(_node["DECAL"]["LightingMethod"].as<bool>());
+
+	YAML::Node node = _node["DECAL"]["DecalTexture"];
+	LoadResourceRef<CTexture>(m_pDecalTex, node);
+}
