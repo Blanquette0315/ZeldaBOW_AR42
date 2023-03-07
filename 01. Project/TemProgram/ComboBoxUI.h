@@ -1,32 +1,6 @@
 #pragma once
 #include "UI.h"
 
-wstring ConvertStrToWstr(const string& _str);
-string ConvertWstrToStr(const wstring& _wstr);
-vector<wstring> ConvertStrToWstrVec(const vector<string>& _vecStr);
-vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr);
-
-template <typename T1, typename T2>
-int GetMapIdx(const map<T1, T2>& _map, T2 _key);
-
-template<typename T1, typename T2>
-inline int GetMapIdx(const map<T1, T2>& _map, T1 _key)
-{
-    int idx = 0;
-    typename map<T1, T2>::const_iterator iter = _map.cbegin();
-    for (; iter != _map.cend(); ++iter)
-    {
-        if (iter->first == _key)
-        {
-            return idx;
-        }
-        ++idx;
-    }
-
-    return 0;
-}
-
-
 class ComboBoxUI :
     public UI
 {

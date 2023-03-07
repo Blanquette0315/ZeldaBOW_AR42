@@ -175,6 +175,7 @@
     <ClInclude Include="LayerCollisionUI.h" />
     <ClInclude Include="LevelUI.h" />
     <ClInclude Include="Light3DUI.h" />
+    <ClInclude Include="ListUI_EX.h" />
     <ClInclude Include="MaterialUI.h" />
     <ClInclude Include="MenuUI.h" />
     <ClInclude Include="MeshUI.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="ScriptUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TemProgram.h" />
+    <ClInclude Include="TestUI.h" />
     <ClInclude Include="TextureUI.h" />
     <ClInclude Include="TileMapTableUI.h" />
     <ClInclude Include="TileMapUI.h" />
@@ -230,6 +232,7 @@
     <ClCompile Include="LayerCollisionUI.cpp" />
     <ClCompile Include="LevelUI.cpp" />
     <ClCompile Include="Light3DUI.cpp" />
+    <ClCompile Include="ListUI_EX.cpp" />
     <ClCompile Include="MaterialUI.cpp" />
     <ClCompile Include="MenuUI.cpp" />
     <ClCompile Include="MeshUI.cpp" />
@@ -257,6 +260,7 @@
     </ClCompile>
     <ClCompile Include="RTextureUI.cpp" />
     <ClCompile Include="ScriptUI.cpp" />
+    <ClCompile Include="TestUI.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TileMapTableUI.cpp" />
     <ClCompile Include="TileMapUI.cpp" />

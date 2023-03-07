@@ -123,6 +123,12 @@
     <Filter Include="03. UI\ModuleUI\ComboBoxUI">
       <UniqueIdentifier>{bf48d095-7111-40c2-b5c2-99479ae0c5f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\ModuleUI\ListUI_EX">
+      <UniqueIdentifier>{c1fd196b-fef0-4566-831c-60eccac61e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\TestUI">
+      <UniqueIdentifier>{736eb4dc-6a79-464c-82f0-317accf87734}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -284,6 +290,8 @@
     <ClInclude Include="ComboBoxUI.h">
       <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
     </ClInclude>
+    <ClInclude Include="ListUI_EX.h" />
+    <ClInclude Include="TestUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -427,6 +435,12 @@
     </ClCompile>
     <ClCompile Include="ComboBoxUI.cpp">
       <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ListUI_EX.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUI.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

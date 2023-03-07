@@ -13,6 +13,7 @@
 #include "ContentUI.h"
 #include "OutlinerUI.h"
 #include "MenuUI.h"
+#include "TestUI.h"
 
 #include "ListUI.h"
 #include "TextureUI.h"
@@ -172,6 +173,9 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new CurAnimEditor;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new TestUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     ListUI* pList = new ListUI;
