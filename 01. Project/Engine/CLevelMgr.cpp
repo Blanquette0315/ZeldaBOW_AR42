@@ -15,12 +15,6 @@ CLevelMgr::CLevelMgr()
 
 CLevelMgr::~CLevelMgr()
 {
-	if (nullptr != m_pCurLevel)
-	{
-		m_mapLevel.erase(m_pCurLevel->GetRelativePath());
-		delete m_pCurLevel;
-	}
-
 	Safe_Del_Map<wstring, CLevel*>(m_mapLevel);
 }
 

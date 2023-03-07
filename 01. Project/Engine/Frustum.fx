@@ -41,10 +41,20 @@ struct GS_OUT
 };
 
 // 원래 포인트 매쉬가 0,0,0 기준에서 확장
-[maxvertexcount(36)]
+[maxvertexcount(16)]
 void GS_Frustum(point VS_OUT _in[1], inout LineStream<GS_OUT> _OutStream)
 {
     GS_OUT output[8] = { (GS_OUT) 0.f, (GS_OUT) 0.f, (GS_OUT) 0.f, (GS_OUT) 0.f, (GS_OUT) 0.f, (GS_OUT) 0.f, (GS_OUT) 0.f, (GS_OUT) 0.f };
+    
+    // 투영공간 좌표
+	//     4 ------ 5
+	//     |        |  Far
+	//   / |        |
+	//	/  7 ------ 6	
+	// /      /
+	// 0 -- 1     /
+	// |    |    / Near
+	// 3 -- 2
     
     float3 vProjPos[8] =
     {
@@ -67,71 +77,28 @@ void GS_Frustum(point VS_OUT _in[1], inout LineStream<GS_OUT> _OutStream)
         output[i].vPosition = mul(mul(vPos, g_matView), g_matProj);
     }
 
-    // 정점을 이용해 면 만들어 주기
-    // Near 평면
     _OutStream.Append(output[0]);
+    _OutStream.Append(output[4]);
+    _OutStream.Append(output[5]);
     _OutStream.Append(output[1]);
     _OutStream.Append(output[2]);
-    _OutStream.RestartStrip();
-    
-    _OutStream.Append(output[0]);
-    _OutStream.Append(output[2]);
+    _OutStream.Append(output[6]);
+    _OutStream.Append(output[7]);
     _OutStream.Append(output[3]);
+    _OutStream.Append(output[0]);
+    _OutStream.Append(output[1]);
     _OutStream.RestartStrip();
     
-    // Right 평면
-    _OutStream.Append(output[1]);
     _OutStream.Append(output[5]);
     _OutStream.Append(output[6]);
     _OutStream.RestartStrip();
     
-    _OutStream.Append(output[1]);
-    _OutStream.Append(output[6]);
+    _OutStream.Append(output[4]);
+    _OutStream.Append(output[7]);
+    _OutStream.RestartStrip();
+    
     _OutStream.Append(output[2]);
-    _OutStream.RestartStrip();
-    
-    // Left 평면
-    _OutStream.Append(output[4]);
-    _OutStream.Append(output[0]);
     _OutStream.Append(output[3]);
-    _OutStream.RestartStrip();
-    
-    _OutStream.Append(output[4]);
-    _OutStream.Append(output[3]);
-    _OutStream.Append(output[7]);
-    _OutStream.RestartStrip();
-    
-    // Down 평면
-    _OutStream.Append(output[3]);
-    _OutStream.Append(output[2]);
-    _OutStream.Append(output[6]);
-    _OutStream.RestartStrip();
-    
-    _OutStream.Append(output[3]);
-    _OutStream.Append(output[6]);
-    _OutStream.Append(output[7]);
-    _OutStream.RestartStrip();
-    
-    //UP 평면
-    _OutStream.Append(output[4]);
-    _OutStream.Append(output[5]);
-    _OutStream.Append(output[1]);
-    _OutStream.RestartStrip();
-    
-    _OutStream.Append(output[4]);
-    _OutStream.Append(output[1]);
-    _OutStream.Append(output[0]);
-    _OutStream.RestartStrip();
-    
-    // Far 평면
-    _OutStream.Append(output[5]);
-    _OutStream.Append(output[4]);
-    _OutStream.Append(output[7]);
-    _OutStream.RestartStrip();
-    
-    _OutStream.Append(output[5]);
-    _OutStream.Append(output[7]);
-    _OutStream.Append(output[6]);
     _OutStream.RestartStrip();
 }
 
