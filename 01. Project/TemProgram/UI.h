@@ -2,6 +2,25 @@
 
 #include "imgui.h"
 
+enum class HEAD_TYPE
+{
+	SELECTABLE,
+	MENU,
+};
+
+enum class MENU_TYPE
+{
+	ADD_COMPONENT,
+	ADD_SCRIPT,
+};
+
+enum class FUNC_TYPE
+{
+	FUNC_0,
+	FUNC_1,
+	FUNC_2,
+};
+
 class UI
 {
 private:
@@ -24,7 +43,7 @@ public:
 
 	void AddChild(UI* _ChildUI);
 
-	virtual void Open() { m_bOpen = true; }
+	virtual void Open();
 	virtual void Close() { m_bOpen = false; }
 	void SetModal(bool _Modal) { m_bModal = _Modal; }
 	void ShowSeperator(bool _bShow) { m_bSeperator = _bShow; }

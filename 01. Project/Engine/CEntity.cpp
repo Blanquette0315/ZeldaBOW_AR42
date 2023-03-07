@@ -21,13 +21,16 @@ CEntity::~CEntity()
 
 }
 
-
-void CEntity::SaveToFile(FILE* _pFile)
+void CEntity::SaveToYAML(YAML::Emitter& _emitter)
 {
-	SaveWStringToFile(m_strName, _pFile);
+	_emitter << YAML::Key << "name";
+	_emitter << YAML::Value << WStringToString(m_strName);
 }
 
-void CEntity::LoadFromFile(FILE* _pFile)
+void CEntity::LoadFromYAML(YAML::Node& _node)
 {
-	LoadWStringFromFile(m_strName, _pFile);
+	if (_node["name"].IsDefined())
+	{
+		m_strName = StringToWString(_node["name"].as<string>());
+	}
 }

@@ -21,6 +21,7 @@ CCamera::CCamera()
 	, m_eProjType(PROJ_TYPE::ORTHOGRAPHICS)
 	, m_fAspectRatio(1.f)
 	, m_FOV(XM_PI / 2.f)
+	, m_fNear(1.f)
 	, m_fFar(2000.f)
 	, m_fScale(1.f)
 	, m_iLayerMask(0)
@@ -90,7 +91,7 @@ void CCamera::CalcProjMat()
 	if (PROJ_TYPE::PERSPECTIVE == m_eProjType)
 	{
 		// 원근 투영
-		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_fAspectRatio, 1.f, m_fFar);
+		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_fAspectRatio, m_fNear, m_fFar);
 	}
 	else
 	{
@@ -165,6 +166,16 @@ void CCamera::SetLayerMask(int _iLayerIdx)
 	{
 		m_iLayerMask |= (1 << _iLayerIdx);
 	}
+}
+
+void CCamera::SetLayerVisible(int _iLayerIdx)
+{
+	m_iLayerMask |= (1 << _iLayerIdx);
+}
+
+void CCamera::SetLayerInvisible(int _iLayerIdx)
+{
+	m_iLayerMask &= ~(1 << _iLayerIdx);
 }
 
 void CCamera::SortObject()
@@ -302,29 +313,33 @@ void CCamera::render_postprocess()
 	}
 }
 
-
-
-
-
-void CCamera::SaveToFile(FILE* _File)
+void CCamera::SaveToYAML(YAML::Emitter& _emitter)
 {
-	COMPONENT_TYPE type = GetType();
-	fwrite(&type, sizeof(UINT), 1, _File);
+	_emitter << YAML::Key << "CAMERA";
+	_emitter << YAML::Value << YAML::BeginMap;
 
-	fwrite(&m_eProjType, sizeof(PROJ_TYPE), 1, _File);
-	fwrite(&m_fAspectRatio, sizeof(float), 1, _File);
-	fwrite(&m_fFar, sizeof(float), 1, _File);
-	fwrite(&m_fScale, sizeof(float), 1, _File);
-	fwrite(&m_iLayerMask, sizeof(UINT), 1, _File);
-	fwrite(&m_iCamIdx, sizeof(int), 1, _File);
+	_emitter << YAML::Key << "ProjType";
+	_emitter << YAML::Value << (UINT)m_eProjType;
+	_emitter << YAML::Key << "Far";
+	_emitter << YAML::Value << m_fFar;
+	_emitter << YAML::Key << "FieldOfView";
+	_emitter << YAML::Value << m_FOV;
+	_emitter << YAML::Key << "Scale";
+	_emitter << YAML::Value << m_fScale;
+	_emitter << YAML::Key << "LayerMask";
+	_emitter << YAML::Value << m_iLayerMask;
+	_emitter << YAML::Key << "CamIdx";
+	_emitter << YAML::Value << m_iCamIdx;
+
+	_emitter << YAML::EndMap;
 }
 
-void CCamera::LoadFromFile(FILE* _File)
+void CCamera::LoadFromYAML(YAML::Node& _node)
 {
-	fread(&m_eProjType, sizeof(PROJ_TYPE), 1, _File);
-	fread(&m_fAspectRatio, sizeof(float), 1, _File);
-	fread(&m_fFar, sizeof(float), 1, _File);
-	fread(&m_fScale, sizeof(float), 1, _File);
-	fread(&m_iLayerMask, sizeof(UINT), 1, _File);
-	fread(&m_iCamIdx, sizeof(int), 1, _File);
+	m_eProjType = (PROJ_TYPE)(_node["CAMERA"]["ProjType"].as<UINT>());
+	m_fFar = _node["CAMERA"]["Far"].as<float>();
+	m_FOV = _node["CAMERA"]["FieldOfView"].as<float>();
+	m_fScale = _node["CAMERA"]["Scale"].as<float>();
+	m_iLayerMask = _node["CAMERA"]["LayerMask"].as<UINT>();
+	m_iCamIdx = _node["CAMERA"]["CamIdx"].as<int>();
 }

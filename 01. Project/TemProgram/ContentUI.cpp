@@ -247,15 +247,23 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 		// InspectorUI에 클릭된 Level을 알려준다.
 		CLevel* pLevel = (CLevel*)pSelectedNode->GetData();
 		Inspector->SetTargetLevel(pLevel);
+
 	}
 
 	// 선택된 노드가 Res일 경우
 	else
 	{
-		CRes* pRes = (CRes*)pSelectedNode->GetData();
+		Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
+
+		// Prefab
+		if (pRes->GetResType() == RES_TYPE::PREFAB)
+		{
+			Ptr<CPrefab> pref = (CPrefab*)pRes.Get();
+			Inspector->SetTargetObject(pref->GetProtoObj());
+		}
 
 		// InspectorUI에 클릭된 Resource를 알려준다.
-		Inspector->SetTargetResource(pRes);
+		Inspector->SetTargetResource(pRes.Get());
 	}
 }
 

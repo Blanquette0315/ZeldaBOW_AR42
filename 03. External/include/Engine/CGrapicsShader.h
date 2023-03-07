@@ -36,13 +36,24 @@ public:
 
     void UpdateData();
 
+    bool USE_VS() { if (m_VS != nullptr) { return true; } else { return false; } }
+    bool USE_HS() { if (m_HS != nullptr) { return true; } else { return false; } }
+    bool USE_DS() { if (m_DS != nullptr) { return true; } else { return false; } }
+    bool USE_GS() { if (m_GS != nullptr) { return true; } else { return false; } }
+    bool USE_PS() { if (m_PS != nullptr) { return true; } else { return false; } }
+
 public:
     void SetTopology(D3D10_PRIMITIVE_TOPOLOGY _eTopology) { m_eTopology = _eTopology; }
     void SetRSType(RS_TYPE _eType) { m_eRSType = _eType; }
     void SetBSType(BS_TYPE _eType) { m_eBSType = _eType; }
     void SetDSType(DS_TYPE _eType) { m_eDSType = _eType; }
-
     void SetDomain(SHADER_DOMAIN _eDomain) { m_eDomain = _eDomain; }
+
+    D3D10_PRIMITIVE_TOPOLOGY GetTopology() { return m_eTopology; }
+    RS_TYPE GetRSType() { return m_eRSType; }
+    BS_TYPE GetBSType() { return m_eBSType; }
+    DS_TYPE GetDSType() { return m_eDSType; }
+
     SHADER_DOMAIN GetDomain() { return m_eDomain; }
 
 public:

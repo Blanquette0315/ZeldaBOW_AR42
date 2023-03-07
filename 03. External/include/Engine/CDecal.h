@@ -11,19 +11,19 @@ class CDecal :
     public CRenderComponent
 {
 private:
-    Ptr<CTexture>   m_pDecalTex;
     bool            m_bLighting;    // 정확히는 Forward로 랜더링할지, Deferred로 랜더링할지
 
 public:
     void SetRenderType(bool _bSet); // m_bLgihting을 즉, forward방식으로 혹은 Deferred 방식으로 랜더링할지에 따라 알맞은 재질을 선택해준다.
-    void SetDecalTexture(Ptr<CTexture> _Tex) { m_pDecalTex = _Tex; }
+    bool IsDeferred() { return m_bLighting; }
 
 public:
     virtual void finaltick() override;
     virtual void render() override;
 
 public:
-
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
     CLONE(CDecal);
 public:
     CDecal();

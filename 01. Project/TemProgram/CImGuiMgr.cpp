@@ -7,12 +7,14 @@
 #include "imgui_impl_win32.h"
 #include "UI.h"
 #include "ParamUI.h"
+#include "CommonUI.h"
 
 
 #include "InspectorUI.h"
 #include "ContentUI.h"
 #include "OutlinerUI.h"
 #include "MenuUI.h"
+#include "TestUI.h"
 
 #include "ListUI.h"
 #include "TextureUI.h"
@@ -91,6 +93,7 @@ void CImGuiMgr::progress()
     // 매번 0으로 초기화해서 무한히 증가하는 것을 방지.
     // 뿐만아니라 계속 아이디가 바뀌면 버튼이 동작하지 않는다.
     ParamUI::ParamCount = 0;
+    CommonUI::iCommonUIID = 0;
 
     // 이부분에 우리가 만들 창들을 입력하면 된다.
     // 이제 구조가 바뀌어서 Create할 때 만들어두고 update, render쪽에서 해준다.
@@ -172,6 +175,9 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new CurAnimEditor;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new TestUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     ListUI* pList = new ListUI;

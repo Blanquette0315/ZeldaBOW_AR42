@@ -2,6 +2,7 @@
 #include "Light3DUI.h"
 
 #include <Engine/CLight3D.h>
+#include "CommonUI.h"
 
 Light3DUI::Light3DUI()
 	: ComponentUI("Light3D", COMPONENT_TYPE::LIGHT3D)
@@ -60,24 +61,30 @@ void Light3DUI::render_update()
 	ImGui::Text("Light_Type"); ImGui::SameLine(); ImGui::Combo("##Light2D_Type", &m_iCurItem, m_arrLightType, IM_ARRAYSIZE(m_arrLightType));
 
 	ImGui::Text("Diff Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_DiffColor", m_vDiff);
-	ImGui::Text("Editor    "); ImGui::SameLine(); ImGui::ColorEdit3("##L3D_DiffColor2", m_vDiff);
+	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vDiff);
 
 	ImGui::Text("Spec Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_SpecColor", m_vSpec);
-	ImGui::Text("Editor    "); ImGui::SameLine(); ImGui::ColorEdit3("##L3D_SpecfColor2", m_vSpec);
+	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vSpec);
 
 	ImGui::Text("Emb  Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_EnbColor", m_Emb);
-	ImGui::Text("Editor    "); ImGui::SameLine(); ImGui::ColorEdit3("##L3D_EmbColor2", m_Emb);
+	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_Emb);
 
-	ImGui::Text("Radius    "); ImGui::SameLine(); ImGui::InputFloat("##L3D_Radius", &m_fRadius);
-	ImGui::Text("          "); ImGui::SameLine(); ImGui::DragFloat("##L3D_Slid_Radius", &m_fRadius, 1.f);
+	if (m_eLightType == LIGHT_TYPE::POINT || m_eLightType == LIGHT_TYPE::SPOT)
+	{
+		ImGui::Text("Radius    "); ImGui::SameLine(); ImGui::InputFloat("##L3D_Radius", &m_fRadius);
+		ImGui::Text("          "); ImGui::SameLine(); ImGui::DragFloat("##L3D_Slid_Radius", &m_fRadius, 1.f);
 
-	ImGui::Text("InAngle   "); ImGui::SameLine(); ImGui::InputFloat("##L3D_InAngle", &m_fInAngle);
-	m_fInAngle = (m_fInAngle / 180.f) * XM_PI;
-	ImGui::Text("          "); ImGui::SameLine(); ImGui::SliderAngle("##L3D_Slid_InAngle", &m_fInAngle, 0.f, 360.f);
+		if (m_eLightType == LIGHT_TYPE::SPOT)
+		{
+			ImGui::Text("InAngle   "); ImGui::SameLine(); ImGui::InputFloat("##L3D_InAngle", &m_fInAngle);
+			m_fInAngle = (m_fInAngle / 180.f) * XM_PI;
+			ImGui::Text("          "); ImGui::SameLine(); ImGui::SliderAngle("##L3D_Slid_InAngle", &m_fInAngle, 0.f, 360.f);
 
-	ImGui::Text("OutAngle  "); ImGui::SameLine(); ImGui::InputFloat("##L3D_OutAngle", &m_fOutAngle);
-	m_fOutAngle = (m_fOutAngle / 180.f) * XM_PI;
-	ImGui::Text("          "); ImGui::SameLine(); ImGui::SliderAngle("##L3D_Slid_OutAngle", &m_fOutAngle, 0.f, 360.f);
+			ImGui::Text("OutAngle  "); ImGui::SameLine(); ImGui::InputFloat("##L3D_OutAngle", &m_fOutAngle);
+			m_fOutAngle = (m_fOutAngle / 180.f) * XM_PI;
+			ImGui::Text("          "); ImGui::SameLine(); ImGui::SliderAngle("##L3D_Slid_OutAngle", &m_fOutAngle, 0.f, 360.f);
+		}
+	}
 
 	if (GetTarget())
 	{
@@ -95,7 +102,7 @@ void Light3DUI::render_update()
 		}
 		case (UINT)LIGHT_TYPE::SPOT:
 		{
-			//GetTarget()->Light3D()->SetLightType(LIGHT_TYPE::SPOT);
+			GetTarget()->Light3D()->SetLightType(LIGHT_TYPE::SPOT);
 			break;
 		}
 		}
@@ -103,10 +110,18 @@ void Light3DUI::render_update()
 		GetTarget()->Light3D()->SetLightColor(m_vDiff);
 		GetTarget()->Light3D()->SetLightSpecular(m_vSpec);
 		GetTarget()->Light3D()->SetLightAmbient(m_Emb);
-		GetTarget()->Light3D()->SetRadius(m_fRadius);
-		m_fInAngle = (m_fInAngle / XM_PI) * 180.f;
-		GetTarget()->Light3D()->SetInAngle(m_fInAngle);
-		m_fOutAngle = (m_fOutAngle / XM_PI) * 180.f;
-		GetTarget()->Light3D()->SetOutAngle(m_fOutAngle);
+
+		if (m_eLightType == LIGHT_TYPE::POINT || m_eLightType == LIGHT_TYPE::SPOT)
+		{
+			GetTarget()->Light3D()->SetRadius(m_fRadius);
+
+			if (m_eLightType == LIGHT_TYPE::SPOT)
+			{
+				m_fInAngle = (m_fInAngle / XM_PI) * 180.f;
+				GetTarget()->Light3D()->SetInAngle(m_fInAngle);
+				m_fOutAngle = (m_fOutAngle / XM_PI) * 180.f;
+				GetTarget()->Light3D()->SetOutAngle(m_fOutAngle);
+			}
+		}
 	}
 }

@@ -50,7 +50,7 @@ public:
     void ChangeName(bool _Change) { m_bChangeName = _Change; }
 
 private:
-    void SetKey(const wstring& _strKey) { m_strKey = _strKey; }
+    void SetKey(const wstring& _strKey) { m_strKey = _strKey; if (m_bEngineRes){SetName(m_strKey);} }
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
 
 protected:

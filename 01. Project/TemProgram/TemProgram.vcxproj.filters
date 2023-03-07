@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="소스 파일">
@@ -119,6 +119,30 @@
     </Filter>
     <Filter Include="03. UI\01. Inspector\ComponentUI\Light3DUI">
       <UniqueIdentifier>{314c15e9-770b-4e9c-b780-273ed895e09e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\ComboBoxUI">
+      <UniqueIdentifier>{bf48d095-7111-40c2-b5c2-99479ae0c5f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\ListUI_EX">
+      <UniqueIdentifier>{c1fd196b-fef0-4566-831c-60eccac61e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\TestUI">
+      <UniqueIdentifier>{736eb4dc-6a79-464c-82f0-317accf87734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\CommonUI">
+      <UniqueIdentifier>{c13ab7d7-ca1b-4ef0-94a9-e53bd5399290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\InputTextUI">
+      <UniqueIdentifier>{0d6f652b-3ac1-4056-9518-daf2fa10cc40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\SkyBoxUI">
+      <UniqueIdentifier>{641b5120-3861-4f5c-95b0-0a45188f26c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\DecalUI">
+      <UniqueIdentifier>{90ab02d0-7d90-4cf2-a24a-b3f716f939ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\01. Inspector\ResUI\GraphicsShaderUI">
+      <UniqueIdentifier>{459504aa-f778-4d14-b9e7-d600e367cc3e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +302,30 @@
     <ClInclude Include="Light3DUI.h">
       <Filter>03. UI\01. Inspector\ComponentUI\Light3DUI</Filter>
     </ClInclude>
+    <ClInclude Include="ComboBoxUI.h">
+      <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonUI.h">
+      <Filter>03. UI\ModuleUI\CommonUI</Filter>
+    </ClInclude>
+    <ClInclude Include="InputTextUI.h">
+      <Filter>03. UI\ModuleUI\InputTextUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ListUI_EX.h">
+      <Filter>03. UI\ModuleUI\ListUI_EX</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUI.h">
+      <Filter>03. UI\ModuleUI\TestUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\SkyBoxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="DecalUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\DecalUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsShaderUI.h">
+      <Filter>03. UI\01. Inspector\ResUI\GraphicsShaderUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -418,6 +466,30 @@
     </ClCompile>
     <ClCompile Include="Light3DUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\Light3DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComboBoxUI.cpp">
+      <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonUI.cpp">
+      <Filter>03. UI\ModuleUI\CommonUI</Filter>
+    </ClCompile>
+    <ClCompile Include="InputTextUI.cpp">
+      <Filter>03. UI\ModuleUI\InputTextUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ListUI_EX.cpp">
+      <Filter>03. UI\ModuleUI\ListUI_EX</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUI.cpp">
+      <Filter>03. UI\ModuleUI\TestUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\SkyBoxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="DecalUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\DecalUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsShaderUI.cpp">
+      <Filter>03. UI\01. Inspector\ResUI\GraphicsShaderUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

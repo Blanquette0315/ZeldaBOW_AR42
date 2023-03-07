@@ -17,6 +17,11 @@ CPrefab::CPrefab(CGameObject* _pProto)
 	: CRes(RES_TYPE::PREFAB)
 	, m_pProtoObj(_pProto)
 {
+	wstring ResName = _pProto->GetName();
+	ResName += L"_Prefab";
+
+	SetName(ResName);
+
 	if (-1 != _pProto->GetLayerIdx())
 	{
 		m_pProtoObj = _pProto->Clone();

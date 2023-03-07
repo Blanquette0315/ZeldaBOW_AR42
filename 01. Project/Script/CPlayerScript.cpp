@@ -8,11 +8,27 @@ CPlayerScript::CPlayerScript()
 	: CScript(PLAYERSCRIPT)
 	, m_fAccTime(0.f)
 	, m_fSpeed(100.f)
+	, m_iTest(0)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player JumpHeight", &m_fJumpHeight);
 
-	m_Prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ChildObject");
+	AddScriptParam(SCRIPT_PARAM::INT, "Int Test         ", &m_iTest);
+	AddScriptParam(SCRIPT_PARAM::VEC2, "Vec2 Test       ", &m_v2Test);
+	AddScriptParam(SCRIPT_PARAM::VEC3, "Vec3 Test       ", &m_v3Test);
+	AddScriptParam(SCRIPT_PARAM::VEC4, "Vec4 Test       ", &m_v4Test);
+
+	m_Prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\Test_Prefab_0.pref");
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Prefab  Test    ", &m_Prefab);
+
+	m_Prefab1 = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\Test_Prefab_0.pref");
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Prefab  Test    ", &m_Prefab1);
+
+	m_PTestTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png");
+	AddScriptParam(SCRIPT_PARAM::TEXTURE, "Texture Test    ", &m_PTestTex);
+
+	m_PTestTex1 = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png");
+	AddScriptParam(SCRIPT_PARAM::TEXTURE, "Texture Test    ", &m_PTestTex1);
 }
 
 CPlayerScript::~CPlayerScript()
@@ -80,21 +96,22 @@ void CPlayerScript::EndOverlap(CCollider2D* _pOther)
 {
 }
 
-
-void CPlayerScript::SaveToFile(FILE* _File)
+void CPlayerScript::SaveToYAML(YAML::Emitter& _emitter)
 {
-	CScript::SaveToFile(_File);
-	fwrite(&m_fSpeed, sizeof(float), 1, _File);
-	fwrite(&m_fJumpHeight, sizeof(float), 1, _File);
-
-	SaveResourceRef(m_Prefab, _File);
+	CScript::SaveToYAML(_emitter);
+	_emitter << YAML::Key << "Speed";
+	_emitter << YAML::Value << m_fSpeed;
+	_emitter << YAML::Key << "JumpHeight";
+	_emitter << YAML::Value << m_fJumpHeight;
 }
 
-void CPlayerScript::LoadFromFile(FILE* _File)
+void CPlayerScript::LoadFromYAML(YAML::Node& _node)
 {
-	CScript::LoadFromFile(_File);
-	fread(&m_fSpeed, sizeof(float), 1, _File);
-	fread(&m_fJumpHeight, sizeof(float), 1, _File);
+	/*CScript::LoadFromYAML(_node);
+	m_fSpeed = _node["Speed"].as<float>();
+	m_fJumpHeight = _node["JumpHeight"].as<float>();*/
 
-	LoadResourceRef(m_Prefab, _File);
+	CScript::LoadFromYAML(_node);
+	SAFE_LOAD_FROM_YAML(float, m_fSpeed, _node["Speed"]);
+	SAFE_LOAD_FROM_YAML(float, m_fJumpHeight, _node["JumpHeight"]);
 }

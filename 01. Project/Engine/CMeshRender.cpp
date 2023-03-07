@@ -58,3 +58,17 @@ void CMeshRender::render()
 		Animator2D()->Clear();
 	}
 }
+
+void CMeshRender::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "MESHRENDER";
+	_emitter << YAML::Value << YAML::BeginMap;
+	CRenderComponent::SaveToYAML(_emitter);
+	_emitter << YAML::EndMap;
+}
+
+void CMeshRender::LoadFromYAML(YAML::Node& _node)
+{
+	YAML::Node node = _node["MESHRENDER"];
+	CRenderComponent::LoadFromYAML(node);
+}

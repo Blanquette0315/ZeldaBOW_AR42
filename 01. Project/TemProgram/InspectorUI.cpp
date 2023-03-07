@@ -4,7 +4,6 @@
 #include <Engine/CLevelMgr.h>
 #include <Engine/CGameObject.h>
 #include <Engine/CLevel.h>
-#include <Engine/CKeyMgr.h>
 #include <Engine/CTransform.h>
 
 #include "ListUI.h"
@@ -21,12 +20,15 @@
 #include "ParticleSystemUI.h"
 #include "TileMapUI.h"
 #include "Animator2DUI.h"
+#include "SkyBoxUI.h"
+#include "DecalUI.h"
 #include "ScriptUI.h"
 
 #include "MeshUI.h"
 #include "RTextureUI.h"
 #include "MaterialUI.h"
 #include "PreFabUI.h"
+#include "GraphicsShaderUI.h"
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
@@ -42,7 +44,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER] = new MeshRenderUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetSize(ImVec2(0.f, 80.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetSize(ImVec2(0.f, 280.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D] = new Collider2DUI;
@@ -58,7 +60,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::LIGHT3D]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA] = new CameraUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetSize(ImVec2(0.f, 100.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetSize(ImVec2(0.f, 280.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = new ParticleSystemUI;
@@ -72,6 +74,14 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = new Animator2DUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetSize(ImVec2(0.f, 450.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX] = new SkyBoxUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX]->SetSize(ImVec2(0.f, 150.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL] = new DecalUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]->SetSize(ImVec2(0.f, 150.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]);
 
 	// ResourceUI
 	m_arrResUI[(UINT)RES_TYPE::MESH] = new MeshUI;
@@ -98,6 +108,12 @@ InspectorUI::InspectorUI()
 	m_arrResUI[(UINT)RES_TYPE::PREFAB]->Close();
 	AddChild(m_arrResUI[(UINT)RES_TYPE::PREFAB]);
 
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER] = new GraphicsShaderUI;
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->SetSize(ImVec2(0.f, 0.f));
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->ShowSeperator(false);
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->Close();
+	AddChild(m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]);
+
 	// LevelUI
 	m_pLevelUI = new LevelUI("LevelUI##UI");
 	m_pLevelUI->SetSize(ImVec2(0.f, 0.f));
@@ -123,42 +139,6 @@ void InspectorUI::update()
 		SetTargetObject(nullptr);
 	}
 
-
-	// LevelMgr로 부터 지금 레벨에 있는 모든 오브젝트 가져오기
-	m_arrObject = CLevelMgr::GetInst()->GetCurLevel()->GetGameObjects();
-	m_ObjName.clear();
-	for (size_t i = 0; i < m_arrObject.size(); ++i)
-	{
-		m_ObjName.push_back(string(m_arrObject[i]->GetName().begin(), m_arrObject[i]->GetName().end()));
-	}
-
-	if (m_bMouseCheck)
-	{
-		if (KEY_TAP(KEY::LBTN))
-		{
-			Vec2 TemMousePos = CKeyMgr::GetInst()->GetGWMousePos();
-			
-			for (size_t i = 0; i < m_arrObject.size(); ++i)
-			{
-				float Left = m_arrObject[i]->Transform()->GetWorldPos().x - m_arrObject[i]->Transform()->GetWorldScale().x * 0.5f;
-				float Right = m_arrObject[i]->Transform()->GetWorldPos().x + m_arrObject[i]->Transform()->GetWorldScale().x * 0.5f;
-				float Top = m_arrObject[i]->Transform()->GetWorldPos().y + m_arrObject[i]->Transform()->GetWorldScale().y * 0.5f;
-				float Bot = m_arrObject[i]->Transform()->GetWorldPos().y - m_arrObject[i]->Transform()->GetWorldScale().y * 0.5f;
-
-				if (TemMousePos.x >= Left
-					&& TemMousePos.x <= Right)
-				{
-					if (TemMousePos.y <= Top
-						&& TemMousePos.y >= Bot)
-					{
-						SetTargetObject(m_arrObject[i]);
-						break;
-					}
-				}
-			}
-		}
-	}
-
 	UI::update();
 }
 
@@ -173,20 +153,6 @@ void InspectorUI::render_update()
 		ImGui::Button("Select Object");
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
-	
-		ImGui::Text("Select Object List"); ImGui::SameLine();
-		if (ImGui::Button("##SelectObjBtn", Vec2(18.f, 18.f)))
-		{
-			ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
-			assert(pListUI);
-	
-			pListUI->SetItemList(m_ObjName); 
-			pListUI->AddDynamicDBClicked(this, (FUNC_1)&InspectorUI::SetTargetbyKey);
-	
-			pListUI->Open();
-		}
-		ImGui::SameLine(); ImGui::Text("Select Object Mouse"); ImGui::SameLine();
-		ImGui::Checkbox("##CheckSelecObjMouse", &m_bMouseCheck);
 	
 		ImGui::Text("Now Object : "); ImGui::SameLine();
 		ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), string(m_TargetObj->GetName().begin(), m_TargetObj->GetName().end()).c_str());
@@ -434,4 +400,14 @@ void InspectorUI::SetTargetLevel(CLevel* _Level)
 		m_pLevelUI->SetTarget(nullptr);
 		m_pLevelUI->Close();
 	}
+}
+
+UI* InspectorUI::FindResUI(RES_TYPE _eType)
+{
+	return m_arrResUI[(UINT)_eType];
+}
+
+UI* InspectorUI::FindComponentUI(COMPONENT_TYPE _eType)
+{
+	return m_arrComUI[(UINT)_eType];
 }

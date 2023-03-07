@@ -8,10 +8,9 @@ CDecal::CDecal()
 	: CRenderComponent(COMPONENT_TYPE::DECAL)
 	, m_bLighting(false)
 {
-	// µ¥Ä®¿¡¼­ »ç¿ëÇÒ ¸Å½Ã´Â ÀÏ¹ÝÀûÀ¸·Î Å¥ºê °íÁ¤ÀÌ±â ¶§¹®¿¡ »ý¼ºÀÚ¿¡¼­ °íÁ¤ÇØÁØ´Ù.
-	// ShaderÀÇ °æ¿ì Deferred³Ä, forward³Ä¿¡ µû¶ó ´Þ¶óÁö±â ¶§¹®¿¡ ÇÔ¼ö·Î ºÐ·ùÇÒ °ÍÀÌ´Ù.
+	// ï¿½ï¿½Ä®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å½Ã´ï¿½ ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+	// Shaderï¿½ï¿½ ï¿½ï¿½ï¿½ Deferredï¿½ï¿½, forwardï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½Ð·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
-	SetRenderType(m_bLighting);
 }
 
 CDecal::~CDecal()
@@ -22,13 +21,13 @@ void CDecal::SetRenderType(bool _bSet)
 {
 	m_bLighting = _bSet;
 
-	// trueÀÏ °æ¿ì Deferred·Î ·£´õ¸µÇÏ°Ú´Ù´Â ÀÇ¹ÌÀÌ´Ù.
+	// trueï¿½ï¿½ ï¿½ï¿½ï¿½ Deferredï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Ú´Ù´ï¿½ ï¿½Ç¹ï¿½ï¿½Ì´ï¿½.
 	if (m_bLighting)
 	{
 		SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_DecalMtrl"));
 	}
 
-	// falseÀÏ °æ¿ì Forward·Î ·£´õ¸µÇÏ°Ú´Ù´Â ÀÇ¹ÌÀÌ´Ù.
+	// falseï¿½ï¿½ ï¿½ï¿½ï¿½ Forwardï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Ú´Ù´ï¿½ ï¿½Ç¹ï¿½ï¿½Ì´ï¿½.
 	else
 	{
 		SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DecalMtrl"));
@@ -41,18 +40,42 @@ void CDecal::finaltick()
 
 void CDecal::render()
 {
-	// Å¥ºê º¼·ý ¸Å½Ã È®ÀÎÀ» À§ÇÑ µð¹ö±× µå·ÎÀ×
+	// Å¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	DebugDrawCube(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetWorldScale(), Transform()->GetRelativeRotation());
 
-	// À§Ä¡ Çà·Ä ¾÷µ¥ÀÌÆ®
+	// ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 	Transform()->UpdateData();
 
-	// ¸ÓÅ×¸®¾ó ¾÷µ¥ÀÌÆ®
+	// ï¿½ï¿½ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 	CRenderMgr::GetInst()->CopyPositionTarget();
-	GetCurMaterial()->SetTexParam(TEX_1, m_pDecalTex);
 	GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PTCopyTex"));
 	GetCurMaterial()->UpdateData();
 
-	// ·»´õ¸µ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	GetMesh()->render();
+
+	CMaterial::Clear();
+}
+
+void CDecal::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "DECAL";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "DecalTexture";
+	_emitter << YAML::Value << YAML::BeginMap;
+	SaveResourceRef<CTexture>(m_pDecalTex, _emitter);
+	_emitter << YAML::EndMap;
+	_emitter << YAML::Key << "LightingMethod";
+	_emitter << YAML::Value << m_bLighting;
+
+	_emitter << YAML::EndMap;
+}
+
+void CDecal::LoadFromYAML(YAML::Node& _node)
+{
+	SetRenderType(_node["DECAL"]["LightingMethod"].as<bool>());
+
+	YAML::Node node = _node["DECAL"]["DecalTexture"];
+	LoadResourceRef<CTexture>(m_pDecalTex, node);
 }

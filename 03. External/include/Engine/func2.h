@@ -1,5 +1,32 @@
 #pragma once
 
+// ====================== JM ======================================
+wstring ConvertStrToWstr(const string& _str);
+string ConvertWstrToStr(const wstring& _wstr);
+vector<wstring> ConvertStrToWstrVec(const vector<string>& _vecStr);
+vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr);
+
+template <typename T1, typename T2>
+int GetMapIdx(const map<T1, T2>& _map, T2 _key);
+
+template<typename T1, typename T2>
+inline int GetMapIdx(const map<T1, T2>& _map, T1 _key)
+{
+	int idx = 0;
+	typename map<T1, T2>::const_iterator iter = _map.cbegin();
+	for (; iter != _map.cend(); ++iter)
+	{
+		if (iter->first == _key)
+		{
+			return idx;
+		}
+		++idx;
+	}
+
+	return 0;
+}
+// ================================================================
+
 template<typename T>
 void Safe_Del_Vec(vector<T*>& _vec)
 {
@@ -38,6 +65,7 @@ void Safe_Del_Array(T* (&_arr)[SIZE])
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath);
 
 string WStringToString(const wstring& _str);
+wstring StringToWString(const string& _str); // 민수 추가
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat);
 
@@ -67,37 +95,36 @@ void LoadWStringFromFile(wstring& _str, FILE* _pFile);
 #include "CResMgr.h"
 #include "Ptr.h"
 template<typename T>
-void SaveResourceRef(Ptr<T> _res, FILE* _pFile)
+void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 {
 	// 참조중인 리소스가 없었다면 없는대로 nullptr이 들어갈 것이다.
 	int bExist = !!_res.Get();
-	fwrite(&bExist, sizeof(int), 1, _pFile);
-
+	_emitter << YAML::Key << "Exist";
+	_emitter << YAML::Value << bExist;
 	// 참조중인 리소스가 있었다면, 어떤 리소스를 가지고 있었는지 키와 경로를 저장한다.
 	if (bExist)
 	{
-		SaveWStringToFile(_res->GetKey(), _pFile);
-		SaveWStringToFile(_res->GetRelativePath(), _pFile);
+		_emitter << YAML::Key << "ResKey";
+		_emitter << YAML::Value << WStringToString(_res->GetKey());
+		_emitter << YAML::Key << "ResRelativePath";
+		_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
 	}
 }
 
 template<typename T>
-void LoadResourceRef(Ptr<T>& _Res, FILE* _pFile)
+void LoadResourceRef(Ptr<T>& _Res, YAML::Node& _node)
 {
-	int bExist = 0;
-	fread(&bExist, sizeof(int), 1, _pFile);
+	int bExist = _node["Exist"].as<int>();
 
 	if (bExist)
 	{
 		wstring strKey, strRelativePath;
-		LoadWStringFromFile(strKey, _pFile);
-		LoadWStringFromFile(strRelativePath, _pFile);
-
+		strKey = StringToWString(_node["ResKey"].as<string>());
+		strRelativePath = StringToWString(_node["ResRelativePath"].as<string>());
+		
 		_Res = CResMgr::GetInst()->Load<T>(strKey, strRelativePath);
 	}
 }
-
-
 
 // Component, Resource Type enum class 값에 따른 char와 wchar로의 변환 함수
 const char* ToString(RES_TYPE);

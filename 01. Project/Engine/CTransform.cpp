@@ -163,25 +163,27 @@ RECT CTransform::GetRectCoord()
 	return Temp;
 }
 
-
-
-
-
-void CTransform::SaveToFile(FILE* _pFile)
+void CTransform::SaveToYAML(YAML::Emitter& _emitter)
 {
-	COMPONENT_TYPE type = GetType();
-	fwrite(&type, sizeof(UINT), 1, _pFile);
+	_emitter << YAML::Key << "TRANSFORM";
+	_emitter << YAML::Value << YAML::BeginMap;
 
-	fwrite(&m_vRelativePos, sizeof(Vec3), 1, _pFile);
-	fwrite(&m_vRelativeScale, sizeof(Vec3), 1, _pFile);
-	fwrite(&m_vRelativeRotation, sizeof(Vec3), 1, _pFile);
-	fwrite(&m_bIgnParentScale, sizeof(bool), 1, _pFile);
+	_emitter << YAML::Key << "RelativePos";
+	_emitter << YAML::Value << m_vRelativePos;
+	_emitter << YAML::Key << "RelativeScale";
+	_emitter << YAML::Value << m_vRelativeScale;
+	_emitter << YAML::Key << "RelativeRotation";
+	_emitter << YAML::Value << m_vRelativeRotation;
+	_emitter << YAML::Key << "IgnParentScale";
+	_emitter << YAML::Value << m_bIgnParentScale;
+
+	_emitter << YAML::EndMap;
 }
 
-void CTransform::LoadFromFile(FILE* _pFile)
+void CTransform::LoadFromYAML(YAML::Node& _node)
 {
-	fread(&m_vRelativePos, sizeof(Vec3), 1, _pFile);
-	fread(&m_vRelativeScale, sizeof(Vec3), 1, _pFile);
-	fread(&m_vRelativeRotation, sizeof(Vec3), 1, _pFile);
-	fread(&m_bIgnParentScale, sizeof(bool), 1, _pFile);
+	m_vRelativePos = _node["TRANSFORM"]["RelativePos"].as<Vec3>();
+	m_vRelativeScale = _node["TRANSFORM"]["RelativeScale"].as<Vec3>();
+	m_vRelativeRotation = _node["TRANSFORM"]["RelativeRotation"].as<Vec3>();
+	m_bIgnParentScale = _node["TRANSFORM"]["IgnParentScale"].as<bool>();
 }

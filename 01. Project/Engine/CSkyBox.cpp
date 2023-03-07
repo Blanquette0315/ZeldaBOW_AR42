@@ -15,15 +15,28 @@ CSkyBox::~CSkyBox()
 {
 }
 
+void CSkyBox::SetTexture(Ptr<CTexture> _pTex)
+{
+	m_pSkyBoxTex = _pTex;
+	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
+	{
+		GetCurMaterial()->SetTexParam(TEX_0, m_pSkyBoxTex);
+	}
+	else
+	{
+		GetCurMaterial()->SetTexParam(TEX_CUBE_0, m_pSkyBoxTex);
+	}
+}
+
 void CSkyBox::finaltick()
 {
-	// ½ÇÁ¦ SkyBox °´Ã¼¸¦ ¸¸µé¾î¼­ Ä«¸Þ¶ó°¡ ÀÌµ¿ÇÒ¶§, ÇØ´ç SkyBoxµµ ÇÔ²² ÀÌµ¿ÇÏµµ·Ï ±¸ÇöÇÏ´Â ¹æ¹ý
-	// ÀÌ·¸°Ô ½Ç½Ã°£À¸·Î À§Ä¡¸¦ °»½ÅÇØ ÇÏ´Â ¹æ½Ä°ú, ¿ì¸®°¡ ¼ö¾÷Áß¿¡ ¸¸µç shaderÄÚµå ÂÊ¿¡¼­ Ã³¸®ÇØÁÖ´Â °Í °£ÀÇ ºñ¿ëÂ÷ÀÌ´Â Å©Áö ¾ÊÀ» °Í °°´Ù°í ÇÏ½Å´Ù.
-	// MainCamÀÇ À§Ä¡¸¦ ¾Ë¾Æ³½´Ù.
-	// SkyBoxÀÇ À§Ä¡°ªÀ» °»½ÅÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ SkyBox ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½î¼­ Ä«ï¿½Þ¶ï¿½ ï¿½Ìµï¿½ï¿½Ò¶ï¿½, ï¿½Ø´ï¿½ SkyBoxï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½Ìµï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
+	// ï¿½Ì·ï¿½ï¿½ï¿½ ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½Ä°ï¿½, ï¿½ì¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ shaderï¿½Úµï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ù°ï¿½ ï¿½Ï½Å´ï¿½.
+	// MainCamï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ë¾Æ³ï¿½ï¿½ï¿½.
+	// SkyBoxï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 
-	// MainComÀÇ Far °ªÀ» °¡Á®¿Â´Ù.
-	// Transform Scale·Î Àû¿ëÇÑ´Ù.
+	// MainComï¿½ï¿½ Far ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
+	// Transform Scaleï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 }
 
 void CSkyBox::render()
@@ -46,18 +59,46 @@ void CSkyBox::render()
 	GetCurMaterial()->UpdateData();
 
 	GetMesh()->render();
+
+	CMaterial::Clear();
+}
+
+void CSkyBox::SetSkyMesh()
+{
+	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
+	{
+		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	}
+	else
+	{
+		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	}
 }
 
 void CSkyBox::SetType(SKYBOX_TYPE _type)
 {
 	m_eSkyBoxType = _type;
+}
 
-	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
-	{
-		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	}
-	else if (m_eSkyBoxType == SKYBOX_TYPE::CUBE)
-	{
-		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
-	}
+void CSkyBox::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "SKYBOX";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "SkyBoxTexture";
+	_emitter << YAML::Value << YAML::BeginMap;
+	SaveResourceRef<CTexture>(m_pSkyBoxTex, _emitter);
+	_emitter << YAML::EndMap;
+	_emitter << YAML::Key << "SkyBoxType";
+	_emitter << YAML::Value << (UINT)m_eSkyBoxType;
+
+	_emitter << YAML::EndMap;
+}
+
+void CSkyBox::LoadFromYAML(YAML::Node& _node)
+{
+	SetType((SKYBOX_TYPE)(_node["SKYBOX"]["SkyBoxType"].as<UINT>()));
+    SetSkyMesh();
+	YAML::Node node = _node["SKYBOX"]["SkyBoxTexture"];
+	LoadResourceRef<CTexture>(m_pSkyBoxTex, node);
 }

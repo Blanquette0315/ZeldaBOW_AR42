@@ -16,6 +16,9 @@
 #include "CSaveLoadMgr.h"
 #include "ContentUI.h"
 
+#include "PopupUI.h"
+#include "InputTextUI.h"
+
 // ============
 // = TreeNode =
 // ============
@@ -49,8 +52,8 @@ void TreeNode::render_update()
 	if (m_bFrame && m_vecChildNode.empty())
 		strName = "\t" + strName;
 
-	// µÚ¿¡ ½Äº°¹øÈ£¸¦ ºÙ¿©¼­ ÀÌ¸§(Å°) Áßº¹À» ¹æÁöÇØÁØ´Ù.
-	// UINT´Ï±î 4¾ï°³ Á¤µµ´Â ¹æÁö°¡ µÉ °Í.
+	// ï¿½Ú¿ï¿½ ï¿½Äºï¿½ï¿½ï¿½È£ï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½(Å°) ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+	// UINTï¿½Ï±ï¿½ 4ï¿½ï°³ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½.
 	char szTag[50] = "";
 	sprintf_s(szTag, 50, "##%d", m_iIdx);
 	strName += szTag;
@@ -59,20 +62,20 @@ void TreeNode::render_update()
 
 	if (ImGui::TreeNodeEx(strName.c_str(),iFlag))
 	{
-		// µå·¡±× Ã¼Å©
+		// ï¿½å·¡ï¿½ï¿½ Ã¼Å©
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
 			m_TreeUI->SetBeginDragNode(this);
 
-			// Ã¹ ÀÎÀÚÀÎ Å°°ªÀº ³ªÁß¿¡ µå¶øÀ» ¹Þ´ÂÂÊ¿¡¼­ Ã¼Å©ÇØ °°À¸¸é µ¥ÀÌÅÍ¸¦ Àü´ÞÇØÁØ´Ù.
-			// µÎ¹øÂ° ÀÎÀÚÀÎ µ¥ÀÌÅÍ´Â ÇØ´ç ³ëµå ÀÚÃ¼¸¦ º¸³¾ °ÍÀÌ±â ¶§¹®¿¡ µ¥ÀÌÅÍ »çÀÌÁî´Â TreeNode¸¸Å­ÀÌ´Ù.
+			// Ã¹ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+			// ï¿½Î¹ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ TreeNodeï¿½ï¿½Å­ï¿½Ì´ï¿½.
 			ImGui::SetDragDropPayload(m_TreeUI->GetName().c_str(), (void*)this, sizeof(TreeNode));
 			ImGui::Text(strName.c_str());
 
 			ImGui::EndDragDropSource();
 		}
 
-		// µå¶øÃ¼Å©
+		// ï¿½ï¿½ï¿½Ã¼Å©
 		if (ImGui::BeginDragDropTarget())
 		{
 			m_TreeUI->SetDropTargetNode(this);
@@ -80,27 +83,27 @@ void TreeNode::render_update()
 			ImGui::EndDragDropTarget();
 		}
 
-		// Å¬¸¯ Ã¼Å© : Clicked·Î ÇÏ¸é, µå·¡±×¿Í ¹®Á¦°¡ »ý°Ü¼­ Released·Î º¯°æÇÏ¿´´Ù.
+		// Å¬ï¿½ï¿½ Ã¼Å© : Clickedï¿½ï¿½ ï¿½Ï¸ï¿½, ï¿½å·¡ï¿½×¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ü¼ï¿½ Releasedï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½.
 		if (!m_bFrame && ImGui::IsItemHovered(0) && ImGui::IsMouseReleased(0))
 		{
 			m_TreeUI->SetSelectedNode(this);
 		}
 
-		//// ¿ìÅ¬¸¯ Ã¼Å©
+		//// ï¿½ï¿½Å¬ï¿½ï¿½ Ã¼Å©
 		//if (ImGui::IsItemHovered(0) && KEY_TAP(KEY::RBTN))
 		//{
-		//	// OutLinerUIÀÇ NodeÀÏ °æ¿ì ºÎ¸ð(ÇÁ·¹ÀÓ)µµ ÆË¾÷À» ¶ç¿ö ÁÖ¾î¾ß ÇÑ´Ù.
+		//	// OutLinerUIï¿½ï¿½ Nodeï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 		//	if (m_TreeUI->GetName() == "##OutlinerTree")
 		//	{
 		//		ImGui::OpenPopup("##OutLinerNode");
 		//	}
 
-		//	// ContentUIÀÇ NodeÀÏ °æ¿ì ºÎ¸ð(ÇÁ·¹ÀÓ)Àº ÆË¾÷À» ¶ç¿ì¸é ¾ÈµÈ´Ù.
+		//	// ContentUIï¿½ï¿½ Nodeï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÈ´ï¿½.
 		//	else if (m_TreeUI->GetName() == "##ContentTree")
 		//	{
 		//		if (!m_bFrame)
 		//		{
-		//			// ÇØ´ç ³ëµå°¡ Level³ëµåÀÏ °æ¿ì
+		//			// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Levelï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		//			if (dynamic_cast<CLevel*>((CEntity*)m_data))
 		//			{
 		//				ImGui::OpenPopup("##LevelNode");
@@ -108,7 +111,7 @@ void TreeNode::render_update()
 		//			else
 		//			{
 		//				CRes* pTargetRes = (CRes*)m_data;
-		//				// ÇØ´ç ³ëµå°¡ Mtrl³ëµåÀÏ °æ¿ì
+		//				// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Mtrlï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		//				if (pTargetRes->GetResType() == RES_TYPE::MATERIAL)
 		//				{
 		//					ImGui::OpenPopup("##MtrlNode");
@@ -120,14 +123,14 @@ void TreeNode::render_update()
 		
 		if (!m_bFrame && ImGui::IsItemHovered(0) && KEY_TAP(KEY::RBTN))
 		{
-			// ÇØ´ç ³ëµå°¡ OutLiner(¿ÀºêÁ§Æ®)ÀÏ °æ¿ì 
+			// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ OutLiner(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®)ï¿½ï¿½ ï¿½ï¿½ï¿½ 
 			if(m_TreeUI->GetName() == "##OutlinerTree")
 				ImGui::OpenPopup("##OutLinerNode");
 
-			// ÇØ´ç ³ëµå°¡ ContentTree ¼Ò¼Ó³ëµåÀÏ °æ¿ì
+			// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ ContentTree ï¿½Ò¼Ó³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 			if (m_TreeUI->GetName() == "##ContentTree")
 			{
-				// ÇØ´ç ³ëµå°¡ Level³ëµåÀÏ °æ¿ì
+				// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Levelï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 				if (dynamic_cast<CLevel*>((CEntity*)m_data))
 				{
 					ImGui::OpenPopup("##LevelNode");
@@ -135,7 +138,7 @@ void TreeNode::render_update()
 				else
 				{
 					CRes* pTargetRes = (CRes*)m_data;
-					// ÇØ´ç ³ëµå°¡ Mtrl³ëµåÀÏ °æ¿ì
+					// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Mtrlï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 					if (pTargetRes->GetResType() == RES_TYPE::MATERIAL)
 					{
 						ImGui::OpenPopup("##MtrlNode");
@@ -146,184 +149,89 @@ void TreeNode::render_update()
 
 		}
 
-		// ¾Æ¿ô ¶óÀÌ³Ê ³ëµåÀÏ ¶§ ¿ìÅ¬¸¯ (¿ÀºêÁ§Æ®)
-		if (ImGui::BeginPopup("##OutLinerNode"))
+		// OutLinerNode Popup ï¿½ï¿½ï¿½ï¿½
 		{
-			// ºó ¿ÀºêÁ§Æ® »ý¼º
-			if (ImGui::Selectable("New Object"))
-			{
-				CGameObject* pObj = new CGameObject;
-				pObj->SetName(L"New Object");
+			static PopupUI* OutLiner = new PopupUI("##OutLinerNode");
 
-				tEvent CreateObj;
-				CreateObj.eType = EVENT_TYPE::CREATE_OBJECT;
-				CreateObj.wParam = (DWORD_PTR)pObj;
-				CreateObj.lParam = 0;
+			tFUNC tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_0;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_0 = (FUNC_0)&PopupUI::Func_NewObj;
+			OutLiner->AddSelectable("New Object", tFunc);
 
-				CEventMgr::GetInst()->AddEvent(CreateObj);
-			}
+			tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_1;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_1 = (FUNC_1)&PopupUI::Func_DeleteObj;
+			tFunc.lFactor = (DWORD_PTR)m_data;
+			OutLiner->AddSelectable("Delete Object", tFunc);
 
-			ImGui::Separator();
+			tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_1;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_1 = (FUNC_1)&PopupUI::Func_ChangePrefab;
+			tFunc.lFactor = (DWORD_PTR)m_data;
+			OutLiner->AddSelectable("Change Prefab", tFunc);
 
-			// ¿ÀºêÁ§Æ® »èÁ¦
-			if (ImGui::Selectable("Delete Object"))
-			{
-				CGameObject* pObj = ((CGameObject*)m_data);
-				pObj->Destroy();
+			tFunc = {};
+			tFunc.eHeadType = HEAD_TYPE::MENU;
+			tFunc.eMenuType = MENU_TYPE::ADD_COMPONENT;
+			tFunc.lFactor = (DWORD_PTR)m_data;
+			OutLiner->AddSelectable("Add Component", tFunc);
 
-				/*tEvent DelObject;
-				DelObject.eType = EVENT_TYPE::DELETE_OBJECT;
-				DelObject.wParam = (DWORD_PTR)pObj;
+			tFunc = {};
+			tFunc.eHeadType = HEAD_TYPE::MENU;
+			tFunc.eMenuType = MENU_TYPE::ADD_SCRIPT;
+			OutLiner->AddSelectable("Add Script", tFunc);
 
-				CEventMgr::GetInst()->AddEvent(DelObject);*/
-			}
-
-			ImGui::Separator();
-
-			// ¼±ÅÃ ¿ÀºêÁ§Æ® ÇÁ¸®Æé ÀüÈ¯
-			if (ImGui::Selectable("Change Prefab"))
-			{
-				CGameObject* pObj = ((CGameObject*)m_data);
-
-				tEvent ChangePreFab;
-				ChangePreFab.eType = EVENT_TYPE::CHANGE_PREFAB;
-				ChangePreFab.wParam = m_data;
-
-				CEventMgr::GetInst()->AddEvent(ChangePreFab);
-			}
-
-			ImGui::Separator();
-
-			// ¿ÀºêÁ§Æ®¿¡ ÄÄÆ÷³ÍÆ® Ãß°¡
-			if (ImGui::BeginMenu("Add Component"))
-			{
-				static bool toggles[(UINT)COMPONENT_TYPE::END] = {};
-				CGameObject* pTargetObj = (CGameObject*)m_data;
-				for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
-				{
-					string strName = ToString((COMPONENT_TYPE)i);
-
-					CComponent* pComponent = pTargetObj->GetComponent((COMPONENT_TYPE)i);
-
-					if (nullptr != pComponent)
-					{
-						toggles[i] = true;
-					}
-					else
-					{
-						toggles[i] = false;
-					}
-
-					// ¼±ÅÃÀÌ µÇ¸é false true¸¦ È®ÀÎÇØ¼­ Add Component¿Í Delete Component¸¦ ÇÏ¸é µÈ´Ù.
-					if (ImGui::MenuItem(strName.c_str(), "", &toggles[i]))
-					{
-						// Å¸ÀÔº°·Î ºÐ±âÃ³¸®ÇØ ¾Ë¸ÂÀº ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇØ ÁØ´Ù.
-						// ´­·¯¼­ true·Î ¹Ù²î¸é AddComponent, false·Î ¹Ù²î¸é ReleaseComponent
-						AddReleaseComponent((COMPONENT_TYPE)i, toggles[i], pTargetObj);
-					}
-				}
-				
-				ImGui::EndMenu();
-			}
-
-			// ¿ÀºêÁ§Æ®¿¡ Script Ãß°¡
-			if (ImGui::BeginMenu("Add Script"))
-			{
-				vector<wstring> vecScriptName;
-				CScriptMgr::GetScriptInfo(vecScriptName);
-
-				for (size_t i = 0; i < vecScriptName.size(); ++i)
-				{
-					string strScriptName = WStringToString(vecScriptName[i]);
-					if (ImGui::MenuItem(strScriptName.c_str()))
-					{
-						InspectorUI* pInspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
-						CGameObject* pTargetObject = pInspector->GetTargetObject();
-						if (nullptr != pTargetObject)
-						{
-							pTargetObject->AddComponent(CScriptMgr::GetScript(vecScriptName[i]));
-							pInspector->SetTargetObject(pTargetObject);
-						}
-					}
-				}
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndPopup();
+			OutLiner->render_update();
 		}
 
-		// ContentUI TreeÀÌ°í, Level ³ëµåÀÏ ¶§ ¿ìÅ¬¸¯
-		if (ImGui::BeginPopup("##LevelNode"))
+		// LevelNode Popup ï¿½ï¿½ï¿½ï¿½
 		{
-			// ºó ·¹º§ »ý¼º
-			if (ImGui::Selectable("New Level"))
-			{
-				// ·¹º§ ÀÌ¸§ÀÌ °ãÄ¡¸é ·¹º§ ÀúÀå½Ã ¹®Á¦°¡ ¹ß»ýÇÏ±â ¶§¹®¿¡ ÀÌ¸§À» Á¤ÇØÁÙ ¼ö ÀÖ´Â Ã¢ ¶ç¿ì±â
-				bOpenLevelName = true;
-			}
+			static PopupUI* LevelNode = new PopupUI("##LevelNode");
 
-			ImGui::EndPopup();
+			tFUNC tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_1;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_1 = (FUNC_1)&PopupUI::Func_NewLevel;
+			tFunc.lFactor = (DWORD_PTR)&bOpenLevelName;
+			LevelNode->AddSelectable("New Level", tFunc);
+
+			LevelNode->render_update();
 		}
 
+		// MtrlNode Popup ï¿½ï¿½ï¿½ï¿½
+		{
+			static PopupUI* MaterialNode = new PopupUI("##MtrlNode");
+
+			tFUNC tFunc = {};
+			tFunc.eFuncType = FUNC_TYPE::FUNC_0;
+			tFunc.eHeadType = HEAD_TYPE::SELECTABLE;
+			tFunc.Func_0 = (FUNC_0)&PopupUI::Func_NewMaterial;
+			MaterialNode->AddSelectable("New Material", tFunc);
+
+			MaterialNode->render_update();
+		}
+
+		// Create Level? Modal Popup ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Æ®
 		if (bOpenLevelName)
+		{
 			ImGui::OpenPopup("Create Level?");
+			bOpenLevelName = false;
+		}
+			
 
-		// ·¹º§ »ý¼º Àü ÀÌ¸§ Á¤ÇÏ±â ÆË¾÷ ¶ç¿ì±â
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-		if (ImGui::BeginPopupModal("Create Level?", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			bOpenLevelName = false;
+		// InputTextPopup ï¿½ï¿½ï¿½ï¿½
+		static InputTextUI* pPopupTextUI = new InputTextUI("##CreateLevel");
+		pPopupTextUI->SetFunc_1((FUNC_1)&InputTextUI::CreateLevel);
+		pPopupTextUI->CreateTextPopup("Create Level?", "Input Level Name");
 
-			static char TemName[128] = "";
-			ImGui::InputText("Input Level Name", TemName, IM_ARRAYSIZE(TemName));
-
-			ImGui::Separator();
-
-			if (ImGui::Button("OK", ImVec2(120, 0)))
-			{
-				string NewName = TemName;
-				wstring wNewName = wstring(NewName.begin(), NewName.end());
-
-				CLevel* pLevel = new CLevel;
-				pLevel->SetName(wNewName);
-
-				CSaveLoadMgr::GetInst()->SaveLevel(pLevel);
-				delete pLevel;
-
-				ImGui::CloseCurrentPopup();
-
-			}
-			ImGui::SetItemDefaultFocus();
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
-
-		// ContentUI TreeÀÌ°í, Mtrl ³ëµåÀÏ ¶§ ¿ìÅ¬¸¯ (¸®¼Ò½ºµé)
-		if (ImGui::BeginPopup("##MtrlNode"))
-		{
-			// »õ·Î¿î Mtrl »ý¼º
-			if (ImGui::Selectable("New Material"))
-			{
-				Ptr<CMaterial> pMtrl = new CMaterial;
-				wstring strKey = CResMgr::GetInst()->GetNewResName<CMaterial>();
-				pMtrl->SetName(strKey);
-				CResMgr::GetInst()->AddRes<CMaterial>(strKey, pMtrl.Get());
-
-				ContentUI* pContentUI = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
-				pContentUI->ResetContent();
-			}
-
-			ImGui::EndPopup();
-		}
-
-		// ÀÚ½Ä ³ëµåµé±îÁö Àç±ÍÀû È£ÃâÀ» ÇØÁØ´Ù.
+		// ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
 		for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 		{
 			m_vecChildNode[i]->render_update();
@@ -335,142 +243,10 @@ void TreeNode::render_update()
 }
 
 
-void TreeNode::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObject* _Target)
-{
-	switch (_type)
-	{
-	case COMPONENT_TYPE::TRANSFORM:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CTransform);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::TRANSFORM));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::CAMERA:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CCamera);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::CAMERA));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::COLLIDER2D:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CCollider2D);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::COLLIDER2D));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::COLLIDER3D:
-		break;
-
-	case COMPONENT_TYPE::ANIMATOR2D:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CAnimator2D);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::ANIMATOR2D));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::ANIMATOR3D:
-		break;
-
-	case COMPONENT_TYPE::LIGHT2D:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CLight2D);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::LIGHT2D));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::LIGHT3D:
-		break;
-
-	case COMPONENT_TYPE::MESHRENDER:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CMeshRender);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::MESHRENDER));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::TILEMAP:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CTileMap);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::TILEMAP));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::PARTICLESYSTEM:
-	{
-		if (_Select)
-		{
-			_Target->AddComponent(new CParticleSystem);
-		}
-		else
-		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::PARTICLESYSTEM));
-		}
-	}
-	break;
-
-	case COMPONENT_TYPE::SKYBOX:
-		break;
-	case COMPONENT_TYPE::DECAL:
-		break;
-	case COMPONENT_TYPE::LANDSPACE:
-		break;
-	}
-
-
-	// ºÁ¼­ À§ÂÊÀ¸·Î ¿Ã·Á¾ßÇÒ ±â´ÉÀÎ°Í °°´Ù ÀÌºÎºÐÀº.
-	UI* pInspector = CImGuiMgr::GetInst()->FindUI("Inspector");
-	dynamic_cast<InspectorUI*>(pInspector)->SetTargetObject(_Target);
-}
-
-
 // ============
 // =   Tree   =
 // ============
-// TreeUIÀÇ ÀÌ¸§Àº »ý¼ºÀÚ¿¡¼­ ³Ö¾îÁÖ¾î¼­ ÀÌ¸§ Áßº¹À» ¹æÁöÇÏµµ·Ï ±¸ÇöÇß´Ù. (ImGui¿¡¼­ ÀÌ¸§ Áßº¹ÀÌ ¹ß»ýÇÏ¸é ¾ÈµÊ)
+// TreeUIï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¾î¼­ ï¿½Ì¸ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß´ï¿½. (ImGuiï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ï¸ï¿½ ï¿½Èµï¿½)
 
 UINT TreeUI::m_iNextNodeIdx = 0;
 
@@ -515,7 +291,7 @@ void TreeUI::render_update()
 		}
 	}
 
-	// ¸¶¿ì½º ¿ÞÂÊ ¸±¸®Áî Ã¼Å©
+	// ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
 	if (ImGui::IsMouseReleased(0))
 	{
 		m_BeginDragNode = nullptr;
@@ -532,10 +308,10 @@ TreeNode* TreeUI::AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _
 	pNode->m_TreeUI = this;
 	pNode->m_iIdx = m_iNextNodeIdx++;
 
-	// RootNode·Î ÁöÁ¤µÇ´Â ³ëµå
+	// RootNodeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½
 	if (nullptr == _parent)
 	{
-		// ÇØ´ç ³ëµå¸¦ Root³ëµå·Î ÁöÁ¤ÇÏ·ÁÇÏ´Âµ¥, ÀÌ¹Ì rootnode°¡ Á¸ÀçÇÑ´Ù¸é Áß´Ü.
+		// ï¿½Ø´ï¿½ ï¿½ï¿½å¸¦ Rootï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ï´Âµï¿½, ï¿½Ì¹ï¿½ rootnodeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½ ï¿½ß´ï¿½.
 		assert(!m_RootNode);
 		m_RootNode = pNode;
 	}
@@ -558,13 +334,13 @@ void TreeUI::Clear()
 
 void TreeUI::SetSelectedNode(TreeNode* _SelectedNode)
 {
-	// ÀÌÀü¿¡ ¼±ÅÃµÈ ³ëµå°¡ ÀÖ¾ú´Ù¸é, ÇØ´ç ³ëµåÀÇ ¼±ÅÃÀ» Ç®¾îÁØ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½å°¡ ï¿½Ö¾ï¿½ï¿½Ù¸ï¿½, ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç®ï¿½ï¿½ï¿½Ø´ï¿½.
 	if (nullptr != m_SelectedNode)
 	{
 		m_SelectedNode->m_bSelected = false;
 	}
 
-	// µé¾î¿Â ³ëµå¸¦ ¼±ÅÃ ³ëµå·Î ÁöÁ¤ÇÏ°í, ÇØ´ç ³ëµå¿¡°Ô ¼±ÅÃµÊÀ» ¾Ë·ÁÁØ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½Ø´ï¿½ ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½Ø´ï¿½.
 	m_SelectedNode = _SelectedNode;
 	m_SelectedNode->m_bSelected = true;
 
@@ -586,5 +362,5 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 		}
 	}
 
-	// ¿ÜºÎ µå¶ø °ü·Ã PayLoad Ã³¸®ÇÏ±â
+	// ï¿½Üºï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ PayLoad Ã³ï¿½ï¿½ï¿½Ï±ï¿½
 }

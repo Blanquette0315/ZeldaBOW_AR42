@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "UI.h"
 
+#include "CommonUI.h"
+
 UI::UI(const string& _strName)
 	: m_strName(_strName)
 	, m_ParentUI(nullptr)
@@ -112,4 +114,10 @@ void UI::AddChild(UI* _ChildUI)
 {
 	_ChildUI->m_ParentUI = this;
 	m_vecChildUI.push_back(_ChildUI);
+}
+
+void UI::Open()
+{
+	m_bOpen = true;
+	CommonUI::vecPickerClear();
 }

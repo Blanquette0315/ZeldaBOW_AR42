@@ -193,37 +193,37 @@ void CAnimator2D::Clear()
 
 
 
-void CAnimator2D::SaveToFile(FILE* _File)
-{
-	COMPONENT_TYPE type = GetType();
-	fwrite(&type, sizeof(UINT), 1, _File);
-
-	// Animation 저장
-	// 원래라면 Level이 Play상태를 제외하고는 애니메이션이 플레이 되면 안된다.
-	// 하지만 Stop상태 일때, 애니메이션이 재생되지 않으면, 제작할 때 불편하다.
-	// 따라서 저장할 때는 애니메이션 초기값만 사용하고, 해당 애니메이터를 사용하는 Script쪽에서 어떤 상황일 때 어떤
-	// 애니메이션을 실행하고 반복할지 말지를 정하도록 구조를 잡았다.
-	size_t iAnimCount = m_mapAnim.size();
-	fwrite(&iAnimCount, sizeof(size_t), 1, _File);
-
-	for (const auto& pair : m_mapAnim)
-	{
-		pair.second->SaveToFile(_File);
-	}
-}
-
-void CAnimator2D::LoadFromFile(FILE* _File)
-{
-	// Animation 로드
-	size_t iAnimCount = 0;
-	fread(&iAnimCount, sizeof(size_t), 1, _File);
-
-	for (size_t i = 0; i < iAnimCount; ++i)
-	{
-		CAnimation2D* pAnim = new CAnimation2D;
-		pAnim->LoadFromFile(_File);
-
-		pAnim->m_pOwner = this;
-		m_mapAnim.insert(make_pair(pAnim->GetName(), pAnim));
-	}
-}
+//void CAnimator2D::SaveToFile(FILE* _File)
+//{
+//	COMPONENT_TYPE type = GetType();
+//	fwrite(&type, sizeof(UINT), 1, _File);
+//
+//	// Animation 저장
+//	// 원래라면 Level이 Play상태를 제외하고는 애니메이션이 플레이 되면 안된다.
+//	// 하지만 Stop상태 일때, 애니메이션이 재생되지 않으면, 제작할 때 불편하다.
+//	// 따라서 저장할 때는 애니메이션 초기값만 사용하고, 해당 애니메이터를 사용하는 Script쪽에서 어떤 상황일 때 어떤
+//	// 애니메이션을 실행하고 반복할지 말지를 정하도록 구조를 잡았다.
+//	size_t iAnimCount = m_mapAnim.size();
+//	fwrite(&iAnimCount, sizeof(size_t), 1, _File);
+//
+//	for (const auto& pair : m_mapAnim)
+//	{
+//		pair.second->SaveToFile(_File);
+//	}
+//}
+//
+//void CAnimator2D::LoadFromFile(FILE* _File)
+//{
+//	// Animation 로드
+//	size_t iAnimCount = 0;
+//	fread(&iAnimCount, sizeof(size_t), 1, _File);
+//
+//	for (size_t i = 0; i < iAnimCount; ++i)
+//	{
+//		CAnimation2D* pAnim = new CAnimation2D;
+//		pAnim->LoadFromFile(_File);
+//
+//		pAnim->m_pOwner = this;
+//		m_mapAnim.insert(make_pair(pAnim->GetName(), pAnim));
+//	}
+//}

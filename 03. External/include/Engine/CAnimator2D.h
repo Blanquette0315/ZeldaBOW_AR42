@@ -58,8 +58,8 @@ public:
     void Clear();
 
 public:
-    virtual void SaveToFile(FILE* _File);
-    virtual void LoadFromFile(FILE* _File);
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override {};
+    virtual void LoadFromYAML(YAML::Node& _node) override {};
 
     CLONE(CAnimator2D);
 

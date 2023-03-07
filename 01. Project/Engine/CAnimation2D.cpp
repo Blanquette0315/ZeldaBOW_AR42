@@ -135,39 +135,39 @@ void CAnimation2D::Clear()
 
 
 
-void CAnimation2D::SaveToFile(FILE* _File)
-{
-	// 애니메이션 이름 저장
-	// 애니메이션의 경우 본인의 이름이 곧 에니메이터에 등록하는 키값이기 때문에 키값을 저장하는 것과 같다.
-	CEntity::SaveToFile(_File);
-
-	// 프레임 개수, 데이터 저장
-	// 프레임 vector는 모두 순수 데이터기 때문에 통으로 저장한다.
-	// 현재 인덱스의 경우 로딩해서 처음 사용하면 무조건 0번부터 실행할 것이기 때문에 저장하지 않는다.
-	size_t iFrameCount = m_vecFrm.size();
-	fwrite(&iFrameCount, sizeof(size_t), 1, _File);
-	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrm), iFrameCount, _File);
-
-	// 참조 아틀라스 텍스처
-	SaveResourceRef<CTexture>(m_AtlasTex, _File);
-}
-
-void CAnimation2D::LoadFromFile(FILE* _File)
-{
-	// 애니메이션 이름 로딩
-	CEntity::LoadFromFile(_File);
-
-	// 프레임 개수, 데이터 로딩
-	size_t iFrameCount = 0;
-	fread(&iFrameCount, sizeof(size_t), 1, _File);
-
-	for (size_t i = 0; i < iFrameCount; ++i)
-	{
-		tAnim2DFrm frm = {};
-		fread(&frm, sizeof(tAnim2DFrm), 1, _File);
-		m_vecFrm.push_back(frm);
-	}
-
-	// 참조 아틀라스 로딩
-	LoadResourceRef<CTexture>(m_AtlasTex, _File);
-}
+//void CAnimation2D::SaveToFile(FILE* _File)
+//{
+//	// 애니메이션 이름 저장
+//	// 애니메이션의 경우 본인의 이름이 곧 에니메이터에 등록하는 키값이기 때문에 키값을 저장하는 것과 같다.
+//	CEntity::SaveToFile(_File);
+//
+//	// 프레임 개수, 데이터 저장
+//	// 프레임 vector는 모두 순수 데이터기 때문에 통으로 저장한다.
+//	// 현재 인덱스의 경우 로딩해서 처음 사용하면 무조건 0번부터 실행할 것이기 때문에 저장하지 않는다.
+//	size_t iFrameCount = m_vecFrm.size();
+//	fwrite(&iFrameCount, sizeof(size_t), 1, _File);
+//	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrm), iFrameCount, _File);
+//
+//	// 참조 아틀라스 텍스처
+//	SaveResourceRef<CTexture>(m_AtlasTex, _File);
+//}
+//
+//void CAnimation2D::LoadFromFile(FILE* _File)
+//{
+//	// 애니메이션 이름 로딩
+//	CEntity::LoadFromFile(_File);
+//
+//	// 프레임 개수, 데이터 로딩
+//	size_t iFrameCount = 0;
+//	fread(&iFrameCount, sizeof(size_t), 1, _File);
+//
+//	for (size_t i = 0; i < iFrameCount; ++i)
+//	{
+//		tAnim2DFrm frm = {};
+//		fread(&frm, sizeof(tAnim2DFrm), 1, _File);
+//		m_vecFrm.push_back(frm);
+//	}
+//
+//	// 참조 아틀라스 로딩
+//	LoadResourceRef<CTexture>(m_AtlasTex, _File);
+//}

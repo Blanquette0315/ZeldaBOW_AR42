@@ -3,7 +3,6 @@
 
 #include "CRenderMgr.h"
 #include "CTransform.h"
-
 CLight2D::CLight2D()
 	: CComponent(COMPONENT_TYPE::LIGHT2D)
 {
@@ -19,8 +18,6 @@ CLight2D::~CLight2D()
 
 void CLight2D::finaltick()
 {
-
-
 	m_Info.vWorldPos = Transform()->GetWorldPos();
 	m_Info.vWorldDir = Transform()->GetWorldDir(DIR::RIGHT);
 
@@ -29,18 +26,36 @@ void CLight2D::finaltick()
 
 
 
-
-
-
-void CLight2D::SaveToFile(FILE* _File)
+void CLight2D::SaveToYAML(YAML::Emitter& _emitter)
 {
-	COMPONENT_TYPE type = GetType();
-	fwrite(&type, sizeof(UINT), 1, _File);
+	_emitter << YAML::Key << "LIGHT2D";
+	_emitter << YAML::Value << YAML::BeginMap;
 
-	fwrite(&m_Info, sizeof(tLightInfo), 1, _File);
+	_emitter << YAML::Key << "Diff";
+	_emitter << YAML::Value << m_Info.vDiff;
+	_emitter << YAML::Key << "Spec";
+	_emitter << YAML::Value << m_Info.vSpec;
+	_emitter << YAML::Key << "Emb";
+	_emitter << YAML::Value << m_Info.vEmb;
+	_emitter << YAML::Key << "LightType";
+	_emitter << YAML::Value << (UINT)m_Info.iLightType;
+	_emitter << YAML::Key << "Radius";
+	_emitter << YAML::Value << m_Info.fRadius;
+	_emitter << YAML::Key << "InAngle";
+	_emitter << YAML::Value << m_Info.fInAngle;
+	_emitter << YAML::Key << "OutAngle";
+	_emitter << YAML::Value << m_Info.fOutAngle;
+
+	_emitter << YAML::EndMap;
 }
 
-void CLight2D::LoadFromFile(FILE* _File)
+void CLight2D::LoadFromYAML(YAML::Node& _node)
 {
-	fread(&m_Info, sizeof(tLightInfo), 1, _File);
+	m_Info.vDiff = _node["LIGHT2D"]["Diff"].as<Vec4>();
+	m_Info.vSpec = _node["LIGHT2D"]["Spec"].as<Vec4>();
+	m_Info.vEmb = _node["LIGHT2D"]["Emb"].as<Vec4>();
+	m_Info.iLightType = (LIGHT_TYPE)(_node["LIGHT2D"]["LightType"].as<UINT>());
+	m_Info.fRadius = _node["LIGHT2D"]["Radius"].as<float>();
+	m_Info.fInAngle = _node["LIGHT2D"]["InAngle"].as<float>();
+	m_Info.fOutAngle = _node["LIGHT2D"]["OutAngle"].as<float>();
 }
