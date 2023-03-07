@@ -165,8 +165,10 @@
     <ClInclude Include="CGameObjectEX.h" />
     <ClInclude Include="CGrid2DScript.h" />
     <ClInclude Include="CImGuiMgr.h" />
+    <ClInclude Include="InputTextUI.h" />
     <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComboBoxUI.h" />
+    <ClInclude Include="CommonUI.h" />
     <ClInclude Include="ComponentUI.h" />
     <ClInclude Include="ContentUI.h" />
     <ClInclude Include="CreateTestLevel.h" />
@@ -220,8 +222,10 @@
     <ClCompile Include="CGameObjectEX.cpp" />
     <ClCompile Include="CGrid2DScript.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
+    <ClCompile Include="InputTextUI.cpp" />
     <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComboBoxUI.cpp" />
+    <ClCompile Include="CommonUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
     <ClCompile Include="ContentUI.cpp" />
     <ClCompile Include="CreateTestLevel.cpp" />

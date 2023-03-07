@@ -2,6 +2,7 @@
 #include "Light3DUI.h"
 
 #include <Engine/CLight3D.h>
+#include "CommonUI.h"
 
 Light3DUI::Light3DUI()
 	: ComponentUI("Light3D", COMPONENT_TYPE::LIGHT3D)
@@ -60,13 +61,13 @@ void Light3DUI::render_update()
 	ImGui::Text("Light_Type"); ImGui::SameLine(); ImGui::Combo("##Light2D_Type", &m_iCurItem, m_arrLightType, IM_ARRAYSIZE(m_arrLightType));
 
 	ImGui::Text("Diff Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_DiffColor", m_vDiff);
-	ImGui::Text("Editor    "); ImGui::SameLine(); ImGui::ColorEdit3("##L3D_DiffColor2", m_vDiff);
+	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vDiff);
 
 	ImGui::Text("Spec Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_SpecColor", m_vSpec);
-	ImGui::Text("Editor    "); ImGui::SameLine(); ImGui::ColorEdit3("##L3D_SpecfColor2", m_vSpec);
+	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vSpec);
 
 	ImGui::Text("Emb  Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_EnbColor", m_Emb);
-	ImGui::Text("Editor    "); ImGui::SameLine(); ImGui::ColorEdit3("##L3D_EmbColor2", m_Emb);
+	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_Emb);
 
 	ImGui::Text("Radius    "); ImGui::SameLine(); ImGui::InputFloat("##L3D_Radius", &m_fRadius);
 	ImGui::Text("          "); ImGui::SameLine(); ImGui::DragFloat("##L3D_Slid_Radius", &m_fRadius, 1.f);

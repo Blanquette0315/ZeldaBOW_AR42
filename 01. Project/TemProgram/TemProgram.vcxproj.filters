@@ -123,6 +123,12 @@
     <Filter Include="03. UI\ModuleUI\ComboBoxUI">
       <UniqueIdentifier>{bf48d095-7111-40c2-b5c2-99479ae0c5f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\ModuleUI\CommonUI">
+      <UniqueIdentifier>{c13ab7d7-ca1b-4ef0-94a9-e53bd5399290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\ModuleUI\InputTextUI">
+      <UniqueIdentifier>{0d6f652b-3ac1-4056-9518-daf2fa10cc40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -284,6 +290,12 @@
     <ClInclude Include="ComboBoxUI.h">
       <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
     </ClInclude>
+    <ClInclude Include="CommonUI.h">
+      <Filter>03. UI\ModuleUI\CommonUI</Filter>
+    </ClInclude>
+    <ClInclude Include="InputTextUI.h">
+      <Filter>03. UI\ModuleUI\InputTextUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -427,6 +439,12 @@
     </ClCompile>
     <ClCompile Include="ComboBoxUI.cpp">
       <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonUI.cpp">
+      <Filter>03. UI\ModuleUI\CommonUI</Filter>
+    </ClCompile>
+    <ClCompile Include="InputTextUI.cpp">
+      <Filter>03. UI\ModuleUI\InputTextUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

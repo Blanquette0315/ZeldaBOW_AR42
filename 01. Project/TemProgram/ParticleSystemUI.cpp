@@ -5,6 +5,7 @@
 #include <Engine/CParticleSystem.h>
 
 #include "CImGuiMgr.h"
+#include "CommonUI.h"
 #include "ListUI.h"
 
 ParticleSystemUI::ParticleSystemUI()
@@ -145,12 +146,10 @@ void ParticleSystemUI::render_update()
     ImGui::Text("End Scale   "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_EndScale", m_vEndScale);
 
     ImGui::Text("Start Color "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_StartColor", m_vStartColor);
-    ImGui::SameLine();
-    ImGui::ColorEdit4("##PTC_StartScale2", m_vStartColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_PickerHueWheel);
+    ImGui::Text("            "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vStartColor);
 
     ImGui::Text("End Color   "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_EndColor", m_vEndColor);
-    ImGui::SameLine();
-    ImGui::ColorEdit4("##PTC_EndColor2", m_vEndColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_PickerHueWheel);
+    ImGui::Text("            "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vEndColor);
 
     ImGui::Text("Min Speed   "); ImGui::SameLine(); ImGui::InputFloat("##PTC_MinSpeed", &m_vMinMaxSpeed.x, 1.f, 10.f);
     ImGui::Text("Max Speed   "); ImGui::SameLine(); ImGui::InputFloat("##PTC_MaxSpeed", &m_vMinMaxSpeed.y, 1.f, 10.f);

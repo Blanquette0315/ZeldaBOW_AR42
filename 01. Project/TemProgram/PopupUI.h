@@ -1,25 +1,6 @@
 #pragma once
 #include "UI.h"
 
-enum class HEAD_TYPE
-{
-    SELECTABLE,
-    MENU,
-};
-
-enum class MENU_TYPE
-{
-    ADD_COMPONENT,
-    ADD_SCRIPT,
-};
-
-enum class FUNC_TYPE
-{
-    FUNC_0,
-    FUNC_1,
-    FUNC_2,
-};
-
 struct tFUNC
 {
     string      strName;     // Selectable ¿Ã∏ß
