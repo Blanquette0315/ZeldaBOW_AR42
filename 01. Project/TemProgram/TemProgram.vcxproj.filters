@@ -296,13 +296,17 @@
     <ClInclude Include="ComboBoxUI.h">
       <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
     </ClInclude>
-    <ClInclude Include="ListUI_EX.h" />
-    <ClInclude Include="TestUI.h" />
     <ClInclude Include="CommonUI.h">
       <Filter>03. UI\ModuleUI\CommonUI</Filter>
     </ClInclude>
     <ClInclude Include="InputTextUI.h">
       <Filter>03. UI\ModuleUI\InputTextUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ListUI_EX.h">
+      <Filter>03. UI\ModuleUI\ListUI_EX</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUI.h">
+      <Filter>03. UI\ModuleUI\TestUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -448,17 +452,17 @@
     <ClCompile Include="ComboBoxUI.cpp">
       <Filter>03. UI\ModuleUI\ComboBoxUI</Filter>
     </ClCompile>
-    <ClCompile Include="ListUI_EX.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TestUI.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CommonUI.cpp">
       <Filter>03. UI\ModuleUI\CommonUI</Filter>
     </ClCompile>
     <ClCompile Include="InputTextUI.cpp">
       <Filter>03. UI\ModuleUI\InputTextUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ListUI_EX.cpp">
+      <Filter>03. UI\ModuleUI\ListUI_EX</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUI.cpp">
+      <Filter>03. UI\ModuleUI\TestUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

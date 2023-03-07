@@ -38,8 +38,6 @@ private:
 
     const vector<TreeNode*>& GetChild() { return m_vecChildNode; }
 
-    void AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObject* _Target);
-
 public:
     TreeNode();
     ~TreeNode();
