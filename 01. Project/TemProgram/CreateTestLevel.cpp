@@ -161,7 +161,7 @@ void CreateTestLevel()
 	pDecal->Transform()->SetRelativeScale(250.f, 250.f, 250.f);
 	
 	pDecal->Decal()->SetRenderType(true);
-	pDecal->Decal()->SetDecalTexture(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\MagicCircle.png"));
+	pDecal->Decal()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\MagicCircle.png"));
 
 	pLevel->AddGameObject(pDecal, 0);
 

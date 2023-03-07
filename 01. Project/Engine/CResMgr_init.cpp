@@ -673,6 +673,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);	// 깊이를 남기면 안되고, 테스트도 하면 안된다.
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DECAL);
 
+	pShader->AddTexureParam(TEX_1, "Decal Texture");
+
 	AddRes<CGrapicsShader>(L"DecalShader", pShader);
 
 	// SkyBox Shader
@@ -801,6 +803,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);		// 색을 남겨 알파 블랜딩을 해주어야 한다.
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);	// 깊이를 남기면 안되고, 테스트도 하면 안된다.
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL);
+
+	pShader->AddTexureParam(TEX_1, "Decal Texture");
 
 	AddRes<CGrapicsShader>(L"Deferred_DecalShader", pShader);
 }

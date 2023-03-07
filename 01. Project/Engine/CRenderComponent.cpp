@@ -33,26 +33,31 @@ CRenderComponent::~CRenderComponent()
 
 Ptr<CMaterial> CRenderComponent::GetSharedMaterial()
 {
+	m_bIsDynamicMtrl = false;
 	m_pCurMtrl = m_pSharedMtrl;
 
 	//if (nullptr != m_pDynamicMtrl)
 	//{
 	//	m_pDynamicMtrl = nullptr;
 	//}
-	m_bIsDynamicMtrl = false;
+
 
 	return m_pSharedMtrl;
 }
 
 Ptr<CMaterial> CRenderComponent::GetDynamicMaterial()
 {
+	m_bIsDynamicMtrl = true;
+	
 	if (nullptr != m_pDynamicMtrl)
+	{
+		m_pCurMtrl = m_pDynamicMtrl;
 		return m_pDynamicMtrl;
+	}
 
 	m_pDynamicMtrl = m_pSharedMtrl->Clone();
-	m_pDynamicMtrl->SetName(m_pSharedMtrl->GetName() + L"_Clone");
+	m_pDynamicMtrl->SetName(m_pSharedMtrl->GetName());
 	m_pCurMtrl = m_pDynamicMtrl;
-	m_bIsDynamicMtrl = true;
 
 	return m_pCurMtrl;
 }
