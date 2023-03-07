@@ -23,7 +23,7 @@ TestUI::~TestUI()
 
 void TestUI::render_update()
 {
-	// Res ÀÌ¸§ ¹®Á¦
+	// Res ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//m_Combo->render_update();
 	//m_ListEX->render_update();
 }

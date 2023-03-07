@@ -1,3 +1,4 @@
+
 #include "pch.h"
 #include "ListUI_EX.h"
 
@@ -34,7 +35,7 @@ void ListUI_EX::render_update()
 {
 	ImVec2 vRegion = ImGui::GetContentRegionAvail();
 	vRegion.x += 18.f;
-	vRegion.y -= 20.f;
+	vRegion.y -= 50.f;
 
 	string str = "##ListBox" + std::to_string(m_ID);
 	if (ImGui::BeginListBox(str.c_str(), vRegion))
@@ -43,13 +44,13 @@ void ListUI_EX::render_update()
 		{
 			for (size_t i = 0; i < m_vecItemName.size(); ++i)
 			{
-				// List Item °¹¼ö°¡ ´Þ¶óÁ³À» ¶§
+				// List Item ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 				if(m_vecItemName.size() != m_vecMultiSelectIdx.size())
 				{
 					m_vecMultiSelectIdx.resize(m_vecItemName.size(), false);
 				}
 
-				char buf[256];
+				static char buf[256] = {};
 				sprintf_s(buf, m_vecItemName[i].c_str());
 
 				if (ImGui::Selectable(buf, m_vecMultiSelectIdx[i]))
@@ -72,14 +73,14 @@ void ListUI_EX::render_update()
 			{
 				bool Selectable = (m_iSelectIdx == i);
 
-				// i¹øÂ° ¾ÆÀÌÅÛÀÌ ´­·È´Ù¸é
+				// iï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½È´Ù¸ï¿½
 				if (ImGui::Selectable(m_vecItemName[i].c_str(), Selectable))
 				{
-					// ´­¸° ¾ÆÀÌÅÛ ÀÎµ¦½º¸¦ ÀúÀåÇØÁØ´Ù. -> ´Ù½Ã µé¾î¿Ã ¶§µµ true
+					// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½. -> ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ true
 					m_iSelectIdx = i;
 				}
 
-				// ÃÊ±â¿¡ ´­·Á ÀÖ´Â ¾ÆÀÌÅÛ ¼³Á¤
+				// ï¿½Ê±â¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				if (Selectable)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -95,6 +96,20 @@ void ListUI_EX::render_update()
 			}
 		}
 		ImGui::EndListBox();
+
+		if (m_bMultiSelect)
+		{
+			static char buf[256] = {};
+			string strButtonName = "confirm##" + std::to_string(m_ID);
+			sprintf_s(buf, strButtonName.c_str());
+			if (ImGui::Button(buf))
+			{
+				if (m_ConfirmInst && m_ConfirmFunc)
+				{
+					(m_ConfirmInst->*m_ConfirmFunc)((DWORD_PTR)&m_vecMultiSelectIdx);
+				}
+			}
+		}
 	}
 }
 
