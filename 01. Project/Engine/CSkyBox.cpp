@@ -59,6 +59,8 @@ void CSkyBox::render()
 	GetCurMaterial()->UpdateData();
 
 	GetMesh()->render();
+
+	CMaterial::Clear();
 }
 
 void CSkyBox::SetSkyMesh()
