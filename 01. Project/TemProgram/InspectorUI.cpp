@@ -27,6 +27,7 @@
 #include "RTextureUI.h"
 #include "MaterialUI.h"
 #include "PreFabUI.h"
+#include "GraphicsShaderUI.h"
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
@@ -97,6 +98,12 @@ InspectorUI::InspectorUI()
 	m_arrResUI[(UINT)RES_TYPE::PREFAB]->ShowSeperator(false);
 	m_arrResUI[(UINT)RES_TYPE::PREFAB]->Close();
 	AddChild(m_arrResUI[(UINT)RES_TYPE::PREFAB]);
+
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER] = new GraphicsShaderUI;
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->SetSize(ImVec2(0.f, 0.f));
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->ShowSeperator(false);
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->Close();
+	AddChild(m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]);
 
 	// LevelUI
 	m_pLevelUI = new LevelUI("LevelUI##UI");

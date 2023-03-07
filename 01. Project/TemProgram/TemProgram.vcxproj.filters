@@ -135,6 +135,9 @@
     <Filter Include="03. UI\ModuleUI\InputTextUI">
       <UniqueIdentifier>{0d6f652b-3ac1-4056-9518-daf2fa10cc40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\01. Inspector\ResUI\GraphicsShaderUI">
+      <UniqueIdentifier>{459504aa-f778-4d14-b9e7-d600e367cc3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -308,6 +311,9 @@
     <ClInclude Include="TestUI.h">
       <Filter>03. UI\ModuleUI\TestUI</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsShaderUI.h">
+      <Filter>03. UI\01. Inspector\ResUI\GraphicsShaderUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -463,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="TestUI.cpp">
       <Filter>03. UI\ModuleUI\TestUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsShaderUI.cpp">
+      <Filter>03. UI\01. Inspector\ResUI\GraphicsShaderUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
