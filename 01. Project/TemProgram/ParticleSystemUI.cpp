@@ -59,11 +59,12 @@ void ParticleSystemUI::render_update()
 
     // 파티클 재질 정하기
     ImGui::Text("Material    ");	ImGui::SameLine();
-    ImGui::PushItemWidth(200.f);
+    ImGui::PushItemWidth(235.f);
     ImGui::InputText("##Mtrl", (char*)MtrlName.data(), MtrlName.length(), ImGuiInputTextFlags_ReadOnly);
+    ImGui::PopItemWidth();
 
     ImGui::SameLine();
-    if (ImGui::Button("##PartcleMtrlBtn", Vec2(15.f, 15.f)))
+    if (ImGui::Button("##PartcleMtrlBtn", Vec2(18.f, 18.f)))
     {
         ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
         assert(pListUI);
@@ -93,11 +94,12 @@ void ParticleSystemUI::render_update()
 
     // 컴퓨트 셰이더 정하기
     ImGui::Text("ComShader   ");	ImGui::SameLine();
-    ImGui::PushItemWidth(200.f);
+    ImGui::PushItemWidth(235.f);
     ImGui::InputText("##ComShader", (char*)ComShaderKey.data(), ComShaderKey.length(), ImGuiInputTextFlags_ReadOnly);
+    ImGui::PopItemWidth();
 
     ImGui::SameLine();
-    if (ImGui::Button("##PartcleComShaderBtn", Vec2(15.f, 15.f)))
+    if (ImGui::Button("##PartcleComShaderBtn", Vec2(18.f, 18.f)))
     {
         ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
         assert(pListUI);
@@ -140,6 +142,7 @@ void ParticleSystemUI::render_update()
         pListUI->Open();
     }
 
+    ImGui::PushItemWidth(265.f);
     ImGui::Text("MaxCount    "); ImGui::SameLine(); ImGui::InputInt("##PTC_MaxCount", &m_iMaxCount, 1, 10);
     ImGui::Text("AliveCount  "); ImGui::SameLine(); ImGui::InputInt("##PTC_AliveCount", &m_iAliveCount, 1, 10);
     ImGui::Text("Start Scale "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_StartScale", m_vStartScale);
