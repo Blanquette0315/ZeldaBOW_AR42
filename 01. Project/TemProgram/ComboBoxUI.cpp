@@ -77,35 +77,3 @@ void ComboBoxUI::update()
 {
 }
 
-inline wstring ConvertStrToWstr(const string& _str)
-{
-    return wstring(_str.begin(), _str.end());
-}
-
-inline string ConvertWstrToStr(const wstring& _wstr)
-{
-    return string(_wstr.begin(), _wstr.end());
-}
-
-vector<wstring> ConvertStrToWstrVec(const vector<string>& _vecStr)
-{
-    vector<wstring> vecWstr;
-
-    for (size_t i = 0; i < _vecStr.size(); ++i)
-    {
-        vecWstr.push_back(ConvertStrToWstr(_vecStr[i]));
-    }
-    return vecWstr;
-}
-
-vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr)
-{
-    vector<string> vecStr;
-
-    for (size_t i = 0; i < _vecWstr.size(); ++i)
-    {
-        vecStr.push_back(ConvertWstrToStr(_vecWstr[i]));
-    }
-    return vecStr;
-}
-
