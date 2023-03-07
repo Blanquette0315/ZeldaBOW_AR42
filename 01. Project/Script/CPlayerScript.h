@@ -8,7 +8,13 @@ private:
     float   m_fAccTime;
     float   m_fSpeed;
     float   m_fJumpHeight;
+    int     m_iTest;
+    Vec2    m_v2Test;
+    Vec3    m_v3Test;
+    Vec4    m_v4Test;
 
+    Ptr<CTexture> m_PTestTex;
+    Ptr<CTexture> m_PTestTex1;
     Ptr<CPrefab> m_Prefab;
 
 
