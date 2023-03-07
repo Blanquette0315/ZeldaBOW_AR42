@@ -52,8 +52,8 @@ void TreeNode::render_update()
 	if (m_bFrame && m_vecChildNode.empty())
 		strName = "\t" + strName;
 
-	// µÚ¿¡ ½Äº°¹øÈ£¸¦ ºÙ¿©¼­ ÀÌ¸§(Å°) Áßº¹À» ¹æÁöÇØÁØ´Ù.
-	// UINT´Ï±î 4¾ï°³ Á¤µµ´Â ¹æÁö°¡ µÉ °Í.
+	// ï¿½Ú¿ï¿½ ï¿½Äºï¿½ï¿½ï¿½È£ï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½(Å°) ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+	// UINTï¿½Ï±ï¿½ 4ï¿½ï°³ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½.
 	char szTag[50] = "";
 	sprintf_s(szTag, 50, "##%d", m_iIdx);
 	strName += szTag;
@@ -62,20 +62,20 @@ void TreeNode::render_update()
 
 	if (ImGui::TreeNodeEx(strName.c_str(),iFlag))
 	{
-		// µå·¡±× Ã¼Å©
+		// ï¿½å·¡ï¿½ï¿½ Ã¼Å©
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
 			m_TreeUI->SetBeginDragNode(this);
 
-			// Ã¹ ÀÎÀÚÀÎ Å°°ªÀº ³ªÁß¿¡ µå¶øÀ» ¹Þ´ÂÂÊ¿¡¼­ Ã¼Å©ÇØ °°À¸¸é µ¥ÀÌÅÍ¸¦ Àü´ÞÇØÁØ´Ù.
-			// µÎ¹øÂ° ÀÎÀÚÀÎ µ¥ÀÌÅÍ´Â ÇØ´ç ³ëµå ÀÚÃ¼¸¦ º¸³¾ °ÍÀÌ±â ¶§¹®¿¡ µ¥ÀÌÅÍ »çÀÌÁî´Â TreeNode¸¸Å­ÀÌ´Ù.
+			// Ã¹ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+			// ï¿½Î¹ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ TreeNodeï¿½ï¿½Å­ï¿½Ì´ï¿½.
 			ImGui::SetDragDropPayload(m_TreeUI->GetName().c_str(), (void*)this, sizeof(TreeNode));
 			ImGui::Text(strName.c_str());
 
 			ImGui::EndDragDropSource();
 		}
 
-		// µå¶øÃ¼Å©
+		// ï¿½ï¿½ï¿½Ã¼Å©
 		if (ImGui::BeginDragDropTarget())
 		{
 			m_TreeUI->SetDropTargetNode(this);
@@ -83,27 +83,27 @@ void TreeNode::render_update()
 			ImGui::EndDragDropTarget();
 		}
 
-		// Å¬¸¯ Ã¼Å© : Clicked·Î ÇÏ¸é, µå·¡±×¿Í ¹®Á¦°¡ »ý°Ü¼­ Released·Î º¯°æÇÏ¿´´Ù.
+		// Å¬ï¿½ï¿½ Ã¼Å© : Clickedï¿½ï¿½ ï¿½Ï¸ï¿½, ï¿½å·¡ï¿½×¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ü¼ï¿½ Releasedï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½.
 		if (!m_bFrame && ImGui::IsItemHovered(0) && ImGui::IsMouseReleased(0))
 		{
 			m_TreeUI->SetSelectedNode(this);
 		}
 
-		//// ¿ìÅ¬¸¯ Ã¼Å©
+		//// ï¿½ï¿½Å¬ï¿½ï¿½ Ã¼Å©
 		//if (ImGui::IsItemHovered(0) && KEY_TAP(KEY::RBTN))
 		//{
-		//	// OutLinerUIÀÇ NodeÀÏ °æ¿ì ºÎ¸ð(ÇÁ·¹ÀÓ)µµ ÆË¾÷À» ¶ç¿ö ÁÖ¾î¾ß ÇÑ´Ù.
+		//	// OutLinerUIï¿½ï¿½ Nodeï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 		//	if (m_TreeUI->GetName() == "##OutlinerTree")
 		//	{
 		//		ImGui::OpenPopup("##OutLinerNode");
 		//	}
 
-		//	// ContentUIÀÇ NodeÀÏ °æ¿ì ºÎ¸ð(ÇÁ·¹ÀÓ)Àº ÆË¾÷À» ¶ç¿ì¸é ¾ÈµÈ´Ù.
+		//	// ContentUIï¿½ï¿½ Nodeï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÈ´ï¿½.
 		//	else if (m_TreeUI->GetName() == "##ContentTree")
 		//	{
 		//		if (!m_bFrame)
 		//		{
-		//			// ÇØ´ç ³ëµå°¡ Level³ëµåÀÏ °æ¿ì
+		//			// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Levelï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		//			if (dynamic_cast<CLevel*>((CEntity*)m_data))
 		//			{
 		//				ImGui::OpenPopup("##LevelNode");
@@ -111,7 +111,7 @@ void TreeNode::render_update()
 		//			else
 		//			{
 		//				CRes* pTargetRes = (CRes*)m_data;
-		//				// ÇØ´ç ³ëµå°¡ Mtrl³ëµåÀÏ °æ¿ì
+		//				// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Mtrlï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		//				if (pTargetRes->GetResType() == RES_TYPE::MATERIAL)
 		//				{
 		//					ImGui::OpenPopup("##MtrlNode");
@@ -123,14 +123,14 @@ void TreeNode::render_update()
 		
 		if (!m_bFrame && ImGui::IsItemHovered(0) && KEY_TAP(KEY::RBTN))
 		{
-			// ÇØ´ç ³ëµå°¡ OutLiner(¿ÀºêÁ§Æ®)ÀÏ °æ¿ì 
+			// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ OutLiner(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®)ï¿½ï¿½ ï¿½ï¿½ï¿½ 
 			if(m_TreeUI->GetName() == "##OutlinerTree")
 				ImGui::OpenPopup("##OutLinerNode");
 
-			// ÇØ´ç ³ëµå°¡ ContentTree ¼Ò¼Ó³ëµåÀÏ °æ¿ì
+			// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ ContentTree ï¿½Ò¼Ó³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 			if (m_TreeUI->GetName() == "##ContentTree")
 			{
-				// ÇØ´ç ³ëµå°¡ Level³ëµåÀÏ °æ¿ì
+				// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Levelï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 				if (dynamic_cast<CLevel*>((CEntity*)m_data))
 				{
 					ImGui::OpenPopup("##LevelNode");
@@ -138,7 +138,7 @@ void TreeNode::render_update()
 				else
 				{
 					CRes* pTargetRes = (CRes*)m_data;
-					// ÇØ´ç ³ëµå°¡ Mtrl³ëµåÀÏ °æ¿ì
+					// ï¿½Ø´ï¿½ ï¿½ï¿½å°¡ Mtrlï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 					if (pTargetRes->GetResType() == RES_TYPE::MATERIAL)
 					{
 						ImGui::OpenPopup("##MtrlNode");
@@ -149,7 +149,7 @@ void TreeNode::render_update()
 
 		}
 
-		// OutLinerNode Popup »ý¼º
+		// OutLinerNode Popup ï¿½ï¿½ï¿½ï¿½
 		{
 			static PopupUI* OutLiner = new PopupUI("##OutLinerNode");
 
@@ -187,7 +187,7 @@ void TreeNode::render_update()
 			OutLiner->render_update();
 		}
 
-		// LevelNode Popup »ý¼º
+		// LevelNode Popup ï¿½ï¿½ï¿½ï¿½
 		{
 			static PopupUI* LevelNode = new PopupUI("##LevelNode");
 
@@ -201,7 +201,7 @@ void TreeNode::render_update()
 			LevelNode->render_update();
 		}
 
-		// MtrlNode Popup »ý¼º
+		// MtrlNode Popup ï¿½ï¿½ï¿½ï¿½
 		{
 			static PopupUI* MaterialNode = new PopupUI("##MtrlNode");
 
@@ -214,7 +214,7 @@ void TreeNode::render_update()
 			MaterialNode->render_update();
 		}
 
-		// Create Level? Modal Popup ¿­¾îÁÖ´Â ÆÄÆ®
+		// Create Level? Modal Popup ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Æ®
 		if (bOpenLevelName)
 		{
 			ImGui::OpenPopup("Create Level?");
@@ -222,16 +222,16 @@ void TreeNode::render_update()
 		}
 			
 
-		// ·¹º§ »ý¼º Àü ÀÌ¸§ Á¤ÇÏ±â ÆË¾÷ ¶ç¿ì±â
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-		// InputTextPopup »ý¼º
+		// InputTextPopup ï¿½ï¿½ï¿½ï¿½
 		static InputTextUI* pPopupTextUI = new InputTextUI("##CreateLevel");
 		pPopupTextUI->SetFunc_1((FUNC_1)&InputTextUI::CreateLevel);
 		pPopupTextUI->CreateTextPopup("Create Level?", "Input Level Name");
 
-		// ÀÚ½Ä ³ëµåµé±îÁö Àç±ÍÀû È£ÃâÀ» ÇØÁØ´Ù.
+		// ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
 		for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 		{
 			m_vecChildNode[i]->render_update();
@@ -246,7 +246,7 @@ void TreeNode::render_update()
 // ============
 // =   Tree   =
 // ============
-// TreeUIÀÇ ÀÌ¸§Àº »ý¼ºÀÚ¿¡¼­ ³Ö¾îÁÖ¾î¼­ ÀÌ¸§ Áßº¹À» ¹æÁöÇÏµµ·Ï ±¸ÇöÇß´Ù. (ImGui¿¡¼­ ÀÌ¸§ Áßº¹ÀÌ ¹ß»ýÇÏ¸é ¾ÈµÊ)
+// TreeUIï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¾î¼­ ï¿½Ì¸ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß´ï¿½. (ImGuiï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ï¸ï¿½ ï¿½Èµï¿½)
 
 UINT TreeUI::m_iNextNodeIdx = 0;
 
@@ -291,7 +291,7 @@ void TreeUI::render_update()
 		}
 	}
 
-	// ¸¶¿ì½º ¿ÞÂÊ ¸±¸®Áî Ã¼Å©
+	// ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
 	if (ImGui::IsMouseReleased(0))
 	{
 		m_BeginDragNode = nullptr;
@@ -308,10 +308,10 @@ TreeNode* TreeUI::AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _
 	pNode->m_TreeUI = this;
 	pNode->m_iIdx = m_iNextNodeIdx++;
 
-	// RootNode·Î ÁöÁ¤µÇ´Â ³ëµå
+	// RootNodeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½
 	if (nullptr == _parent)
 	{
-		// ÇØ´ç ³ëµå¸¦ Root³ëµå·Î ÁöÁ¤ÇÏ·ÁÇÏ´Âµ¥, ÀÌ¹Ì rootnode°¡ Á¸ÀçÇÑ´Ù¸é Áß´Ü.
+		// ï¿½Ø´ï¿½ ï¿½ï¿½å¸¦ Rootï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ï´Âµï¿½, ï¿½Ì¹ï¿½ rootnodeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½ ï¿½ß´ï¿½.
 		assert(!m_RootNode);
 		m_RootNode = pNode;
 	}
@@ -334,13 +334,13 @@ void TreeUI::Clear()
 
 void TreeUI::SetSelectedNode(TreeNode* _SelectedNode)
 {
-	// ÀÌÀü¿¡ ¼±ÅÃµÈ ³ëµå°¡ ÀÖ¾ú´Ù¸é, ÇØ´ç ³ëµåÀÇ ¼±ÅÃÀ» Ç®¾îÁØ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½å°¡ ï¿½Ö¾ï¿½ï¿½Ù¸ï¿½, ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç®ï¿½ï¿½ï¿½Ø´ï¿½.
 	if (nullptr != m_SelectedNode)
 	{
 		m_SelectedNode->m_bSelected = false;
 	}
 
-	// µé¾î¿Â ³ëµå¸¦ ¼±ÅÃ ³ëµå·Î ÁöÁ¤ÇÏ°í, ÇØ´ç ³ëµå¿¡°Ô ¼±ÅÃµÊÀ» ¾Ë·ÁÁØ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½Ø´ï¿½ ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½Ø´ï¿½.
 	m_SelectedNode = _SelectedNode;
 	m_SelectedNode->m_bSelected = true;
 
@@ -362,5 +362,5 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 		}
 	}
 
-	// ¿ÜºÎ µå¶ø °ü·Ã PayLoad Ã³¸®ÇÏ±â
+	// ï¿½Üºï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ PayLoad Ã³ï¿½ï¿½ï¿½Ï±ï¿½
 }

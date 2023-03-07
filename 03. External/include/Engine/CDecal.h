@@ -22,7 +22,8 @@ public:
     virtual void render() override;
 
 public:
-
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
     CLONE(CDecal);
 public:
     CDecal();

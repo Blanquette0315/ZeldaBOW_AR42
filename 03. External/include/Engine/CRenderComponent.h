@@ -32,8 +32,8 @@ public:
     bool IsDynamicMtrl() { return m_bIsDynamicMtrl; }
 
 public:
-    virtual void SaveToFile(FILE* _File) override;
-    virtual void LoadFromFile(FILE* _File) override;
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
 public:
     virtual CRenderComponent* Clone() = 0;

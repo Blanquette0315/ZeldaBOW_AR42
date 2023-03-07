@@ -91,27 +91,33 @@ void CTileMap::SetTileAtlas(Ptr<CTexture> _AtlasTex)
 	m_TexWH.y = m_AtlasTex->GetHeight();
 }
 
-
-
-void CTileMap::SaveToFile(FILE* _File)
+void CTileMap::SaveToYAML(YAML::Emitter& _emitter)
 {
-	CRenderComponent::SaveToFile(_File);
+	_emitter << YAML::Key << "TILEMAP";
+	_emitter << YAML::Value << YAML::BeginMap;
 
-	SaveResourceRef<CTexture>(m_AtlasTex, _File);
+	CRenderComponent::SaveToYAML(_emitter);
+	_emitter << YAML::Key << "TileMapTexture";
+	_emitter << YAML::Value << YAML::BeginMap;
+	SaveResourceRef<CTexture>(m_AtlasTex, _emitter);
+	_emitter << YAML::EndMap;
+	_emitter << YAML::Key << "TexWH";
+	_emitter << YAML::Value << m_TexWH;
+	_emitter << YAML::Key << "TileCount";
+	_emitter << YAML::Value << m_vTileCount;
+	_emitter << YAML::Key << "vecTile";
+	_emitter << YAML::Value << m_vecTile;
 
-	fwrite(&m_TexWH, sizeof(Vec2), 1, _File);
-	fwrite(&m_vTileCount, sizeof(Vec2), 1, _File);
-	fwrite(m_vecTile.data(), sizeof(tTile), m_vecTile.size(), _File);
+	_emitter << YAML::EndMap;
 }
 
-void CTileMap::LoadFromFile(FILE* _File)
+void CTileMap::LoadFromYAML(YAML::Node& _node)
 {
-	CRenderComponent::LoadFromFile(_File);
-
-	LoadResourceRef<CTexture>(m_AtlasTex, _File);
-	fread(&m_TexWH, sizeof(Vec2), 1, _File);
-	fread(&m_vTileCount, sizeof(Vec2), 1, _File);
-
+	YAML::Node node = _node["TILEMAP"];
+	CRenderComponent::LoadFromYAML(node);
+	m_TexWH = node["TexWH"].as<Vec2>();
+	m_vTileCount = node["TileCount"].as<Vec2>();
+	
 	// vector의 reserve와 resize의 차이
 	// reserve는 단지 수용량만 늘려주는 것이다. (캐퍼시티를 할당 받아둔다.)
 	// resize는 실제로 데이터가 들어가는 index 공간을 동적할당 받는다.
@@ -121,14 +127,12 @@ void CTileMap::LoadFromFile(FILE* _File)
 	size_t iTileCount = (size_t)(m_vTileCount.x * m_vTileCount.y);
 	SetTileCount((UINT)m_vTileCount.x, (UINT)m_vTileCount.y);
 	// 파일로부터 타일 정보를 읽어서 벡터에 기록
-	for (size_t i = 0; i < iTileCount; ++i)
-	{
-		tTile tile = {};
-		fread(&tile, sizeof(tTile), 1, _File);
-		m_vecTile[i] = tile;
-	}
+	m_vecTile = node["vecTile"].as<vector<tTile>>();
 
 	// 타일정보가 1개 이상 있으면, 데이터 변경점 체크 --> render 에서 데이터를 구조화버퍼로 이동
 	if (0 < m_vecTile.size())
 		m_bDataChanged = true;
+
+	node = _node["TILEMAP"]["TileMapTexture"];
+	LoadResourceRef<CTexture>(m_AtlasTex, node);
 }

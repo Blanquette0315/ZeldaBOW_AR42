@@ -20,6 +20,11 @@ string WStringToString(const wstring& _str)
 	return string(_str.begin(), _str.end());
 }
 
+wstring StringToWString(const string& _str)
+{
+	return wstring(_str.begin(), _str.end());
+}
+
 int GetSizeofFormat(DXGI_FORMAT _eFormat)
 {
 	int iRetByte = 0;

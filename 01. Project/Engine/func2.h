@@ -65,6 +65,7 @@ void Safe_Del_Array(T* (&_arr)[SIZE])
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath);
 
 string WStringToString(const wstring& _str);
+wstring StringToWString(const string& _str); // 민수 추가
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat);
 
@@ -94,32 +95,33 @@ void LoadWStringFromFile(wstring& _str, FILE* _pFile);
 #include "CResMgr.h"
 #include "Ptr.h"
 template<typename T>
-void SaveResourceRef(Ptr<T> _res, FILE* _pFile)
+void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 {
 	// 참조중인 리소스가 없었다면 없는대로 nullptr이 들어갈 것이다.
 	int bExist = !!_res.Get();
-	fwrite(&bExist, sizeof(int), 1, _pFile);
-
+	_emitter << YAML::Key << "Exist";
+	_emitter << YAML::Value << bExist;
 	// 참조중인 리소스가 있었다면, 어떤 리소스를 가지고 있었는지 키와 경로를 저장한다.
 	if (bExist)
 	{
-		SaveWStringToFile(_res->GetKey(), _pFile);
-		SaveWStringToFile(_res->GetRelativePath(), _pFile);
+		_emitter << YAML::Key << "ResKey";
+		_emitter << YAML::Value << WStringToString(_res->GetKey());
+		_emitter << YAML::Key << "ResRelativePath";
+		_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
 	}
 }
 
 template<typename T>
-void LoadResourceRef(Ptr<T>& _Res, FILE* _pFile)
+void LoadResourceRef(Ptr<T>& _Res, YAML::Node& _node)
 {
-	int bExist = 0;
-	fread(&bExist, sizeof(int), 1, _pFile);
+	int bExist = _node["Exist"].as<int>();
 
 	if (bExist)
 	{
 		wstring strKey, strRelativePath;
-		LoadWStringFromFile(strKey, _pFile);
-		LoadWStringFromFile(strRelativePath, _pFile);
-
+		strKey = StringToWString(_node["ResKey"].as<string>());
+		strRelativePath = StringToWString(_node["ResRelativePath"].as<string>());
+		
 		_Res = CResMgr::GetInst()->Load<T>(strKey, strRelativePath);
 	}
 }

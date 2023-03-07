@@ -51,8 +51,8 @@ public:
     void EndOverlap(CCollider2D* _pOther);
 
 public:
-    virtual void SaveToFile(FILE* _File);
-    virtual void LoadFromFile(FILE* _File);
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override {};
+    virtual void LoadFromYAML(YAML::Node& _node) override {};
 
     CLONE(CCollider2D);
 public:

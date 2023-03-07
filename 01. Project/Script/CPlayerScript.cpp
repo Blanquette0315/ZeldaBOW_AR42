@@ -96,21 +96,22 @@ void CPlayerScript::EndOverlap(CCollider2D* _pOther)
 {
 }
 
-
-void CPlayerScript::SaveToFile(FILE* _File)
+void CPlayerScript::SaveToYAML(YAML::Emitter& _emitter)
 {
-	CScript::SaveToFile(_File);
-	fwrite(&m_fSpeed, sizeof(float), 1, _File);
-	fwrite(&m_fJumpHeight, sizeof(float), 1, _File);
-
-	SaveResourceRef(m_Prefab, _File);
+	CScript::SaveToYAML(_emitter);
+	_emitter << YAML::Key << "Speed";
+	_emitter << YAML::Value << m_fSpeed;
+	_emitter << YAML::Key << "JumpHeight";
+	_emitter << YAML::Value << m_fJumpHeight;
 }
 
-void CPlayerScript::LoadFromFile(FILE* _File)
+void CPlayerScript::LoadFromYAML(YAML::Node& _node)
 {
-	CScript::LoadFromFile(_File);
-	fread(&m_fSpeed, sizeof(float), 1, _File);
-	fread(&m_fJumpHeight, sizeof(float), 1, _File);
+	/*CScript::LoadFromYAML(_node);
+	m_fSpeed = _node["Speed"].as<float>();
+	m_fJumpHeight = _node["JumpHeight"].as<float>();*/
 
-	LoadResourceRef(m_Prefab, _File);
+	CScript::LoadFromYAML(_node);
+	SAFE_LOAD_FROM_YAML(float, m_fSpeed, _node["Speed"]);
+	SAFE_LOAD_FROM_YAML(float, m_fJumpHeight, _node["JumpHeight"]);
 }

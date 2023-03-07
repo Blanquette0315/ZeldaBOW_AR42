@@ -2,7 +2,7 @@
 #include "CLandScape.h"
 
 CLandScape::CLandScape()
-	: CRenderComponent(COMPONENT_TYPE::LANDSPACE)
+	: CRenderComponent(COMPONENT_TYPE::LANDSCAPE)
 	, m_iXFaceCount(1)
 	, m_iZFaceCount(1)
 {

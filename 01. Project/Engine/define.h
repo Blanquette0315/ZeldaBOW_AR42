@@ -30,7 +30,9 @@ typedef Vector4 Vec4;
 
 #define MAX_LAYER 32
 
-// ½ºÄ«ÀÌ ¹Ú½º´Â Å¥ºê ¸Å½Ã¿Í Sphere 2°¡Áö·Î ¸¸µé ¼ö ÀÖ´Ù.
+#define SAFE_LOAD_FROM_YAML(type, variable, node) if(node.IsDefined()) { variable = node.as<type>(); }
+
+// ï¿½ï¿½Ä«ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½ ï¿½Å½Ã¿ï¿½ Sphere 2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½.
 enum class SKYBOX_TYPE
 {
 	SPHERE,
@@ -39,7 +41,7 @@ enum class SKYBOX_TYPE
 
 enum class SAMPLER_TYPE
 {
-	ANISOTROPIC, // ÀÌ¹æ¼º
+	ANISOTROPIC, // ï¿½Ì¹æ¼º
 	POINT,
 
 	END,
@@ -99,20 +101,20 @@ enum PIPELINE_STAGE
 
 enum class SHADER_DOMAIN
 {
-	DOMAIN_DEFERRED_OPAQIE,		// Áö¿¬ ·»´õ¸µ
-	DOMAIN_DEFERRED_MASK,		// Áö¿¬ ·»´õ¸µ
-	DOMAIN_DEFERRED_DECAL,		// Áö¿¬Ã³¸® µ¥Ä®
+	DOMAIN_DEFERRED_OPAQIE,		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	DOMAIN_DEFERRED_MASK,		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	DOMAIN_DEFERRED_DECAL,		// ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½Ä®
 
-	DOMAIN_OPAQUE,				// ºÒÅõ¸í ´Ü°è
-	DOMAIN_MASK,				// Ãâ·Â, ºñÃâ·Â
+	DOMAIN_OPAQUE,				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½
+	DOMAIN_MASK,				// ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	DOMAIN_DECAL,				// µ¥Ä® Ã³¸® (Forward)
-	DOMAIN_TRANSPARENT,			// ¹ÝÅõ¸í
+	DOMAIN_DECAL,				// ï¿½ï¿½Ä® Ã³ï¿½ï¿½ (Forward)
+	DOMAIN_TRANSPARENT,			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	DOMAIN_POST_PROCESS,		// ÈÄÃ³¸®
+	DOMAIN_POST_PROCESS,		// ï¿½ï¿½Ã³ï¿½ï¿½
 
-	// Rendering ¸ñÀûÀÌ ¾Æ´Ñ Engine Â÷¿ø¿¡¼­ Ã³¸®ÇÒ ¿ëµµ
-	DOMAIN_LIGHT,				// ±¤¿ø Ã³¸®
+	// Rendering ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ Engine ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ëµµ
+	DOMAIN_LIGHT,				// ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 	NONE,
 };
 
@@ -153,7 +155,7 @@ enum class COMPONENT_TYPE
 	PARTICLESYSTEM,
 	SKYBOX,
 	DECAL,
-	LANDSPACE,
+	LANDSCAPE,
 
 
 	END,
@@ -257,28 +259,28 @@ enum class DIR
 	END,
 };
 
-// ±¸Á¶È­ ¹öÆÛÀÇ Å¸ÀÔ(¿ëµµ)
+// ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½(ï¿½ëµµ)
 enum class SB_TYPE
 {
-	SRV_ONLY,	// ShaderResourceView¸¸ Áö´Ï°í ÀÖ´Â Å¸ÀÔ
-	UAV_INC,	// ShaderResourceView »Ó ¾Æ´Ï¶ó UnorderedAccessViewµµ Áö´Ï°í ÀÖ´Â Å¸ÀÔ. (SRV¾øÀÌ UAV¸¸ Áö´Ï°í ÀÖ´Â°Ô ¸»ÀÌ ¾ÈµÇ±äÇÏ´Ù.)
+	SRV_ONLY,	// ShaderResourceViewï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½
+	UAV_INC,	// ShaderResourceView ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ UnorderedAccessViewï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½. (SRVï¿½ï¿½ï¿½ï¿½ UAVï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ±ï¿½ï¿½Ï´ï¿½.)
 };
 
 enum class LIGHT_TYPE
 {
-	DIRECTIONAL,	// ¹æÇâ¼º ±¤¿ø			: ÇÑ ¹æÇâÀ¸·Î ºñÃß´Â ºû
-	POINT,			// Á¡ ±¤¿ø				: ÇÑ Á¡¿¡¼­ ¸ðµç ¹æÇâÀ¸·Î ¹ß»ýÇÏ´Â ºû
-	SPOT,			// ½ºÆ÷Æ® ¶óÀÌÆ® ±¤¿ø		: Æ¯Á¤ °¢µµ·Î Á¦ÇÑÀ» µÖ¼­ ½î´Â ºû
+	DIRECTIONAL,	// ï¿½ï¿½ï¿½â¼º ï¿½ï¿½ï¿½ï¿½			: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ ï¿½ï¿½
+	POINT,			// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½				: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½
+	SPOT,			// ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½		: Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½
 };
 
-// Ä«¸Þ¶ó Å¸ÀÔ
+// Ä«ï¿½Þ¶ï¿½ Å¸ï¿½ï¿½
 enum class PROJ_TYPE
 {
 	PERSPECTIVE,
 	ORTHOGRAPHICS,
 };
 
-// ·¹º§ »óÅÂ
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 enum class LEVEL_STATE
 {
 	PLAY,

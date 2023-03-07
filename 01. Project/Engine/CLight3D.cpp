@@ -88,10 +88,37 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 	}
 }
 
-void CLight3D::SaveToFile(FILE* _File)
+void CLight3D::SaveToYAML(YAML::Emitter& _emitter)
 {
+	_emitter << YAML::Key << "LIGHT3D";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "Diff";
+	_emitter << YAML::Value << m_Info.vDiff;
+	_emitter << YAML::Key << "Spec";
+	_emitter << YAML::Value << m_Info.vSpec;
+	_emitter << YAML::Key << "Emb";
+	_emitter << YAML::Value << m_Info.vEmb;
+	_emitter << YAML::Key << "LightType";
+	_emitter << YAML::Value << (UINT)m_Info.iLightType;
+	_emitter << YAML::Key << "Radius";
+	_emitter << YAML::Value << m_Info.fRadius;
+	_emitter << YAML::Key << "InAngle";
+	_emitter << YAML::Value << m_Info.fInAngle;
+	_emitter << YAML::Key << "OutAngle";
+	_emitter << YAML::Value << m_Info.fOutAngle;	
+
+	_emitter << YAML::EndMap;
 }
 
-void CLight3D::LoadFromFile(FILE* _File)
+void CLight3D::LoadFromYAML(YAML::Node& _node)
 {
+	m_Info.vDiff = _node["LIGHT3D"]["Diff"].as<Vec4>();
+	m_Info.vSpec = _node["LIGHT3D"]["Spec"].as<Vec4>();
+	m_Info.vEmb = _node["LIGHT3D"]["Emb"].as<Vec4>();
+	m_Info.iLightType = (LIGHT_TYPE)(_node["LIGHT3D"]["LightType"].as<UINT>());
+	SetLightType(m_Info.iLightType);
+	m_Info.fRadius = _node["LIGHT3D"]["Radius"].as<float>();
+	m_Info.fInAngle = _node["LIGHT3D"]["InAngle"].as<float>();
+	m_Info.fOutAngle = _node["LIGHT3D"]["OutAngle"].as<float>();
 }
