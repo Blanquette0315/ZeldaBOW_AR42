@@ -7,6 +7,7 @@
 #include "CImGuiMgr.h"
 #include "ListUI.h"
 #include "TreeUI.h"
+#include "ScriptUI.h"
 
 // 카운트 초기화부분
 UINT ParamUI::ParamCount = 0;
@@ -139,6 +140,12 @@ bool ParamUI::Param_Tex(const string& _ParamName, Ptr<CTexture>& _Tex, UI* _Inst
 	ImGui::SameLine();
 	if (ImGui::Button(szName, Vec2(18.f, 18.f)))
 	{
+		ScriptUI* pScriptUI = dynamic_cast<ScriptUI*>(_Inst);
+		if (pScriptUI != nullptr)
+		{
+			pScriptUI->SetParamTex(&_Tex);
+		}
+
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
 		assert(pListUI);
 
@@ -186,6 +193,12 @@ bool ParamUI::Param_Prefab(const string& _ParamName, Ptr<CPrefab>& _Prefab, UI* 
 	ImGui::SameLine();
 	if (ImGui::Button(szName, Vec2(18.f, 18.f)))
 	{
+		ScriptUI* pScriptUI = dynamic_cast<ScriptUI*>(_Inst);
+		if (pScriptUI != nullptr)
+		{
+			pScriptUI->SetParamPrefab(&_Prefab);
+		}
+
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
 		assert(pListUI);
 

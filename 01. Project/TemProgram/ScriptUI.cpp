@@ -77,16 +77,16 @@ void ScriptUI::render_scriptparam()
             break;
         case SCRIPT_PARAM::TEXTURE:
         {
-            m_pParamTex = (Ptr<CTexture>*)vecParam[i].pParam;
-            ParamUI::Param_Tex(vecParam[i].strParamName, *m_pParamTex, this, (FUNC_1)&ScriptUI::SetTexture);
+            Ptr<CTexture>* pParamTex = (Ptr<CTexture>*)vecParam[i].pParam;
+            ParamUI::Param_Tex(vecParam[i].strParamName, *pParamTex, this, (FUNC_1)&ScriptUI::SetTexture);
         }
             break;
         case SCRIPT_PARAM::MATERIAL:
             break;
         case SCRIPT_PARAM::PREFAB:
         {
-            m_pParamPrefab = (Ptr<CPrefab>*)vecParam[i].pParam;
-            ParamUI::Param_Prefab(vecParam[i].strParamName, *m_pParamPrefab, this, (FUNC_1)&ScriptUI::SetPrefab);
+            Ptr<CPrefab>* pParamPrefab = (Ptr<CPrefab>*)vecParam[i].pParam;
+            ParamUI::Param_Prefab(vecParam[i].strParamName, *pParamPrefab, this, (FUNC_1)&ScriptUI::SetPrefab);
         }
             break;
         case SCRIPT_PARAM::SOUND:

@@ -16,6 +16,7 @@ private:
     Ptr<CTexture> m_PTestTex;
     Ptr<CTexture> m_PTestTex1;
     Ptr<CPrefab> m_Prefab;
+    Ptr<CPrefab> m_Prefab1;
 
 
 public:

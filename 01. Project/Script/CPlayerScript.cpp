@@ -21,6 +21,9 @@ CPlayerScript::CPlayerScript()
 	m_Prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\Test_Prefab_0.pref");
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "Prefab  Test    ", &m_Prefab);
 
+	m_Prefab1 = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\Test_Prefab_0.pref");
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Prefab  Test    ", &m_Prefab1);
+
 	m_PTestTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png");
 	AddScriptParam(SCRIPT_PARAM::TEXTURE, "Texture Test    ", &m_PTestTex);
 
