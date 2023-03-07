@@ -1,5 +1,32 @@
 #pragma once
 
+// ====================== JM ======================================
+wstring ConvertStrToWstr(const string& _str);
+string ConvertWstrToStr(const wstring& _wstr);
+vector<wstring> ConvertStrToWstrVec(const vector<string>& _vecStr);
+vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr);
+
+template <typename T1, typename T2>
+int GetMapIdx(const map<T1, T2>& _map, T2 _key);
+
+template<typename T1, typename T2>
+inline int GetMapIdx(const map<T1, T2>& _map, T1 _key)
+{
+	int idx = 0;
+	typename map<T1, T2>::const_iterator iter = _map.cbegin();
+	for (; iter != _map.cend(); ++iter)
+	{
+		if (iter->first == _key)
+		{
+			return idx;
+		}
+		++idx;
+	}
+
+	return 0;
+}
+// ================================================================
+
 template<typename T>
 void Safe_Del_Vec(vector<T*>& _vec)
 {
@@ -96,8 +123,6 @@ void LoadResourceRef(Ptr<T>& _Res, FILE* _pFile)
 		_Res = CResMgr::GetInst()->Load<T>(strKey, strRelativePath);
 	}
 }
-
-
 
 // Component, Resource Type enum class 값에 따른 char와 wchar로의 변환 함수
 const char* ToString(RES_TYPE);
