@@ -42,7 +42,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER] = new MeshRenderUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetSize(ImVec2(0.f, 80.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetSize(ImVec2(0.f, 280.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D] = new Collider2DUI;
@@ -434,4 +434,14 @@ void InspectorUI::SetTargetLevel(CLevel* _Level)
 		m_pLevelUI->SetTarget(nullptr);
 		m_pLevelUI->Close();
 	}
+}
+
+UI* InspectorUI::FindResUI(RES_TYPE _eType)
+{
+	return m_arrResUI[(UINT)_eType];
+}
+
+UI* InspectorUI::FindComponentUI(COMPONENT_TYPE _eType)
+{
+	return m_arrComUI[(UINT)_eType];
 }

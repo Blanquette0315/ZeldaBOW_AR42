@@ -32,6 +32,7 @@ void CameraUI::update()
 		m_iVisibleLayer = GetTarget()->Camera()->GetLayerMask();
 		m_iCamIdx = GetTarget()->Camera()->GetCamIdx();
 
+		// init
 		if (m_bInit == false)
 		{
 			vector<string> vecInitName = {};

@@ -9,8 +9,12 @@ class MeshRenderUI :
     public ComponentUI
 {
 private:
+    TEX_PARAM   m_eSelectTexParam;
+
     Ptr<CMesh>      m_Mesh;
     Ptr<CMaterial>  m_Material;
+    
+    bool            m_bIsDyanmicMtrl;
 
 public:
     virtual void update() override;
@@ -19,6 +23,9 @@ public:
 public:
     void SetMesh(DWORD_PTR _strMeshKey);
     void SetMaterial(DWORD_PTR _strMaterialKey);
+
+    void SetTexture(DWORD_PTR _strTexKey);
+    void ShowShaderParam(CMaterial* _pMtrl);
 
 public:
     MeshRenderUI();

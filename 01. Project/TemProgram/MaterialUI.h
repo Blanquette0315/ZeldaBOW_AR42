@@ -15,6 +15,9 @@ private:
     void SetShader(DWORD_PTR _strShaderKey);
 
 public:
+    void ShowShaderParam(CMaterial* _pMtrl);
+
+public:
     MaterialUI();
     ~MaterialUI();
 };

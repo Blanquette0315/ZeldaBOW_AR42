@@ -14,6 +14,8 @@ private:
     Ptr<CMaterial>          m_pDynamicMtrl; // 동적 재질
     Ptr<CMaterial>          m_pCurMtrl;     // 현재 사용 중인 재질
 
+    bool                    m_bIsDynamicMtrl;
+
 public:
     virtual void render() = 0;
 
@@ -26,6 +28,8 @@ public:
 
     Ptr<CMaterial> GetCurMaterial() { return m_pCurMtrl; }
     Ptr<CMaterial> GetDynamicMaterial();
+
+    bool IsDynamicMtrl() { return m_bIsDynamicMtrl; }
 
 public:
     virtual void SaveToFile(FILE* _File) override;

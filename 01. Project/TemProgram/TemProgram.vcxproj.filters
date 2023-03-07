@@ -135,6 +135,12 @@
     <Filter Include="03. UI\ModuleUI\InputTextUI">
       <UniqueIdentifier>{0d6f652b-3ac1-4056-9518-daf2fa10cc40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\SkyBoxUI">
+      <UniqueIdentifier>{641b5120-3861-4f5c-95b0-0a45188f26c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\DecalUI">
+      <UniqueIdentifier>{90ab02d0-7d90-4cf2-a24a-b3f716f939ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">

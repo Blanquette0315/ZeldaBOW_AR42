@@ -40,6 +40,9 @@ public:
     void SetTargetbyKey(DWORD_PTR _strKey);
     void SetTargetLevel(CLevel* _Level);
 
+    UI* FindResUI(RES_TYPE _eType);
+    UI* FindComponentUI(COMPONENT_TYPE _eType);
+
 private:
     virtual void update() override;
     virtual void render_update() override;
