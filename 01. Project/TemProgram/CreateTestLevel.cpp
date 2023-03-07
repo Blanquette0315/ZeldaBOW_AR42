@@ -21,7 +21,7 @@
 void CreateTestLevel()
 {
 //#ifdef _DEBUG
-//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test Level.lv");
+//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test Level2.lv");
 //	
 //	ChangeLevel(Level);
 //	return;
@@ -293,9 +293,9 @@ void CreateTestLevel()
 	CCollisionMgr::GetInst()->CollisionLayerCheck(0, 1);
 
 	// Level 저장
-	pLevel->SetName(L"Test Level2");
+	//pLevel->SetName(L"Test Level2");
 	//CSaveLoadMgr::GetInst()->SaveLevel(pLevel);
-	CLevelMgr::GetInst()->RegisterLevel(pLevel->GetRelativePath(), pLevel);
+	//CLevelMgr::GetInst()->RegisterLevel(pLevel->GetRelativePath(), pLevel);
 
 	// 레벨 설정
 	// 만든 테스트 레벨을 지금 레벨로 전환

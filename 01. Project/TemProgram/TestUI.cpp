@@ -24,8 +24,8 @@ TestUI::~TestUI()
 void TestUI::render_update()
 {
 	// Res 테스트
-	m_Combo->render_update();
-	m_ListEX->render_update();
+	/*m_Combo->render_update();
+	m_ListEX->render_update();*/
 }
 
 void TestUI::Open()

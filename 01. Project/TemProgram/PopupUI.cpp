@@ -321,7 +321,7 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 		break;
 	case COMPONENT_TYPE::DECAL:
 		break;
-	case COMPONENT_TYPE::LANDSPACE:
+	case COMPONENT_TYPE::LANDSCAPE:
 		break;
 	}
 

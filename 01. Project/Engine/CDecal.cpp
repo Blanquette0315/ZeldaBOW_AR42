@@ -11,6 +11,7 @@ CDecal::CDecal()
 	// ��Į���� ����� �Žô� �Ϲ������� ť�� �����̱� ������ �����ڿ��� �������ش�.
 	// Shader�� ��� Deferred��, forward�Ŀ� ���� �޶����� ������ �Լ��� �з��� ���̴�.
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	SetRenderType(m_bLighting);
 }
 
 CDecal::~CDecal()
@@ -48,6 +49,7 @@ void CDecal::render()
 
 	// ���׸��� ������Ʈ
 	CRenderMgr::GetInst()->CopyPositionTarget();
+	GetCurMaterial()->SetTexParam(TEX_1, m_pDecalTex);
 	GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PTCopyTex"));
 	GetCurMaterial()->UpdateData();
 

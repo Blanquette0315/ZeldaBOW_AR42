@@ -9,6 +9,7 @@ CSkyBox::CSkyBox()
 {
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"));
 	SetType(m_eSkyBoxType);
+	SetSkyMesh();
 }
 
 CSkyBox::~CSkyBox()
