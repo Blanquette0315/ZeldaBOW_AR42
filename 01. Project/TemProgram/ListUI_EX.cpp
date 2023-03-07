@@ -44,7 +44,7 @@ void ListUI_EX::render_update()
 		{
 			for (size_t i = 0; i < m_vecItemName.size(); ++i)
 			{
-				// List Item ������ �޶����� ��
+				// When list item expanded
 				if(m_vecItemName.size() != m_vecMultiSelectIdx.size())
 				{
 					m_vecMultiSelectIdx.resize(m_vecItemName.size(), false);
@@ -73,14 +73,12 @@ void ListUI_EX::render_update()
 			{
 				bool Selectable = (m_iSelectIdx == i);
 
-				// i��° �������� ���ȴٸ�
 				if (ImGui::Selectable(m_vecItemName[i].c_str(), Selectable))
 				{
-					// ���� ������ �ε����� �������ش�. -> �ٽ� ���� ���� true
 					m_iSelectIdx = i;
 				}
 
-				// �ʱ⿡ ���� �ִ� ������ ����
+				// show selected
 				if (Selectable)
 				{
 					ImGui::SetItemDefaultFocus();
