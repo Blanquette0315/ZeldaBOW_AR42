@@ -1,40 +1,48 @@
 #include "pch.h"
-#include "MeshRenderUI.h"
+#include "DecalUI.h"
 
 #include <Engine/CResMgr.h>
 #include <Engine/CGameObject.h>
-#include <Engine/CMeshRender.h>
+#include <Engine/CDecal.h>
 
 #include "CImGuiMgr.h"
 #include "ListUI.h"
-#include "TreeUI.h"
 
-#include "ComboBoxUI.h"
+#include "TreeUI.h"
 #include "ParamUI.h"
 
-MeshRenderUI::MeshRenderUI()
-	: ComponentUI("MeshRender", COMPONENT_TYPE::MESHRENDER)
+DecalUI::DecalUI()
+	: ComponentUI("DecalUI", COMPONENT_TYPE::DECAL)
+	, m_eSelectTexParam(TEX_PARAM::TEX_END)
 	, m_bIsDyanmicMtrl(false)
 {
 }
 
-MeshRenderUI::~MeshRenderUI()
+DecalUI::~DecalUI()
 {
 }
 
-void MeshRenderUI::update()
+void DecalUI::update()
 {
-	if (nullptr != GetTarget())
+	if (GetTarget())
 	{
-		m_Mesh = GetTarget()->MeshRender()->GetMesh();
-		m_Material = GetTarget()->MeshRender()->GetCurMaterial();
-		m_bIsDyanmicMtrl = GetTarget()->MeshRender()->IsDynamicMtrl();
+		m_Mesh = GetTarget()->Decal()->GetMesh();
+		m_Material = GetTarget()->Decal()->GetCurMaterial();
+		m_bDeferred = GetTarget()->Decal()->IsDeferred();
+		if (GetTarget()->Decal()->IsDynamicMtrl())
+		{
+			m_bIsDyanmicMtrl = true;
+		}
+		else
+		{
+			m_bIsDyanmicMtrl = false;
+		}
 	}
 
 	ComponentUI::update();
 }
 
-void MeshRenderUI::render_update()
+void DecalUI::render_update()
 {
 	ComponentUI::render_update();
 
@@ -43,11 +51,11 @@ void MeshRenderUI::render_update()
 	string MeshName, MtrlName;
 	if (nullptr != m_Mesh)
 	{
-		MeshName = string(m_Mesh->GetName().begin(), m_Mesh->GetName().end());
+		MeshName = string(m_Mesh->GetKey().begin(), m_Mesh->GetKey().end());
 	}
 	if (nullptr != m_Material)
 	{
-		MtrlName = string(m_Material->GetName().begin(), m_Material->GetName().end());
+		MtrlName = string(m_Material->GetKey().begin(), m_Material->GetKey().end());
 	}
 
 	// 메시 정보
@@ -91,65 +99,40 @@ void MeshRenderUI::render_update()
 			vecRes.push_back(iter->first);
 		}
 		pListUI->SetItemList(vecRes);
-		pListUI->AddDynamicDBClicked(this, (FUNC_1)&MeshRenderUI::SetMesh);
+		pListUI->AddDynamicDBClicked(this, (FUNC_1)&DecalUI::SetMesh);
 
 		pListUI->Open();
 	}
 
-	// 재질 정보
-	ImGui::Text("Material");	ImGui::SameLine(); ImGui::InputText("##Mtrl", (char*)MtrlName.data(), MtrlName.length(), ImGuiInputTextFlags_ReadOnly);
-
-	// 드랍체크
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ContentTree"))
-		{
-			TreeNode* pNode = (TreeNode*)payload->Data;
-			CRes* pRes = (CRes*)pNode->GetData();
-
-			if (RES_TYPE::MATERIAL == pRes->GetResType())
-			{
-				string strKey = string(pRes->GetKey().begin(), pRes->GetKey().end());
-				SetMaterial((DWORD_PTR)strKey.c_str());
-			}
-		}
-		ImGui::EndDragDropTarget();
-	}
-
+	// material 
+	ImGui::Text("Material ");
 	ImGui::SameLine();
-	if (ImGui::Button("##MtrlBtn", Vec2(15.f, 15.f)))
+	ImGui::InputText("##MtrlName", (char*)MtrlName.data(), MtrlName.length(), ImGuiInputTextFlags_ReadOnly);
+
+	if (ImGui::RadioButton("Forward", !m_bDeferred))
 	{
-		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
-		assert(pListUI);
-
-		// 재질 목록을 받아온다.
-		const map<wstring, Ptr<CRes>> MapRes = CResMgr::GetInst()->GetResource(RES_TYPE::MATERIAL);
-		static vector<wstring> vecRes;
-		vecRes.clear();
-
-		map<wstring, Ptr<CRes>>::const_iterator iter = MapRes.begin();
-		for (; iter != MapRes.end(); ++iter)
-		{
-			vecRes.push_back(iter->first);
-		}
-		pListUI->SetItemList(vecRes);
-		pListUI->AddDynamicDBClicked(this, (FUNC_1)&MeshRenderUI::SetMaterial);
-
-		pListUI->Open();
+		m_bDeferred = false;
+		GetTarget()->Decal()->SetRenderType(m_bDeferred);
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Deferred", m_bDeferred))
+	{
+		m_bDeferred = true;
+		GetTarget()->Decal()->SetRenderType(m_bDeferred);
 	}
 
 	// material type
-	ImGui::Text("Shared"); ImGui::SameLine();  if (ImGui::RadioButton("##SharedMtrl", !m_bIsDyanmicMtrl)) { GetTarget()->MeshRender()->GetSharedMaterial(); };
+	ImGui::Text("Shared"); ImGui::SameLine(); if (ImGui::RadioButton("##SharedMtrl", !m_bIsDyanmicMtrl)) { GetTarget()->Decal()->GetSharedMaterial(); };
 	ImGui::SameLine();
-	ImGui::Text("Dynamic"); ImGui::SameLine(); if (ImGui::RadioButton("##DynamicMtrl", m_bIsDyanmicMtrl)) { GetTarget()->MeshRender()->GetDynamicMaterial();};
+	ImGui::Text("Dynamic"); ImGui::SameLine(); if (ImGui::RadioButton("##DynamicMtrl", m_bIsDyanmicMtrl)) { GetTarget()->Decal()->GetDynamicMaterial(); };
 
-	if(m_bIsDyanmicMtrl)
+	if (m_bIsDyanmicMtrl)
 	{
 		ShowShaderParam(m_Material.Get());
 	}
 }
 
-void MeshRenderUI::SetMesh(DWORD_PTR _strMeshKey)
+void DecalUI::SetMesh(DWORD_PTR _strMeshKey)
 {
 	string strKey = (char*)_strMeshKey;
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
@@ -157,10 +140,10 @@ void MeshRenderUI::SetMesh(DWORD_PTR _strMeshKey)
 	Ptr<CMesh> pMesh = CResMgr::GetInst()->FindRes<CMesh>(wstrKey);
 	assert(nullptr != pMesh);
 
-	GetTarget()->MeshRender()->SetMesh(pMesh);
+	GetTarget()->Decal()->SetMesh(pMesh);
 }
 
-void MeshRenderUI::SetMaterial(DWORD_PTR _strMaterialKey)
+void DecalUI::SetMaterial(DWORD_PTR _strMaterialKey)
 {
 	string strKey = (char*)_strMaterialKey;
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
@@ -168,10 +151,10 @@ void MeshRenderUI::SetMaterial(DWORD_PTR _strMaterialKey)
 	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(wstrKey);
 	assert(nullptr != pMtrl);
 
-	GetTarget()->MeshRender()->SetSharedMaterial(pMtrl);
+	GetTarget()->Decal()->SetSharedMaterial(pMtrl);
 }
 
-void MeshRenderUI::SetTexture(DWORD_PTR _strTexKey)
+void DecalUI::SetTexture(DWORD_PTR _strTexKey)
 {
 	string strKey = (char*)_strTexKey;
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
@@ -183,7 +166,7 @@ void MeshRenderUI::SetTexture(DWORD_PTR _strTexKey)
 	m_Material->SetTexParam(m_eSelectTexParam, pTex);
 }
 
-void MeshRenderUI::ShowShaderParam(CMaterial* _pMtrl)
+void DecalUI::ShowShaderParam(CMaterial* _pMtrl)
 {
 	if (nullptr != _pMtrl->GetShader())
 	{
@@ -257,7 +240,7 @@ void MeshRenderUI::ShowShaderParam(CMaterial* _pMtrl)
 		for (size_t i = 0; i < vecTex.size(); ++i)
 		{
 			Ptr<CTexture> pTex = _pMtrl->GetTexParam(vecTex[i].eParam);
-			if (ParamUI::Param_Tex(vecTex[i].strName, pTex, this, (FUNC_1)&MeshRenderUI::SetTexture))
+			if (ParamUI::Param_Tex(vecTex[i].strName, pTex, this, (FUNC_1)&DecalUI::SetTexture))
 			{
 				m_eSelectTexParam = vecTex[i].eParam;
 			}

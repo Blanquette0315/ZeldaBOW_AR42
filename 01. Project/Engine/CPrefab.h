@@ -17,6 +17,9 @@ private:
     CGameObject* m_pProtoObj;
 
 public:
+    CGameObject* GetProtoObj() { return m_pProtoObj; }
+
+public:
     CGameObject* Instantiate();
 
     virtual void Save(const wstring& _strRelativePath) override;

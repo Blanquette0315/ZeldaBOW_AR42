@@ -15,6 +15,19 @@ CSkyBox::~CSkyBox()
 {
 }
 
+void CSkyBox::SetTexture(Ptr<CTexture> _pTex)
+{
+	m_pSkyBoxTex = _pTex;
+	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
+	{
+		GetCurMaterial()->SetTexParam(TEX_0, m_pSkyBoxTex);
+	}
+	else
+	{
+		GetCurMaterial()->SetTexParam(TEX_CUBE_0, m_pSkyBoxTex);
+	}
+}
+
 void CSkyBox::finaltick()
 {
 	// 실제 SkyBox 객체를 만들어서 카메라가 이동할때, 해당 SkyBox도 함께 이동하도록 구현하는 방법
@@ -46,18 +59,23 @@ void CSkyBox::render()
 	GetCurMaterial()->UpdateData();
 
 	GetMesh()->render();
+
+	CMaterial::Clear();
+}
+
+void CSkyBox::SetSkyMesh()
+{
+	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
+	{
+		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	}
+	else
+	{
+		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	}
 }
 
 void CSkyBox::SetType(SKYBOX_TYPE _type)
 {
 	m_eSkyBoxType = _type;
-
-	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
-	{
-		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	}
-	else if (m_eSkyBoxType == SKYBOX_TYPE::CUBE)
-	{
-		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
-	}
 }

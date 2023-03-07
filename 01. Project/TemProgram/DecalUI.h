@@ -1,20 +1,15 @@
 #pragma once
 #include "ComponentUI.h"
-
-#include <Engine/CMeshRender.h>
-
-class ComboBoxUI;
-
-class MeshRenderUI :
+class DecalUI :
     public ComponentUI
 {
 private:
-    TEX_PARAM   m_eSelectTexParam;
-
     Ptr<CMesh>      m_Mesh;
     Ptr<CMaterial>  m_Material;
-    
+    TEX_PARAM       m_eSelectTexParam;
     bool            m_bIsDyanmicMtrl;
+
+    bool            m_bDeferred;
 
 public:
     virtual void update() override;
@@ -28,7 +23,7 @@ public:
     void ShowShaderParam(CMaterial* _pMtrl);
 
 public:
-    MeshRenderUI();
-    ~MeshRenderUI();
+    DecalUI();
+    ~DecalUI();
 };
 

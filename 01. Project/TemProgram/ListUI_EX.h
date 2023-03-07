@@ -6,7 +6,7 @@ class ListUI_EX :
 private:
     vector<string> m_vecItemKey;
     vector<string> m_vecItemName;
-    int m_iSelectIdx;
+    UINT m_iSelectIdx;
 
     UI* m_DBCInst;
     FUNC_1 m_DBCFunc;
@@ -53,12 +53,12 @@ public:
 
 public:
     template<typename T>
-    void InitRes(int _Initial);
+    void InitRes(UINT _Initial);
 
     template<typename T>
     void SetItem();
 
-    void InitNotRes(vector<string>& _vecItemName, int _Initial);
+    void InitNotRes(vector<string>& _vecItemName, UINT _Initial);
     virtual void render_update() override;
     virtual void Close() override;
 
@@ -79,8 +79,9 @@ inline void ListUI_EX::SetItem()
 }
 
 template<typename T>
-inline void ListUI_EX::InitRes(int _Initial)
+inline void ListUI_EX::InitRes(UINT _Initial)
 {
+    m_vecMultiSelectIdx.clear();
     m_vecItemKey.clear();
     m_vecItemName.clear();
 
@@ -96,6 +97,17 @@ inline void ListUI_EX::InitRes(int _Initial)
 
     SetItem<T>();
 
-    m_iSelectIdx = _Initial;
+    if (m_bMultiSelect)
+    {
+        m_vecMultiSelectIdx.reserve(m_vecItemName.size());
+        for (size_t i = 0; i < m_vecItemName.size(); ++i)
+        {
+            m_vecMultiSelectIdx.push_back((_Initial & (1 << i)));
+        }
+    }
+    else
+    {
+        m_iSelectIdx = _Initial;
+    }
 }
 

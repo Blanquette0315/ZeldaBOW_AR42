@@ -165,6 +165,7 @@
     <ClInclude Include="CGameObjectEX.h" />
     <ClInclude Include="CGrid2DScript.h" />
     <ClInclude Include="CImGuiMgr.h" />
+    <ClInclude Include="DecalUI.h" />
     <ClInclude Include="InputTextUI.h" />
     <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComboBoxUI.h" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RTextureUI.h" />
     <ClInclude Include="ScriptUI.h" />
+    <ClInclude Include="SkyBoxUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TemProgram.h" />
     <ClInclude Include="TestUI.h" />
@@ -224,6 +226,7 @@
     <ClCompile Include="CGameObjectEX.cpp" />
     <ClCompile Include="CGrid2DScript.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
+    <ClCompile Include="DecalUI.cpp" />
     <ClCompile Include="InputTextUI.cpp" />
     <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComboBoxUI.cpp" />
@@ -264,6 +267,7 @@
     </ClCompile>
     <ClCompile Include="RTextureUI.cpp" />
     <ClCompile Include="ScriptUI.cpp" />
+    <ClCompile Include="SkyBoxUI.cpp" />
     <ClCompile Include="TestUI.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TileMapTableUI.cpp" />

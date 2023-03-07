@@ -169,89 +169,7 @@ void MaterialUI::render_update()
 	ImGui::Text("Shader Parameter");
 
 	// Material에 Shader가 셋팅되어 있지 않다면
-	if (nullptr != pMtrl->GetShader())
-	{
-		const vector<tScalarParam> vecScalar = pMtrl->GetShader()->GetScalarParam();
-		for (size_t i = 0; i < vecScalar.size(); ++i)
-		{
-			switch (vecScalar[i].eParam)
-			{
-			case INT_0:
-			case INT_1:
-			case INT_2:
-			case INT_3:
-			{
-				int iInput, iOutput;
-				pMtrl->GetScalarParam(vecScalar[i].eParam, &iInput);
-				pMtrl->GetScalarParam(vecScalar[i].eParam, &iOutput);
-				ParamUI::Param_Int(vecScalar[i].strName, &iOutput);
-				pMtrl->SetScalarParam(vecScalar[i].eParam, &iOutput);
-
-				// 임시로 해두는 저장. 여기서 할게 아니라 이제 단축키 등을 만들어서 저장을 해야한다.
-				if (iInput != iOutput)
-				{
-					pMtrl->Save(L"material\\mtrl.mtrl");
-				}
-			}
-			break;
-			case FLOAT_0:
-			case FLOAT_1:
-			case FLOAT_2:
-			case FLOAT_3:
-			{
-				float fData = 0;
-				pMtrl->GetScalarParam(vecScalar[i].eParam, &fData);
-				ParamUI::Param_Float(vecScalar[i].strName, &fData);
-				pMtrl->SetScalarParam(vecScalar[i].eParam, &fData);
-			}
-			break;
-			case VEC2_0:
-			case VEC2_1:
-			case VEC2_2:
-			case VEC2_3:
-			{
-				Vec2 data;
-				pMtrl->GetScalarParam(vecScalar[i].eParam, &data);
-				ParamUI::Param_Vec2(vecScalar[i].strName, &data);
-				pMtrl->SetScalarParam(vecScalar[i].eParam, &data);
-			}
-			break;
-			case VEC4_0:
-			case VEC4_1:
-			case VEC4_2:
-			case VEC4_3:
-			{
-				Vec4 data;
-				pMtrl->GetScalarParam(vecScalar[i].eParam, &data);
-				ParamUI::Param_Vec4(vecScalar[i].strName, &data);
-				pMtrl->SetScalarParam(vecScalar[i].eParam, &data);
-			}
-			break;
-			case MAT_0:
-			case MAT_1:
-			case MAT_2:
-			case MAT_3:
-			{
-				break;
-			}
-			}
-		}
-
-		const vector<tTextureParam> vecTex = pMtrl->GetShader()->GetTextureParam();
-		for (size_t i = 0; i < vecTex.size(); ++i)
-		{
-			Ptr<CTexture> pTex = pMtrl->GetTexParam(vecTex[i].eParam);
-			if (ParamUI::Param_Tex(vecTex[i].strName, pTex, this, (FUNC_1)&MaterialUI::SetTexture))
-			{
-				m_eSelectTexParam = vecTex[i].eParam;
-			}
-			else
-			{
-				pMtrl->SetTexParam(vecTex[i].eParam, pTex);
-			}
-		}
-	}
-	
+	ShowShaderParam(pMtrl);
 }
 
 void MaterialUI::SetTexture(DWORD_PTR _strTexKey)
@@ -276,4 +194,90 @@ void MaterialUI::SetShader(DWORD_PTR _strShaderKey)
 	assert(nullptr != pShader);
 
 	((CMaterial*)GetTarget().Get())->SetShader(pShader);
+}
+
+void MaterialUI::ShowShaderParam(CMaterial* _pMtrl)
+{
+	if (nullptr != _pMtrl->GetShader())
+	{
+		const vector<tScalarParam> vecScalar = _pMtrl->GetShader()->GetScalarParam();
+		for (size_t i = 0; i < vecScalar.size(); ++i)
+		{
+			switch (vecScalar[i].eParam)
+			{
+			case INT_0:
+			case INT_1:
+			case INT_2:
+			case INT_3:
+			{
+				int iInput, iOutput;
+				_pMtrl->GetScalarParam(vecScalar[i].eParam, &iInput);
+				_pMtrl->GetScalarParam(vecScalar[i].eParam, &iOutput);
+				ParamUI::Param_Int(vecScalar[i].strName, &iOutput);
+				_pMtrl->SetScalarParam(vecScalar[i].eParam, &iOutput);
+
+				// 임시로 해두는 저장. 여기서 할게 아니라 이제 단축키 등을 만들어서 저장을 해야한다.
+				if (iInput != iOutput)
+				{
+					_pMtrl->Save(L"material\\mtrl.mtrl");
+				}
+			}
+			break;
+			case FLOAT_0:
+			case FLOAT_1:
+			case FLOAT_2:
+			case FLOAT_3:
+			{
+				float fData = 0;
+				_pMtrl->GetScalarParam(vecScalar[i].eParam, &fData);
+				ParamUI::Param_Float(vecScalar[i].strName, &fData);
+				_pMtrl->SetScalarParam(vecScalar[i].eParam, &fData);
+			}
+			break;
+			case VEC2_0:
+			case VEC2_1:
+			case VEC2_2:
+			case VEC2_3:
+			{
+				Vec2 data;
+				_pMtrl->GetScalarParam(vecScalar[i].eParam, &data);
+				ParamUI::Param_Vec2(vecScalar[i].strName, &data);
+				_pMtrl->SetScalarParam(vecScalar[i].eParam, &data);
+			}
+			break;
+			case VEC4_0:
+			case VEC4_1:
+			case VEC4_2:
+			case VEC4_3:
+			{
+				Vec4 data;
+				_pMtrl->GetScalarParam(vecScalar[i].eParam, &data);
+				ParamUI::Param_Vec4(vecScalar[i].strName, &data);
+				_pMtrl->SetScalarParam(vecScalar[i].eParam, &data);
+			}
+			break;
+			case MAT_0:
+			case MAT_1:
+			case MAT_2:
+			case MAT_3:
+			{
+				break;
+			}
+			}
+		}
+
+		const vector<tTextureParam> vecTex = _pMtrl->GetShader()->GetTextureParam();
+		for (size_t i = 0; i < vecTex.size(); ++i)
+		{
+			Ptr<CTexture> pTex = _pMtrl->GetTexParam(vecTex[i].eParam);
+			if (ParamUI::Param_Tex(vecTex[i].strName, pTex, this, (FUNC_1)&MaterialUI::SetTexture))
+			{
+				m_eSelectTexParam = vecTex[i].eParam;
+			}
+			else
+			{
+				_pMtrl->SetTexParam(vecTex[i].eParam, pTex);
+			}
+		}
+	}
 }

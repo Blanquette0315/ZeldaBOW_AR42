@@ -238,6 +238,7 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 {
 	// _res : 클릭된 노드
 	TreeNode* pSelectedNode = (TreeNode*)_res;
+	Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
 
 	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 
@@ -247,6 +248,14 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 		// InspectorUI에 클릭된 Level을 알려준다.
 		CLevel* pLevel = (CLevel*)pSelectedNode->GetData();
 		Inspector->SetTargetLevel(pLevel);
+
+	}
+
+	// Prefab
+	else if (pRes->GetResType() == RES_TYPE::PREFAB)
+	{
+		Ptr<CPrefab> pref = (CPrefab*)pRes.Get();
+		Inspector->SetTargetObject(pref->GetProtoObj());
 	}
 
 	// 선택된 노드가 Res일 경우
@@ -257,6 +266,9 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 		// InspectorUI에 클릭된 Resource를 알려준다.
 		Inspector->SetTargetResource(pRes);
 	}
+
+
+
 }
 
 void ContentUI::FindContentFileName(const wstring& _strFolderPath)
