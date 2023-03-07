@@ -266,6 +266,16 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 	break;
 
 	case COMPONENT_TYPE::LIGHT3D:
+	{
+		if (_Select)
+		{
+			_Target->AddComponent(new CLight3D);
+		}
+		else
+		{
+			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::LIGHT3D));
+		}
+	}
 		break;
 
 	case COMPONENT_TYPE::MESHRENDER:

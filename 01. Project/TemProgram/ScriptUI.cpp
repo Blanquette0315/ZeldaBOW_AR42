@@ -21,7 +21,6 @@ ScriptUI::~ScriptUI()
 {
 }
 
-
 void ScriptUI::render_update()
 {
     ImGui::PushID(0);
@@ -68,16 +67,27 @@ void ScriptUI::render_scriptparam()
             ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam);
             break;
         case SCRIPT_PARAM::VEC2:
+            ParamUI::Param_Vec2(vecParam[i].strParamName, (Vec2*)vecParam[i].pParam);
             break;
         case SCRIPT_PARAM::VEC3:
+            ParamUI::Param_Vec3(vecParam[i].strParamName, (Vec3*)vecParam[i].pParam);
             break;
         case SCRIPT_PARAM::VEC4:
+            ParamUI::Param_Vec4(vecParam[i].strParamName, (Vec4*)vecParam[i].pParam);
             break;
         case SCRIPT_PARAM::TEXTURE:
+        {
+            Ptr<CTexture>* pParamTex = (Ptr<CTexture>*)vecParam[i].pParam;
+            ParamUI::Param_Tex(vecParam[i].strParamName, *pParamTex, this, (FUNC_1)&ScriptUI::SetTexture);
+        }
             break;
         case SCRIPT_PARAM::MATERIAL:
             break;
         case SCRIPT_PARAM::PREFAB:
+        {
+            Ptr<CPrefab>* pParamPrefab = (Ptr<CPrefab>*)vecParam[i].pParam;
+            ParamUI::Param_Prefab(vecParam[i].strParamName, *pParamPrefab, this, (FUNC_1)&ScriptUI::SetPrefab);
+        }
             break;
         case SCRIPT_PARAM::SOUND:
             break;
@@ -86,4 +96,26 @@ void ScriptUI::render_scriptparam()
         }
     }
 
+}
+
+void ScriptUI::SetTexture(DWORD_PTR _strTexKey)
+{
+    string strKey = (char*)_strTexKey;
+    wstring wstrKey = wstring(strKey.begin(), strKey.end());
+
+    Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(wstrKey);
+    assert(nullptr != pTex);
+
+    *m_pParamTex = pTex;
+}
+
+void ScriptUI::SetPrefab(DWORD_PTR _strTexKey)
+{
+    string strKey = (char*)_strTexKey;
+    wstring wstrKey = wstring(strKey.begin(), strKey.end());
+
+    Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(wstrKey);
+    assert(nullptr != pPrefab);
+
+    *m_pParamPrefab = pPrefab;
 }

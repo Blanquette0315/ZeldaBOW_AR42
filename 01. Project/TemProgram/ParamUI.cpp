@@ -7,6 +7,7 @@
 #include "CImGuiMgr.h"
 #include "ListUI.h"
 #include "TreeUI.h"
+#include "ScriptUI.h"
 
 // 카운트 초기화부분
 UINT ParamUI::ParamCount = 0;
@@ -52,11 +53,31 @@ void ParamUI::Param_Vec2(const string& _ParamName, Vec2* _pInOut)
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
 
-	float arrData[2] = { _pInOut->x, _pInOut->y };
-	ImGui::InputFloat2(szName, arrData);
-	_pInOut->x = arrData[0];
-	_pInOut->y = arrData[1];
+	if (ImGui::DragFloat2(szName, *_pInOut, 0.01f, 0.f, 1.f, "%6.3f"))
+	{
+		if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
+		{
+			UI::ResetFocus();
+		}
+	}
 
+}
+
+void ParamUI::Param_Vec3(const string& _ParamName, Vec3* _pInOut)
+{
+	char szName[50] = "";
+	sprintf_s(szName, 50, "##Vec3%d", ParamCount++);
+
+	ImGui::Text(_ParamName.c_str());
+	ImGui::SameLine();
+
+	if (ImGui::DragFloat3(szName, *_pInOut, 0.01f, 0.f, 1.f, "%6.3f"))
+	{
+		if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
+		{
+			UI::ResetFocus();
+		}
+	}
 }
 
 void ParamUI::Param_Vec4(const string& _ParamName, Vec4* _pInOut)
@@ -66,7 +87,14 @@ void ParamUI::Param_Vec4(const string& _ParamName, Vec4* _pInOut)
 
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
-	ImGui::InputFloat4(szName, *_pInOut);
+
+	if (ImGui::DragFloat4(szName, *_pInOut, 0.01f, 0.f, 1.f, "%6.3f"))
+	{
+		if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
+		{
+			UI::ResetFocus();
+		}
+	}
 }
 
 void ParamUI::Param_Mat(const string& _ParamName, Matrix* _pInOut)
@@ -110,13 +138,72 @@ bool ParamUI::Param_Tex(const string& _ParamName, Ptr<CTexture>& _Tex, UI* _Inst
 	sprintf_s(szName, 50, "##TexBtn%d", ParamCount++);
 
 	ImGui::SameLine();
-	if (ImGui::Button(szName, Vec2(15.f, 15.f)))
+	if (ImGui::Button(szName, Vec2(18.f, 18.f)))
 	{
+		ScriptUI* pScriptUI = dynamic_cast<ScriptUI*>(_Inst);
+		if (pScriptUI != nullptr)
+		{
+			pScriptUI->SetParamTex(&_Tex);
+		}
+
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
 		assert(pListUI);
 
 		// 메쉬 목록을 받아와서, ListUI 에 전달
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::TEXTURE);
+		static vector<wstring> vecRes;
+		vecRes.clear();
+
+		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
+		for (; iter != mapRes.end(); ++iter)
+		{
+			vecRes.push_back(iter->first);
+		}
+		pListUI->SetItemList(vecRes);
+		pListUI->AddDynamicDBClicked(_Inst, _Func);
+
+		pListUI->Open();
+
+		return true;
+	}
+
+	return false;
+}
+
+bool ParamUI::Param_Prefab(const string& _ParamName, Ptr<CPrefab>& _Prefab, UI* _Inst, FUNC_1 _Func)
+{
+	// 키를 텍스트로 띄워준다.
+	ImGui::Text(_ParamName.c_str());
+	
+	ImGui::SameLine();
+
+	// Prafab의 이름을 띄워준다.
+	ImGui::PushItemWidth(250.f);
+	char PrefabNameID[50] = "";
+	sprintf_s(PrefabNameID, 50, "##PrefabName%d", ParamCount++);
+	char PrefabName[50] = {};
+	sprintf_s(PrefabName, 50, WStringToString(_Prefab->GetName()).c_str());
+	ImGui::InputText(PrefabNameID, PrefabName, 50, ImGuiInputTextFlags_ReadOnly);
+	ImGui::PopItemWidth();
+
+	// 버튼의 이름이 겹치지 안도록 만들기 위해 추가함.
+	char szName[50] = "";
+	sprintf_s(szName, 50, "##PrefabBtn%d", ParamCount++);
+
+	ImGui::SameLine();
+	if (ImGui::Button(szName, Vec2(18.f, 18.f)))
+	{
+		ScriptUI* pScriptUI = dynamic_cast<ScriptUI*>(_Inst);
+		if (pScriptUI != nullptr)
+		{
+			pScriptUI->SetParamPrefab(&_Prefab);
+		}
+
+		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
+		assert(pListUI);
+
+		// 메쉬 목록을 받아와서, ListUI 에 전달
+		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::PREFAB);
 		static vector<wstring> vecRes;
 		vecRes.clear();
 

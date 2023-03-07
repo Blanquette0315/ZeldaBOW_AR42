@@ -13,6 +13,9 @@ private:
     CScript* m_pTargetScript;
     const UINT m_ScriptUIID;
 
+    Ptr<CTexture>* m_pParamTex;
+    Ptr<CPrefab>* m_pParamPrefab;
+
 public:
     void SetTargetScript(CScript* _pScript)
     {
@@ -23,6 +26,12 @@ public:
     {
         return m_pTargetScript;
     }
+
+public:
+    void SetTexture(DWORD_PTR _strTexKey);
+    void SetPrefab(DWORD_PTR _strTexKey);
+    void SetParamTex(Ptr<CTexture>* _pTex) { m_pParamTex = _pTex; }
+    void SetParamPrefab(Ptr<CPrefab>* _pPrefab) { m_pParamPrefab = _pPrefab; }
 
 public:
     virtual void render_update() override;

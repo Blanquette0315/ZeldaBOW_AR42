@@ -141,6 +141,9 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\DecalUI">
       <UniqueIdentifier>{90ab02d0-7d90-4cf2-a24a-b3f716f939ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\01. Inspector\ResUI\GraphicsShaderUI">
+      <UniqueIdentifier>{459504aa-f778-4d14-b9e7-d600e367cc3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -320,6 +323,9 @@
     <ClInclude Include="DecalUI.h">
       <Filter>03. UI\01. Inspector\ComponentUI\DecalUI</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsShaderUI.h">
+      <Filter>03. UI\01. Inspector\ResUI\GraphicsShaderUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -481,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="DecalUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\DecalUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsShaderUI.cpp">
+      <Filter>03. UI\01. Inspector\ResUI\GraphicsShaderUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
