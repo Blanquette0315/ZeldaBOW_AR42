@@ -314,6 +314,9 @@
     <ClInclude Include="TestUI.h">
       <Filter>03. UI\ModuleUI\TestUI</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBoxUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\SkyBoxUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -469,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="TestUI.cpp">
       <Filter>03. UI\ModuleUI\TestUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\SkyBoxUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,13 @@ typedef Vector4 Vec4;
 
 #define MAX_LAYER 32
 
+// 스카이 박스는 큐브 매시와 Sphere 2가지로 만들 수 있다.
+enum class SKYBOX_TYPE
+{
+	SPHERE,
+	CUBE,
+};
+
 enum class SAMPLER_TYPE
 {
 	ANISOTROPIC, // 이방성

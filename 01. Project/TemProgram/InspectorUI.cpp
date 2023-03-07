@@ -21,6 +21,7 @@
 #include "ParticleSystemUI.h"
 #include "TileMapUI.h"
 #include "Animator2DUI.h"
+#include "SkyBoxUI.h"
 #include "ScriptUI.h"
 
 #include "MeshUI.h"
@@ -72,6 +73,10 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = new Animator2DUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetSize(ImVec2(0.f, 450.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX] = new SkyBoxUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX]->SetSize(ImVec2(0.f, 120.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX]);
 
 	// ResourceUI
 	m_arrResUI[(UINT)RES_TYPE::MESH] = new MeshUI;
