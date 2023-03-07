@@ -21,6 +21,7 @@ CCamera::CCamera()
 	, m_eProjType(PROJ_TYPE::ORTHOGRAPHICS)
 	, m_fAspectRatio(1.f)
 	, m_FOV(XM_PI / 2.f)
+	, m_fNear(1.f)
 	, m_fFar(2000.f)
 	, m_fScale(1.f)
 	, m_iLayerMask(0)
@@ -90,7 +91,7 @@ void CCamera::CalcProjMat()
 	if (PROJ_TYPE::PERSPECTIVE == m_eProjType)
 	{
 		// 원근 투영
-		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_fAspectRatio, 1.f, m_fFar);
+		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_fAspectRatio, m_fNear, m_fFar);
 	}
 	else
 	{
@@ -165,6 +166,16 @@ void CCamera::SetLayerMask(int _iLayerIdx)
 	{
 		m_iLayerMask |= (1 << _iLayerIdx);
 	}
+}
+
+void CCamera::SetLayerVisible(int _iLayerIdx)
+{
+	m_iLayerMask |= (1 << _iLayerIdx);
+}
+
+void CCamera::SetLayerInvisible(int _iLayerIdx)
+{
+	m_iLayerMask &= ~(1 << _iLayerIdx);
 }
 
 void CCamera::SortObject()

@@ -58,7 +58,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::LIGHT3D]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA] = new CameraUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetSize(ImVec2(0.f, 100.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetSize(ImVec2(0.f, 280.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = new ParticleSystemUI;

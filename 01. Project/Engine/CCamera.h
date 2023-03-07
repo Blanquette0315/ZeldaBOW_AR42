@@ -18,6 +18,7 @@ private:
     PROJ_TYPE   m_eProjType;    // 투영 방식
     float       m_fAspectRatio; // 종횡비
 
+    float       m_fNear;
     float       m_fFar;         // 카메라 최대 시야
     float       m_FOV;          // 시야각
     float       m_fScale;       // 투영 범위 배율
@@ -44,8 +45,17 @@ public:
     void SetAspectRatio(float _fRatio) { m_fAspectRatio = _fRatio; }
     float GetAspectRatio() { return m_fAspectRatio; }
 
+    void SetNear(float _fNear) { m_fNear = _fNear; }
+    float GetNear() { return m_fNear; }
+
     void SetFar(float _fFar) { m_fFar = _fFar; }
     float GetFar() { return m_fFar; }
+
+    void SetFOV(float _fFOV) { m_FOV = m_FOV; }
+    float GetFOV() { return m_FOV; }
+
+    void SetCamIdx(int _idx) { m_iCamIdx = _idx; }
+    int GetCamIdx() { return m_iCamIdx; }
 
     const Matrix& GetViewMat() { return m_matView; }
     const Matrix& GetProjMat() { return m_matProj; }
@@ -56,6 +66,10 @@ public:
     void SetLayerMask(int _iLayerIdx);
     void SetLayerMaskAll() { m_iLayerMask = 0xffffffff; }
     void SetLayerMaskZero() { m_iLayerMask = 0; }
+    void SetLayerVisible(int _iLayerIdx);
+    void SetLayerInvisible(int _iLayerIdx);
+
+    UINT GetLayerMask() { return m_iLayerMask; }
 
     CFrustum& GetFrustum() { return m_Frustum; }
     void SetFrustumRender(bool _Render) { m_bFrustumRender = _Render; }

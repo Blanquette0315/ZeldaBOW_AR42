@@ -24,11 +24,27 @@ ListUI_EX::~ListUI_EX()
 {
 }
 
-void ListUI_EX::InitNotRes(vector<string>& _vecItemName, int _Initial)
+void ListUI_EX::InitNotRes(vector<string>& _vecItemName, UINT _Initial)
 {
-	m_iSelectIdx = _Initial;
+	m_vecMultiSelectIdx.clear();
+	m_vecItemKey.clear();
+	m_vecItemName.clear();
+
 	m_vecItemKey = _vecItemName;
 	m_vecItemName = _vecItemName;
+
+	if (m_bMultiSelect)
+	{
+		m_vecMultiSelectIdx.reserve(_vecItemName.size());
+		for (size_t i = 0; i < m_vecItemName.size(); ++i)
+		{
+			m_vecMultiSelectIdx.push_back((_Initial & (1 << i)));
+		}
+	}
+	else
+	{
+		m_iSelectIdx = _Initial;
+	}
 }
 
 void ListUI_EX::render_update()
