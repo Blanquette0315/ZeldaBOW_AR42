@@ -53,7 +53,7 @@ public:
 // 프리펩 전환
 public:
     void ChangePrefab();
-    const Ptr<CPrefab> GetOwnerPrefab() { m_OwnerPrefab; }
+    const Ptr<CPrefab> GetOwnerPrefab() { return m_OwnerPrefab; }
     
     // 랜더링을 할지 안할지 정해준다.
     void SetRender(bool _render) { m_bRender = _render; }

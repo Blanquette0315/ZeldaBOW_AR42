@@ -10,7 +10,7 @@ class PreFabUI :
     public ResUI
 {
 private:
-    Ptr<CPrefab> m_pTargetPref;
+    // Ptr<CPrefab> m_pTargetPref;
     CGameObject* m_pTargetObj;
 
 private:

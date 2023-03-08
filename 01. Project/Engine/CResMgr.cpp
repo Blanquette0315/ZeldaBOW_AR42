@@ -18,14 +18,9 @@ CResMgr::~CResMgr()
 		{
 			if (i == (UINT)RES_TYPE::PREFAB)
 			{
-				map<wstring, Ptr<CRes>> mapPref = m_arrRes[(UINT)RES_TYPE::PREFAB];
-				map<wstring, Ptr<CRes>>::iterator iterPref = mapPref.begin();
-				for (; iterPref != mapPref.end(); ++iterPref)
-				{
-					CPrefab* pPref = (CPrefab*)iterPref->second.Get();
-					delete pPref->GetProtoObj();
-					pPref->m_pProtoObj = nullptr;
-				}
+				CPrefab* pPref = (CPrefab*)iter->second.Get();
+				delete pPref->GetProtoObj();
+				pPref->m_pProtoObj = nullptr;
 			}
 			iter->second = nullptr;
 		}

@@ -65,7 +65,6 @@ void ContentUI::update()
 			}
 		}
 	}
-	
 	UI::update();
 }
 
@@ -129,6 +128,8 @@ void ContentUI::ResetContent()
 
 void ContentUI::ReloadContent()
 {
+	m_vecContentName.clear();
+
 	// Content 폴더에 있는 모든 리소스들을 검사 및 로딩
 	wstring strFolderPath = CPathMgr::GetInst()->GetContentPath();
 	FindContentFileName(strFolderPath);
@@ -148,14 +149,15 @@ void ContentUI::ReloadContent()
 		case RES_TYPE::PREFAB:
 			CResMgr::GetInst()->Load<CPrefab>(m_vecContentName[i], m_vecContentName[i]);
 			break;
+
 		case RES_TYPE::MESHDATA:
 
 			break;
 		case RES_TYPE::MATERIAL:
 			CResMgr::GetInst()->Load<CMaterial>(m_vecContentName[i], m_vecContentName[i]);
 			break;
-		case RES_TYPE::MESH:
 
+		case RES_TYPE::MESH:
 			break;
 		case RES_TYPE::TEXTURE:
 			CResMgr::GetInst()->Load<CTexture>(m_vecContentName[i], m_vecContentName[i]);

@@ -14,7 +14,6 @@
 
 PreFabUI::PreFabUI()
 	: ResUI("PreFab##UI", RES_TYPE::PREFAB)
-	, m_pTargetPref(nullptr)
 	, m_pTargetObj(nullptr)
 {
 }
@@ -136,21 +135,26 @@ void PreFabUI::SavePrefab()
 	// 프리펩 저장 기능
 	if (ImGui::Button("Save##PrefabSaveBtn", ImVec2(100.f, 30.f)))
 	{
-		CPrefab* pTarget = (CPrefab*)GetTarget().Get();
+		CGameObject* pParentObj = m_pTargetObj;
+		while (pParentObj->GetParent())
+		{
+			pParentObj = m_pTargetObj->GetParent();
+		}
+		Ptr<CPrefab> pOwnerPref = pParentObj->GetOwnerPrefab();
 
-		if (L"" == pTarget->GetRelativePath())
+		if (L"" == pOwnerPref->GetRelativePath())
 		{
 			wstring strRelativePath;
 
 			strRelativePath = L"prefab\\";
-			strRelativePath += pTarget->GetKey();
+			strRelativePath += pOwnerPref->GetKey();
 			strRelativePath += L".pref";
-			pTarget->Save(strRelativePath);
+			pOwnerPref->Save(strRelativePath);
 		}
 		// 이전 경로 그대로를 넣어 덮어씌운다.
 		else
 		{
-			pTarget->Save(pTarget->GetRelativePath());
+			pOwnerPref->Save(pOwnerPref->GetRelativePath());
 		}
 	}
 }
@@ -159,8 +163,14 @@ void PreFabUI::InstantiatePrefab()
 {
 	if (ImGui::Button("Instantiate", ImVec2(100.f, 30.f)))
 	{
-		CPrefab* pTarget = (CPrefab*)GetTarget().Get();
-		CGameObject* pNewObj = pTarget->Instantiate();
+		CGameObject* pParentObj = m_pTargetObj;
+		while (pParentObj->GetParent())
+		{
+			pParentObj = m_pTargetObj->GetParent();
+		}
+		Ptr<CPrefab> pOwnerPref = pParentObj->GetOwnerPrefab();
+
+		CGameObject* pNewObj = pOwnerPref->Instantiate();
 		Instantiate(pNewObj, Vec3(0.f, 0.f, 990.f), 0);
 	}
 }
