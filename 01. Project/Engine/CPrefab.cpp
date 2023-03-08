@@ -75,6 +75,7 @@ int CPrefab::Load(const wstring& _strFilePath)
 	LoadKeyPath(rootNode);
 
 	m_pProtoObj = Load_GameObject_Func(rootNode);
+	m_pProtoObj->m_OwnerPrefab = this;
 
 	return S_OK;
 }

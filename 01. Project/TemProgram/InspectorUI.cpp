@@ -163,6 +163,18 @@ void InspectorUI::render_update()
 		if (ImGui::Button("##ChangeObjNameBtn", ImVec2(18.f, 18.f)))
 			ImGui::OpenPopup("Change Object Name?");
 
+		CGameObject* pParentObj = m_TargetObj;
+		while (pParentObj->GetParent())
+		{
+			pParentObj = pParentObj->GetParent();
+		}
+		if (pParentObj->GetOwnerPrefab().Get())
+		{
+			SavePrefab(pParentObj); ImGui::SameLine(); InstantiatePrefab(pParentObj);
+		}
+
+		
+
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -460,4 +472,49 @@ UI* InspectorUI::FindResUI(RES_TYPE _eType)
 UI* InspectorUI::FindComponentUI(COMPONENT_TYPE _eType)
 {
 	return m_arrComUI[(UINT)_eType];
+}
+
+void InspectorUI::SavePrefab(CGameObject* _pParentObj)
+{
+	// 프리펩 저장 기능
+	if (ImGui::Button("Save##PrefabSaveBtn", ImVec2(100.f, 30.f)))
+	{
+		CGameObject* pParentObj = _pParentObj;
+		while (pParentObj->GetParent())
+		{
+			pParentObj = _pParentObj->GetParent();
+		}
+		Ptr<CPrefab> pOwnerPref = pParentObj->GetOwnerPrefab();
+
+		if (L"" == pOwnerPref->GetRelativePath())
+		{
+			wstring strRelativePath;
+
+			strRelativePath = L"prefab\\";
+			strRelativePath += pOwnerPref->GetKey();
+			strRelativePath += L".pref";
+			pOwnerPref->Save(strRelativePath);
+		}
+		// 이전 경로 그대로를 넣어 덮어씌운다.
+		else
+		{
+			pOwnerPref->Save(pOwnerPref->GetRelativePath());
+		}
+	}
+}
+
+void InspectorUI::InstantiatePrefab(CGameObject* _pParentObj)
+{
+	if (ImGui::Button("Instantiate", ImVec2(100.f, 30.f)))
+	{
+		CGameObject* pParentObj = _pParentObj;
+		while (pParentObj->GetParent())
+		{
+			pParentObj = _pParentObj->GetParent();
+		}
+		Ptr<CPrefab> pOwnerPref = pParentObj->GetOwnerPrefab();
+
+		CGameObject* pNewObj = pOwnerPref->Instantiate();
+		Instantiate(pNewObj, Vec3(0.f, 0.f, 990.f), 0);
+	}
 }

@@ -46,6 +46,12 @@ public:
     UI* FindResUI(RES_TYPE _eType);
     UI* FindComponentUI(COMPONENT_TYPE _eType);
 
+    //prefab
+private:
+    void SavePrefab(CGameObject* _pParentObj);
+    void InstantiatePrefab(CGameObject* _pParentObj);
+
+
 private:
     virtual void update() override;
     virtual void render_update() override;

@@ -278,14 +278,14 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 		{
 			// Prefab child obj
 			CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
-			Inspector->SetTargetPrefObject(pPrefabObject);
+			Inspector->SetTargetObject(pPrefabObject);
 		}
-		else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
-		{
-			Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
-			CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
-			Inspector->SetTargetPrefObject(pProtoObject);
-		}
+		//else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
+		//{
+		//	Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
+		//	CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
+		//	Inspector->SetTargetPrefObject(pProtoObject);
+		//}
 		else
 		{
 			Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
