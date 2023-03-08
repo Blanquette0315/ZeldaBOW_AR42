@@ -41,9 +41,6 @@ public:
     void Func_SaveMaterial(Ptr<CMaterial> _pMtrl);
 
 
-    // 대상 노드가 LevelNode일때,
-    void Func_NewLevel();
-
     // Menu 생성함수
     // Add Component Menu를 만들어주는 함수
     void Create_AddCompoMenu(DWORD_PTR _pTargetObj);

@@ -33,10 +33,10 @@ void PopupUI::render_update()
 		{
 			if (m_vecSelectable[i].eHeadType == HEAD_TYPE::SELECTABLE)
 			{
-				// Selectable »ý¼º
+				// Selectable ï¿½ï¿½ï¿½ï¿½
 				if (ImGui::Selectable(m_vecSelectable[i].strName.c_str()))
 				{
-					// ¸¸¾à ÇØ´ç SelectableÀÌ ¼±ÅÃµÇ¸é, »ç¿ëÇÒ ÇÔ¼ö
+					// ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ Selectableï¿½ï¿½ ï¿½ï¿½ï¿½ÃµÇ¸ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 					switch (m_vecSelectable[i].eFuncType)
 					{
 					case FUNC_TYPE::FUNC_0:
@@ -60,7 +60,7 @@ void PopupUI::render_update()
 				}
 			}
 
-			// Çìµå¶óÀÎÀÌ Menu Å¸ÀÔÀÏ °æ¿ì
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Menu Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 			else if (m_vecSelectable[i].eHeadType == HEAD_TYPE::MENU)
 			{
 				switch (m_vecSelectable[i].eMenuType)
@@ -163,8 +163,8 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 {
 	if (!_pMtrl->IsEngineRes())
 	{
-		// Ã³À½ ÀúÀåÇÏ´Â °Å¶ó¸é, °æ·Î±îÁö ÁöÁ¤À» ÇØ¼­ ÀúÀåÀ» ÇØÁÖ¾î¾ß ÇÑ´Ù.
-		// µ¤¾î ¾º¿ö ÀúÀåÇÑ´Ù¸é, °æ·Î¸¦ ÀçÁöÁ¤ ÇÏ¸é ¾ÈµÈ´Ù.
+		// Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Å¶ï¿½ï¿½, ï¿½ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½, ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÈ´ï¿½.
 		if (L"" == _pMtrl->GetRelativePath())
 		{
 			wstring strRelativePath;
@@ -174,7 +174,7 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 			strRelativePath += L".mtrl";
 			_pMtrl->Save(strRelativePath);
 
-			// °æ·Î°¡ ¾ø´ø ÀÓ½Ã ÀçÁúÀº ÇØÁ¦ÇØ ÁÖ¾î¾ß ÇÑ´Ù.
+			// ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 			tEvent DelMtrl = {};
 			DelMtrl.eType = EVENT_TYPE::DELETE_RES;
 			DelMtrl.wParam = (DWORD_PTR)_pMtrl->GetResType();
@@ -185,9 +185,9 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 		}
 		else
 		{
-			// ÀÌ¸§°ú Å°°¡ ÀÏÄ¡ÇÏÁö ¾Ê´Â´Ù¸é ÀÌ¸§ °ªÀ¸·Î º¯°æÇØÁÖ¾î¾ß ÇÑ´Ù.
-			// ÀÌ¸§À» °æ·Î Ã³·³ º¯°æ ÇÏ°Å³ª °æ·Î¸¦ ÀÌ¸§ Ã³·³ º¯°æÇØ¼­ ºñ±³ÇØ¾ßÇÑ´Ù.
-			// ¿ì¼±Àº ÀÌ¸§À» °æ·ÎÃ³·³ º¯°æÇÏ´Â ¹æ½ÄÀ¸·Î ÁøÇàÇÒ °ÍÀÌ´Ù.
+			// ï¿½Ì¸ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+			// ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï°Å³ï¿½ ï¿½ï¿½Î¸ï¿½ ï¿½Ì¸ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½Ñ´ï¿½.
+			// ï¿½ì¼±ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
 
 			wstring strNamePath = {};
 
@@ -198,11 +198,11 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 			if (strNamePath != _pMtrl->GetKey())
 			{
 				_pMtrl->Save(strNamePath);
-				// ÀúÀåÀÌ µÇ°í³ª¸é ÀÌ¸§ÀÌ ¾Æ¿¡ Á¤ÇØÁø °ÍÀÌ±â ¶§¹®¿¡ ´Ù½Ã false¸¦ ³Ö¾îÁÖ¾î¾ß ÇÑ´Ù.
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ falseï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 				_pMtrl->ChangeName(false);
 			}
 
-			// ÀÌ¸§°ú Å°°ªÀÌ ÀÏÄ¡ÇÏ¸é ÀÌÀü °æ·Î ±×´ë·Î¸¦ ³Ö¾î µ¤¾î¾º¿î´Ù.
+			// ï¿½Ì¸ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½×´ï¿½Î¸ï¿½ ï¿½Ö¾ï¿½ ï¿½ï¿½ï¿½î¾ºï¿½ï¿½ï¿½.
 			else
 			{
 				_pMtrl->Save(_pMtrl->GetRelativePath());
@@ -210,11 +210,6 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 		}
 	}
 }
-
-void PopupUI::Func_NewLevel()
-{
-}
-
 void PopupUI::Create_AddCompoMenu(DWORD_PTR _pTargetObj)
 {
 	static bool toggles[(UINT)COMPONENT_TYPE::END] = {};
@@ -234,11 +229,11 @@ void PopupUI::Create_AddCompoMenu(DWORD_PTR _pTargetObj)
 			toggles[i] = false;
 		}
 
-		// ¼±ÅÃÀÌ µÇ¸é false true¸¦ È®ÀÎÇØ¼­ Add Component¿Í Delete Component¸¦ ÇÏ¸é µÈ´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½ false trueï¿½ï¿½ È®ï¿½ï¿½ï¿½Ø¼ï¿½ Add Componentï¿½ï¿½ Delete Componentï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½È´ï¿½.
 		if (ImGui::MenuItem(strName.c_str(), "", &toggles[i]))
 		{
-			// Å¸ÀÔº°·Î ºÐ±âÃ³¸®ÇØ ¾Ë¸ÂÀº ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇØ ÁØ´Ù.
-			// ´­·¯¼­ true·Î ¹Ù²î¸é AddComponent, false·Î ¹Ù²î¸é ReleaseComponent
+			// Å¸ï¿½Ôºï¿½ï¿½ï¿½ ï¿½Ð±ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½.
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ AddComponent, falseï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ ReleaseComponent
 			AddReleaseComponent((COMPONENT_TYPE)i, toggles[i], pTargetObj);
 		}
 	}
@@ -379,7 +374,7 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 		break;
 	}
 
-	// ºÁ¼­ À§ÂÊÀ¸·Î ¿Ã·Á¾ßÇÒ ±â´ÉÀÎ°Í °°´Ù ÀÌºÎºÐÀº.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÌºÎºï¿½ï¿½ï¿½.
 	UI* pInspector = CImGuiMgr::GetInst()->FindUI("Inspector");
 	dynamic_cast<InspectorUI*>(pInspector)->SetTargetObject(_Target);
 }

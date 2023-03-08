@@ -17,10 +17,12 @@ private:
 
     bool                m_bFrame;
     bool                m_bSelected;
+    bool                m_bIsDataLevel; // this member is indicates whether m_data is a level or not.
 
 
 public:
     DWORD_PTR GetData() { return m_data; }
+    bool IsLevelData() { return m_bIsDataLevel; }
     const string& GetName() { return m_strName; }
 
     // 외부에서 노드의 이름과 데이터가 수정이 되면 안되기 때문에 Private필드로 은닉하고, TreeUI에게만 알려준다.
@@ -35,6 +37,7 @@ private:
         _ChildNode->m_ParentNode = this;
         m_vecChildNode.push_back(_ChildNode);
     }
+    void SetLevelData(bool _IsLevelData) { m_bIsDataLevel = _IsLevelData; }
 
     const vector<TreeNode*>& GetChild() { return m_vecChildNode; }
 
@@ -69,7 +72,7 @@ private:
 
 public:
     // 새로 노드가 추가될 때, 인자로 주는 부모 노드가 nullptr이면, 해당 노드를 RootNode로 지정한다.
-    TreeNode* AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _data, bool _IsFrame = false);
+    TreeNode* AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _data, bool _IsFrame = false, bool _LevelData = false);
     void Clear();
     void SetDummyRoot(bool _bUse) { m_bDummyRootUse = _bUse; }
     void SetSelectedNode(TreeNode* _SelectedNode);

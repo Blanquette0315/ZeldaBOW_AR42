@@ -122,7 +122,7 @@ void ContentUI::ResetContent()
 		wstring strLevelName = m_vecLevelName[i];
 		size_t idx = strLevelName.find(L"\\");
 		strLevelName.erase(0, idx + 1);
-		m_Tree->AddItem(pLevelNode, string(strLevelName.begin(), strLevelName.end()), (DWORD_PTR)&m_vecLevelName[i]);
+		m_Tree->AddItem(pLevelNode, string(strLevelName.begin(), strLevelName.end()), (DWORD_PTR)&m_vecLevelName[i], false, true);
 	}
 }
 
@@ -267,30 +267,31 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 
 	// if Selected Node is LevelNode
 
-
-
-	if (dynamic_cast<CGameObject*>((CEntity*)pSelectedNode->GetData()))
-	{
-		// Prefab child obj
-		CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
-		Inspector->SetTargetObject(pPrefabObject);
-	}
-	//else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
-	//{
-	//	Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
-	//	CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
-	//	Inspector->SetTargetPrefObject(pProtoObject);
-	//}
-	else if(dynamic_cast<CRes*>((CEntity*)pSelectedNode->GetData()))
-	{
-		Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
-		// InspectorUI�� Ŭ���� Resource�� �˷��ش�.
-		Inspector->SetTargetResource(pRes.Get());
-	}
-	else
+	if (pSelectedNode->IsLevelData())
 	{
 		// TargetLevel's RelativePath impart to InspectorUI
 		Inspector->SetTargetLevel((wstring*)pSelectedNode->GetData());
+	}
+	else
+	{
+		if (dynamic_cast<CGameObject*>((CEntity*)pSelectedNode->GetData()))
+		{
+			// Prefab child obj
+			CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
+			Inspector->SetTargetObject(pPrefabObject);
+		}
+		//else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
+		//{
+		//	Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
+		//	CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
+		//	Inspector->SetTargetPrefObject(pProtoObject);
+		//}
+		else if (dynamic_cast<CRes*>((CEntity*)pSelectedNode->GetData()))
+		{
+			Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
+			// InspectorUI�� Ŭ���� Resource�� �˷��ش�.
+			Inspector->SetTargetResource(pRes.Get());
+		}
 	}
 
 }

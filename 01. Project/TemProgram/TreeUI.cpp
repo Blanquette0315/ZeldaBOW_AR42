@@ -299,11 +299,12 @@ void TreeUI::render_update()
 	}
 }
 
-TreeNode* TreeUI::AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _data, bool _IsFrame)
+TreeNode* TreeUI::AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _data, bool _IsFrame, bool _LevelData)
 {
 	TreeNode* pNode = new TreeNode;
 	pNode->SetNodeName(_strName);
 	pNode->SetData(_data);
+	pNode->SetLevelData(_LevelData);
 	pNode->SetFrame(_IsFrame);
 	pNode->m_TreeUI = this;
 	pNode->m_iIdx = m_iNextNodeIdx++;
