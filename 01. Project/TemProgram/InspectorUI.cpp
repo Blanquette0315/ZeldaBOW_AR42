@@ -290,7 +290,10 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 				m_arrComUI[i]->SetTarget(_Target);
 
 				if (nullptr != _Target)
+				{
 					m_arrComUI[i]->Open();
+					m_arrComUI[i]->update();
+				}
 				else
 					m_arrComUI[i]->Close();
 			}
@@ -335,6 +338,7 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 			m_vecScriptUI[i]->Open();
 			m_vecScriptUI[i]->SetTarget(m_TargetObj);
 			m_vecScriptUI[i]->SetTargetScript(vecScript[i]);
+			m_vecScriptUI[i]->update();
 		}
 	}
 }
