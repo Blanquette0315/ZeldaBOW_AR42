@@ -12,12 +12,12 @@
 
 #include "CMRT.h"
 
+#include "CMeshRender.h"
 #include "CGameObject.h"
 
 CCamera::CCamera()
 	: CComponent(COMPONENT_TYPE::CAMERA)
 	, m_Frustum(this)
-	, m_bFrustumRender(false)
 	, m_eProjType(PROJ_TYPE::ORTHOGRAPHICS)
 	, m_fAspectRatio(1.f)
 	, m_FOV(XM_PI / 2.f)
@@ -46,7 +46,7 @@ void CCamera::finaltick()
 	m_Frustum.finaltick();
 
 	// Frustum DebugRender
-	if (m_bFrustumRender)
+	if (Is_ShowDebugDraw())
 	{
 		DebugDrawFrustum(Vec4(0.2f, 0.8f, 0.2f, 1.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 0.f, 0.f));
 		Ptr<CMaterial> pCamMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"FrustumDebugDrawMtrl");

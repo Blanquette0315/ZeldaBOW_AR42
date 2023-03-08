@@ -92,7 +92,7 @@ void InputTextUI::CreateLevel(DWORD_PTR _strLvName)
 	ContentUI* pContentUI = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
 	if (!pContentUI->Is_ValidLvPath(RelativePath))
 	{
-		MessageBox(nullptr, L"동일한 이름의 레벨 파일이 이미 존재한다.", L"레벨 생성 실패!!", MB_OK);
+		MessageBox(nullptr, L"동일한 이름의 레벨 파일이 이미 존재합니다.", L"레벨 생성 실패!!", MB_OK);
 		return;
 	}
 

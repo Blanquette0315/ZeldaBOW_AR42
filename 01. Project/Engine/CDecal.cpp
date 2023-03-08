@@ -37,12 +37,16 @@ void CDecal::SetRenderType(bool _bSet)
 
 void CDecal::finaltick()
 {
+	
 }
 
 void CDecal::render()
 {
-	// ť�� ���� �Ž� Ȯ���� ���� ����� �����
-	DebugDrawCube(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetWorldScale(), Transform()->GetRelativeRotation());
+	// Decal Debug Draw
+	if (Is_ShowDebugDraw())
+	{
+		DebugDrawCube(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetWorldScale(), Transform()->GetRelativeRotation());
+	}
 
 	// ��ġ ��� ������Ʈ
 	Transform()->UpdateData();

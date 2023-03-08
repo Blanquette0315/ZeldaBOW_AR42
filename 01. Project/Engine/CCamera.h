@@ -8,7 +8,6 @@ class CCamera :
 {
 private:
     CFrustum    m_Frustum;
-    bool        m_bFrustumRender;
 
     Matrix      m_matView;      // ºä Çà·Ä
     Matrix      m_matViewInv;   // ºä ¿ªÇà·Ä
@@ -72,7 +71,6 @@ public:
     UINT GetLayerMask() { return m_iLayerMask; }
 
     CFrustum& GetFrustum() { return m_Frustum; }
-    void SetFrustumRender(bool _Render) { m_bFrustumRender = _Render; }
 
 protected:
     void CalcViewMat();

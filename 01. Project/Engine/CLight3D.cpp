@@ -41,12 +41,15 @@ void CLight3D::finaltick()
 
 void CLight3D::render()
 {
-	if (LIGHT_TYPE::POINT == m_Info.iLightType)
-		DebugDrawSphere(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetWorldScale().x * 0.5f);
-
-	if (LIGHT_TYPE::SPOT == m_Info.iLightType)
+	if (Is_ShowDebugDraw())
 	{
-		DebugDrawCone(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetRelativeRotation(), m_Info.fRadius, m_Info.fOutAngle);
+		if (LIGHT_TYPE::POINT == m_Info.iLightType)
+			DebugDrawSphere(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetWorldScale().x * 0.5f);
+
+		if (LIGHT_TYPE::SPOT == m_Info.iLightType)
+		{
+			DebugDrawCone(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetRelativeRotation(), m_Info.fRadius, m_Info.fOutAngle);
+		}
 	}
 
 	if (nullptr == m_pLightMtrl)
