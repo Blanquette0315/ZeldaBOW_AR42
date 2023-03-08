@@ -35,6 +35,8 @@ private:
     bool                        m_bRender;  // 랜더를 할 지 말지 정해주는 변수 기본은 true
     bool                        m_bFrustumCul; // CameraFrustum Culling을 할지 말지
 
+    Ptr<CPrefab>                m_OwnerPrefab;
+
 protected:
     vector<CGameObject*>        m_vecChild;
 
@@ -51,7 +53,8 @@ public:
 // 프리펩 전환
 public:
     void ChangePrefab();
-
+    const Ptr<CPrefab> GetOwnerPrefab() { m_OwnerPrefab; }
+    
     // 랜더링을 할지 안할지 정해준다.
     void SetRender(bool _render) { m_bRender = _render; }
 
@@ -111,6 +114,7 @@ public:
 
     friend class CLayer;
     friend class CEventMgr;
+    friend class CPrefab;
 };
 
 template<typename T>

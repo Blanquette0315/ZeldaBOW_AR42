@@ -87,28 +87,22 @@ void ContentUI::ResetContent()
 
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource((RES_TYPE)i);
 
+		// Prefab
 		if( i == (UINT)RES_TYPE::PREFAB)
 		{
 			map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
 			for (; iter != mapRes.end(); ++iter)
 			{
 				wstring strName = iter->first;
-				TreeNode* pParentObjNode = m_Tree->AddItem(pResNode, string(strName.begin(), strName.end()), (DWORD_PTR)iter->second.Get());
-
-				// protoobj
+				
 				iter->second; // Prefab
 				Ptr<CPrefab> pPref = (CPrefab*)iter->second.Get();
 				CGameObject* pParentObj = pPref->GetProtoObj();
-				
-				// 부모 오브젝트만 넣어도 해당 오브젝트의 자식까지 재귀함수를 통해 노드를 추가해준다.
-				const vector<CGameObject*>& vecChild = pParentObj->GetChildObject();
-				for (size_t i = 0; i < vecChild.size(); ++i)
-				{
-					const wstring& wstrChildName = vecChild[i]->GetName();
-					m_Tree->AddItem(pParentObjNode, string(wstrChildName.begin(), wstrChildName.end()), (DWORD_PTR)vecChild[i]);
-				}
+				AddGameObjectToTree(pResNode, pParentObj);
 			}
 		}
+
+		// Other Res
 		else
 		{
 			map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
@@ -370,4 +364,29 @@ RES_TYPE ContentUI::GetResTypeByExt(wstring _filename)
 		return RES_TYPE::LEVEL;
 	else
 		return RES_TYPE::END;
+}
+
+void ContentUI::AddGameObjectToTree(TreeNode* _ParentNode, CGameObject* _Object)
+{
+	string strObjectName = string(_Object->GetName().begin(), _Object->GetName().end());
+	TreeNode* pCurNode = m_Tree->AddItem(_ParentNode, strObjectName.c_str(), (DWORD_PTR)_Object);
+
+	// 부모 오브젝트만 넣어도 해당 오브젝트의 자식까지 재귀함수를 통해 노드를 추가해준다.
+	const vector<CGameObject*>& vecChild = _Object->GetChildObject();
+	for (size_t i = 0; i < vecChild.size(); ++i)
+	{
+		AddGameObjectToTree(pCurNode, vecChild[i]);
+	}
+}
+
+void ContentUI::AddChildObject(DWORD_PTR _ChildObject, DWORD_PTR _ParentObject)
+{
+	TreeNode* pChildNode = (TreeNode*)_ChildObject;
+	TreeNode* pParentNode = (TreeNode*)_ParentObject;
+
+	tEvent evt = {};
+	evt.eType = EVENT_TYPE::ADD_CHILD;
+	evt.wParam = pChildNode->GetData();
+	evt.lParam = pParentNode->GetData();
+	CEventMgr::GetInst()->AddEvent(evt);
 }

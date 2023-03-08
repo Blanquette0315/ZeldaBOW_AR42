@@ -2,6 +2,7 @@
 #include "UI.h"
 
 class TreeUI;
+class TreeNode;
 
 class ContentUI :
     public UI
@@ -16,6 +17,9 @@ private:
     void FindContentFileName(const wstring& _strFolderPath);
     // 파일의 확장자를 확인해 리소스 타입을 확인해주는 함수이다.
     RES_TYPE GetResTypeByExt(wstring _filename);
+
+    void AddGameObjectToTree(TreeNode* _ParentNode, CGameObject* _Object);
+    void AddChildObject(DWORD_PTR _ChildObject, DWORD_PTR _ParentObject);
 
 public:
     // 현재 리소스 목록을 트리에 갱신

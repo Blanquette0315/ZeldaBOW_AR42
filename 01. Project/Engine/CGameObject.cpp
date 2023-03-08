@@ -21,6 +21,7 @@ CGameObject::CGameObject()
 	, m_bDead(false)
 	, m_bRender(true)
 	, m_bFrustumCul(true)
+	, m_OwnerPrefab(nullptr)
 {
 }
 
@@ -33,6 +34,7 @@ CGameObject::CGameObject(const CGameObject& _origin)
 	, m_bDead(false)
 	, m_bRender(true)
 	, m_bFrustumCul(true)
+	, m_OwnerPrefab(nullptr)
 {
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
