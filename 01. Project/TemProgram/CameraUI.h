@@ -18,6 +18,7 @@ private:
     ListUI_EX*  m_uiList;
 
     bool        m_bInit;
+    bool        m_bShowDebugDraw;
 
 
 public:

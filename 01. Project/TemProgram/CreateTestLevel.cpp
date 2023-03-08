@@ -49,7 +49,6 @@ void CreateTestLevel()
 
 	pCamObj->Camera()->SetLayerMaskAll();
 	pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pCamObj->Camera()->SetFrustumRender(true);
 
 	pLevel->AddGameObject(pCamObj, 0);
 

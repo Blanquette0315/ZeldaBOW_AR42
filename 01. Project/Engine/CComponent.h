@@ -13,6 +13,7 @@ private:
     CGameObject*            m_pOwnerObject;
     const COMPONENT_TYPE    m_eType;
     bool                    m_bActive;
+    bool                    m_bShowDebugDraw;   // Show DebugDraw : true is draw, false is nondraw Defulat is false
 
 public:
     virtual void begin() {}
@@ -41,6 +42,11 @@ public:
     GET_OTHER_COMPONENT(Decal);
     GET_OTHER_COMPONENT(SkyBox);
     GET_OTHER_COMPONENT(LandScape);
+
+public:
+    // Debug Draw Function
+    void ShowDebugDraw(bool _ShowDebugDraw) { m_bShowDebugDraw = _ShowDebugDraw; }
+    bool Is_ShowDebugDraw() { return m_bShowDebugDraw; }
 
     virtual CComponent* Clone() = 0;
 

@@ -10,9 +10,9 @@ class CRenderComponent :
 private:
     Ptr<CMesh>              m_pMesh;
 
-    Ptr<CMaterial>          m_pSharedMtrl; // 공유 재질
-    Ptr<CMaterial>          m_pDynamicMtrl; // 동적 재질
-    Ptr<CMaterial>          m_pCurMtrl;     // 현재 사용 중인 재질
+    Ptr<CMaterial>          m_pSharedMtrl;      // 공유 재질
+    Ptr<CMaterial>          m_pDynamicMtrl;     // 동적 재질
+    Ptr<CMaterial>          m_pCurMtrl;         // 현재 사용 중인 재질
 
     bool                    m_bIsDynamicMtrl;
 

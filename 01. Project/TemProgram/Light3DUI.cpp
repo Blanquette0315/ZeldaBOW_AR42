@@ -11,6 +11,7 @@ Light3DUI::Light3DUI()
 	, m_fInAngle(0.f)
 	, m_fOutAngle(0.f)
 	, m_fRadius(0.f)
+	, m_bShowDebugDraw(false)
 {
 }
 
@@ -48,6 +49,8 @@ void Light3DUI::update()
 		m_fRadius = GetTarget()->Light3D()->GetRadius();
 		m_fInAngle = GetTarget()->Light3D()->GetInAngle();
 		m_fOutAngle = GetTarget()->Light3D()->GetOutAngle();
+
+		m_bShowDebugDraw = GetTarget()->Light3D()->Is_ShowDebugDraw();
 	}
 
 	ComponentUI::update();
@@ -56,9 +59,11 @@ void Light3DUI::update()
 void Light3DUI::render_update()
 {
 	ComponentUI::render_update();
+	ImGui::Text("ShowDebugDraw"); ImGui::SameLine(); ImGui::Checkbox("##Light3D_ShowDebugDraw", &m_bShowDebugDraw);
+	GetTarget()->Light3D()->ShowDebugDraw(m_bShowDebugDraw);
 
 	static const char* m_arrLightType[] = { "DIRECTIONAL", "POINT", "SPOT" };
-	ImGui::Text("Light_Type"); ImGui::SameLine(); ImGui::Combo("##Light2D_Type", &m_iCurItem, m_arrLightType, IM_ARRAYSIZE(m_arrLightType));
+	ImGui::Text("Light_Type"); ImGui::SameLine(); ImGui::Combo("##Light3D_Type", &m_iCurItem, m_arrLightType, IM_ARRAYSIZE(m_arrLightType));
 
 	ImGui::Text("Diff Color"); ImGui::SameLine(); ImGui::InputFloat3("##L3D_DiffColor", m_vDiff);
 	ImGui::Text("          "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vDiff);

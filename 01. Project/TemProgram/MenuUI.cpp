@@ -128,17 +128,38 @@ void MenuUI::render()
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Resource"))
+        if (ImGui::BeginMenu("DebugDraw"))
         {
             // Editor에서 새로운 리소스를 만들어 준다.
-            if (ImGui::MenuItem("Create Material"))
+            if (ImGui::MenuItem("All DebugDraw OFF"))
             {
-                Ptr<CMaterial> pMtrl = new CMaterial;
-                wstring strKey = CResMgr::GetInst()->GetNewResName<CMaterial>();
-                CResMgr::GetInst()->AddRes<CMaterial>(strKey, pMtrl.Get());
+                vector<CGameObject*> pvecObj = CLevelMgr::GetInst()->GetCurLevel()->GetGameObjects();
 
-                ContentUI* pContentUI = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
-                pContentUI->ResetContent();
+                for (size_t i = 0; i < pvecObj.size(); ++i)
+                {
+                    for (UINT j = 0; j < (UINT)COMPONENT_TYPE::END; ++j)
+                    {
+                        CComponent* pTargetCompo = pvecObj[i]->GetComponent((COMPONENT_TYPE)j);
+                        if (nullptr != pTargetCompo)
+                            pTargetCompo->ShowDebugDraw(false);
+                    }
+                }
+            }
+
+            // Editor에서 새로운 리소스를 만들어 준다.
+            if (ImGui::MenuItem("All DebugDraw ON"))
+            {
+                vector<CGameObject*> pvecObj = CLevelMgr::GetInst()->GetCurLevel()->GetGameObjects();
+
+                for (size_t i = 0; i < pvecObj.size(); ++i)
+                {
+                    for (UINT j = 0; j < (UINT)COMPONENT_TYPE::END; ++j)
+                    {
+                        CComponent* pTargetCompo = pvecObj[i]->GetComponent((COMPONENT_TYPE)j);
+                        if (nullptr != pTargetCompo)
+                            pTargetCompo->ShowDebugDraw(true);
+                    }
+                }
             }
 
             ImGui::EndMenu();

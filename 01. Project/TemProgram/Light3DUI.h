@@ -19,6 +19,8 @@ private:
     LIGHT_TYPE m_eLightType;
     int m_iCurItem;
 
+    bool m_bShowDebugDraw;
+
 public:
     virtual void update() override;
     virtual void render_update() override;

@@ -12,6 +12,8 @@ private:
 
     bool            m_bDeferred;
 
+    bool            m_bShowDebugDraw;
+
 public:
     virtual void update() override;
     virtual void render_update() override;

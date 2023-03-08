@@ -16,6 +16,7 @@ DecalUI::DecalUI()
 	, m_eSelectTexParam(TEX_PARAM::TEX_END)
 	, m_bIsDyanmicMtrl(false)
 	, m_DecalTexture(nullptr)
+	, m_bShowDebugDraw(false)
 {
 }
 
@@ -39,6 +40,7 @@ void DecalUI::update()
 		{
 			m_bIsDyanmicMtrl = false;
 		}
+		m_bShowDebugDraw = GetTarget()->Decal()->Is_ShowDebugDraw();
 	}
 
 	ComponentUI::update();
@@ -47,6 +49,10 @@ void DecalUI::update()
 void DecalUI::render_update()
 {
 	ComponentUI::render_update();
+
+	// Show DebugDraw
+	ImGui::Text("ShowDebugDraw"); ImGui::SameLine(); ImGui::Checkbox("##DecalDebugDraw", &m_bShowDebugDraw);
+	GetTarget()->Decal()->ShowDebugDraw(m_bShowDebugDraw);
 
 	// 키 값 가져오기.
 	// 이때, GetKey()의 반환은 wstring인데, string()의 생성자를 이용해 wstring을 string으로 변경해주었다.

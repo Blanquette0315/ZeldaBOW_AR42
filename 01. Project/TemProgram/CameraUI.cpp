@@ -10,6 +10,7 @@ CameraUI::CameraUI()
 	, m_fFar(0.f)
 	, m_fScale(0.f)
 	, m_bInit(false)
+	, m_bShowDebugDraw(false)
 {
 	m_uiList = new ListUI_EX;
 }
@@ -47,6 +48,8 @@ void CameraUI::update()
 			m_uiList->InitNotRes(vecInitName, m_iVisibleLayer);
 			m_bInit = true;
 		}
+
+		m_bShowDebugDraw = GetTarget()->Camera()->Is_ShowDebugDraw();
 	}
 
 	ComponentUI::update();
@@ -55,6 +58,9 @@ void CameraUI::update()
 void CameraUI::render_update()
 {
 	ComponentUI::render_update();
+
+	ImGui::Text("Show Frustum"); ImGui::SameLine(); ImGui::Checkbox("##CameraFrustum", &m_bShowDebugDraw);
+	GetTarget()->Camera()->ShowDebugDraw(m_bShowDebugDraw);
 
 	if (ImGui::RadioButton("ORTHOGRAHPICS", m_eProjType == PROJ_TYPE::ORTHOGRAPHICS))
 	{
