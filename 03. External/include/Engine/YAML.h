@@ -11,4 +11,6 @@ YAML::Emitter& operator << (YAML::Emitter& out, const tLayerCollision t);
 
 YAML::Emitter& operator << (YAML::Emitter& out, const tTile t);
 
+YAML::Emitter& operator << (YAML::Emitter& out, const Matrix t);
+
 #include "YAML.hpp"

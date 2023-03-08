@@ -23,8 +23,8 @@ CSaveLoadMgr::~CSaveLoadMgr()
 
 void CSaveLoadMgr::init()
 {
-	/*CPrefab::Save_GameObject_Func = &CSaveLoadMgr::SaveGameObject;
-	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;*/
+	CPrefab::Save_GameObject_Func = &CSaveLoadMgr::SaveGameObject;
+	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;
 }
 
 void CSaveLoadMgr::SaveLevel(CLevel* _Level)

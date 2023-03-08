@@ -61,9 +61,9 @@ protected:
     bool CheckRelativePath(const wstring& _strRelativePath);
 
     // Save를 할때 해당 함수를 호출해 본인의 키와 경로를 먼저 저장한다.
-    void SaveKeyPath(FILE* _pFile);
+    void SaveKeyPath(YAML::Emitter& _emitter);
     // Load를 할때 해당 함수를 호출해 본인의 키와 경로를 먼저 읽어온다.
-    void LoadKeyPath(FILE* _pFile);
+    void LoadKeyPath(YAML::Node& _node);
 
     virtual CRes* Clone() = 0;
 

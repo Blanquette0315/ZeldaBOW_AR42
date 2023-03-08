@@ -25,8 +25,8 @@ public:
     void UpdateData();
     static void Clear();
 
-    virtual void Save(const wstring& _strRelativePath) override {};
-    virtual int Load(const wstring& _strFilePath) override { return S_OK; }
+    virtual void Save(const wstring& _strRelativePath) override;
+    virtual int Load(const wstring& _strFilePath) override;
 
     CLONE(CMaterial);
 public:

@@ -48,33 +48,32 @@ void CPrefab::Save(const wstring& _strRelativePath)
 	if (!CheckRelativePath(_strRelativePath))
 		assert(nullptr);
 
-	FILE* pFile = nullptr;
-
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
 
-	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+	YAML::Emitter emitter;
+	emitter << YAML::BeginMap;
 
 	// 키, 경로 저장
-	SaveKeyPath(pFile);
+	SaveKeyPath(emitter);
 
 	// 원본 오브젝트 정보 저장
-	Save_GameObject_Func(m_pProtoObj, pFile);
+	Save_GameObject_Func(m_pProtoObj, emitter);
 
-	fclose(pFile);
+	emitter << YAML::EndMap;
+
+	std::ofstream fout(strFilePath);
+	fout << emitter.c_str();
 }
 
 int CPrefab::Load(const wstring& _strFilePath)
 {
-	FILE* pFile = nullptr;
+	// 파일 읽기
+	YAML::Node rootNode = YAML::LoadFile(WStringToString(_strFilePath));
 
-	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
+	LoadKeyPath(rootNode);
 
-	LoadKeyPath(pFile);
-
-	m_pProtoObj = Load_GameObject_Func(pFile);
-
-	fclose(pFile);
+	m_pProtoObj = Load_GameObject_Func(rootNode);
 
 	return S_OK;
 }

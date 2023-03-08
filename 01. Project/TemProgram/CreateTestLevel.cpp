@@ -295,7 +295,7 @@ void CreateTestLevel()
 	// Level 저장
 	//pLevel->SetName(L"Test Level2");
 	//CSaveLoadMgr::GetInst()->SaveLevel(pLevel);
-	//CLevelMgr::GetInst()->RegisterLevel(pLevel->GetRelativePath(), pLevel);
+	CLevelMgr::GetInst()->RegisterLevel(pLevel->GetRelativePath(), pLevel);
 
 	// 레벨 설정
 	// 만든 테스트 레벨을 지금 레벨로 전환

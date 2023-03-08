@@ -48,14 +48,16 @@ bool CRes::CheckRelativePath(const wstring& _strRelativePath)
 	}
 }
 
-void CRes::SaveKeyPath(FILE* _pFile)
+void CRes::SaveKeyPath(YAML::Emitter& _emitter)
 {
-	SaveWStringToFile(m_strKey, _pFile);
-	SaveWStringToFile(m_strRelativePath, _pFile);
+	_emitter << YAML::Key << "ResourceKey";
+	_emitter << YAML::Value << WStringToString(m_strKey);
+	_emitter << YAML::Key << "ResourceRelativePath";
+	_emitter << YAML::Value << WStringToString(m_strRelativePath);
 }
 
-void CRes::LoadKeyPath(FILE* _pFile)
+void CRes::LoadKeyPath(YAML::Node& _node)
 {
-	LoadWStringFromFile(m_strKey, _pFile);
-	LoadWStringFromFile(m_strRelativePath, _pFile);
+	m_strKey = StringToWString(_node["ResourceKey"].as<string>());
+	m_strRelativePath = StringToWString(_node["ResourceRelativePath"].as<string>());
 }

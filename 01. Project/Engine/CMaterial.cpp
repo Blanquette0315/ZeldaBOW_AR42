@@ -144,73 +144,106 @@ void CMaterial::Clear()
 	}
 }
 
-//void CMaterial::Save(const wstring& _strRelativePath)
-//{
-//	// 파일과 1:1 매칭 확인
-//	// 확인을 해서 true가 나오면 저장을 하고, false가 반환되면 저장을 안하고 중단을 건다.
-//	if (!CheckRelativePath(_strRelativePath))
-//		assert(nullptr);
-//
-//	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-//	strFilePath += _strRelativePath;
-//
-//	FILE* pFile = nullptr;
-//	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
-//
-//	// 재질 이름 저장
-//	CEntity::SaveToFile(pFile);
-//
-//	// Key, RelativePath 저장
-//	SaveKeyPath(pFile);
-//
-//	// 참조 쉐이더 정보 저장
-//	// Shader는 우리가 항상 수동으로 코딩해서 만들기 때문에 이미 ResMgr에 등록이 되어있을 것이다. 항상.
-//	// 따라서 shader는 키값만 저장해 찾아서 사용하는 방식을 채택했다.
-//	SaveResourceRef(m_pShader, pFile);
-//
-//	// 상수, 참조 텍스쳐 정보 저장
-//	// Shader가 없다면 전달하는 값도 의미가 없기 때문에 체크해주고 저장한다.
-//	if (nullptr != m_pShader)
-//	{
-//		// 상수 파라미터는 그대로 있는것을 저장하면 된다.
-//		fwrite(&m_tConst, sizeof(tMtrlConst), 1, pFile);
-//
-//		for (UINT i = 0; i < TEX_PARAM::TEX_END; ++i)
-//		{
-//			// 텍스처 파라미터는 참조중인 Texture를 SaveResourceRef를 이용해 저장한다.
-//			SaveResourceRef(m_arrTex[i], pFile);
-//		}
-//	}
-//
-//	fclose(pFile);
-//}
-//
-//int CMaterial::Load(const wstring& _strFilePath)
-//{
-//	FILE* pFile = nullptr;
-//	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
-//
-//	// 이름 불러오기
-//	CEntity::LoadFromFile(pFile);
-//
-//	// Key, RelativePath 불러오기
-//	LoadKeyPath(pFile);
-//
-//	// 참조 쉐이더 복구
-//	LoadResourceRef(m_pShader, pFile);
-//
-//	// 상수, 참조 텍스쳐 정보 복구
-//	if (nullptr != m_pShader)
-//	{
-//		fread(&m_tConst, sizeof(tMtrlConst), 1, pFile);
-//
-//		for (UINT i = 0; i < TEX_END; ++i)
-//		{
-//			LoadResourceRef(m_arrTex[i], pFile);
-//		}
-//	}
-//
-//	fclose(pFile);
-//
-//	return S_OK; 
-//}
+void CMaterial::Save(const wstring& _strRelativePath)
+{
+	// 파일과 1:1 매칭 확인
+	// 확인을 해서 true가 나오면 저장을 하고, false가 반환되면 저장을 안하고 중단을 건다.
+	if (!CheckRelativePath(_strRelativePath))
+		assert(nullptr);
+
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	YAML::Emitter emitter;
+	emitter << YAML::BeginMap;
+
+	// 재질 이름 저장
+	CEntity::SaveToYAML(emitter);
+
+	// Key, RelativePath 저장
+	SaveKeyPath(emitter);
+
+	// 참조 쉐이더 정보 저장
+	// Shader는 우리가 항상 수동으로 코딩해서 만들기 때문에 이미 ResMgr에 등록이 되어있을 것이다. 항상.
+	// 따라서 shader는 키값만 저장해 찾아서 사용하는 방식을 채택했다.
+	emitter << YAML::Key << "MaterialShader";
+	emitter << YAML::Value << YAML::BeginMap;
+	SaveResourceRef(m_pShader, emitter);
+	emitter << YAML::EndMap;
+
+	// 상수, 참조 텍스쳐 정보 저장
+	// Shader가 없다면 전달하는 값도 의미가 없기 때문에 체크해주고 저장한다.
+	if (nullptr != m_pShader)
+	{
+		// 상수 파라미터는 그대로 있는것을 저장하면 된다.
+		emitter << YAML::Key << "ConstIntArr";
+		emitter << YAML::Value << m_tConst.iArr;
+		emitter << YAML::Key << "ConstFloatArr";
+		emitter << YAML::Value << m_tConst.fArr;
+		emitter << YAML::Key << "ConstVec2Arr";
+		emitter << YAML::Value << m_tConst.v2Arr;
+		emitter << YAML::Key << "ConstVec4Arr";
+		emitter << YAML::Value << m_tConst.v4Arr;
+		emitter << YAML::Key << "ConstMatrixArr";
+		emitter << YAML::Value << m_tConst.matArr;
+		emitter << YAML::Key << "ConstHasTex";
+		emitter << YAML::Value << m_tConst.HasTex;
+
+		for (UINT i = 0; i < TEX_PARAM::TEX_END; ++i)
+		{
+			// 텍스처 파라미터는 참조중인 Texture를 SaveResourceRef를 이용해 저장한다.
+			emitter << YAML::Key << "MaterialShaderTexture" + std::to_string(i);
+			emitter << YAML::Value << YAML::BeginMap;
+			SaveResourceRef(m_arrTex[i], emitter);
+			emitter << YAML::EndMap;
+		}
+	}
+
+	emitter << YAML::EndMap;
+
+	std::ofstream fout(strFilePath);
+	fout << emitter.c_str();
+}
+
+int CMaterial::Load(const wstring& _strFilePath)
+{
+	// 파일 읽기
+	YAML::Node rootNode = YAML::LoadFile(WStringToString(_strFilePath));
+
+	// 이름 불러오기
+	CEntity::LoadFromYAML(rootNode);
+
+	// Key, RelativePath 불러오기
+	LoadKeyPath(rootNode);
+
+	// 참조 쉐이더 복구
+	YAML::Node node = rootNode["MaterialShader"];
+	LoadResourceRef(m_pShader, node);
+
+	// 상수, 참조 텍스쳐 정보 복구
+	if (nullptr != m_pShader)
+	{
+		tMtrlConst tConst;
+
+		for (UINT i = 0; i < 4; ++i)
+		{
+			m_tConst.iArr[i] = rootNode["ConstIntArr"][i].as<int>();
+			m_tConst.fArr[i] = rootNode["ConstFloatArr"][i].as<float>();
+			m_tConst.v2Arr[i] = rootNode["ConstVec2Arr"][i].as<Vec2>();
+			m_tConst.v4Arr[i] = rootNode["ConstVec4Arr"][i].as<Vec4>();
+			m_tConst.matArr[i] = rootNode["ConstMatrixArr"][i].as<Matrix>();
+		}
+		for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)
+		{
+			m_tConst.HasTex[i] = rootNode["ConstHasTex"][i].as<int>();
+		}
+		
+		for (UINT i = 0; i < TEX_PARAM::TEX_END; ++i)
+		{
+			node = rootNode["MaterialShaderTexture" + std::to_string(i)];
+			LoadResourceRef(m_arrTex[i], node);
+		}
+	}
+
+	return S_OK; 
+}

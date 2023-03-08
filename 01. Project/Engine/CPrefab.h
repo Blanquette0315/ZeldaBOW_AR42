@@ -3,8 +3,8 @@
 
 class CGameObject;
 
-typedef void (*SAVE_GAMEOBJECT)(CGameObject*, FILE*);
-typedef CGameObject* (*LOAD_GAMEOBJECT)(FILE*);
+typedef void (*SAVE_GAMEOBJECT)(CGameObject*, YAML::Emitter&);
+typedef CGameObject* (*LOAD_GAMEOBJECT)(YAML::Node&);
 
 class CPrefab :
     public CRes
