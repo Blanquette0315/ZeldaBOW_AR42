@@ -41,7 +41,7 @@ public:
     void SetTargetResource(CRes* _Resource);
     void SetTargetbyKey(DWORD_PTR _strKey);
     void SetTargetLevel(CLevel* _Level);
-    void SetTargetPrefObject(CGameObject* _Target);
+    // void SetTargetPrefObject(CGameObject* _Target);
 
     UI* FindResUI(RES_TYPE _eType);
     UI* FindComponentUI(COMPONENT_TYPE _eType);
