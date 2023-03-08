@@ -80,7 +80,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL] = new DecalUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]->SetSize(ImVec2(0.f, 150.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]->SetSize(ImVec2(0.f, 250.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]);
 
 	// ResourceUI
