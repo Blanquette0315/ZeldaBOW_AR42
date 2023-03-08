@@ -266,34 +266,33 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 
 	// if Selected Node is LevelNode
-	if (IS_LevelRelativePath(pSelectedNode->GetData()))
+
+
+
+	if (dynamic_cast<CGameObject*>((CEntity*)pSelectedNode->GetData()))
+	{
+		// Prefab child obj
+		CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
+		Inspector->SetTargetObject(pPrefabObject);
+	}
+	//else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
+	//{
+	//	Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
+	//	CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
+	//	Inspector->SetTargetPrefObject(pProtoObject);
+	//}
+	else if(dynamic_cast<CRes*>((CEntity*)pSelectedNode->GetData()))
+	{
+		Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
+		// InspectorUI�� Ŭ���� Resource�� �˷��ش�.
+		Inspector->SetTargetResource(pRes.Get());
+	}
+	else
 	{
 		// TargetLevel's RelativePath impart to InspectorUI
 		Inspector->SetTargetLevel((wstring*)pSelectedNode->GetData());
 	}
 
-	// if Selected Node is ResNode
-	else
-	{
-		if (dynamic_cast<CGameObject*>((CEntity*)pSelectedNode->GetData()))
-		{
-			// Prefab child obj
-			CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
-			Inspector->SetTargetObject(pPrefabObject);
-		}
-		//else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
-		//{
-		//	Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
-		//	CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
-		//	Inspector->SetTargetPrefObject(pProtoObject);
-		//}
-		else
-		{
-			Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
-			// InspectorUI�� Ŭ���� Resource�� �˷��ش�.
-			Inspector->SetTargetResource(pRes.Get());
-		}
-	}
 }
 
 void ContentUI::FindContentFileName(const wstring& _strFolderPath)
