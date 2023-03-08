@@ -140,14 +140,14 @@ void CEventMgr::tick()
 		}
 			break;
 
-		case EVENT_TYPE::DELETE_LEVEL:
-		{
-			// wParam : Level Adress
-			CLevel* _pTarget = (CLevel*)m_vecEvent[i].wParam;
-			CLevelMgr::GetInst()->DeRegisterLevel(_pTarget->GetRelativePath());
-			m_bLevelChanged = true;
-		}
-			break;
+		//case EVENT_TYPE::DELETE_LEVEL:
+		//{
+		//	// wParam : Level Adress
+		//	CLevel* _pTarget = (CLevel*)m_vecEvent[i].wParam;
+		//	CLevelMgr::GetInst()->DeRegisterLevel(_pTarget->GetRelativePath());
+		//	m_bLevelChanged = true;
+		//}
+		//	break;
 
 		case EVENT_TYPE::CHANGE_PREFAB:
 		{

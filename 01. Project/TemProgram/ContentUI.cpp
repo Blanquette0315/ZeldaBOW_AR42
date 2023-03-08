@@ -33,6 +33,7 @@ ContentUI::ContentUI()
 
 ContentUI::~ContentUI()
 {
+
 }
 
 void ContentUI::update()
@@ -96,19 +97,27 @@ void ContentUI::ResetContent()
 	// ContentUI에 Level 추가
 	TreeNode* pLevelNode = m_Tree->AddItem(pRootNode, "All Level", 0, true);
 
-	const map<wstring, CLevel*>& mapLevels = CLevelMgr::GetInst()->GetLevels();
-
-	map<wstring, CLevel*>::const_iterator liter = mapLevels.begin();
-	for (; liter != mapLevels.end(); ++liter)
+	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
 	{
-		wstring strLevelName = liter->first;
-		m_Tree->AddItem(pLevelNode, string(strLevelName.begin(), strLevelName.end()), (DWORD_PTR)liter->second);
+		wstring strLevelName = m_vecLevelName[i];
+		size_t idx = strLevelName.find(L"\\");
+		strLevelName.erase(0, idx + 1);
+		m_Tree->AddItem(pLevelNode, string(strLevelName.begin(), strLevelName.end()), (DWORD_PTR)&m_vecLevelName[i]);
 	}
 
 }
 
 void ContentUI::ReloadContent()
 {
+	m_vecContentName.clear();
+	m_vecLevelName.clear();
+
+	// A problem arises when Reload Content() is called when the InspectorUI target is a level.
+	// This is because the address of the const wstring ("m_vecLevelName") is lost.
+	// So, use Function SetTargetLevel(nullptr)
+	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+	Inspector->SetTargetLevel(nullptr);
+
 	// Content 폴더에 있는 모든 리소스들을 검사 및 로딩
 	wstring strFolderPath = CPathMgr::GetInst()->GetContentPath();
 	FindContentFileName(strFolderPath);
@@ -145,13 +154,11 @@ void ContentUI::ReloadContent()
 			break;
 
 		case RES_TYPE::LEVEL:
-			if (nullptr == CLevelMgr::GetInst()->FindLevel(m_vecContentName[i]))
-			{
-				CLevel* pLoadLevel = CSaveLoadMgr::GetInst()->LoadLevel(m_vecContentName[i]);
-				CLevelMgr::GetInst()->RegisterLevel(m_vecContentName[i], pLoadLevel);
-				ResetContent();
-			}
-			
+		{
+			// vector에 계속 추가되는지 확인해봐야 함.
+			m_vecLevelName.push_back(m_vecContentName[i]);
+			ResetContent();
+		}
 			break;
 		}
 	}
@@ -204,53 +211,48 @@ void ContentUI::ReloadContent()
 	}
 
 	// 로딩된 레벨 파일이 실제로 있는지 확인
-	const map<wstring, CLevel*>& mapLevel = CLevelMgr::GetInst()->GetLevels();
-
-	map<wstring, CLevel*>::const_iterator iter = mapLevel.begin();
-	for (iter; iter != mapLevel.end(); ++iter)
+	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
 	{
-		wstring strRelativePath = iter->second->GetRelativePath();
+		wstring strRelativePath = m_vecLevelName[i];
 
 		if (!filesystem::exists(strFolderPath + strRelativePath))
 		{
-			// 지워진 레벨 파일이 현재 레벨이 아니라면 로딩한 파일에서 제거한다.
-			if (iter->second != CLevelMgr::GetInst()->GetCurLevel())
-			{
-				// 이밴트 처리로 바꾸어 주어야 한다.
-				tEvent DeRegiLevel = {};
-				DeRegiLevel.eType = EVENT_TYPE::DELETE_LEVEL;
-				DeRegiLevel.wParam = (DWORD_PTR)iter->second;
-				
-				CEventMgr::GetInst()->AddEvent(DeRegiLevel);
-
-				MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
-			}
-			else
-			{
-				// 현재 레벨 객체가 파일로써는 지워 졌다면 로딩한 곳에서 빼면 안된다.
-				MessageBox(nullptr, L"사용 중 인 리소스/n리소스 삭제 실패", L"리소스 변경 확인", MB_OK);
-			}
+			// Erase Level Relative Path to m_vecLevelName
+			m_vecLevelName.erase(m_vecLevelName.begin() + i);
+			ResetContent();
+			MessageBox(nullptr, L"원본 레벨 삭제됨", L"리소스 변경 확인", MB_OK);
 		}
 	}
 }
 
+bool ContentUI::Is_ValidLvPath(const wstring& _strLvRelativePath)
+{
+	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
+	{
+		// If any of the files in the folder have the same file, FAILED!
+		if (_strLvRelativePath == m_vecLevelName[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 {
-	// _res : 클릭된 노드
+	// _res : Selected Node
 	TreeNode* pSelectedNode = (TreeNode*)_res;
 
 	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 
-	// 선택된 노드가 Level일 경우
-	if (dynamic_cast<CLevel*>((CEntity*)pSelectedNode->GetData()))
+	// if Selected Node is LevelNode
+	if (IS_LevelRelativePath(pSelectedNode->GetData()))
 	{
-		// InspectorUI에 클릭된 Level을 알려준다.
-		CLevel* pLevel = (CLevel*)pSelectedNode->GetData();
-		Inspector->SetTargetLevel(pLevel);
-
+		// TargetLevel's RelativePath impart to InspectorUI
+		Inspector->SetTargetLevel((wstring*)pSelectedNode->GetData());
 	}
 
-	// 선택된 노드가 Res일 경우
+	// if Selected Node is ResNode
 	else
 	{
 		Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
@@ -262,7 +264,7 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 			Inspector->SetTargetObject(pref->GetProtoObj());
 		}
 
-		// InspectorUI에 클릭된 Resource를 알려준다.
+		// TargetNode's Data(Resource) impart to InspectorUI
 		Inspector->SetTargetResource(pRes.Get());
 	}
 }

@@ -4,6 +4,7 @@
 #include <Engine/CLevel.h>
 #include "CImGuiMgr.h"
 #include "CSaveLoadMgr.h"
+#include "ContentUI.h"
 
 InputTextUI::InputTextUI(const string& _strName)
 	: UI(_strName.c_str())
@@ -82,6 +83,19 @@ void InputTextUI::CreateTextPopup(const string& _strPopupName, const string& _st
 void InputTextUI::CreateLevel(DWORD_PTR _strLvName)
 {
 	string NewName = (char*)_strLvName;
+
+	// SameFile Check in LevelFolder
+	wstring RelativePath = L"level\\";
+	RelativePath += wstring(NewName.begin(), NewName.end());
+	RelativePath += L".lv";
+
+	ContentUI* pContentUI = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
+	if (!pContentUI->Is_ValidLvPath(RelativePath))
+	{
+		MessageBox(nullptr, L"동일한 이름의 레벨 파일이 이미 존재한다.", L"레벨 생성 실패!!", MB_OK);
+		return;
+	}
+
 	wstring wNewName = wstring(NewName.begin(), NewName.end());
 
 	CLevel* pLevel = new CLevel;

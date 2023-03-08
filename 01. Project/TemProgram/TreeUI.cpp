@@ -130,8 +130,8 @@ void TreeNode::render_update()
 			// �ش� ��尡 ContentTree �Ҽӳ���� ���
 			if (m_TreeUI->GetName() == "##ContentTree")
 			{
-				// �ش� ��尡 Level����� ���
-				if (dynamic_cast<CLevel*>((CEntity*)m_data))
+				// if m_data is LevelRelativePath
+				if (IS_LevelRelativePath(m_data))
 				{
 					ImGui::OpenPopup("##LevelNode");
 				}
@@ -187,7 +187,7 @@ void TreeNode::render_update()
 			OutLiner->render_update();
 		}
 
-		// LevelNode Popup ����
+		// Create LevelNode Popup
 		{
 			static PopupUI* LevelNode = new PopupUI("##LevelNode");
 
@@ -214,7 +214,7 @@ void TreeNode::render_update()
 			MaterialNode->render_update();
 		}
 
-		// Create Level? Modal Popup �����ִ� ��Ʈ
+		// Create "Create Level?" Modal Popup
 		if (bOpenLevelName)
 		{
 			ImGui::OpenPopup("Create Level?");
@@ -226,7 +226,7 @@ void TreeNode::render_update()
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-		// InputTextPopup ����
+		// Create InputTextPopup
 		static InputTextUI* pPopupTextUI = new InputTextUI("##CreateLevel");
 		pPopupTextUI->SetFunc_1((FUNC_1)&InputTextUI::CreateLevel);
 		pPopupTextUI->CreateTextPopup("Create Level?", "Input Level Name");

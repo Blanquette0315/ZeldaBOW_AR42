@@ -29,19 +29,6 @@ void MenuUI::render()
         // 이곳에 저장기능을 하는 것을 넣어주면 좋을 것이다.
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("All Level Save"))
-            {
-                // LevelMgr로부터 레벨들을 가져와서 모두 저장해 주어야하는 기능.
-                const map<wstring, CLevel*>& mapLevels = CLevelMgr::GetInst()->GetLevels();
-
-                map<wstring, CLevel*>::const_iterator iter = mapLevels.begin();
-
-                for (; iter != mapLevels.end(); ++iter)
-                {
-                    CLevel* pTargetLevel = iter->second;
-                    CSaveLoadMgr::GetInst()->SaveLevel(pTargetLevel);
-                }
-            }
 
             if (ImGui::MenuItem("Level Save"))
             {

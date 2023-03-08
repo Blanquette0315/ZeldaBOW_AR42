@@ -15,7 +15,7 @@ CLevelMgr::CLevelMgr()
 
 CLevelMgr::~CLevelMgr()
 {
-	Safe_Del_Map<wstring, CLevel*>(m_mapLevel);
+	delete m_pCurLevel;
 }
 
 void CLevelMgr::init()
@@ -23,7 +23,6 @@ void CLevelMgr::init()
 	// 임시 Level 제작하기
 	m_pCurLevel = new CLevel;
 	m_pCurLevel->SetName(L"Level 0");
-	RegisterLevel(m_pCurLevel->GetName(), m_pCurLevel);
 }
 
 void CLevelMgr::progress()
@@ -58,49 +57,21 @@ void CLevelMgr::FindObjectByName(const wstring& _name, vector<CGameObject*>& _ou
 
 void CLevelMgr::ChangeLevel(CLevel* _NextLevel)
 {
-	// 현재 레벨이 임시 레벨이었을 경우 지우기
-	//if (L"Level 0" == m_pCurLevel->GetName())
-	//{
-	//	m_mapLevel.erase(L"Level 0");
-	//	delete m_pCurLevel;
-	//}
+	CLevel* pPrevLevel = nullptr;
 
 	if (nullptr != m_pCurLevel)
 	{
 		m_pCurLevel->SetState(LEVEL_STATE::STOP);
+		pPrevLevel = m_pCurLevel;
 	}
-
+	
 	m_pCurLevel = _NextLevel;
 	// 변경될 Level이 지닌 Collsion 충돌 설정 값으로 변경해준다.
 	_NextLevel->RefreshCollsionSet();
+
+	if (nullptr != pPrevLevel)
+		delete pPrevLevel;
 }
-
-void CLevelMgr::RegisterLevel(const wstring& _strKey, CLevel* _level)
-{
-	CLevel* pTemLevel = FindLevel(_strKey);
-	assert(!pTemLevel);
-
-	m_mapLevel.insert(make_pair(_strKey, _level));
-}
-
-void CLevelMgr::DeRegisterLevel(const wstring& _strKey)
-{
-	map<wstring, CLevel*>::const_iterator iter = m_mapLevel.find(_strKey);
-	CLevel* TargetLevel = iter->second;
-	m_mapLevel.erase(_strKey);
-
-	delete TargetLevel;
-}
-
-CLevel* CLevelMgr::FindLevel(const wstring& _strKey)
-{
-	map<wstring, CLevel*>::const_iterator iter = m_mapLevel.find(_strKey);
-	if (iter == m_mapLevel.end())
-		return nullptr;
-	else
-		return iter->second;
-}
-
 
 void CLevelMgr::ChangeLevelState(LEVEL_STATE _State)
 {

@@ -176,7 +176,6 @@ enum class EVENT_TYPE
 	DELETE_RES,			// wParam : RES_TYPE, lParam : Resource Adress
 	CHANGE_PREFAB,
 	CHANGE_LEVEL_STATE, //wParam : Next Level State
-	DELETE_LEVEL,		// wParam : LevelAdress
 	SLOWTIME,
 
 	END,

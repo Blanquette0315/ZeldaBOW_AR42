@@ -29,7 +29,7 @@ private:
     int                     m_iCurItem;
     bool                    m_bMouseCheck;
 
-    CLevel*                 m_TargetLevel;
+    const wstring*          m_TargetLevelPath;
     LevelUI*                m_pLevelUI;
 
 public:
@@ -38,7 +38,7 @@ public:
     void SetTargetObject(CGameObject* _Target);
     void SetTargetResource(CRes* _Resource);
     void SetTargetbyKey(DWORD_PTR _strKey);
-    void SetTargetLevel(CLevel* _Level);
+    void SetTargetLevel(const wstring* _LevelPath);
 
     UI* FindResUI(RES_TYPE _eType);
     UI* FindComponentUI(COMPONENT_TYPE _eType);
