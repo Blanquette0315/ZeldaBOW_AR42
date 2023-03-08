@@ -8,6 +8,8 @@
 #include <Engine/CLevelMgr.h>
 #include <Engine/CLevel.h>
 #include <Engine/CSound.h>
+#include <Engine/CGameObject.h>
+#include <Engine/CPrefab.h>
 
 #include "CImGuiMgr.h"
 #include "InspectorUI.h"
@@ -85,11 +87,36 @@ void ContentUI::ResetContent()
 
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource((RES_TYPE)i);
 
-		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
-		for (; iter != mapRes.end(); ++iter)
+		if( i == (UINT)RES_TYPE::PREFAB)
 		{
-			wstring strName = iter->first;
-			m_Tree->AddItem(pResNode, string(strName.begin(), strName.end()), (DWORD_PTR)iter->second.Get());
+			map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
+			for (; iter != mapRes.end(); ++iter)
+			{
+				wstring strName = iter->first;
+				TreeNode* pParentObjNode = m_Tree->AddItem(pResNode, string(strName.begin(), strName.end()), (DWORD_PTR)iter->second.Get());
+
+				// protoobj
+				iter->second; // Prefab
+				Ptr<CPrefab> pPref = (CPrefab*)iter->second.Get();
+				CGameObject* pParentObj = pPref->GetProtoObj();
+				
+				// 부모 오브젝트만 넣어도 해당 오브젝트의 자식까지 재귀함수를 통해 노드를 추가해준다.
+				const vector<CGameObject*>& vecChild = pParentObj->GetChildObject();
+				for (size_t i = 0; i < vecChild.size(); ++i)
+				{
+					const wstring& wstrChildName = vecChild[i]->GetName();
+					m_Tree->AddItem(pParentObjNode, string(wstrChildName.begin(), wstrChildName.end()), (DWORD_PTR)vecChild[i]);
+				}
+			}
+		}
+		else
+		{
+			map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
+			for (; iter != mapRes.end(); ++iter)
+			{
+				wstring strName = iter->first;
+				m_Tree->AddItem(pResNode, string(strName.begin(), strName.end()), (DWORD_PTR)iter->second.Get());
+			}
 		}
 	}
 
@@ -104,7 +131,6 @@ void ContentUI::ResetContent()
 		wstring strLevelName = liter->first;
 		m_Tree->AddItem(pLevelNode, string(strLevelName.begin(), strLevelName.end()), (DWORD_PTR)liter->second);
 	}
-
 }
 
 void ContentUI::ReloadContent()
@@ -247,23 +273,29 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 		// InspectorUI에 클릭된 Level을 알려준다.
 		CLevel* pLevel = (CLevel*)pSelectedNode->GetData();
 		Inspector->SetTargetLevel(pLevel);
-
 	}
 
 	// 선택된 노드가 Res일 경우
 	else
 	{
-		Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
-
-		// Prefab
-		if (pRes->GetResType() == RES_TYPE::PREFAB)
+		if (dynamic_cast<CGameObject*>((CEntity*)pSelectedNode->GetData()))
 		{
-			Ptr<CPrefab> pref = (CPrefab*)pRes.Get();
-			Inspector->SetTargetObject(pref->GetProtoObj());
+			// Prefab child obj
+			CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
+			Inspector->SetTargetPrefObject(pPrefabObject);
 		}
-
-		// InspectorUI에 클릭된 Resource를 알려준다.
-		Inspector->SetTargetResource(pRes.Get());
+		else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
+		{
+			Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
+			CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
+			Inspector->SetTargetPrefObject(pProtoObject);
+		}
+		else
+		{
+			Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
+			// InspectorUI에 클릭된 Resource를 알려준다.
+			Inspector->SetTargetResource(pRes.Get());
+		}
 	}
 }
 

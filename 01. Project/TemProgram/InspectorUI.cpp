@@ -256,6 +256,11 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 		SetTargetLevel(nullptr);
 	}
 
+	if (nullptr != m_TargetPrefObj && _Target != nullptr)
+	{
+		SetTargetPrefObject(nullptr);
+	}
+
 	m_TargetObj = _Target;
 
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
@@ -399,6 +404,51 @@ void InspectorUI::SetTargetLevel(CLevel* _Level)
 	{
 		m_pLevelUI->SetTarget(nullptr);
 		m_pLevelUI->Close();
+	}
+}
+
+void InspectorUI::SetTargetPrefObject(CGameObject* _Target)
+{
+	// Object가 타겟인 상태였다면
+	if (nullptr != m_TargetObj)
+	{
+		SetTargetObject(nullptr);
+	}
+
+	// Level이 타겟이었다면
+	if (nullptr != m_TargetLevel)
+	{
+		SetTargetLevel(nullptr);
+	}
+
+	if (nullptr != _Target)
+	{
+		// 기존에 가리키던 리소스가 있으면, 해당 UI를 끄고
+		if (nullptr != m_TargetRes && nullptr != m_arrResUI[(UINT)m_TargetRes->GetResType()])
+		{
+			m_arrResUI[(UINT)m_TargetRes->GetResType()]->Close();
+		}
+
+		// 새로 지정된 리소스를 담당하는 UI를 활성화
+		m_TargetPrefObj = _Target;
+		RES_TYPE eType = RES_TYPE::PREFAB;
+
+		if (nullptr != m_arrResUI[(UINT)eType])
+		{
+			m_arrResUI[(UINT)eType]->SetTargetObj(m_TargetPrefObj);
+			m_arrResUI[(UINT)eType]->Open();
+		}
+	}
+	else
+	{
+		for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i)
+		{
+			if (nullptr != m_arrResUI[i])
+			{
+				m_arrResUI[i]->SetTarget(nullptr);
+				m_arrResUI[i]->Close();
+			}
+		}
 	}
 }
 
