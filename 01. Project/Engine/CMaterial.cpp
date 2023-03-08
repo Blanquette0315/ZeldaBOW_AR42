@@ -177,17 +177,22 @@ void CMaterial::Save(const wstring& _strRelativePath)
 	{
 		// 상수 파라미터는 그대로 있는것을 저장하면 된다.
 		emitter << YAML::Key << "ConstIntArr";
-		emitter << YAML::Value << m_tConst.iArr;
+		emitter << YAML::Value << YAML::BeginSeq << m_tConst.iArr[0] << m_tConst.iArr[1] << m_tConst.iArr[2] << m_tConst.iArr[3] << YAML::EndSeq;
 		emitter << YAML::Key << "ConstFloatArr";
-		emitter << YAML::Value << m_tConst.fArr;
+		emitter << YAML::Value << YAML::BeginSeq << m_tConst.fArr[0] << m_tConst.fArr[1] << m_tConst.fArr[2] << m_tConst.fArr[3] << YAML::EndSeq;
 		emitter << YAML::Key << "ConstVec2Arr";
-		emitter << YAML::Value << m_tConst.v2Arr;
+		emitter << YAML::Value << YAML::BeginSeq << m_tConst.v2Arr[0] << m_tConst.v2Arr[1] << m_tConst.v2Arr[2] << m_tConst.v2Arr[3] << YAML::EndSeq;
 		emitter << YAML::Key << "ConstVec4Arr";
-		emitter << YAML::Value << m_tConst.v4Arr;
+		emitter << YAML::Value << YAML::BeginSeq << m_tConst.v4Arr[0] << m_tConst.v4Arr[1] << m_tConst.v4Arr[2] << m_tConst.v4Arr[3] << YAML::EndSeq;
 		emitter << YAML::Key << "ConstMatrixArr";
-		emitter << YAML::Value << m_tConst.matArr;
+		emitter << YAML::Value << YAML::BeginSeq << m_tConst.matArr[0] << m_tConst.matArr[1] << m_tConst.matArr[2] << m_tConst.matArr[3] << YAML::EndSeq;
 		emitter << YAML::Key << "ConstHasTex";
-		emitter << YAML::Value << m_tConst.HasTex;
+		emitter << YAML::Value << YAML::BeginSeq;
+		for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)
+		{
+			emitter << m_tConst.HasTex[i];
+		}
+		emitter << YAML::EndSeq;
 
 		for (UINT i = 0; i < TEX_PARAM::TEX_END; ++i)
 		{
