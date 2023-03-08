@@ -27,7 +27,6 @@ CResMgr::~CResMgr()
 	}
 }
 
-
 void CResMgr::AddRes(const wstring& _strKey, RES_TYPE _type, CRes* _pRes)
 {
 	Ptr<CRes> pRes = FindRes(_strKey, _type);
