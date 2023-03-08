@@ -123,8 +123,9 @@ inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 	RES_TYPE eResType = GetType<T>();
 
 	CRes* pRes = FindRes<T>(_strKey).Get();
-
-	assert(!pRes);
+	if(pRes)
+		return;
+	//assert(!pRes);
 
 	_pRes->SetKey(_strKey);
 	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
