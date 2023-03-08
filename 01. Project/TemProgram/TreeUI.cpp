@@ -131,7 +131,7 @@ void TreeNode::render_update()
 			if (m_TreeUI->GetName() == "##ContentTree")
 			{
 				// if m_data is LevelRelativePath
-				if (IS_LevelRelativePath(m_data))
+				if (m_bIsDataLevel && IS_LevelRelativePath(m_data))
 				{
 					ImGui::OpenPopup("##LevelNode");
 				}
