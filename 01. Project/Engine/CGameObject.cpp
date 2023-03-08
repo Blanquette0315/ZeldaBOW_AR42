@@ -157,13 +157,13 @@ void CGameObject::ChangePrefab()
 
 	// 중복이 되지 않도록 넘버링을 해준다.
 	UINT Count = 0;
-
+	
+	wstring strTempName;
 	while (true)
 	{
 		wstring Number = std::to_wstring(Count);
 
-		wstring strTempName = strKey;
-		strTempName += Number;
+		strTempName = strKey + Number;
 
 		if (nullptr != CResMgr::GetInst()->FindRes<CPrefab>(strTempName).Get())
 		{
@@ -171,12 +171,23 @@ void CGameObject::ChangePrefab()
 		}
 		else
 		{
-			// 중복되지 않는 키값을 찾았으면, 해당 키값으로 Prefab을 등록해준다.
-			CResMgr::GetInst()->AddRes(strTempName, new CPrefab(temClone));
+
 			break;
 		}
 	}
-	
+	// 중복되지 않는 키값을 찾았으면, 해당 키값으로 Prefab을 등록해준다.
+	Ptr<CPrefab> pNewPref = new CPrefab(temClone);
+	wstring strRelativePath;
+	strRelativePath = L"prefab\\";
+	strRelativePath += GetName();
+	strRelativePath += L".pref";
+	pNewPref->Save(strRelativePath);
+
+	// in ui -> reload
+	delete pNewPref->GetProtoObj();
+	pNewPref->m_pProtoObj = nullptr;
+	pNewPref = nullptr;
+	//CResMgr::GetInst()->AddRes(strTempName, pNewPref.Get());
 }
 
 void CGameObject::AddComponent(CComponent* _pComponent)

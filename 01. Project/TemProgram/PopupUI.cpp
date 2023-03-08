@@ -153,8 +153,62 @@ void PopupUI::Func_NewMaterial()
 	pMtrl->SetName(strKey);
 	CResMgr::GetInst()->AddRes<CMaterial>(strKey, pMtrl.Get());
 
+	Func_SaveMaterial(pMtrl);
+
 	ContentUI* pContentUI = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
 	pContentUI->ResetContent();
+}
+
+void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
+{
+	if (!_pMtrl->IsEngineRes())
+	{
+		// 처음 저장하는 거라면, 경로까지 지정을 해서 저장을 해주어야 한다.
+		// 덮어 씌워 저장한다면, 경로를 재지정 하면 안된다.
+		if (L"" == _pMtrl->GetRelativePath())
+		{
+			wstring strRelativePath;
+
+			strRelativePath = L"material\\";
+			strRelativePath += _pMtrl->GetKey();
+			strRelativePath += L".mtrl";
+			_pMtrl->Save(strRelativePath);
+
+			// 경로가 없던 임시 재질은 해제해 주어야 한다.
+			tEvent DelMtrl = {};
+			DelMtrl.eType = EVENT_TYPE::DELETE_RES;
+			DelMtrl.wParam = (DWORD_PTR)_pMtrl->GetResType();
+			DelMtrl.lParam = (DWORD_PTR)_pMtrl.Get();
+
+			CEventMgr::GetInst()->AddEvent(DelMtrl);
+
+		}
+		else
+		{
+			// 이름과 키가 일치하지 않는다면 이름 값으로 변경해주어야 한다.
+			// 이름을 경로 처럼 변경 하거나 경로를 이름 처럼 변경해서 비교해야한다.
+			// 우선은 이름을 경로처럼 변경하는 방식으로 진행할 것이다.
+
+			wstring strNamePath = {};
+
+			strNamePath = L"material\\";
+			strNamePath += _pMtrl->GetName();
+			strNamePath += L".mtrl";
+
+			if (strNamePath != _pMtrl->GetKey())
+			{
+				_pMtrl->Save(strNamePath);
+				// 저장이 되고나면 이름이 아에 정해진 것이기 때문에 다시 false를 넣어주어야 한다.
+				_pMtrl->ChangeName(false);
+			}
+
+			// 이름과 키값이 일치하면 이전 경로 그대로를 넣어 덮어씌운다.
+			else
+			{
+				_pMtrl->Save(_pMtrl->GetRelativePath());
+			}
+		}
+	}
 }
 
 void PopupUI::Func_NewLevel()

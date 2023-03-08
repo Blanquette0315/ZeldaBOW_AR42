@@ -34,8 +34,12 @@ public:
     void Func_NewObj();
     void Func_DeleteObj(DWORD_PTR _lFactor);
     void Func_ChangePrefab(DWORD_PTR _lFactor);
+
     void Func_NewLevel(DWORD_PTR _lFactor);
+
     void Func_NewMaterial();
+    void Func_SaveMaterial(Ptr<CMaterial> _pMtrl);
+
 
     // 대상 노드가 LevelNode일때,
     void Func_NewLevel();

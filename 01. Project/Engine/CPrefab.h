@@ -33,4 +33,5 @@ public:
     ~CPrefab();
 
     friend class CResMgr;
+    friend class CGameObject;
 };
