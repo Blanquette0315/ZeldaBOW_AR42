@@ -217,6 +217,7 @@
     <ClInclude Include="TreeUI.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIdefine.h" />
+    <ClInclude Include="UIFunc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animator2DUI.cpp" />
@@ -277,6 +278,7 @@
     <ClCompile Include="TransformUI.cpp" />
     <ClCompile Include="TreeUI.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UIFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TemProgram.rc" />

@@ -245,13 +245,14 @@ void InspectorUI::SetTargetbyKey(DWORD_PTR _strKey)
 
 void InspectorUI::SetTargetObject(CGameObject* _Target)
 {
-	// Resource가 타겟인 상태였다면
+	// if Prev Target is Resource
 	if (nullptr != m_TargetRes && _Target != nullptr)
 	{
 		SetTargetResource(nullptr);
 	}
 
-	if (nullptr != m_TargetLevel && _Target != nullptr)
+	// if Prev Target is Level
+	if (nullptr != m_TargetLevelPath && _Target != nullptr)
 	{
 		SetTargetLevel(nullptr);
 	}
@@ -325,14 +326,14 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 
 void InspectorUI::SetTargetResource(CRes* _Resource)
 {
-	// Object가 타겟인 상태였다면
+	// if Prev Target is Object
 	if (nullptr != m_TargetObj)
 	{
 		SetTargetObject(nullptr);
 	}
 
-	// Level이 타겟이었다면
-	if (nullptr != m_TargetLevel)
+	// if Prev Target is Level
+	if (nullptr != m_TargetLevelPath)
 	{
 		SetTargetLevel(nullptr);
 	}
@@ -368,28 +369,28 @@ void InspectorUI::SetTargetResource(CRes* _Resource)
 	}
 }
 
-void InspectorUI::SetTargetLevel(CLevel* _Level)
+void InspectorUI::SetTargetLevel(const wstring* _LevelPath)
 {
 	// Resource가 Target이었다면
-	if (nullptr != m_TargetRes && nullptr != _Level)
+	if (nullptr != m_TargetRes && nullptr != _LevelPath)
 	{
 		SetTargetResource(nullptr);
 	}
 	// Object가 Target이었다면
-	if (nullptr != m_TargetObj && nullptr != _Level)
+	if (nullptr != m_TargetObj && nullptr != _LevelPath)
 	{
 		SetTargetObject(nullptr);
 	}
 
-	m_TargetLevel = _Level;
+	m_TargetLevelPath = _LevelPath;
 
 	// 들어온 Target Level이 nullptr이 아니라면 UI에게 Target을 지정하고 열어 주어야 한다.
-	if (nullptr != _Level)
+	if (nullptr != _LevelPath)
 	{
 
 		if (nullptr != m_pLevelUI)
 		{
-			m_pLevelUI->SetTarget(m_TargetLevel);
+			m_pLevelUI->SetTarget(m_TargetLevelPath);
 			m_pLevelUI->Open();
 		}
 	}

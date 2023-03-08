@@ -18,3 +18,5 @@
 #else
 #pragma comment(lib, "Script\\Script.lib")
 #endif
+
+#include "UIFunc.h"
