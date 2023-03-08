@@ -8,6 +8,8 @@
 #include <Engine/CLevelMgr.h>
 #include <Engine/CLevel.h>
 #include <Engine/CSound.h>
+#include <Engine/CGameObject.h>
+#include <Engine/CPrefab.h>
 
 #include "CImGuiMgr.h"
 #include "InspectorUI.h"
@@ -21,13 +23,13 @@ ContentUI::ContentUI()
 	m_Tree = new TreeUI("##ContentTree");
 	AddChild(m_Tree);
 
-	// Tree ¼³Á¤
+	// Tree ï¿½ï¿½ï¿½ï¿½
 	m_Tree->SetDummyRoot(true);
 
-	// Tree¿¡ Delegate µî·Ï
+	// Treeï¿½ï¿½ Delegate ï¿½ï¿½ï¿½
 	m_Tree->AddDynamic_Selected(this, (FUNC_1)& ContentUI::SetResourceToInspector);
 
-	// ÇöÀç ¸®¼Ò½º »óÅÂ¸¦ °»½Å
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 	ResetContent();
 }
 
@@ -38,7 +40,7 @@ ContentUI::~ContentUI()
 
 void ContentUI::update()
 {
-	// ResMgrÀÇ ISChangedÂÊÀ¸·Î ÇÏµµ·Ï º¯°æÇØº¸¾Æ¾ßÇÔ.
+	// ResMgrï¿½ï¿½ ISChangedï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½Æ¾ï¿½ï¿½ï¿½.
 	if (CEventMgr::GetInst()->IsLevelChanged() || CResMgr::GetInst()->IsChanged())
 	{
 		ResetContent();
@@ -64,7 +66,6 @@ void ContentUI::update()
 			}
 		}
 	}
-	
 	UI::update();
 }
 
@@ -77,7 +78,7 @@ void ContentUI::ResetContent()
 {
 	m_Tree->Clear();
 
-	// ContentUI¿¡ Res Ãß°¡
+	// ContentUIï¿½ï¿½ Res ï¿½ß°ï¿½
 	TreeNode* pRootNode = m_Tree->AddItem(nullptr, "Content", 0);
 
 	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i) 
@@ -86,15 +87,34 @@ void ContentUI::ResetContent()
 
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource((RES_TYPE)i);
 
-		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
-		for (; iter != mapRes.end(); ++iter)
+		// Prefab
+		if( i == (UINT)RES_TYPE::PREFAB)
 		{
-			wstring strName = iter->first;
-			m_Tree->AddItem(pResNode, string(strName.begin(), strName.end()), (DWORD_PTR)iter->second.Get());
+			map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
+			for (; iter != mapRes.end(); ++iter)
+			{
+				wstring strName = iter->first;
+				
+				iter->second; // Prefab
+				Ptr<CPrefab> pPref = (CPrefab*)iter->second.Get();
+				CGameObject* pParentObj = pPref->GetProtoObj();
+				AddGameObjectToTree(pResNode, pParentObj);
+			}
+		}
+
+		// Other Res
+		else
+		{
+			map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
+			for (; iter != mapRes.end(); ++iter)
+			{
+				wstring strName = iter->first;
+				m_Tree->AddItem(pResNode, string(strName.begin(), strName.end()), (DWORD_PTR)iter->second.Get());
+			}
 		}
 	}
 
-	// ContentUI¿¡ Level Ãß°¡
+	// ContentUIï¿½ï¿½ Level ï¿½ß°ï¿½
 	TreeNode* pLevelNode = m_Tree->AddItem(pRootNode, "All Level", 0, true);
 
 	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
@@ -104,7 +124,6 @@ void ContentUI::ResetContent()
 		strLevelName.erase(0, idx + 1);
 		m_Tree->AddItem(pLevelNode, string(strLevelName.begin(), strLevelName.end()), (DWORD_PTR)&m_vecLevelName[i]);
 	}
-
 }
 
 void ContentUI::ReloadContent()
@@ -118,17 +137,17 @@ void ContentUI::ReloadContent()
 	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	Inspector->SetTargetLevel(nullptr);
 
-	// Content Æú´õ¿¡ ÀÖ´Â ¸ðµç ¸®¼Ò½ºµéÀ» °Ë»ç ¹× ·Îµù
+	// Content ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ ï¿½ï¿½ ï¿½Îµï¿½
 	wstring strFolderPath = CPathMgr::GetInst()->GetContentPath();
 	FindContentFileName(strFolderPath);
 
-	// ÆÄÀÏ¸íÀÇ È®ÀåÀÚ¸¦ È®ÀÎ ÈÄ ¾Ë¸ÂÀº ¸®¼Ò½º°¡ ¹«¾ùÀÎÁö ¾Ë¾Æ³½´Ù.
+	// ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ú¸ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾Æ³ï¿½ï¿½ï¿½.
 	for (size_t i = 0; i < m_vecContentName.size(); ++i)
 	{
 		RES_TYPE resType = GetResTypeByExt(m_vecContentName[i]);
 
-		// ¸®¼Ò½º Å¸ÀÔ¿¡ ÇØ´çÇÏ´Â ¸®¼Ò½º¸¦ °æ·Î·ÎºÎÅÍ ·Îµù
-		// End°¡ ¹ÝÈ¯µÇ¾ú´Ù´Â ¼Ò¸®´Â ¾Ë ¼ö ¾ø´Â È®ÀåÀÚ¶ó´Â ÀÇ¹Ì·Î ³Ñ±ä´Ù.
+		// ï¿½ï¿½ï¿½Ò½ï¿½ Å¸ï¿½Ô¿ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½Î·Îºï¿½ï¿½ï¿½ ï¿½Îµï¿½
+		// Endï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ç¾ï¿½ï¿½Ù´ï¿½ ï¿½Ò¸ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ ï¿½Ç¹Ì·ï¿½ ï¿½Ñ±ï¿½ï¿½.
 		if (RES_TYPE::END == resType)
 			continue;
 
@@ -137,14 +156,15 @@ void ContentUI::ReloadContent()
 		case RES_TYPE::PREFAB:
 			CResMgr::GetInst()->Load<CPrefab>(m_vecContentName[i], m_vecContentName[i]);
 			break;
+
 		case RES_TYPE::MESHDATA:
 
 			break;
 		case RES_TYPE::MATERIAL:
 			CResMgr::GetInst()->Load<CMaterial>(m_vecContentName[i], m_vecContentName[i]);
 			break;
-		case RES_TYPE::MESH:
 
+		case RES_TYPE::MESH:
 			break;
 		case RES_TYPE::TEXTURE:
 			CResMgr::GetInst()->Load<CTexture>(m_vecContentName[i], m_vecContentName[i]);
@@ -155,7 +175,7 @@ void ContentUI::ReloadContent()
 
 		case RES_TYPE::LEVEL:
 		{
-			// vector¿¡ °è¼Ó Ãß°¡µÇ´ÂÁö È®ÀÎÇØºÁ¾ß ÇÔ.
+			// vectorï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ ï¿½ï¿½.
 			m_vecLevelName.push_back(m_vecContentName[i]);
 			ResetContent();
 		}
@@ -163,7 +183,7 @@ void ContentUI::ReloadContent()
 		}
 	}
 
-	// ·ÎµùµÈ ¸®¼Ò½º°¡ ½ÇÁ¦ ÆÄÀÏ·Î Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+	// ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i)
 	{
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource((RES_TYPE)i);
@@ -171,25 +191,25 @@ void ContentUI::ReloadContent()
 		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
 		for (iter; iter != mapRes.end(); ++iter)
 		{
-			// Engine Res Å¸ÀÔÀÌ¸é È®ÀÎÇÏÁö ¾Ê´Â´Ù.
+			// Engine Res Å¸ï¿½ï¿½ï¿½Ì¸ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´ï¿½.
 			if (iter->second->IsEngineRes())
 			{
 				continue;
 			}
 
-			// ¿£Áø ¸®¼Ò½º°¡ ¾Æ´Ñµ¥, °æ·Î°¡ ¾ø´Ù´Â °ÍÀº ¸»ÀÌ ¾ÈµÇ±â ¶§¹®¿¡ Áß´ÜÀ» °É¾îÁØ´Ù.
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Æ´Ñµï¿½, ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½ï¿½ï¿½ ï¿½É¾ï¿½ï¿½Ø´ï¿½.
 			wstring strRelativePath = iter->second->GetRelativePath();
 			assert(!strRelativePath.empty());
 
-			// ¸Þ¸ð¸®¿¡ ·ÎµùµÈ ¸®¼Ò½º¿¡ ÇØ´çÇÏ´Â ½ÇÁ¦ ÆÄÀÏ ÀÌ Á¸ÀçÇÏÁö ¾Ê´Â °æ¿ì
-			// existsÇÔ¼ö´Â ÀÔ·ÂµÈ °æ·Î¿¡ ÆÄÀÏÀÌ ½ÇÁ¦·Î Á¸ÀçÇÏ´ÂÁö¸¦ È®ÀÎÇØÁØ´Ù.
+			// ï¿½Þ¸ð¸®¿ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½
+			// existsï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½Ô·Âµï¿½ ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 			if (!filesystem::exists(strFolderPath + strRelativePath))
 			{
-				// ½ÇÁ¦ ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸é, ResMgr¿¡¼­ »©ÁÖ¾î¼­ ·ÎµùµÈ ¸®¼Ò½º¸¦ Á¦°Å ÇØÁÖ¾î¾ß ÇÑ´Ù.
-				// ¸®¼Ò½º ¸Þ´ÏÁ®¿¡¼­ ÇØ´ç ¸®¼Ò½º¸¦ ÇØÁ¦ÇÑ´Ù.
-				// ¸®¼Ò½ºÀÇ ·¹ÆÛ·±½º Ä«¿îÆ®¸¦ È®ÀÎÇØ¼­ 1ÀÌ¸é, ResMgr¸¸ ÂüÁ¶ÇÏ°í ÀÖ´Ù´Â ¶æÀÌ¹Ç·Î ¹®Á¦°¡ ¾ø´Ù.
-				// µû¶ó¼­ 1º¸´Ù ÀÛÀº °æ¿ì¿¡¸¸ Á¦°Å¸¦ ÇØÁØ´Ù.
-				// ¸¸¾à ´Ù¸¥ °÷¿¡¼­ ÂüÁ¶ÁßÀÎµ¥, »èÁ¦¸¦ ÇØ¹ö¸®¸é ¹®Á¦°¡ µÇ±â ¶§¹®¿¡ ÀÌ·± ¹æ¹ýÀ» »ç¿ëÇß´Ù.
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´Ù¸ï¿½, ResMgrï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾î¼­ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+				// ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+				// ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ®ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ø¼ï¿½ 1ï¿½Ì¸ï¿½, ResMgrï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´Ù´ï¿½ ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+				// ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß´ï¿½.
 				if (iter->second->GetRefCount() <= 1)
 				{
 					tEvent evn = {};
@@ -199,18 +219,18 @@ void ContentUI::ReloadContent()
 
 					CEventMgr::GetInst()->AddEvent(evn);
 
-					MessageBox(nullptr, L"¿øº» ¸®¼Ò½º »èÁ¦µÊ", L"¸®¼Ò½º º¯°æ È®ÀÎ", MB_OK);
+					MessageBox(nullptr, L"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", L"ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½", MB_OK);
 				}
 				else
 				{
-					// ÇØ´ç ¸®¼Ò½º¸¦ ÂüÁ¶ÇÏ´Â °´Ã¼°¡ ÀÖÀ½
-					MessageBox(nullptr, L"»ç¿ë Áß ÀÎ ¸®¼Ò½º/n¸®¼Ò½º »èÁ¦ ½ÇÆÐ", L"¸®¼Ò½º º¯°æ È®ÀÎ", MB_OK);
+					// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+					MessageBox(nullptr, L"ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½/nï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", L"ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½", MB_OK);
 				}
 			}
 		}
 	}
 
-	// ·ÎµùµÈ ·¹º§ ÆÄÀÏÀÌ ½ÇÁ¦·Î ÀÖ´ÂÁö È®ÀÎ
+	// ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
 	{
 		wstring strRelativePath = m_vecLevelName[i];
@@ -220,7 +240,7 @@ void ContentUI::ReloadContent()
 			// Erase Level Relative Path to m_vecLevelName
 			m_vecLevelName.erase(m_vecLevelName.begin() + i);
 			ResetContent();
-			MessageBox(nullptr, L"¿øº» ·¹º§ »èÁ¦µÊ", L"¸®¼Ò½º º¯°æ È®ÀÎ", MB_OK);
+			MessageBox(nullptr, L"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", L"ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½", MB_OK);
 		}
 	}
 }
@@ -255,53 +275,60 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 	// if Selected Node is ResNode
 	else
 	{
-		Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
-
-		// Prefab
-		if (pRes->GetResType() == RES_TYPE::PREFAB)
+		if (dynamic_cast<CGameObject*>((CEntity*)pSelectedNode->GetData()))
 		{
-			Ptr<CPrefab> pref = (CPrefab*)pRes.Get();
-			Inspector->SetTargetObject(pref->GetProtoObj());
+			// Prefab child obj
+			CGameObject* pPrefabObject = (CGameObject*)pSelectedNode->GetData();
+			Inspector->SetTargetObject(pPrefabObject);
 		}
-
-		// TargetNode's Data(Resource) impart to InspectorUI
-		Inspector->SetTargetResource(pRes.Get());
+		//else if (dynamic_cast<CPrefab*>((CEntity*)pSelectedNode->GetData()))
+		//{
+		//	Ptr<CPrefab> pPrefabObject = (CPrefab*)pSelectedNode->GetData();
+		//	CGameObject* pProtoObject = pPrefabObject->GetProtoObj();
+		//	Inspector->SetTargetPrefObject(pProtoObject);
+		//}
+		else
+		{
+			Ptr<CRes> pRes = (CRes*)pSelectedNode->GetData();
+			// InspectorUIï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ Resourceï¿½ï¿½ ï¿½Ë·ï¿½ï¿½Ø´ï¿½.
+			Inspector->SetTargetResource(pRes.Get());
+		}
 	}
 }
 
 void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 {
-	// Æú´õ ±¸Á¶µµ Tree±¸Á¶ÀÌ±â ¶§¹®¿¡ Àç±ÍÀûÀ¸·Î È£ÃâÇÏ¸é¼­ ¸ðµç ÇÏÀ§ Æú´õ¸¦ ¼øÈ¸ÇÒ °ÍÀÌ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Treeï¿½ï¿½ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï¸é¼­ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
 
 	wstring strFolderPath = _strFolderPath + L"*.*";
 
-	// ¸ðµç ÆÄÀÏ¸íÀ» ¾Ë¾Æ³½´Ù.
-	// ÇÚµéÀ» »ç¿ëÇÑ´Ù´Â ¶æÀº Ä¿³Î ¿ÀºêÁ§Æ®¸¦ ¸¸µç´Ù´Â ÀÇ¹Ì¿Í °°´Ù.
+	// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ ï¿½Ë¾Æ³ï¿½ï¿½ï¿½.
+	// ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ ï¿½Ç¹Ì¿ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	HANDLE hFindHandle = nullptr;
 
 	WIN32_FIND_DATA data = {};
 
-	// Å½»ö¿ë ÇÚµé ¾ò±â
-	// FindFirstFile´Â ÆÄÀÏÀ» Ã£À» ¼ö ÀÖ´Â ÇÔ¼öÀÌ¸ç, À©µµ¿ì¿¡¼­ Á¦°øÇØÁØ´Ù.
-	// Á¤È®È÷´Â Å½»ö±âÀÇ ÇÚµéÀ» ¹ÝÈ¯ÇØÁÖ´Â ÇÔ¼öÀÌ´Ù.
-	// µû¶ó¼­ ÀÎÀÚ·Î °Ë»öÀ» ½ÃÀÛÇÒ Æú´õ¿Í µ¥ÀÌÅÍ¸¦ ¹ÞÀ» ÁÖ¼Ò¸¦ ³Ö¾îÁÖ¸é µÈ´Ù.
+	// Å½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ ï¿½ï¿½ï¿½
+	// FindFirstFileï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½ï¿½Ì¸ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+	// ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½ï¿½Ì´ï¿½.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼Ò¸ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¸ï¿½ ï¿½È´ï¿½.
 	hFindHandle = FindFirstFile(strFolderPath.c_str(), &data);
 
 	if (INVALID_HANDLE_VALUE == hFindHandle)
 		return;
 
-	// Å½»ö ÇÚµéÀ» ÀÌ¿ëÇØ¼­ ¸ðµç ÆÄÀÏÀ» ´Ù È®ÀÎÇÒ ¶§ ±îÁö ¹Ýº¹
-	// ¸¸¾à ´ÙÀ½ Å½»öÇÒ ÆÄÀÏÀÌ ¾ø´Ù¸é false¸¦ ¹ÝÈ¯ÇØÁØ´Ù.
+	// Å½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ falseï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ø´ï¿½.
 	while (FindNextFile(hFindHandle, &data))
 	{
-		// Æú´õ¿¡¼­ ÆÄÀÏÀ» Ã£À» ¶§´Â ¿ì¸®¿¡°Ô °ø°³µÇÁö ¾ÊÀº ..Æú´õ¿Í ´Ù¸¥ Æú´õµéµµ ÇÔ²² Ã£¾ÆÁö±â ¶§¹®¿¡
-		// ÆÄÀÏ¸¸ ¾ò±â À§ÇØ¼­´Â Æú´õ ÇüÅÂ´Â Àç±ÍÈ£ÃâÇØ¼­ ÇÏÀ§ Æú´õ¸¦ Å½»öÇØ¾ß ÇÑ´Ù.
-		// ¿¹¿Ü Ã³¸® : ..Æú´õ ÇÏÀ§ Å½»öÀ» ÇÏ¸é °è¼Ó ¹«ÇÑ·çÇÁ¸¦ µ¹±â ¶§¹®¿¡ ¿¹¿ÜÃ³¸®ÇØÁÖ¾ú´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ..ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½éµµ ï¿½Ô²ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½ ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ñ´ï¿½.
+		// ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ : ..ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 		if (FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes && wcscmp(data.cFileName, L".."))
 		{
 			FindContentFileName(_strFolderPath + data.cFileName + L"\\");
 		}
-		// Æú´õ Å¸ÀÔÀÌ ¾Æ´Ï´Ù == ÆÄÀÏ Å¸ÀÔÀÌ´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï´ï¿½ == ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½Ì´ï¿½.
 		else
 		{
 			wstring strRelative = GetRelativePath(CPathMgr::GetInst()->GetContentPath(), _strFolderPath + data.cFileName);
@@ -309,18 +336,18 @@ void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 		}
 	}
 
-	// Å½»ö±â »ç¿ëÀÌ ³¡³µÀ¸¸é FindCloseÀ» ¹ÝµíÀÌ È£ÃâÇØ ÁÖ¾î¾ß ÇÑ´Ù.
+	// Å½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ FindCloseï¿½ï¿½ ï¿½Ýµï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 	FindClose(hFindHandle);
 }
 
 RES_TYPE ContentUI::GetResTypeByExt(wstring _filename)
 {
-	// path´Â FileSystem Çì´õ ÂüÁ¶·Î »ç¿ëÀÌ °¡´ÉÇÏ´Ù.
-	// _wsplitpath_s¸¦ »ç¿ëÇÏÁö ¾Ê¾Æµµ µÈ´Ù´Â ÀåÁ¡ÀÌ ÀÖ´Ù.
+	// pathï¿½ï¿½ FileSystem ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
+	// _wsplitpath_sï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Æµï¿½ ï¿½È´Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½.
 	wstring strExt = path(_filename.c_str()).extension();
 
-	// if¹®À¸·Î È®ÀåÀÚ¸¦ °Ë»çÇØ ºÐ±âÃ³¸®ÇØ¼­ ¾Ë¸ÂÀº RES_TYPEÀ» ¹ÝÈ¯ÇØÁØ´Ù.
-	// ShaderµéÀº ¿ì¸®°¡ ÇÏµåÄÚµùÇØ »ç¿ëÇÏ±â ¶§¹®¿¡ Á¦¿ÜÇØ ÁÖ¾ú´Ù.
+	// ifï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½ ï¿½Ð±ï¿½Ã³ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½ RES_TYPEï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ø´ï¿½.
+	// Shaderï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®ï¿½ï¿½ ï¿½Ïµï¿½ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½.
 	if (strExt == L".pref")
 		return RES_TYPE::PREFAB;
 	else if (strExt == L".mdat")
@@ -340,4 +367,29 @@ RES_TYPE ContentUI::GetResTypeByExt(wstring _filename)
 		return RES_TYPE::LEVEL;
 	else
 		return RES_TYPE::END;
+}
+
+void ContentUI::AddGameObjectToTree(TreeNode* _ParentNode, CGameObject* _Object)
+{
+	string strObjectName = string(_Object->GetName().begin(), _Object->GetName().end());
+	TreeNode* pCurNode = m_Tree->AddItem(_ParentNode, strObjectName.c_str(), (DWORD_PTR)_Object);
+
+	// ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö¾îµµ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ú½Ä±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ ï¿½ß°ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+	const vector<CGameObject*>& vecChild = _Object->GetChildObject();
+	for (size_t i = 0; i < vecChild.size(); ++i)
+	{
+		AddGameObjectToTree(pCurNode, vecChild[i]);
+	}
+}
+
+void ContentUI::AddChildObject(DWORD_PTR _ChildObject, DWORD_PTR _ParentObject)
+{
+	TreeNode* pChildNode = (TreeNode*)_ChildObject;
+	TreeNode* pParentNode = (TreeNode*)_ParentObject;
+
+	tEvent evt = {};
+	evt.eType = EVENT_TYPE::ADD_CHILD;
+	evt.wParam = pChildNode->GetData();
+	evt.lParam = pParentNode->GetData();
+	CEventMgr::GetInst()->AddEvent(evt);
 }

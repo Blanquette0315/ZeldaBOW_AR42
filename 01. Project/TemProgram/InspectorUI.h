@@ -24,6 +24,8 @@ private:
     Ptr<CRes>               m_TargetRes;
     ResUI*                  m_arrResUI[(UINT)RES_TYPE::END];
 
+    CGameObject*            m_TargetPrefObj;
+
     vector<CGameObject*>    m_arrObject;
     vector<string>          m_ObjName;
     int                     m_iCurItem;
@@ -39,9 +41,16 @@ public:
     void SetTargetResource(CRes* _Resource);
     void SetTargetbyKey(DWORD_PTR _strKey);
     void SetTargetLevel(const wstring* _LevelPath);
+    // void SetTargetPrefObject(CGameObject* _Target);
 
     UI* FindResUI(RES_TYPE _eType);
     UI* FindComponentUI(COMPONENT_TYPE _eType);
+
+    //prefab
+private:
+    void SavePrefab(CGameObject* _pParentObj);
+    void InstantiatePrefab(CGameObject* _pParentObj);
+
 
 private:
     virtual void update() override;

@@ -31,4 +31,6 @@ public:
     CPrefab();
     CPrefab(CGameObject* _pProto);
     ~CPrefab();
+
+    friend class CResMgr;
 };

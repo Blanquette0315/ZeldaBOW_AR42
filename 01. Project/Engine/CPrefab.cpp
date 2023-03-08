@@ -22,6 +22,7 @@ CPrefab::CPrefab(CGameObject* _pProto)
 
 	SetName(ResName);
 
+	m_pProtoObj->m_OwnerPrefab = this;
 	if (-1 != _pProto->GetLayerIdx())
 	{
 		m_pProtoObj = _pProto->Clone();
@@ -74,6 +75,7 @@ int CPrefab::Load(const wstring& _strFilePath)
 	LoadKeyPath(rootNode);
 
 	m_pProtoObj = Load_GameObject_Func(rootNode);
+	m_pProtoObj->m_OwnerPrefab = this;
 
 	return S_OK;
 }

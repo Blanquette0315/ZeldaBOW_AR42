@@ -16,11 +16,16 @@ CResMgr::~CResMgr()
 
 		for (; iter != m_arrRes[i].end(); ++iter)
 		{
+			if (i == (UINT)RES_TYPE::PREFAB)
+			{
+				CPrefab* pPref = (CPrefab*)iter->second.Get();
+				delete pPref->GetProtoObj();
+				pPref->m_pProtoObj = nullptr;
+			}
 			iter->second = nullptr;
 		}
 	}
 }
-
 
 void CResMgr::AddRes(const wstring& _strKey, RES_TYPE _type, CRes* _pRes)
 {
