@@ -6,6 +6,7 @@ class DecalUI :
 private:
     Ptr<CMesh>      m_Mesh;
     Ptr<CMaterial>  m_Material;
+    Ptr<CTexture>   m_DecalTexture;
     TEX_PARAM       m_eSelectTexParam;
     bool            m_bIsDyanmicMtrl;
 

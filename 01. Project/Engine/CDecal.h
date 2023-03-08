@@ -18,6 +18,7 @@ public:
     void SetRenderType(bool _bSet); // m_bLgihting을 즉, forward방식으로 혹은 Deferred 방식으로 랜더링할지에 따라 알맞은 재질을 선택해준다.
     bool IsDeferred() { return m_bLighting; }
     void SetDecalTexture(Ptr<CTexture> _Tex) { m_pDecalTex = _Tex; }
+    Ptr<CTexture> GetDecalTexture() { return m_pDecalTex; }
 
 public:
     virtual void finaltick() override;

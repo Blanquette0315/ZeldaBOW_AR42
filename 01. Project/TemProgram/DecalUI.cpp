@@ -15,6 +15,7 @@ DecalUI::DecalUI()
 	: ComponentUI("DecalUI", COMPONENT_TYPE::DECAL)
 	, m_eSelectTexParam(TEX_PARAM::TEX_END)
 	, m_bIsDyanmicMtrl(false)
+	, m_DecalTexture(nullptr)
 {
 }
 
@@ -28,6 +29,7 @@ void DecalUI::update()
 	{
 		m_Mesh = GetTarget()->Decal()->GetMesh();
 		m_Material = GetTarget()->Decal()->GetCurMaterial();
+		m_DecalTexture = GetTarget()->Decal()->GetDecalTexture();
 		m_bDeferred = GetTarget()->Decal()->IsDeferred();
 		if (GetTarget()->Decal()->IsDynamicMtrl())
 		{
@@ -51,11 +53,11 @@ void DecalUI::render_update()
 	string MeshName, MtrlName;
 	if (nullptr != m_Mesh)
 	{
-		MeshName = string(m_Mesh->GetKey().begin(), m_Mesh->GetKey().end());
+		MeshName = string(m_Mesh->GetName().begin(), m_Mesh->GetName().end());
 	}
 	if (nullptr != m_Material)
 	{
-		MtrlName = string(m_Material->GetKey().begin(), m_Material->GetKey().end());
+		MtrlName = string(m_Material->GetName().begin(), m_Material->GetName().end());
 	}
 
 	// 메시 정보
@@ -129,6 +131,17 @@ void DecalUI::render_update()
 	if (m_bIsDyanmicMtrl)
 	{
 		ShowShaderParam(m_Material.Get());
+	}
+	else
+	{
+		if (nullptr != m_DecalTexture)
+		{
+			ImGui::Image(m_DecalTexture->GetSRV().Get(), ImVec2(100.f, 100.f));
+		}
+		else
+		{
+			ImGui::Image(nullptr, ImVec2(100.f, 100.f));
+		}
 	}
 }
 
