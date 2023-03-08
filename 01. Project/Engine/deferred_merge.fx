@@ -79,11 +79,33 @@ float4 PS_Merge(VS_OUT _in) : SV_Target
     
     vOutColor = g_tex_0.Sample(g_sam_0, vUV);
     
+    if (g_int_0 >= 2)
+    {
+        vOutColor.rgb = pow(vOutColor.rgb, 2.2);
+    }
+    
     // ±¤¿ø Àû¿ë
     float4 vDiffuse = g_tex_2.Sample(g_sam_0, vUV);
     float4 vSpecular = g_tex_3.Sample(g_sam_0, vUV);
     
     vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
+    
+    if (g_int_0 == 1 || g_int_0 == 3)
+    {
+        const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
+        vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+    }
+    
+    if (g_int_0 >= 4)
+    {
+        const float A = 6.2, B = 0.5, C = 6.2, D = 1.7, E = 0.06;
+        vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+    }
+    
+    if (g_int_0 == 2 || g_int_0 == 3)
+    {
+        vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
+    }
     
     return vOutColor;
 }

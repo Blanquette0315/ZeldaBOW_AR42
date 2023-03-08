@@ -791,6 +791,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	// 해당 셰이더는 물체를 그릴 셰이더가 아닌 MRT의 랜더 타겟 병합 목적이므로
 	// 파라미터를 공개할 필요가 없다.
+	pShader->AddScalarParam(INT_0, "Render Method");
 
 	AddRes<CGrapicsShader>(L"Deferred_MergeShader", pShader);
 

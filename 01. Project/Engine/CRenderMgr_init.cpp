@@ -124,7 +124,7 @@ void CRenderMgr::CreateMRT()
 		{
 			CResMgr::GetInst()->CreateTexture(L"DiffuseTargetTex"
 											, vRenderResolution.x, vRenderResolution.y
-											, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 			CResMgr::GetInst()->CreateTexture(L"SpecularTargetTex"
 											, vRenderResolution.x, vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
