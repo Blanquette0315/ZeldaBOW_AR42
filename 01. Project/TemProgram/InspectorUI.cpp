@@ -29,14 +29,17 @@
 #include "MaterialUI.h"
 #include "PreFabUI.h"
 #include "GraphicsShaderUI.h"
+#include "SoundUI.h"
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
 	, m_TargetObj(nullptr)
 	, m_arrComUI{}
 	, m_arrResUI{}
+	, m_TargetPrefObj(nullptr)
 	, m_iCurItem(0)
 	, m_bMouseCheck(false)
+	, m_TargetLevelPath(nullptr)
 {
 	// ComponentUI
 	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM] = new TransformUI;
@@ -113,6 +116,12 @@ InspectorUI::InspectorUI()
 	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->ShowSeperator(false);
 	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]->Close();
 	AddChild(m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER]);
+
+	m_arrResUI[(UINT)RES_TYPE::SOUND] = new SoundUI;
+	m_arrResUI[(UINT)RES_TYPE::SOUND]->SetSize(ImVec2(0.f, 0.f));
+	m_arrResUI[(UINT)RES_TYPE::SOUND]->ShowSeperator(false);
+	m_arrResUI[(UINT)RES_TYPE::SOUND]->Close();
+	AddChild(m_arrResUI[(UINT)RES_TYPE::SOUND]);
 
 	// LevelUI
 	m_pLevelUI = new LevelUI("LevelUI##UI");

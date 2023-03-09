@@ -27,6 +27,8 @@ public:
 
     virtual void render_update() override;
 
+    virtual void Close() override { UI::Close(); }
+
 public:
     ResUI(const string& _UIName, RES_TYPE _eType);
     ~ResUI();

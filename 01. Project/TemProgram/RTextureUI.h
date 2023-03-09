@@ -12,4 +12,3 @@ public:
     RTextureUI();
     ~RTextureUI();
 };
-
