@@ -1,0 +1,1 @@
+xcopy /s /y  /exclude:exclude_list.txt ".\01. Project\PhysEngine\*.h" ".\03. External\include\PhysEngine"

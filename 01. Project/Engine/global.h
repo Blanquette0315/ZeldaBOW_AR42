@@ -33,6 +33,14 @@ using namespace std::experimental::filesystem;
 #pragma comment(lib, "yaml_cpp/yaml-cpp.lib")
 #endif
 
+// PhysX Engine
+#ifdef _DEBUG
+#pragma comment(lib, "PhysEngine/PhysEngine_x64d.lib")
+#else
+#pragma comment(lib, "yaml_cpp/yaml-cpp.lib")
+#endif
+
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>

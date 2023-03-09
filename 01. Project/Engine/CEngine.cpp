@@ -14,6 +14,8 @@
 #include "CFontMgr.h"
 #include "CSound.h"
 
+#include <PhysEngine/Export/PhysCollider.h>
+
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
 	//, m_vResolution{} Vector2의 경우 기본 생성자가 구현이 되어 있기 때문에 굳이 초기화를 해주지 않아도 기본 생성자로 만들어진다.
@@ -59,6 +61,9 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CRenderMgr::GetInst()->init();
 	CLevelMgr::GetInst()->init();
 	CFontMgr::GetInst()->init();
+
+	PhysCollider b;
+	b.CreateBox(1, 1, 1);
 
 	return S_OK;
 }
