@@ -91,7 +91,7 @@ void ListUI_EX::render_update()
 
 				if (ImGui::Selectable(m_vecItemName[i].c_str(), Selectable))
 				{
-					m_iSelectIdx = i;
+					m_iSelectIdx = (UINT)i;
 				}
 
 				// show selected

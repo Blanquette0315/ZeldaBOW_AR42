@@ -3,6 +3,7 @@
 
 ResUI::ResUI(const string& _UIName, RES_TYPE _eType)
 	: UI(_UIName)
+    , m_TargetObj(nullptr)
 	, m_eResType(_eType)
 {
 }

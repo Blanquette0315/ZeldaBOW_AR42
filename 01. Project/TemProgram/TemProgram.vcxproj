@@ -207,6 +207,7 @@
     <ClInclude Include="RTextureUI.h" />
     <ClInclude Include="ScriptUI.h" />
     <ClInclude Include="SkyBoxUI.h" />
+    <ClInclude Include="SoundUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TemProgram.h" />
     <ClInclude Include="TestUI.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="RTextureUI.cpp" />
     <ClCompile Include="ScriptUI.cpp" />
     <ClCompile Include="SkyBoxUI.cpp" />
+    <ClCompile Include="SoundUI.cpp" />
     <ClCompile Include="TestUI.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TileMapTableUI.cpp" />
