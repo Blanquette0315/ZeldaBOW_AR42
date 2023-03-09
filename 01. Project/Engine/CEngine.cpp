@@ -62,8 +62,8 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CLevelMgr::GetInst()->init();
 	CFontMgr::GetInst()->init();
 
-	PhysCollider b;
-	b.CreateBox(1, 1, 1);
+	/*PhysCollider b;
+	b.CreateBox(1, 1, 1);*/
 
 	return S_OK;
 }
