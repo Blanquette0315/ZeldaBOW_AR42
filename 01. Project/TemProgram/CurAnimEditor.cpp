@@ -20,6 +20,13 @@ CurAnimEditor::CurAnimEditor()
 	, m_bGrid(false)
 	, m_bGrid_Front(false)
 	, m_bGrid_Center(false)
+	, m_AnimPreviewIdx(0)
+	, m_fAcctime(0.f)
+	, m_iSelectedIdx(0)
+	, m_pCurAnim(nullptr)
+	, m_pOwnerUI(nullptr)
+	, m_pTarget(nullptr)
+	, m_pTextureUI(nullptr)
 {
 	Close();
 }
@@ -510,8 +517,8 @@ void CurAnimEditor::SetAnimation(CAnimation2D* _Anim)
 	m_vecFrm = m_pCurAnim->GetvecFrm();
 	m_AtlasTex = m_pCurAnim->GetAtlas();
 
-	m_vAtlasWH.x = m_AtlasTex->GetWidth();
-	m_vAtlasWH.y = m_AtlasTex->GetHeight();
+	m_vAtlasWH.x = (float)m_AtlasTex->GetWidth();
+	m_vAtlasWH.y = (float)m_AtlasTex->GetHeight();
 
 	// 해당 풀사이즈를 0번 인덱스에서 가져오는건 문제가 될 수도 있음.(모든 프레임의 풀사이즈가 동일한 것을 기준삼음)
 	//m_vFullSize = m_vecFrm[0].vFullsize;
@@ -520,7 +527,7 @@ void CurAnimEditor::SetAnimation(CAnimation2D* _Anim)
 void CurAnimEditor::PlayWorkingAnim()
 {
 	// 시간 누적
-	m_fAcctime += DT;
+	m_fAcctime += FDT;
 	// 누적 시간이 해당 프레임 유지시간을 넘어서면 다음 프레임으로 넘어간다.
 	if (m_fAcctime > m_vecFrm[m_AnimPreviewIdx].fDuration)
 	{
@@ -555,8 +562,8 @@ void CurAnimEditor::SetAtlasTex(DWORD_PTR _AtlasKey)
 
 	m_AtlasTex = pTexture;
 
-	m_vAtlasWH.x = m_AtlasTex->GetWidth();
-	m_vAtlasWH.y = m_AtlasTex->GetHeight();
+	m_vAtlasWH.x = (float)m_AtlasTex->GetWidth();
+	m_vAtlasWH.y = (float)m_AtlasTex->GetHeight();
 }
 
 void CurAnimEditor::SetSliceImage(DWORD_PTR _LeftTop, DWORD_PTR _Slice)

@@ -139,7 +139,7 @@ void CRenderMgr::UpdateLight2D()
 	}
 
 	// 광원 정보를 구조화 버퍼로 옮긴다.
-	struct vector<tLightInfo> vecLight2DInfo;
+	vector<tLightInfo> vecLight2DInfo;
 	vecLight2DInfo.clear();
 
 	for (size_t i = 0; i < m_vecLight2D.size(); ++i)
@@ -165,7 +165,7 @@ void CRenderMgr::UpdateLight3D()
 	}
 
 	// 광원정보를 구조화버퍼로 옮김
-	struct vector<tLightInfo> vecLight3DInfo;
+	vector<tLightInfo> vecLight3DInfo;
 	vecLight3DInfo.clear();
 
 	for (size_t i = 0; i < m_vecLight3D.size(); ++i)

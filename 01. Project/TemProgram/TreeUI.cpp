@@ -52,8 +52,6 @@ void TreeNode::render_update()
 	if (m_bFrame && m_vecChildNode.empty())
 		strName = "\t" + strName;
 
-	// �ڿ� �ĺ���ȣ�� �ٿ��� �̸�(Ű) �ߺ��� �������ش�.
-	// UINT�ϱ� 4�ﰳ ������ ������ �� ��.
 	char szTag[50] = "";
 	sprintf_s(szTag, 50, "##%d", m_iIdx);
 	strName += szTag;
@@ -62,20 +60,16 @@ void TreeNode::render_update()
 
 	if (ImGui::TreeNodeEx(strName.c_str(),iFlag))
 	{
-		// �巡�� üũ
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
 			m_TreeUI->SetBeginDragNode(this);
 
-			// ù ������ Ű���� ���߿� ����� �޴��ʿ��� üũ�� ������ �����͸� �������ش�.
-			// �ι�° ������ �����ʹ� �ش� ��� ��ü�� ���� ���̱� ������ ������ ������� TreeNode��ŭ�̴�.
 			ImGui::SetDragDropPayload(m_TreeUI->GetName().c_str(), (void*)this, sizeof(TreeNode));
 			ImGui::Text(strName.c_str());
 
 			ImGui::EndDragDropSource();
 		}
 
-		// ���üũ
 		if (ImGui::BeginDragDropTarget())
 		{
 			m_TreeUI->SetDropTargetNode(this);
@@ -83,51 +77,16 @@ void TreeNode::render_update()
 			ImGui::EndDragDropTarget();
 		}
 
-		// Ŭ�� üũ : Clicked�� �ϸ�, �巡�׿� ������ ���ܼ� Released�� �����Ͽ���.
 		if (!m_bFrame && ImGui::IsItemHovered(0) && ImGui::IsMouseReleased(0))
 		{
 			m_TreeUI->SetSelectedNode(this);
 		}
-
-		//// ��Ŭ�� üũ
-		//if (ImGui::IsItemHovered(0) && KEY_TAP(KEY::RBTN))
-		//{
-		//	// OutLinerUI�� Node�� ��� �θ�(������)�� �˾��� ��� �־�� �Ѵ�.
-		//	if (m_TreeUI->GetName() == "##OutlinerTree")
-		//	{
-		//		ImGui::OpenPopup("##OutLinerNode");
-		//	}
-
-		//	// ContentUI�� Node�� ��� �θ�(������)�� �˾��� ���� �ȵȴ�.
-		//	else if (m_TreeUI->GetName() == "##ContentTree")
-		//	{
-		//		if (!m_bFrame)
-		//		{
-		//			// �ش� ��尡 Level����� ���
-		//			if (dynamic_cast<CLevel*>((CEntity*)m_data))
-		//			{
-		//				ImGui::OpenPopup("##LevelNode");
-		//			}
-		//			else
-		//			{
-		//				CRes* pTargetRes = (CRes*)m_data;
-		//				// �ش� ��尡 Mtrl����� ���
-		//				if (pTargetRes->GetResType() == RES_TYPE::MATERIAL)
-		//				{
-		//					ImGui::OpenPopup("##MtrlNode");
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
 		
 		if (!m_bFrame && ImGui::IsItemHovered(0) && KEY_TAP(KEY::RBTN))
 		{
-			// �ش� ��尡 OutLiner(������Ʈ)�� ��� 
 			if(m_TreeUI->GetName() == "##OutlinerTree")
 				ImGui::OpenPopup("##OutLinerNode");
 
-			// �ش� ��尡 ContentTree �Ҽӳ���� ���
 			if (m_TreeUI->GetName() == "##ContentTree")
 			{
 				// if m_data is LevelRelativePath
@@ -138,7 +97,6 @@ void TreeNode::render_update()
 				else
 				{
 					CRes* pTargetRes = (CRes*)m_data;
-					// �ش� ��尡 Mtrl����� ���
 					if (pTargetRes->GetResType() == RES_TYPE::MATERIAL)
 					{
 						ImGui::OpenPopup("##MtrlNode");
@@ -201,7 +159,7 @@ void TreeNode::render_update()
 			LevelNode->render_update();
 		}
 
-		// MtrlNode Popup ����
+		// MtrlNode Popup
 		{
 			static PopupUI* MaterialNode = new PopupUI("##MtrlNode");
 
@@ -222,7 +180,6 @@ void TreeNode::render_update()
 		}
 			
 
-		// ���� ���� �� �̸� ���ϱ� �˾� ����
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -231,7 +188,6 @@ void TreeNode::render_update()
 		pPopupTextUI->SetFunc_1((FUNC_1)&InputTextUI::CreateLevel);
 		pPopupTextUI->CreateTextPopup("Create Level?", "Input Level Name");
 
-		// �ڽ� ������� ����� ȣ���� ���ش�.
 		for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 		{
 			m_vecChildNode[i]->render_update();
@@ -246,7 +202,6 @@ void TreeNode::render_update()
 // ============
 // =   Tree   =
 // ============
-// TreeUI�� �̸��� �����ڿ��� �־��־ �̸� �ߺ��� �����ϵ��� �����ߴ�. (ImGui���� �̸� �ߺ��� �߻��ϸ� �ȵ�)
 
 UINT TreeUI::m_iNextNodeIdx = 0;
 
@@ -291,7 +246,6 @@ void TreeUI::render_update()
 		}
 	}
 
-	// ���콺 ���� ������ üũ
 	if (ImGui::IsMouseReleased(0))
 	{
 		m_BeginDragNode = nullptr;
@@ -309,10 +263,8 @@ TreeNode* TreeUI::AddItem(TreeNode* _parent, const string& _strName, DWORD_PTR _
 	pNode->m_TreeUI = this;
 	pNode->m_iIdx = m_iNextNodeIdx++;
 
-	// RootNode�� �����Ǵ� ���
 	if (nullptr == _parent)
 	{
-		// �ش� ��带 Root���� �����Ϸ��ϴµ�, �̹� rootnode�� �����Ѵٸ� �ߴ�.
 		assert(!m_RootNode);
 		m_RootNode = pNode;
 	}
@@ -335,13 +287,11 @@ void TreeUI::Clear()
 
 void TreeUI::SetSelectedNode(TreeNode* _SelectedNode)
 {
-	// ������ ���õ� ��尡 �־��ٸ�, �ش� ����� ������ Ǯ���ش�.
 	if (nullptr != m_SelectedNode)
 	{
 		m_SelectedNode->m_bSelected = false;
 	}
 
-	// ���� ��带 ���� ���� �����ϰ�, �ش� ��忡�� ���õ��� �˷��ش�.
 	m_SelectedNode = _SelectedNode;
 	m_SelectedNode->m_bSelected = true;
 
@@ -363,5 +313,4 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 		}
 	}
 
-	// �ܺ� ��� ���� PayLoad ó���ϱ�
 }

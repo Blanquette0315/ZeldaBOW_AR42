@@ -169,6 +169,9 @@
     <Filter Include="Engine\06. Component\02. RenderComponent\LandScape">
       <UniqueIdentifier>{ac1d224d-247c-43e1-a135-84caaadb09e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Mgr\10. PhysMgr">
+      <UniqueIdentifier>{801b50d5-67ab-436e-99df-70deec5ca22c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -351,6 +354,9 @@
     <ClInclude Include="YAML.hpp">
       <Filter>Engine\00. Header</Filter>
     </ClInclude>
+    <ClInclude Include="CPhysMgr.h">
+      <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -517,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="YAML.cpp">
       <Filter>Engine\00. Header</Filter>
+    </ClCompile>
+    <ClCompile Include="CPhysMgr.cpp">
+      <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

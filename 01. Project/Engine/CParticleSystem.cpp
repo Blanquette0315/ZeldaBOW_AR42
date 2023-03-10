@@ -84,7 +84,7 @@ void CParticleSystem::finaltick()
 	float fAliveTime = 1.f / m_Frequency;
 
 	// 누적 시간
-	m_fAccTime += DT;
+	m_fAccTime += FDT;
 
 	// 누적시간이 파티클 생성 시간을 넘어서면
 	if (fAliveTime < m_fAccTime)

@@ -135,7 +135,7 @@ void CAnimator2D::CreatebeginAnimation()
 	// 임시로 무조건 로딩하는 NoiseTexture를 넣어준다.
 	Ptr<CTexture> _AtlasTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\noise\\TestNoise.png");
 
-	CreateAnimation(L"New Animation", _AtlasTex, Vec2(0.f,0.f), Vec2(10.f,10.f), 10.f, 1.f, 1.f);
+	CreateAnimation(L"New Animation", _AtlasTex, Vec2(0.f,0.f), Vec2(10.f,10.f), 10.f, 1, 1.f);
 	m_pCurAnim = FindAnimation(L"New Animation");
 	m_pCurAnim->m_iCurIdx = 0;
 }

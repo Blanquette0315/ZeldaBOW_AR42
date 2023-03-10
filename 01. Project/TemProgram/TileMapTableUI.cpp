@@ -42,7 +42,7 @@ void TileMapTableUI::render_update()
             if (x > 0)
                 ImGui::SameLine();
 
-            ImGui::PushID(y * m_vIdxCount.x + x);
+            ImGui::PushID(y * (int)m_vIdxCount.x + x);
             string _Name = "";
             char szIdx[50] = "";
             sprintf_s(szIdx, 50, "[%d][%d]", y, x);
@@ -50,16 +50,16 @@ void TileMapTableUI::render_update()
             _Name += "##TIMT_Select";
 
             ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f,0.5f));
-            if (ImGui::Selectable(_Name.c_str(), m_selected[y * m_vIdxCount.x + x], 0, ImVec2(50, 50)))
+            if (ImGui::Selectable(_Name.c_str(), m_selected[(UINT)(y * m_vIdxCount.x + x)], 0, ImVec2(50, 50)))
             {
                 // 눌렸으면, 해당 인덱스 타일을 지금 설정해둔 타일로 변경해주기
-                if (m_selected[y * m_vIdxCount.x + x])
+                if (m_selected[(UINT)(y * m_vIdxCount.x + x)])
                 {
-                    m_selected[y * m_vIdxCount.x + x] = false;
+                    m_selected[(UINT)(y * m_vIdxCount.x + x)] = false;
                 }
                 else
                 {
-                    m_selected[y * m_vIdxCount.x + x] = true;
+                    m_selected[(UINT)(y * m_vIdxCount.x + x)] = true;
                 }
 
             }
@@ -76,7 +76,7 @@ void TileMapTableUI::SetIdxCount(Vec2 _IdxCount)
     m_vIdxCount = _IdxCount;
 
     m_selected.clear();
-    m_selected.resize(_IdxCount.x * _IdxCount.y);
+    m_selected.resize((size_t)(_IdxCount.x * _IdxCount.y));
 
     int i = 0;
 }

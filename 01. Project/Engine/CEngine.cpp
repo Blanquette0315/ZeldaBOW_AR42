@@ -13,6 +13,7 @@
 #include "CCollisionMgr.h"
 #include "CFontMgr.h"
 #include "CSound.h"
+#include "CPhysMgr.h"
 
 #include <PhysEngine/Export/PhysCollider.h>
 
@@ -62,8 +63,7 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CLevelMgr::GetInst()->init();
 	CFontMgr::GetInst()->init();
 
-	/*PhysCollider b;
-	b.CreateBox(1, 1, 1);*/
+	CPhysMgr::GetInst()->init();
 
 	return S_OK;
 }
@@ -73,8 +73,8 @@ void CEngine::tick()
 	// Mgr 업데이트
 	CResMgr::GetInst()->tick();
 	CSound::g_pFMOD->update();
-	CTimeMgr::GetInst()->tick();
 	CKeyMgr::GetInst()->tick();
+	CPhysMgr::GetInst()->tick();
 	CRenderMgr::GetInst()->tick();
 
 	CLevelMgr::GetInst()->progress();
@@ -84,7 +84,5 @@ void CEngine::tick()
 
 void CEngine::render()
 {
-	CTimeMgr::GetInst()->render();
-
 	CRenderMgr::GetInst()->render();
 }

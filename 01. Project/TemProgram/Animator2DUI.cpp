@@ -126,7 +126,7 @@ void Animator2DUI::render_update()
 void Animator2DUI::PlayPreview()
 {
 	// 시간 누적
-	m_fAcctime += DT;
+	m_fAcctime += FDT;
 	// 누적 시간이 해당 프레임 유지시간을 넘어서면 다음 프레임으로 넘어간다.
 	if (m_fAcctime > m_vecFrm[m_iCurIdx].fDuration)
 	{

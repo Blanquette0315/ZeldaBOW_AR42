@@ -78,7 +78,7 @@ void CalcLight3D(float3 _vViewPos, float3 _vViewNormal, int _iLigntIdx, inout tL
     // Directional Light
     if(Lightinfo.iLightType == 0)
     {
-        float3 ViewLightDir = normalize(mul(float4(Lightinfo.vWorldDir.xyz, 0.f), g_matView));
+        float3 ViewLightDir = normalize(mul(float4(Lightinfo.vWorldDir.xyz, 0.f), g_matView)).xyz;
     
         // View 스페이스 상에서 표면의 빛의 세기를 구함
         fDiffPow = saturate(dot(-ViewLightDir, _vViewNormal));
@@ -100,7 +100,7 @@ void CalcLight3D(float3 _vViewPos, float3 _vViewNormal, int _iLigntIdx, inout tL
     else if(Lightinfo.iLightType == 1)
     {
         // VeiwSpace 상에서 광원의 위치를 찾는다.
-        float3 vLightViewPos = mul(float4(Lightinfo.vWorldPos.xyz, 1.f), g_matView);
+        float3 vLightViewPos = mul(float4(Lightinfo.vWorldPos.xyz, 1.f), g_matView).xyz;
         
         // 광원의 위치에서 물체로 향하는 벡터를 구한다.
         // 벡터는 xyz 성분으로 나타내기 때문에 포지션을 빼면 방향 정보를 얻을 수 있다.
@@ -137,10 +137,10 @@ void CalcLight3D(float3 _vViewPos, float3 _vViewNormal, int _iLigntIdx, inout tL
     else if (Lightinfo.iLightType == 2)
     {
         // 스포트라이트 진행 방향 구하기
-        float3 ViewLightDir = normalize(mul(float4(Lightinfo.vWorldDir.xyz, 0.f), g_matView));
+        float3 ViewLightDir = normalize(mul(float4(Lightinfo.vWorldDir.xyz, 0.f), g_matView)).xyz;
         
         // VeiwSpace 상에서 광원의 위치를 찾는다.
-        float3 vLightViewPos = mul(float4(Lightinfo.vWorldPos.xyz, 1.f), g_matView);
+        float3 vLightViewPos = mul(float4(Lightinfo.vWorldPos.xyz, 1.f), g_matView).xyz;
         
         // 광원 지점에서 부터 물체 지점까지의 방향 구하기
         float3 ViewVToLDir = _vViewPos - vLightViewPos;

@@ -30,7 +30,7 @@ void TextureUI::render_update()
 			ImVec2 uv_max = ImVec2(1, 1);                 // Lower-right
 			ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);   // No tint
 			ImVec4 border_col = ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 50% opaque white ImVec2(m_TexWH.x, m_TexWH.y)
-			ImGui::Image(my_tex_id, ImVec2(m_pTexture->GetWidth(), m_pTexture->GetHeight()), uv_min, uv_max, tint_col, border_col);
+			ImGui::Image(my_tex_id, ImVec2((float)m_pTexture->GetWidth(), (float)m_pTexture->GetHeight()), uv_min, uv_max, tint_col, border_col);
 
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
@@ -100,7 +100,7 @@ void TextureUI::render_update()
 
 						// 얻어온 픽셀좌표를 queue에 넣어서 Root로 줌.
 						BFS_Tex.push(TempClickMousePos);
-						vecVisitChk[BFS_Tex.front().x][BFS_Tex.front().y] = true;
+						vecVisitChk[(UINT)BFS_Tex.front().x][(UINT)BFS_Tex.front().y] = true;
 
 						// Queue가 빌때까지 반복 수행
 						while (!BFS_Tex.empty())
@@ -117,19 +117,19 @@ void TextureUI::render_update()
 							if (NextRight.x < m_pTexture->GetWidth() - 1)
 								NextRight.x += 1.f;
 							else
-								m_vTemRigthBot.x = m_pTexture->GetWidth();
+								m_vTemRigthBot.x = (float)m_pTexture->GetWidth();
 
 							Vec2 NextBot = BFS_Tex.front(); // 4
 							if (NextBot.y < m_pTexture->GetHeight() - 1)
 								NextBot.y += 1.f;
 							else
-								m_vTemRigthBot.y = m_pTexture->GetHeight();
+								m_vTemRigthBot.y = (float)m_pTexture->GetHeight();
 
 
-							if (!vecVisitChk[NextLeft.x][NextLeft.y])
+							if (!vecVisitChk[(UINT)NextLeft.x][(UINT)NextLeft.y])
 							{
 								// 알파 체크
-								if (PixelColorData[NextLeft.x][NextLeft.y].a == 0.f)
+								if (PixelColorData[(UINT)NextLeft.x][(UINT)NextLeft.y].a == 0.f)
 								{
 									if (NextLeft.x < m_vTemLeftTop.x)
 									{
@@ -139,13 +139,13 @@ void TextureUI::render_update()
 								else
 								{
 									BFS_Tex.push(NextLeft);
-									vecVisitChk[NextLeft.x][NextLeft.y] = true;
+									vecVisitChk[(UINT)NextLeft.x][(UINT)NextLeft.y] = true;
 								}
 							}
 
-							if (!vecVisitChk[NextTop.x][NextTop.y])
+							if (!vecVisitChk[(UINT)NextTop.x][(UINT)NextTop.y])
 							{
-								if (PixelColorData[NextTop.x][NextTop.y].a == 0.f)
+								if (PixelColorData[(UINT)NextTop.x][(UINT)NextTop.y].a == 0.f)
 								{
 									if (NextTop.y < m_vTemLeftTop.y)
 									{
@@ -155,13 +155,13 @@ void TextureUI::render_update()
 								else
 								{
 									BFS_Tex.push(NextTop);
-									vecVisitChk[NextTop.x][NextTop.y] = true;
+									vecVisitChk[(UINT)NextTop.x][(UINT)NextTop.y] = true;
 								}
 							}
 
-							if (!vecVisitChk[NextRight.x][NextRight.y])
+							if (!vecVisitChk[(UINT)NextRight.x][(UINT)NextRight.y])
 							{
-								if (PixelColorData[NextRight.x][NextRight.y].a == 0.f)
+								if (PixelColorData[(UINT)NextRight.x][(UINT)NextRight.y].a == 0.f)
 								{
 									if (NextRight.x > m_vTemRigthBot.x)
 									{
@@ -171,13 +171,13 @@ void TextureUI::render_update()
 								else
 								{
 									BFS_Tex.push(NextRight);
-									vecVisitChk[NextRight.x][NextRight.y] = true;
+									vecVisitChk[(UINT)NextRight.x][(UINT)NextRight.y] = true;
 								}
 							}
 
-							if (!vecVisitChk[NextBot.x][NextBot.y])
+							if (!vecVisitChk[(UINT)NextBot.x][(UINT)NextBot.y])
 							{
-								if (PixelColorData[NextBot.x][NextBot.y].a == 0.f)
+								if (PixelColorData[(UINT)NextBot.x][(UINT)NextBot.y].a == 0.f)
 								{
 									if (NextBot.y > m_vTemRigthBot.y)
 									{
@@ -187,7 +187,7 @@ void TextureUI::render_update()
 								else
 								{
 									BFS_Tex.push(NextBot);
-									vecVisitChk[NextBot.x][NextBot.y] = true;
+									vecVisitChk[(UINT)NextBot.x][(UINT)NextBot.y] = true;
 								}
 							}
 
@@ -215,8 +215,8 @@ void TextureUI::render_update()
 
 				// Full Size 보여주기
 				Vec2 TEMCenter = {};
-				TEMCenter.x = TEMLeftTop.x + ((TEMRightBot.x - TEMLeftTop.x) * 0.5);
-				TEMCenter.y = TEMLeftTop.y + ((TEMRightBot.y - TEMLeftTop.y) * 0.5);
+				TEMCenter.x = TEMLeftTop.x + ((TEMRightBot.x - TEMLeftTop.x) * 0.5f);
+				TEMCenter.y = TEMLeftTop.y + ((TEMRightBot.y - TEMLeftTop.y) * 0.5f);
 				Vec2 SliceLeftTop = Vec2(TEMCenter.x - (m_vFullSize.x * 0.5f), TEMCenter.y - (m_vFullSize.y * 0.5f));
 				Vec2 SliceRightBot = Vec2(TEMCenter.x + (m_vFullSize.x * 0.5f), TEMCenter.y + (m_vFullSize.y * 0.5f));
 				draw_list = ImGui::GetWindowDrawList();

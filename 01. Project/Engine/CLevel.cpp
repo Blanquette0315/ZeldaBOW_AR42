@@ -75,9 +75,8 @@ CLayer* CLevel::GetLayer(const wstring& _strLayerName)
 		{
 			return &m_arrLayer[i];
 		}
-
-		return nullptr;
 	}
+	return nullptr;
 }
 
 void CLevel::AddGameObject(CGameObject* _pObjet, UINT _iLayerIdx)

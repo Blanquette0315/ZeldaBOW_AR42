@@ -79,7 +79,7 @@ float4 PS_Std3D(VS_OUT _in) : SV_Target
     if(g_btex_1)
     {
         // 물체의 표면에 적용될 탄젠트 스페이스 기준 방향벡터를 가져온다.
-        vNormal = g_tex_1.Sample(g_sam_0, _in.vUV);
+        vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
         vNormal = (vNormal * 2.f) - 1.f;
         
         // (1, 0, 0) -> _in.vViewTangent

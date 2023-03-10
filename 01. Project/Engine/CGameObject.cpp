@@ -309,6 +309,8 @@ CGameObject* CGameObject::GetChildObject(const wstring& _strName)
 			return m_vecChild[i];
 		}
 	}
+
+	return nullptr;
 }
 
 void CGameObject::DisconnectFromParent()

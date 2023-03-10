@@ -85,16 +85,16 @@ void CRenderMgr::CreateMRT()
 		Ptr<CTexture> arrRTTex[8] =
 		{
 			CResMgr::GetInst()->CreateTexture(L"ColorTargetTex"
-											, vRenderResolution.x, vRenderResolution.y
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 			CResMgr::GetInst()->CreateTexture(L"NormalTargetTex"
-											, vRenderResolution.x, vRenderResolution.y
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 			CResMgr::GetInst()->CreateTexture(L"PositionTargetTex"
-											, vRenderResolution.x, vRenderResolution.y
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 			CResMgr::GetInst()->CreateTexture(L"DataTargetTex"
-											, vRenderResolution.x, vRenderResolution.y
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
@@ -123,10 +123,10 @@ void CRenderMgr::CreateMRT()
 		Ptr<CTexture> arrRTTex[8] =
 		{
 			CResMgr::GetInst()->CreateTexture(L"DiffuseTargetTex"
-											, vRenderResolution.x, vRenderResolution.y
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 			CResMgr::GetInst()->CreateTexture(L"SpecularTargetTex"
-											, vRenderResolution.x, vRenderResolution.y
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 

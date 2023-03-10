@@ -1,191 +1,180 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Header">
+      <UniqueIdentifier>{06e01ca0-a443-43f5-844a-6309a2d41f65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="소스 파일\PhysEngine">
-      <UniqueIdentifier>{e91549e7-96f0-4c22-9c19-5bded107d307}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\PhysAPI">
-      <UniqueIdentifier>{2ebc0d29-1c01-4d20-8437-85155d19bc87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Manager">
-      <UniqueIdentifier>{b1e3e00d-d275-47f8-bbcd-90e8c0955eaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Manager\Factory">
-      <UniqueIdentifier>{0e0d0ab0-8736-466d-ad9c-7a8ac1fd3f45}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Manager\RayCast">
-      <UniqueIdentifier>{9b963b53-2183-4d63-b9c9-d25bc40f429f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\MainDLL">
+    <Filter Include="MainDLL">
       <UniqueIdentifier>{68b67251-3f82-456b-9a4c-71db0c272897}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Manager\EventCallback">
+    <Filter Include="Manager">
+      <UniqueIdentifier>{b1e3e00d-d275-47f8-bbcd-90e8c0955eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Factory">
+      <UniqueIdentifier>{0e0d0ab0-8736-466d-ad9c-7a8ac1fd3f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\RayCast">
+      <UniqueIdentifier>{9b963b53-2183-4d63-b9c9-d25bc40f429f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\EventCallback">
       <UniqueIdentifier>{ae5a4030-e3f2-4212-ad55-0debf049cba6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData">
+    <Filter Include="OutputData">
       <UniqueIdentifier>{3f0e3621-b1f7-4509-8a8b-59017096badd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ActorData">
+    <Filter Include="OutputData\ActorData">
       <UniqueIdentifier>{e1a74042-e8a3-4599-ab12-45e5dab8711e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\SceneData">
+    <Filter Include="OutputData\SceneData">
       <UniqueIdentifier>{c4026359-cbaf-4201-a201-104a4f4ddab5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData">
+    <Filter Include="OutputData\ColliderData">
       <UniqueIdentifier>{88d7d4c5-4e49-4e87-92b6-b768f97a3430}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\MaterialData">
-      <UniqueIdentifier>{88535f40-4b4d-45f8-946e-f506669f2e4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\OutputData\RayData">
-      <UniqueIdentifier>{0e5737a4-56c1-467f-8660-bd87a32e96e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData\Phys_Collider_Box">
+    <Filter Include="OutputData\ColliderData\Phys_Collider_Box">
       <UniqueIdentifier>{e7a1df1b-a02b-43d9-ae02-d2fa5a486318}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData\Phys_Collider_Sphere">
+    <Filter Include="OutputData\ColliderData\Phys_Collider_Sphere">
       <UniqueIdentifier>{d6708933-504c-4ff5-868a-ff3cdc51dff1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData\Phys_Collider_Capsule">
+    <Filter Include="OutputData\ColliderData\Phys_Collider_Capsule">
       <UniqueIdentifier>{3ea8d9db-a2a3-4463-8071-76c3d6527335}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData\Phys_Collider_Triangle">
+    <Filter Include="OutputData\ColliderData\Phys_Collider_Triangle">
       <UniqueIdentifier>{62d79796-5db0-4a27-9b7b-d5f4ba2c331c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData\Phys_Collider_Interface">
+    <Filter Include="OutputData\ColliderData\Phys_Collider_Interface">
       <UniqueIdentifier>{8371fbe3-056c-41fb-9626-21f569752ee4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\ColliderData\Phys_Collider">
+    <Filter Include="OutputData\ColliderData\Phys_Collider">
       <UniqueIdentifier>{1608f526-d483-4270-af4c-f0c7c5ecddba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OutputData\BaseData">
+    <Filter Include="OutputData\MaterialData">
+      <UniqueIdentifier>{88535f40-4b4d-45f8-946e-f506669f2e4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OutputData\RayData">
+      <UniqueIdentifier>{0e5737a4-56c1-467f-8660-bd87a32e96e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OutputData\BaseData">
       <UniqueIdentifier>{99d82115-b74c-4e49-813d-320fa07b8c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysAPI">
+      <UniqueIdentifier>{2ebc0d29-1c01-4d20-8437-85155d19bc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysEngine">
+      <UniqueIdentifier>{e91549e7-96f0-4c22-9c19-5bded107d307}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PhysEngine.h">
-      <Filter>소스 파일\PhysEngine</Filter>
+      <Filter>PhysEngine</Filter>
     </ClInclude>
     <ClInclude Include="Factory.h">
-      <Filter>소스 파일\Manager\Factory</Filter>
+      <Filter>Manager\Factory</Filter>
     </ClInclude>
     <ClInclude Include="RaycastManager.h">
-      <Filter>소스 파일\Manager\RayCast</Filter>
+      <Filter>Manager\RayCast</Filter>
     </ClInclude>
     <ClInclude Include="PhysEngineDLL.h">
-      <Filter>소스 파일\MainDLL</Filter>
+      <Filter>MainDLL</Filter>
     </ClInclude>
     <ClInclude Include="BaseEventCallBack.h">
-      <Filter>소스 파일\Manager\EventCallback</Filter>
+      <Filter>Manager\EventCallback</Filter>
     </ClInclude>
     <ClInclude Include="Export\PhysMaterial.h">
-      <Filter>소스 파일\OutputData\MaterialData</Filter>
+      <Filter>OutputData\MaterialData</Filter>
     </ClInclude>
     <ClInclude Include="Export\PhysData.h">
-      <Filter>소스 파일\OutputData\ActorData</Filter>
+      <Filter>OutputData\ActorData</Filter>
     </ClInclude>
     <ClInclude Include="Export\PhysX_API.h">
-      <Filter>소스 파일\PhysAPI</Filter>
+      <Filter>PhysAPI</Filter>
     </ClInclude>
     <ClInclude Include="Export\PhysCollider.h">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider</Filter>
     </ClInclude>
     <ClInclude Include="Export\PhysScene.h">
-      <Filter>소스 파일\OutputData\SceneData</Filter>
+      <Filter>OutputData\SceneData</Filter>
     </ClInclude>
     <ClInclude Include="Export\PhysRay.h">
-      <Filter>소스 파일\OutputData\RayData</Filter>
+      <Filter>OutputData\RayData</Filter>
     </ClInclude>
     <ClInclude Include="Export\Phys_Collider_Box.h">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Box</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Box</Filter>
     </ClInclude>
     <ClInclude Include="Export\Phys_Collider_Sphere.h">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Sphere</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Sphere</Filter>
     </ClInclude>
     <ClInclude Include="Export\Phys_Collider_Capsule.h">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Capsule</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Capsule</Filter>
     </ClInclude>
     <ClInclude Include="Export\Phys_Collider_Triangle.h">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Triangle</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Triangle</Filter>
     </ClInclude>
     <ClInclude Include="Export\Phys_Collider_Interface.h">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Interface</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Interface</Filter>
     </ClInclude>
     <ClInclude Include="Export\BaseData.h">
-      <Filter>소스 파일\OutputData\BaseData</Filter>
+      <Filter>OutputData\BaseData</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="SimpleMath.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PhysEngine.cpp">
-      <Filter>소스 파일\PhysEngine</Filter>
+      <Filter>PhysEngine</Filter>
     </ClCompile>
     <ClCompile Include="PhysX_API.cpp">
-      <Filter>소스 파일\PhysAPI</Filter>
+      <Filter>PhysAPI</Filter>
     </ClCompile>
     <ClCompile Include="Factory.cpp">
-      <Filter>소스 파일\Manager\Factory</Filter>
+      <Filter>Manager\Factory</Filter>
     </ClCompile>
     <ClCompile Include="RaycastManager.cpp">
-      <Filter>소스 파일\Manager\RayCast</Filter>
+      <Filter>Manager\RayCast</Filter>
     </ClCompile>
     <ClCompile Include="BaseEventCallBack.cpp">
-      <Filter>소스 파일\Manager\EventCallback</Filter>
+      <Filter>Manager\EventCallback</Filter>
     </ClCompile>
     <ClCompile Include="PhysData.cpp">
-      <Filter>소스 파일\OutputData\ActorData</Filter>
+      <Filter>OutputData\ActorData</Filter>
     </ClCompile>
     <ClCompile Include="PhysScene.cpp">
-      <Filter>소스 파일\OutputData\SceneData</Filter>
+      <Filter>OutputData\SceneData</Filter>
     </ClCompile>
     <ClCompile Include="PhysMaterial.cpp">
-      <Filter>소스 파일\OutputData\MaterialData</Filter>
+      <Filter>OutputData\MaterialData</Filter>
     </ClCompile>
     <ClCompile Include="PhysRay.cpp">
-      <Filter>소스 파일\OutputData\RayData</Filter>
+      <Filter>OutputData\RayData</Filter>
     </ClCompile>
     <ClCompile Include="Phys_Collider_Triangle.cpp">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Triangle</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Triangle</Filter>
     </ClCompile>
     <ClCompile Include="Phys_Collider_Interface.cpp">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Interface</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Interface</Filter>
     </ClCompile>
     <ClCompile Include="Phys_Collider_Box.cpp">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Box</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Box</Filter>
     </ClCompile>
     <ClCompile Include="Phys_Collider_Sphere.cpp">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Sphere</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Sphere</Filter>
     </ClCompile>
     <ClCompile Include="Phys_Collider_Capsule.cpp">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider_Capsule</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider_Capsule</Filter>
     </ClCompile>
     <ClCompile Include="PhysCollider.cpp">
-      <Filter>소스 파일\OutputData\ColliderData\Phys_Collider</Filter>
+      <Filter>OutputData\ColliderData\Phys_Collider</Filter>
     </ClCompile>
+    <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
-      <Filter>헤더 파일</Filter>
+      <Filter>Header</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -37,7 +37,7 @@ void CGrapicsShader::CreateVertexShader(const wstring& _strRelativePath, const s
 	
 	const vector<D3D11_INPUT_ELEMENT_DESC>& vecLayout = CResMgr::GetInst()->GetInputLayoutInfo();
 	
-	hr = DEVICE->CreateInputLayout(vecLayout.data(), vecLayout.size()
+	hr = DEVICE->CreateInputLayout(vecLayout.data(), (UINT)vecLayout.size()
 		, m_VSBlob->GetBufferPointer(), m_VSBlob->GetBufferSize()
 		, m_Layout.GetAddressOf());
 

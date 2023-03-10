@@ -14,6 +14,7 @@ typedef Vector4 Vec4;
 							type();\
 							~type();
 
+#define FDT (1.f / 120.f) // 120fps
 #define DT CTimeMgr::GetInst()->GetEffectDeltaTime()
 //#define EDT CTimeMgr::GetInst()->GetEffectDeltaTime()
 
@@ -32,7 +33,6 @@ typedef Vector4 Vec4;
 
 #define SAFE_LOAD_FROM_YAML(type, variable, node) if(node.IsDefined()) { variable = node.as<type>(); }
 
-// ��ī�� �ڽ��� ť�� �Žÿ� Sphere 2������ ���� �� �ִ�.
 enum class SKYBOX_TYPE
 {
 	SPHERE,
@@ -41,7 +41,7 @@ enum class SKYBOX_TYPE
 
 enum class SAMPLER_TYPE
 {
-	ANISOTROPIC, // �̹漺
+	ANISOTROPIC,
 	POINT,
 
 	END,
@@ -101,20 +101,19 @@ enum PIPELINE_STAGE
 
 enum class SHADER_DOMAIN
 {
-	DOMAIN_DEFERRED_OPAQIE,		// ���� ������
-	DOMAIN_DEFERRED_MASK,		// ���� ������
-	DOMAIN_DEFERRED_DECAL,		// ����ó�� ��Į
+	DOMAIN_DEFERRED_OPAQIE,	
+	DOMAIN_DEFERRED_MASK,	
+	DOMAIN_DEFERRED_DECAL,	
+							
+	DOMAIN_OPAQUE,			
+	DOMAIN_MASK,			
+							
+	DOMAIN_DECAL,			
+	DOMAIN_TRANSPARENT,		
+							
+	DOMAIN_POST_PROCESS,	
 
-	DOMAIN_OPAQUE,				// ������ �ܰ�
-	DOMAIN_MASK,				// ���, �����
-
-	DOMAIN_DECAL,				// ��Į ó�� (Forward)
-	DOMAIN_TRANSPARENT,			// ������
-
-	DOMAIN_POST_PROCESS,		// ��ó��
-
-	// Rendering ������ �ƴ� Engine �������� ó���� �뵵
-	DOMAIN_LIGHT,				// ���� ó��
+	DOMAIN_LIGHT,
 	NONE,
 };
 
@@ -258,7 +257,6 @@ enum class DIR
 	END,
 };
 
-// ����ȭ ������ Ÿ��(�뵵)
 enum class SB_TYPE
 {
 	SRV_ONLY,	// ShaderResourceView�� ���ϰ� �ִ� Ÿ��
@@ -267,9 +265,9 @@ enum class SB_TYPE
 
 enum class LIGHT_TYPE
 {
-	DIRECTIONAL,	// ���⼺ ����			: �� �������� ���ߴ� ��
-	POINT,			// �� ����				: �� ������ ��� �������� �߻��ϴ� ��
-	SPOT,			// ����Ʈ ����Ʈ ����		: Ư�� ������ ������ �ּ� ��� ��
+	DIRECTIONAL,	
+	POINT,			
+	SPOT,			
 };
 
 // ī�޶� Ÿ��

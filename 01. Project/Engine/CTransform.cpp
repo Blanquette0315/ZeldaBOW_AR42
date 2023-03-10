@@ -7,6 +7,7 @@
 CTransform::CTransform()
 	: CComponent(COMPONENT_TYPE::TRANSFORM)
 	, m_vRelativeScale(Vec3(1.f,1.f,1.f))
+	, m_bIgnParentScale(false)
 {
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3(1.f, 0.f, 0.f);
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3(0.f, 1.f, 0.f);
@@ -155,10 +156,10 @@ RECT CTransform::GetRectCoord()
 	RECT Temp = {};
 
 	Vec3 vWorldPos = GetWorldPos();
-	Temp.left = vWorldPos.x - (m_vRelativeScale.x * 0.5f);
-	Temp.top = vWorldPos.y + (m_vRelativeScale.y * 0.5f);
-	Temp.right = vWorldPos.x + (m_vRelativeScale.x * 0.5f);
-	Temp.bottom = vWorldPos.y - (m_vRelativeScale.y * 0.5f);
+	Temp.left = (LONG)(vWorldPos.x - (m_vRelativeScale.x * 0.5f));
+	Temp.top = (LONG)(vWorldPos.y + (m_vRelativeScale.y * 0.5f));
+	Temp.right = (LONG)(vWorldPos.x + (m_vRelativeScale.x * 0.5f));
+	Temp.bottom = (LONG)(vWorldPos.y - (m_vRelativeScale.y * 0.5f));
 
 	return Temp;
 }

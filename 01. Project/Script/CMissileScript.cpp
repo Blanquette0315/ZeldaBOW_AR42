@@ -15,7 +15,7 @@ void CMissileScript::tick()
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	vPos.y += m_fSpeed * DT;
+	vPos.y += m_fSpeed * FDT;
 
 	Transform()->SetRelativePos(vPos);
 }

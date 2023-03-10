@@ -36,7 +36,7 @@ void ListUI::render_update()
 			bool Selectable = (m_iSelectedIdx == i);
 			if (ImGui::Selectable(m_ItemList[i].c_str(), Selectable))
 			{
-				m_iSelectedIdx = i;
+				m_iSelectedIdx = (int)i;
 			}
 
 			if (Selectable)

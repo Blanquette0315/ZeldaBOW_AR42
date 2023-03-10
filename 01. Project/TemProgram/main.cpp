@@ -5,6 +5,7 @@
 
 #include <Engine\CDevice.h>
 #include <Engine/CEventMgr.h>
+#include <Engine/CTimeMgr.h>
 #include "CImGuiMgr.h"
 #include "CreateTestLevel.h"
 #include "CSaveLoadMgr.h"
@@ -64,6 +65,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
+    float fDeltaTime = 0.f;
+
     // 기본 메시지 루프입니다:
     while (true)
     {
@@ -81,20 +84,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
       
         else
         {
-            // 게임 Engine 매 프레임 마다 실행.
-            CEngine::GetInst()->progress();
+            CTimeMgr::GetInst()->tick();
+            CTimeMgr::GetInst()->render();
+            fDeltaTime += DT;
+            if (fDeltaTime >= FDT)
+            {
+                fDeltaTime -= FDT;
 
-            // Editor
-            CEditor::GetInst()->progress();
+                // 게임 Engine 매 프레임 마다 실행.
+                CEngine::GetInst()->progress();
 
-            // ImGui
-            CImGuiMgr::GetInst()->progress();
+                // Editor
+                CEditor::GetInst()->progress();
 
-            // EventMgrtick();
-            CEventMgr::GetInst()->tick();
+                // ImGui
+                CImGuiMgr::GetInst()->progress();
 
-            // Present(SwapChain)
-            CDevice::GetInst()->Present();
+                // EventMgrtick();
+                CEventMgr::GetInst()->tick();
+
+                // Present(SwapChain)
+                CDevice::GetInst()->Present();
+            }
         }
     }
 

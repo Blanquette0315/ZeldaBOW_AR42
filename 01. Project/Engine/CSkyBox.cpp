@@ -31,13 +31,7 @@ void CSkyBox::SetTexture(Ptr<CTexture> _pTex)
 
 void CSkyBox::finaltick()
 {
-	// ���� SkyBox ��ü�� ���� ī�޶� �̵��Ҷ�, �ش� SkyBox�� �Բ� �̵��ϵ��� �����ϴ� ���
-	// �̷��� �ǽð����� ��ġ�� ������ �ϴ� ��İ�, �츮�� �����߿� ���� shader�ڵ� �ʿ��� ó�����ִ� �� ���� ������̴� ũ�� ���� �� ���ٰ� �ϽŴ�.
-	// MainCam�� ��ġ�� �˾Ƴ���.
-	// SkyBox�� ��ġ���� �����Ѵ�.
 
-	// MainCom�� Far ���� �����´�.
-	// Transform Scale�� �����Ѵ�.
 }
 
 void CSkyBox::render()

@@ -11,6 +11,7 @@ CAnimation2D::CAnimation2D()
 	: m_iCurIdx(-1)
 	, m_pOwner(nullptr)
 	, m_fAcctime(0.f)
+	, m_bFinish(false)
 {
 }
 
@@ -25,7 +26,7 @@ void CAnimation2D::finaltick()
 		return;
 
 	// 시간 누적
-	m_fAcctime += DT;
+	m_fAcctime += FDT;
 
 	// 누적 시간이 해당 프레임 유지시간을 넘어서면 다음 프레임으로 넘어간다.
 	if (m_fAcctime > m_vecFrm[m_iCurIdx].fDuration)
@@ -55,7 +56,7 @@ void CAnimation2D::Create(const wstring& _Key, Ptr<CTexture> _AtlasTex, Vec2 _vL
 	float TexHeight = (float)m_AtlasTex->GetHeight();
 
 	// tAnim2DFrm (Animation Frame Info) 채우기
-	for (UINT i = 0; i < _iMaxFrm; ++i)
+	for (int i = 0; i < _iMaxFrm; ++i)
 	{
 		tAnim2DFrm TemAnim2DFrm = {};
 

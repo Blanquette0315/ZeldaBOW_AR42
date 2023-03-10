@@ -46,32 +46,32 @@ void CPlayerScript::tick()
 
 	if (KEY_PRESSED(KEY::LEFT))
 	{
-		vPos.x -= m_fSpeed * DT;
+		vPos.x -= m_fSpeed * FDT;
 	}
 
 	if (KEY_PRESSED(KEY::RIGHT))
 	{
-		vPos.x += m_fSpeed * DT;
+		vPos.x += m_fSpeed * FDT;
 	}
 
 	if (KEY_PRESSED(KEY::UP))
 	{
-		vPos.y += m_fSpeed * DT;
+		vPos.y += m_fSpeed * FDT;
 	}
 
 	if (KEY_PRESSED(KEY::DOWN))
 	{
-		vPos.y -= m_fSpeed * DT;
+		vPos.y -= m_fSpeed * FDT;
 	}
 
 	if (KEY_PRESSED(KEY::Y))
 	{
 		Vec3 vRot = Transform()->GetRelativeRotation();
-		vRot.z += DT * XM_PI;
+		vRot.z += FDT * XM_PI;
 		Transform()->SetRelativeRotation(vRot);
 
 		float fZRot = Collider2D()->GetRotationZ();
-		fZRot += DT * XM_PI;
+		fZRot += FDT * XM_PI;
 		Collider2D()->SetRotationZ(fZRot);
 	}
 

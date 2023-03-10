@@ -32,7 +32,7 @@ VS_OUT VS_SkyBox(VS_IN _in)
     // ViewSpace에서 카메라가 원점이기 떄문에 스카이 박스가 View로 바로 이동하면,
     // 항상 카메라 원점을 중심으로 스카이박스의 중심이 잡힌다.
     
-    float3 vViewPos = mul(mul(float4(_in.vPos, 0.f), g_mat_0), g_matView);
+    float3 vViewPos = mul(mul(float4(_in.vPos, 0.f), g_mat_0), g_matView).xyz;
     // 투영 행렬을 곱했을 때, w에 있는 z값이 중요하다.
     // 즉, 투영 행렬을 곱했을 때, x,y,z의 값을 그대로 사용하면 안된다.
     // w 자리의 Vz가 들어있기 때무에 투영좌표는 다음과 같이 나온다.

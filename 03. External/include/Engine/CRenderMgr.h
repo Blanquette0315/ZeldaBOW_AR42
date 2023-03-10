@@ -1,11 +1,12 @@
 #pragma once
 
+#include "CLight2D.h"
+#include "CLight3D.h"
+#include "CTexture.h"
+
 class CCamera;
 class CStructuredBuffer;
 class CMRT;
-#include "CLight2D.h";
-#include "CLight3D.h"
-#include "CTexture.h";
 
 class CRenderMgr
 	: public CSingleton<CRenderMgr>
@@ -61,7 +62,7 @@ public:
 	{
 		m_vecLight3D.push_back(_pLight3D);
 		// 사이즈 -1을 반환해서 해당 라이트가 몇 번째 배열 요소인지 알려준다.
-		return m_vecLight3D.size() - 1;
+		return (int)m_vecLight3D.size() - 1;
 	}
 
 	CCamera* GetMainCam();

@@ -107,7 +107,7 @@ void CEditor::render_debug()
 	list<tDebugShapeInfo>::iterator iter = m_DebugDrawList.begin();
 	for (; iter != m_DebugDrawList.end();)
 	{
-		iter->fCurtime += DT;
+		iter->fCurtime += FDT;
 		if (iter->fDuration < iter->fCurtime)
 		{
 			iter = m_DebugDrawList.erase(iter);

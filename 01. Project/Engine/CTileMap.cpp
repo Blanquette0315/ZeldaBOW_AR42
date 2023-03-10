@@ -87,8 +87,8 @@ void CTileMap::SetTileAtlas(Ptr<CTexture> _AtlasTex)
 {
 	m_AtlasTex = _AtlasTex;
 
-	m_TexWH.x = m_AtlasTex->GetWidth();
-	m_TexWH.y = m_AtlasTex->GetHeight();
+	m_TexWH.x = (float)m_AtlasTex->GetWidth();
+	m_TexWH.y = (float)m_AtlasTex->GetHeight();
 }
 
 void CTileMap::SaveToYAML(YAML::Emitter& _emitter)

@@ -43,13 +43,13 @@ void CCameraScript::Move()
 		Vec3 vRight = Transform()->GetRelativeDir(DIR::RIGHT);
 
 		if (KEY_PRESSED(KEY::W))
-			vPos += DT * vFront * fSpeed;
+			vPos += FDT * vFront * fSpeed;
 		if (KEY_PRESSED(KEY::S))
-			vPos += DT * -vFront * fSpeed;
+			vPos += FDT * -vFront * fSpeed;
 		if (KEY_PRESSED(KEY::A))
-			vPos += DT * -vRight * fSpeed;
+			vPos += FDT * -vRight * fSpeed;
 		if (KEY_PRESSED(KEY::D))
-			vPos += DT * vRight * fSpeed;
+			vPos += FDT * vRight * fSpeed;
 
 		Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
 
@@ -57,8 +57,8 @@ void CCameraScript::Move()
 		{
 			Vec3 vRot = Transform()->GetRelativeRotation();
 
-			vRot.y += vMouseDir.x * DT * XM_PI;
-			vRot.x -= vMouseDir.y * DT * XM_PI;
+			vRot.y += vMouseDir.x * FDT * XM_PI;
+			vRot.x -= vMouseDir.y * FDT * XM_PI;
 			Transform()->SetRelativeRotation(vRot);
 		}
 
@@ -74,13 +74,13 @@ void CCameraScript::Move()
 			vRot.y = 0.f;
 
 		if (KEY_PRESSED(KEY::W))
-			vPos.y += DT * fSpeed;
+			vPos.y += FDT * fSpeed;
 		if (KEY_PRESSED(KEY::S))
-			vPos.y -= DT * fSpeed;
+			vPos.y -= FDT * fSpeed;
 		if (KEY_PRESSED(KEY::A))
-			vPos.x += DT * fSpeed;
+			vPos.x += FDT * fSpeed;
 		if (KEY_PRESSED(KEY::D))
-			vPos.x -= DT * fSpeed;
+			vPos.x -= FDT * fSpeed;
 
 		if (vPos != Transform()->GetRelativePos())
 			Transform()->SetRelativePos(vPos);
@@ -88,13 +88,13 @@ void CCameraScript::Move()
 		if (KEY_PRESSED(KEY::N_1))
 		{
 			float fScale = Camera()->GetOrthographicScale();
-			fScale += DT;
+			fScale += FDT;
 			Camera()->SetOrthographicScale(fScale);
 		}
 		else if (KEY_PRESSED(KEY::N_2))
 		{
 			float fScale = Camera()->GetOrthographicScale();
-			fScale -= DT;
+			fScale -= FDT;
 			Camera()->SetOrthographicScale(fScale);
 		}
 	}

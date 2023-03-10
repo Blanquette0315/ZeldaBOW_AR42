@@ -125,11 +125,11 @@ void CResMgr::CreateDefaultMesh()
 
 	vecVtx.push_back(v);
 
-	int iSlice = 40;
+	UINT iSlice = 40;
 	float fRadius = 0.5f;
 	float fTheta = XM_2PI / (float)iSlice;
 
-	for (int i = 0; i < iSlice; ++i)
+	for (UINT i = 0; i < iSlice; ++i)
 	{
 		v.vPos = Vec3(fRadius * cosf(fTheta * (float)i), fRadius * sinf(fTheta * (float)i), 1.f);
 		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
@@ -467,8 +467,8 @@ void CResMgr::CreateConeMesh(float radius, float height, size_t tessellation)
 		vertices.push_back(Vtx{ position, {}, {}, {}, {}, {} });
 
 		indices.push_back(0);
-		indices.push_back(i + 2);
-		indices.push_back(i + 1);
+		indices.push_back((UINT)i + 2);
+		indices.push_back((UINT)i + 1);
 	}
 
 	indices[indices.size() - 2] = 1;
@@ -476,8 +476,8 @@ void CResMgr::CreateConeMesh(float radius, float height, size_t tessellation)
 	for (size_t i = 0; i < tessellation - 2; i++)
 	{
 		indices.push_back(1);
-		indices.push_back(1 + i + 1);
-		indices.push_back(1 + i + 2);
+		indices.push_back(1 + (UINT)i + 1);
+		indices.push_back(1 + (UINT)i + 2);
 	}
 
 

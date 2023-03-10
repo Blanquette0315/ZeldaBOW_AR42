@@ -9,7 +9,6 @@ private:
 	HWND			m_hMainWnd;	// 메인 윈도우 핸들
 	Vec2			m_vResolution; // 해상도
 
-
 public:
 	void progress();
 	int init(HWND _hWnd, UINT _iWidth, UINT _iHeight);
