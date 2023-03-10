@@ -60,13 +60,13 @@ void CPhysMgr::init()
 	pData->isKinematic = true;
 	PhysX_Create_Actor(pData);
 
-	//pData = new PhysData;
-	//pData->mCollider->CreateBox(0.1f, 0.1f, 0.1f);
-	//pData->SetWorldPosition(0.03f, 1.f, 0.f);
-	//pData->mMeterial->MT_Restitution = 0.f;
-	//pData->isDinamic = true;
-
-	//PhysX_Create_Actor(pData);
+	m_pData2 = new PhysData;
+	m_pData2->mCollider->CreateBox(10.f, 10.f, 10.f);
+	m_pData2->SetWorldPosition(0.f, 1.f, 0.f);
+	m_pData2->mMeterial->MT_Restitution = 0.f;
+	m_pData2->isKinematic = true;
+	m_pData2->SetTrigger(true);
+	PhysX_Create_Actor(m_pData2);
 
 	m_pData = new PhysData;
 	m_pData->SetWorldPosition(0.f, 50.f, 0.f);
@@ -83,14 +83,19 @@ void CPhysMgr::tick()
 {
 	//m_fFrame = DT;
 	PhysX_Update(FDT);
-	m_fFrame += FDT;
-	float dtd = m_pData->mMeterial->MT_Restitution;
-	PhysX_Update_Actor(m_pData);
 
-	//if(m_pData->mCollider->GetTrigger)
-	if (KEY_PRESSED(KEY::SPACE))
+	if (m_pData2->Enter_Count != 0)
 	{
-		m_pData->SetVelocity(0.2f, 0.f, 0.f);
+		int a = 0;
 	}
 
+	if (m_pData2->Exit_Count != 0)
+	{
+		int a = 0;
+	}
+
+	if (KEY_TAP(KEY::SPACE))
+	{
+		PhysX_Delete_Actor(m_pData);
+	}
 }

@@ -66,13 +66,7 @@ void CPlayerScript::tick()
 
 	if (KEY_PRESSED(KEY::Y))
 	{
-		Vec3 vRot = Transform()->GetRelativeRotation();
-		vRot.z += FDT * XM_PI;
-		Transform()->SetRelativeRotation(vRot);
-
-		float fZRot = Collider2D()->GetRotationZ();
-		fZRot += FDT * XM_PI;
-		Collider2D()->SetRotationZ(fZRot);
+	
 	}
 
 	if (vPos != Transform()->GetRelativePos())

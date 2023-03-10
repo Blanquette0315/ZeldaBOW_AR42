@@ -269,20 +269,20 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 	}
 	break;
 
-	case COMPONENT_TYPE::COLLIDER2D:
+	case COMPONENT_TYPE::COLLIDER:
 	{
-		if (_Select)
+		/*if (_Select)
 		{
 			_Target->AddComponent(new CCollider2D);
 		}
 		else
 		{
 			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::COLLIDER2D));
-		}
+		}*/
 	}
 	break;
 
-	case COMPONENT_TYPE::COLLIDER3D:
+	case COMPONENT_TYPE::RIGIDBODY:
 		break;
 
 	case COMPONENT_TYPE::ANIMATOR2D:

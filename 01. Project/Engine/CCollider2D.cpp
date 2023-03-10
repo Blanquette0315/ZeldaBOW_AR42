@@ -5,7 +5,7 @@
 #include "CScript.h"
 
 CCollider2D::CCollider2D()
-	: CComponent(COMPONENT_TYPE::COLLIDER2D)
+	: CComponent(COMPONENT_TYPE::COLLIDER)
 	, m_vScale(Vec2(1.f, 1.f))
 	, m_bIgnorObjectScale(false)
 	, m_eType(COLLIDER2D_TYPE::COLLIDER2D_RECT)

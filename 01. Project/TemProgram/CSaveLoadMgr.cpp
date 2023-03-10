@@ -195,8 +195,6 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 	pObject->LoadFromYAML(_node);
 
 	// 오브젝트 소유 컴포넌트
-	
-
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		COMPONENT_TYPE type = (COMPONENT_TYPE)i;
@@ -215,7 +213,7 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 				pComponent = new CCamera;
 				break;
 
-			case COMPONENT_TYPE::COLLIDER2D:
+			case COMPONENT_TYPE::COLLIDER:
 				break;
 
 			case COMPONENT_TYPE::ANIMATOR2D:
@@ -240,7 +238,7 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 			case COMPONENT_TYPE::LIGHT3D:
 				pComponent = new CLight3D;
 				break;
-			case COMPONENT_TYPE::COLLIDER3D:
+			case COMPONENT_TYPE::RIGIDBODY:
 				break;
 			case COMPONENT_TYPE::ANIMATOR3D:
 				break;
