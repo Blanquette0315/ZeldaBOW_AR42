@@ -66,7 +66,9 @@ void CPlayerScript::tick()
 
 	if (KEY_PRESSED(KEY::Y))
 	{
-	
+		Vec3 vRot = Transform()->GetRelativeRotation();
+		vRot.z += 20.f * DT * XM_PI;
+		Transform()->SetRelativeRotation(vRot);
 	}
 
 	if (vPos != Transform()->GetRelativePos())
@@ -77,17 +79,19 @@ void CPlayerScript::tick()
 	}
 }
 
-void CPlayerScript::BeginOverlap(CCollider2D* _pOther)
+void CPlayerScript::BeginOverlap(CCollider* _pOther)
 {
-	_pOther->Destroy();
+	int a = 0;
 }
 
-void CPlayerScript::Overlap(CCollider2D* _pOther)
+void CPlayerScript::Overlap(CCollider* _pOther)
 {
+	int a = 0;
 }
 
-void CPlayerScript::EndOverlap(CCollider2D* _pOther)
+void CPlayerScript::EndOverlap(CCollider* _pOther)
 {
+	int a = 0;
 }
 
 void CPlayerScript::SaveToYAML(YAML::Emitter& _emitter)

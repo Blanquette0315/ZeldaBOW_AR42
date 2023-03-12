@@ -294,9 +294,6 @@
     <ClInclude Include="CPrefab.h">
       <Filter>Engine\07. Resource\05. Prefab</Filter>
     </ClInclude>
-    <ClInclude Include="CCollider2D.h">
-      <Filter>Engine\06. Component\04. Collider</Filter>
-    </ClInclude>
     <ClInclude Include="CCollisionMgr.h">
       <Filter>Engine\03. Mgr\08. CollisionMgr</Filter>
     </ClInclude>
@@ -356,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="CPhysMgr.h">
       <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollider.h">
+      <Filter>Engine\06. Component\04. Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -461,9 +461,6 @@
     <ClCompile Include="CResMgr_init.cpp">
       <Filter>Engine\03. Mgr\05. ResourceMgr</Filter>
     </ClCompile>
-    <ClCompile Include="CCollider2D.cpp">
-      <Filter>Engine\06. Component\04. Collider</Filter>
-    </ClCompile>
     <ClCompile Include="CCollisionMgr.cpp">
       <Filter>Engine\03. Mgr\08. CollisionMgr</Filter>
     </ClCompile>
@@ -526,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="CPhysMgr.cpp">
       <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollider.cpp">
+      <Filter>Engine\06. Component\04. Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

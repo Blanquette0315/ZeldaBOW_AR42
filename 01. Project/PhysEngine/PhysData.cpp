@@ -31,6 +31,13 @@ PhysData::PhysData()
 	ActorObj	= nullptr;
 	mMeterial	= new PhysMaterial();
 	mCollider	= new PhysCollider();
+
+	for (int i = 0; i < 10; ++i)
+	{
+		TriggerEnter_List[i] = nullptr;
+		TriggerStay_List[i] = nullptr;
+		TriggerExit_List[i] = nullptr;
+	}
 }
 
 PhysData::~PhysData()

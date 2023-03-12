@@ -49,9 +49,9 @@ public:
     virtual void finaltick() final {};
 
 public:
-    virtual void BeginOverlap(CCollider2D* _pOther) {}
-    virtual void Overlap(CCollider2D* _pOther) {}
-    virtual void EndOverlap(CCollider2D* _pOther) {}
+    virtual void BeginOverlap(CCollider* _pOther) {}
+    virtual void Overlap(CCollider* _pOther) {}
+    virtual void EndOverlap(CCollider* _pOther) {}
 
 public:
     virtual CScript* Clone() = 0;

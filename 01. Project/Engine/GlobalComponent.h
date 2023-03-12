@@ -3,7 +3,7 @@
 #include "CTransform.h"
 #include "CMeshRender.h"
 #include "CCamera.h"
-#include "CCollider2D.h"
+#include "CCollider.h"
 #include "CLight2D.h"
 #include "CAnimator2D.h"
 #include "CTileMap.h"
@@ -13,6 +13,5 @@
 #include "CSkyBox.h"
 #include "CLandScape.h"
 
-//#include "CCollider3D.h"
 //#include "CAnimator3D.h"
 //#include "CBoundingBox.h"
