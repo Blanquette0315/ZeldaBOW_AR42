@@ -92,6 +92,9 @@ public:
 	void SetLockAxis_Rotation(bool x, bool y, bool z);
 	Vector3 GetLockAxis_Rotation();
 
+	//임시
+	Vector3 DVelocity;
+
 private:
 	///위치 데이터
 	//로컬 위치 (계층 구조일때)

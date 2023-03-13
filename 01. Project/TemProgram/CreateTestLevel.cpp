@@ -56,7 +56,7 @@ void CreateTestLevel()
 	// 보통 방향성 광원은 낮일때는 0.7, 밤에는 0.2정도를 두고 사용한다.
 	// 광원은 그려질 필요가 없기 때문에 CRenderMesh는 추가하지 않는다.
 	// Directional Light는 방향 정보가 필요 없기 때문에 넣지 않았다.
-	/*CGameObject* pDirLight = new CGameObject;
+	CGameObject* pDirLight = new CGameObject;
 	pDirLight->SetName(L"DirectionalLight");
 
 	pDirLight->AddComponent(new CTransform);
@@ -67,7 +67,7 @@ void CreateTestLevel()
 	pDirLight->Light3D()->SetLightAmbient(Vec3(0.15f, 0.15f, 0.15f));
 	pDirLight->Light3D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 
-	pLevel->AddGameObject(pDirLight, 0);*/
+	pLevel->AddGameObject(pDirLight, 0);
 
 
 	// Point Light 추가
@@ -89,7 +89,7 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pPointLight, 0);*/
 
 	// Spot Light 추가
-	CGameObject* pSpotLight = new CGameObject;
+	/*CGameObject* pSpotLight = new CGameObject;
 	pSpotLight->SetName(L"SpotLight");
 
 	pSpotLight->AddComponent(new CTransform);
@@ -107,7 +107,7 @@ void CreateTestLevel()
 	pSpotLight->Light3D()->SetInAngle(25);
 	pSpotLight->Light3D()->SetOutAngle(45);
 
-	pLevel->AddGameObject(pSpotLight, 0);
+	pLevel->AddGameObject(pSpotLight, 0);*/
 
 	// SkyBox 추가
 	CGameObject* pSkyBox = new CGameObject;
@@ -137,15 +137,24 @@ void CreateTestLevel()
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CRigidBody);
 	pObject->AddComponent(new CPlayerScript);
-
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 400.f));
+	//
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 
+	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::SPHERE, false, true);
+	pObject->RigidBody()->SetMass(10.f);
+	pObject->RigidBody()->SetRestitution(0.f);
+	pObject->RigidBody()->SetStaticFriction(0.f);
+	pObject->RigidBody()->SetDynamicFriction(0.f);
+	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
+	pObject->RigidBody()->SetGravityOption(true);
+	pObject->RigidBody()->CreateActor();
 
 	pLevel->AddGameObject(pObject, 0);
 
@@ -156,7 +165,7 @@ void CreateTestLevel()
 	pDecal->AddComponent(new CTransform);
 	pDecal->AddComponent(new CDecal);
 
-	pDecal->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pDecal->Transform()->SetRelativePos(0.f, 500.f, 0.f);
 	pDecal->Transform()->SetRelativeScale(250.f, 250.f, 250.f);
 	
 	pDecal->Decal()->SetRenderType(true);
@@ -170,17 +179,21 @@ void CreateTestLevel()
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CRigidBody);
 
-	pObject->Transform()->SetRelativePos(Vec3(0.f, -500.f, 400.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(XM_PI / 2.f, 0.f, 0.f));
-	//Std3DMtrl
+	
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//Std3D_DeferredMtrl
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TessMtrl"));
-	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
-	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
+	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true);
+	pObject->RigidBody()->SetLockAxis_Pos(true, true, true);
+	pObject->RigidBody()->SetStaticFriction(0.f);
+	pObject->RigidBody()->SetDynamicFriction(0.f);
+	pObject->RigidBody()->SetRestitution(0.f);
+	pObject->RigidBody()->CreateActor();
 
 	pLevel->AddGameObject(pObject, 0);
 
@@ -190,7 +203,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 400.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 1000.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI / 2.f, 0.f, 0.f));
 
@@ -206,13 +219,19 @@ void CreateTestLevel()
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CRigidBody);
 
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 900.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 900.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+
+	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true);
+	pObject->RigidBody()->SetLockAxis_Pos(true, true, true);
+	pObject->RigidBody()->SetRestitution(0.f);
+	pObject->RigidBody()->CreateActor();
 
 	//Instantiate(pObject, Vec3(0.f, 0.f, 900.f), 0);
 	pLevel->AddGameObject(pObject, 0);
@@ -223,7 +242,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 
-	pObject->Transform()->SetRelativePos(Vec3(500.f, 0.f, 400.f));
+	pObject->Transform()->SetRelativePos(Vec3(500.f, 500.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(0.f, XM_PI / 2.f, 0.f));
 
@@ -239,7 +258,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 
-	pObject->Transform()->SetRelativePos(Vec3(-500.f, 0.f, 400.f));
+	pObject->Transform()->SetRelativePos(Vec3(-500.f, 500.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(0.f, -XM_PI / 2.f, 0.f));
 

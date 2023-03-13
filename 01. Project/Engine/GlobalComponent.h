@@ -12,6 +12,7 @@
 #include "CDecal.h"
 #include "CSkyBox.h"
 #include "CLandScape.h"
+#include "CRigidBody.h"
 
 //#include "CCollider3D.h"
 //#include "CAnimator3D.h"

@@ -328,3 +328,21 @@ vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr)
 	}
 	return vecStr;
 }
+
+void QuaternionToEuler(Vec4 _vQRot, Vec3& _vERot)
+{
+	// roll (x-axis rotation)
+	double sinr_cosp = 2 * (_vQRot.w * _vQRot.x + _vQRot.y * _vQRot.z);
+	double cosr_cosp = 1 - 2 * (_vQRot.x * _vQRot.x + _vQRot.y * _vQRot.y);
+	_vERot.x = std::atan2(sinr_cosp, cosr_cosp);
+
+	// pitch (y-axis rotation)
+	double sinp = std::sqrt(1 + 2 * (_vQRot.w * _vQRot.y - _vQRot.x * _vQRot.z));
+	double cosp = std::sqrt(1 - 2 * (_vQRot.w * _vQRot.y - _vQRot.x * _vQRot.z));
+	_vERot.y = 2 * std::atan2(sinp, cosp) - XM_PI / 2;
+
+	// yaw (z-axis rotation)
+	double siny_cosp = 2 * (_vQRot.w * _vQRot.z + _vQRot.x * _vQRot.y);
+	double cosy_cosp = 1 - 2 * (_vQRot.y * _vQRot.y + _vQRot.z * _vQRot.z);
+	_vERot.z = std::atan2(siny_cosp, cosy_cosp);
+}
