@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PhysEngineDLL.h"
-#include "SimpleMath.h"
+//#include "SimpleMath.h"
 #include <string>
 
 using namespace DirectX;

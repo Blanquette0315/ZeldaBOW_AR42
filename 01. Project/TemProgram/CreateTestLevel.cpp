@@ -151,9 +151,9 @@ void CreateTestLevel()
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 
 	pObject->Collider()->SetType(COLLIDER_TYPE::COLLIDER_CUBE);
-	pObject->Collider()->SetOffsetPos(Vec3(-300.f, 100.f, 0.f));
-	pObject->Collider()->SetRotationX(XM_PI / 4.f);
-	pObject->Collider()->SetRotationY(XM_PI / 4.f);
+	pObject->Collider()->SetOffsetPos(Vec3(100.f, 0.f, 0.f));
+	//pObject->Collider()->SetRotationX(XM_PI / 4.f);
+	//pObject->Collider()->SetRotationY(XM_PI / 4.f);
 	pObject->Collider()->SetRotationZ(XM_PI / 4.f);
 	pObject->Collider()->SetRadius(150.f);
 	pLevel->AddGameObject(pObject, 1);

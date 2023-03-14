@@ -18,6 +18,11 @@ CTransform::~CTransform()
 {
 }
 
+void CTransform::begin()
+{
+	finaltick();
+}
+
 void CTransform::tick()
 {
 }
