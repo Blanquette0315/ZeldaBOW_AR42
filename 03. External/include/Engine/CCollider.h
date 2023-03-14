@@ -44,6 +44,7 @@ public:
 
     PhysData* GetPhysData() { return m_pPhysData; }
 public:
+    virtual void begin() override;
     virtual void finaltick() override;
 
 public:

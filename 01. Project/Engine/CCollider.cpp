@@ -23,75 +23,117 @@ CCollider::~CCollider()
 	}
 }
 
+void CCollider::begin()
+{
+	if (m_pPhysData != nullptr)
+		return;
+
+	Vec3 vObjectPos = Transform()->GetWorldPos();
+	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetWorldRotMat());
+	m_vFinalPos = vColliderWorldOffset + vObjectPos;
+
+	Vec3 vRot = m_vRot;
+	Matrix matRot = XMMatrixRotationX(m_vRot.x);
+	matRot *= XMMatrixRotationY(m_vRot.y);
+	matRot *= XMMatrixRotationZ(m_vRot.z);
+	CGameObject* pParent = GetOwner();
+	while (true)
+	{
+		if (nullptr == pParent)
+			break;
+		Vec3 vParentRot = pParent->Transform()->GetRelativeRotation();
+		matRot *= XMMatrixRotationX(vParentRot.x);
+		matRot *= XMMatrixRotationY(vParentRot.y);
+		matRot *= XMMatrixRotationZ(vParentRot.z);
+
+		pParent = pParent->GetParent();
+	}
+
+	m_pPhysData = PhysX_Create_Data();
+	m_pPhysData->EaterObj = GetOwner();
+	m_pPhysData->isKinematic = true;
+	m_pPhysData->SetTrigger(true);
+	if (m_eType == COLLIDER_TYPE::COLLIDER_CUBE)
+	{
+		m_pPhysData->mCollider->SetBoxCollider(m_vScale.x / 100.f, m_vScale.y / 100.f, m_vScale.z / 100.f);
+	}
+	else if (m_eType == COLLIDER_TYPE::COLLIDER_SPHERE)
+	{
+		m_pPhysData->mCollider->SetSphereCollider(m_vScale.x / 100.f);
+	}
+	m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
+	Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
+	m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		m_pPhysData->TriggerEnter_List[i] = nullptr;
+		m_pPhysData->TriggerStay_List[i] = nullptr;
+		m_pPhysData->TriggerExit_List[i] = nullptr;
+	}
+
+	PhysX_Create_Actor(m_pPhysData);
+}
+
 void CCollider::finaltick()
 {
+	if (m_pPhysData == nullptr)
+		return;
+
 	//FinalPos
 	Vec3 vObjectPos = Transform()->GetWorldPos();
 	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetWorldRotMat());
 	m_vFinalPos = vColliderWorldOffset + vObjectPos;
 
+	Vec3 vRot = m_vRot;
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
 	matRot *= XMMatrixRotationZ(m_vRot.z);
-	matRot *= Transform()->GetWorldRotMat();
-
-	// Physx 업데이트
-	if (m_bBeCreateActor)
+	CGameObject* pParent = GetOwner();
+	while (true)
 	{
-		PhysX_Update_Actor(m_pPhysData);
-		m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
-		Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
-		m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
-	}
-	else
-	{
-		m_pPhysData = PhysX_Create_Data();
-		m_pPhysData->EaterObj = GetOwner();
-		m_pPhysData->isKinematic = true;
-		m_pPhysData->SetTrigger(true);
-		if (m_eType == COLLIDER_TYPE::COLLIDER_CUBE)
-		{
-			m_pPhysData->mCollider->SetBoxCollider(m_vScale.x / 100.f, m_vScale.y / 100.f, m_vScale.z / 100.f);
-		}
-		else if (m_eType == COLLIDER_TYPE::COLLIDER_SPHERE)
-		{
-			m_pPhysData->mCollider->SetSphereCollider(m_vScale.x / 100.f);
-		}
-		m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
-		Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
-		m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
+		if (nullptr == pParent)
+			break;
+		Vec3 vParentRot = pParent->Transform()->GetRelativeRotation();
+		matRot *= XMMatrixRotationX(vParentRot.x);
+		matRot *= XMMatrixRotationY(vParentRot.y);
+		matRot *= XMMatrixRotationZ(vParentRot.z);
 		
-		for (int i = 0; i < 10; ++i)
-		{
-			m_pPhysData->TriggerEnter_List[i] = nullptr;
-			m_pPhysData->TriggerStay_List[i] = nullptr;
-			m_pPhysData->TriggerExit_List[i] = nullptr;
-		}
-
-		PhysX_Create_Actor(m_pPhysData);
-		m_bBeCreateActor = true;
+		pParent = pParent->GetParent();
 	}
 
-	// DebugDraw 요청
+	// Physx update
+	PhysX_Update_Actor(m_pPhysData);
+	m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
+	Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
+	m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
+
+
+	// DebugDraw
 #ifdef _DEBUG
-	// 오버랩이 1개 이상이면 빨간색으로 그린다.
 	Vec4 vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	if (0 < m_iOverlapCount)
 		vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 
+	// 함수로 바꿀거임
+	{
+		double sinr_cosp = 2 * (Q_Rot.w * Q_Rot.x + Q_Rot.y * Q_Rot.z);
+		double cosr_cosp = 1 - 2 * (Q_Rot.x * Q_Rot.x + Q_Rot.y * Q_Rot.y);
+		vRot.x = std::atan2(sinr_cosp, cosr_cosp);
+
+		// pitch (y-axis rotation)
+		double sinp = std::sqrt(1 + 2 * (Q_Rot.w * Q_Rot.y - Q_Rot.x * Q_Rot.z));
+		double cosp = std::sqrt(1 - 2 * (Q_Rot.w * Q_Rot.y - Q_Rot.x * Q_Rot.z));
+		vRot.y = 2 * std::atan2(sinp, cosp) - XM_PI / 2;
+
+		// yaw (z-axis rotation)
+		double siny_cosp = 2 * (Q_Rot.w * Q_Rot.z + Q_Rot.x * Q_Rot.y);
+		double cosy_cosp = 1 - 2 * (Q_Rot.y * Q_Rot.y + Q_Rot.z * Q_Rot.z);
+		vRot.z = std::atan2(siny_cosp, cosy_cosp);
+	}
+
 	if (COLLIDER_TYPE::COLLIDER_CUBE == m_eType)
 	{
-		// 지속 시간을 0으로 넣어주는 이유는 Collider2D에서 매 Finaltick 마다 호출해주기 때문에 0이 들어가지 않으면 중첩이 발생한다.
-		Vec3 vRot = m_vRot;
-		CGameObject* pParent = GetOwner();
-		while (true)
-		{
-			if (nullptr == pParent)
-				break;
-			
-			vRot += pParent->Transform()->GetRelativeRotation();
-			pParent = pParent->GetParent();
-		}
 		DebugDrawCube(vColor, m_vFinalPos, m_vScale * 2.f, vRot);
 	}
 	if (COLLIDER_TYPE::COLLIDER_SPHERE == m_eType)

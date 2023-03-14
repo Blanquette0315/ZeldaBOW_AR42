@@ -50,6 +50,7 @@ public:
     const Matrix& GetWorldRotMat() { return m_matWorldRot; }
 
 public:
+    virtual void begin() override;
     virtual void tick() override;
     virtual void finaltick() override;
 

@@ -35,6 +35,9 @@ void CCollisionMgr::tick()
 				// Object has Collider Component
 				PhysData* pPhysData = vecObjects[iObjectNum]->Collider()->GetPhysData();
 
+				if (pPhysData == nullptr)
+					continue;
+
 				// EndOverlap
 				if (pPhysData->Exit_Count > 0)
 				{
@@ -50,8 +53,7 @@ void CCollisionMgr::tick()
 						}
 
 						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
-						if ((nullptr == pOther->Collider()) ||
-							!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
+						if (!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
 							(pOther == vecObjects[iObjectNum]))
 						{
 							pPhysData->TriggerExit_List[i] = nullptr;
@@ -124,8 +126,7 @@ void CCollisionMgr::tick()
 						}
 
 						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
-						if ((nullptr == pOther->Collider()) ||
-							!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
+						if (!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
 							(pOther == vecObjects[iObjectNum]))
 						{
 							pPhysData->TriggerEnter_List[i] = nullptr;
@@ -162,10 +163,14 @@ void CCollisionMgr::tick()
 					}
 				}
 			}
+			// isDead = true
 			else
 			{
 				// Object has Collider Component
 				PhysData* pPhysData = vecObjects[iObjectNum]->Collider()->GetPhysData();
+
+				if (pPhysData == nullptr)
+					continue;
 
 				// EndOverlap
 				if (pPhysData->Exit_Count > 0)
@@ -182,8 +187,7 @@ void CCollisionMgr::tick()
 						}
 
 						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
-						if ((nullptr == pOther->Collider()) ||
-							!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
+						if (!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
 							(pOther == vecObjects[iObjectNum]))
 						{
 							pPhysData->TriggerExit_List[i] = nullptr;
