@@ -20,5 +20,7 @@ public:
 public:
     CMeshRender();
     virtual ~CMeshRender();
+
+
 };
 

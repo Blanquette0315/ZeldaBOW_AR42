@@ -9,6 +9,8 @@
 
 #include "CAnimator2D.h"
 
+#include "CDevice.h"
+
 CMeshRender::CMeshRender()
 	: CRenderComponent(COMPONENT_TYPE::MESHRENDER)
 {
@@ -72,3 +74,5 @@ void CMeshRender::LoadFromYAML(YAML::Node& _node)
 	YAML::Node node = _node["MESHRENDER"];
 	CRenderComponent::LoadFromYAML(node);
 }
+
+
