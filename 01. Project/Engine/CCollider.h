@@ -56,6 +56,7 @@ public:
     CLONE(CCollider);
 public:
     CCollider();
+    CCollider(const CCollider& _origin);
     ~CCollider();
 };
 
