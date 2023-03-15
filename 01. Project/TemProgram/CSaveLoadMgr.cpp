@@ -239,6 +239,7 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 				pComponent = new CLight3D;
 				break;
 			case COMPONENT_TYPE::RIGIDBODY:
+				pComponent = new CRigidBody;
 				break;
 			case COMPONENT_TYPE::ANIMATOR3D:
 				break;
@@ -253,8 +254,8 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 				break;
 			}
 			YAML::Node componentNode = _node["Component"];
-			pComponent->LoadFromYAML(componentNode);
 			pObject->AddComponent(pComponent);
+			pComponent->LoadFromYAML(componentNode);
 		}
 	}
 

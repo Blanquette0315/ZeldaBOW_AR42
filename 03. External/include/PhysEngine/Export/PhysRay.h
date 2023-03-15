@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysEngineDLL.h"
 #include "SimpleMath.h"
+#include "PhysData.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -37,4 +38,11 @@ public:
 
 	RaycastHit Hit;			//충돌한 객체 정보
 	float MaxDistance;		//최대 거리
+
+private:
+	uint32_t m_wQueryFilterData0; // word0 is PxU32(uint32_t)
+
+public:
+	void SetQueryFilterData0(FILTER_GROUP _eFilterGroup);
+	uint32_t GetQueryFilterData0();
 };

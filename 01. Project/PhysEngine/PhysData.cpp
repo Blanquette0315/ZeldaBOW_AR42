@@ -14,6 +14,8 @@ PhysData::PhysData()
 	CenterPoint		= { 0.0f,0.0f,0.0f};
 	PhysX_Velocity  = { 0.0f,0.0f,0.0f};
 
+	m_iFilterData0 = 0;
+
 	MT_Mass = 1.0f;
 
 	isDinamic	= false;
@@ -127,6 +129,21 @@ bool PhysData::GetTriggerExit()
 		OnTriggerExit = false;
 	}
 	return off;
+}
+
+void PhysData::SetFilterData0(FILTER_GROUP _eFilterGroup)
+{
+	m_iFilterData0 |= (uint32_t)_eFilterGroup;
+}
+
+void PhysData::SetFilterData0(uint32_t _FilterData)
+{
+	m_iFilterData0 |= _FilterData;
+}
+
+uint32_t PhysData::GetFilterData0()
+{
+	return m_iFilterData0;
 }
 
 void PhysData::SetLockAxis_Position(bool x, bool y, bool z)

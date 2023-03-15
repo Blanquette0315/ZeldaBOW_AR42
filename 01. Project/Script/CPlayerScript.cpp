@@ -3,6 +3,7 @@
 
 #include "CMissileScript.h"
 #include <Engine\CMaterial.h>
+#include <Engine/CRigidbody.h>
 
 CPlayerScript::CPlayerScript()
 	: CScript(PLAYERSCRIPT)
@@ -42,39 +43,103 @@ void CPlayerScript::begin()
 
 void CPlayerScript::tick()
 {
-	Vec3 vPos = Transform()->GetRelativePos();
-
-	if (KEY_PRESSED(KEY::LEFT))
+	if (KEY_RELEASE(KEY::LEFT))
 	{
-		vPos.x -= m_fSpeed * FDT;
+		RigidBody()->SetKeyRelease(true);
 	}
 
-	if (KEY_PRESSED(KEY::RIGHT))
+	if (KEY_RELEASE(KEY::RIGHT))
 	{
-		vPos.x += m_fSpeed * FDT;
+		RigidBody()->SetKeyRelease(true);
 	}
 
-	if (KEY_PRESSED(KEY::UP))
+	if (KEY_RELEASE(KEY::UP))
 	{
-		vPos.y += m_fSpeed * FDT;
+		RigidBody()->SetKeyRelease(true);
 	}
 
-	if (KEY_PRESSED(KEY::DOWN))
+	if (KEY_RELEASE(KEY::DOWN))
 	{
-		vPos.y -= m_fSpeed * FDT;
+		RigidBody()->SetKeyRelease(true);
 	}
 
-	if (KEY_PRESSED(KEY::Y))
+	if (RigidBody()->RayCast())//(!RigidBody()->IsAir())
 	{
+		if (KEY_PRESSED(KEY::LEFT))
+		{
+			RigidBody()->AddVelocity(Vec3(-2.f, 0.f, 0.f));
+		}
+
+		if (KEY_PRESSED(KEY::RIGHT))
+		{
+			RigidBody()->AddVelocity(Vec3(2.f, 0.f, 0.f));
+		}
+
+		if (KEY_PRESSED(KEY::UP))
+		{
+			RigidBody()->AddVelocity(Vec3(0.f, 0.f, 2.f));
+		}
+
+		if (KEY_PRESSED(KEY::DOWN))
+		{
+			RigidBody()->AddVelocity(Vec3(0.f, 0.f, -2.f));
+		}
+
+		if (KEY_TAP(KEY::SPACE))
+		{
+			//RigidBody()->SetVelocity(Vec3(0.f, 0.f, 5.f));
+			RigidBody()->AddForce(Vec3(0.f, 50000.f, 0.f));
+		}
+	}
+
 	
-	}
+	
 
-	if (vPos != Transform()->GetRelativePos())
-		Transform()->SetRelativePos(vPos);
+	//if (RigidBody()->GetPxVeloctiy().y == 0.f)
+	//{
+	//	if (KEY_PRESSED(KEY::LEFT))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(-5.f, 0.f, 0.f));
+	//	}
 
-	if (KEY_TAP(KEY::SPACE))
-	{
-	}
+	//	if (KEY_PRESSED(KEY::RIGHT))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(5.f, 0.f, 0.f));
+	//	}
+
+	//	if (KEY_PRESSED(KEY::UP))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(0.f, 0.f, 5.f));
+	//	}
+
+	//	if (KEY_PRESSED(KEY::DOWN))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(0.f, 0.f, -5.f));
+	//	}
+	//	
+
+	//	if (m_fAccTime == 0.f)
+	//	{
+	//		if (KEY_PRESSED(KEY::SPACE))
+	//		{
+	//			m_fAccTime += FDT;
+	//			
+	//			//RigidBody()->SetVelocity(Vec3(0.f, 0.f, 5.f));
+	//			RigidBody()->AddForce(Vec3(0.f, 50000.f, 0.f));
+	//		}
+	//	}
+	//	else if (m_fAccTime != 0.f)
+	//	{
+	//		if (m_fAccTime > 5.f * FDT)
+	//		{
+	//			m_fAccTime = 0.f;
+	//		}
+	//		else
+	//		{
+	//			m_fAccTime += FDT;
+	//		}
+	//	}
+	//}
 }
 
 void CPlayerScript::BeginOverlap(CCollider2D* _pOther)

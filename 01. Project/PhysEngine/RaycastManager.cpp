@@ -22,10 +22,12 @@ bool RaycastManager::RayCast(PhysRayCast* ray)
 {
 	PxVec3 O = PxVec3(ray->Origin.x, ray->Origin.y, ray->Origin.z);
 	PxVec3 D = PxVec3(ray->Direction.x, ray->Direction.y, ray->Direction.z);
-	
-	
+
 	PxRaycastBuffer buffer;
-	bool Collision = m_Scene->raycast(O, D, ray->MaxDistance, buffer);
+	PxQueryFilterData QFilterData;
+	QFilterData.data.word0 = ray->GetQueryFilterData0();
+	bool Collision = m_Scene->raycast(O, D, ray->MaxDistance, buffer, PxHitFlags(PxHitFlag::eDEFAULT), QFilterData);
+
 
 	//충돌한 카운터개수
 	ray->Hit.HitCount = buffer.getNbAnyHits();

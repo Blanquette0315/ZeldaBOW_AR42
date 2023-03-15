@@ -172,6 +172,9 @@
     <Filter Include="Engine\03. Mgr\10. PhysMgr">
       <UniqueIdentifier>{801b50d5-67ab-436e-99df-70deec5ca22c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Component\08. RigidBody">
+      <UniqueIdentifier>{51b92768-9a8b-4730-b62c-1847216727f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -357,6 +360,9 @@
     <ClInclude Include="CPhysMgr.h">
       <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CRigidBody.h">
+      <Filter>Engine\06. Component\08. RigidBody</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -526,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="CPhysMgr.cpp">
       <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CRigidBody.cpp">
+      <Filter>Engine\06. Component\08. RigidBody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
