@@ -214,6 +214,7 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 				break;
 
 			case COMPONENT_TYPE::COLLIDER:
+				pComponent = new CCollider;
 				break;
 
 			case COMPONENT_TYPE::ANIMATOR2D:
