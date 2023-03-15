@@ -78,9 +78,9 @@ void CLevelMgr::ChangeLevelState(LEVEL_STATE _State)
 	// 이미 플레이 상태인데, 플레이상태가 또 들어오면 안되기 때문에 예외처리를 해주었다.
 	assert(!(m_pCurLevel->GetState() == _State));
 
-	m_pCurLevel->SetState(_State);
-
 	// 플레이 상태가 되면, 레벨이 지닌 모든 것들을 begin()을 호출해줄 것이다.
-	if (LEVEL_STATE::PLAY == _State)
+	if (LEVEL_STATE::STOP == m_pCurLevel->GetState() && LEVEL_STATE::PLAY == _State)
 		m_pCurLevel->begin();
+
+	m_pCurLevel->SetState(_State);
 }

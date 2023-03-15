@@ -38,6 +38,7 @@ CRigidBody::~CRigidBody()
 
 void CRigidBody::begin()
 {
+	m_pPhysData->EaterObj = GetOwner();
 	UpdateTransformData(m_eRigidColliderType, m_pPhysData->isKinematic, m_pPhysData->isDinamic);
 	CreateActor();
 }

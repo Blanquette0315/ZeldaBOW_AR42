@@ -15,7 +15,7 @@ typedef Vector4 Vec4;
 							~type();
 
 #define FDT (1.f / 120.f) // 120fps
-#define DT CTimeMgr::GetInst()->GetEffectDeltaTime()
+#define SYSTEM_DT CTimeMgr::GetInst()->GetDeltaTime()
 //#define EDT CTimeMgr::GetInst()->GetEffectDeltaTime()
 
 #define DEVICE CDevice::GetInst()->GetDevice()

@@ -84,6 +84,11 @@ void CLevel::AddGameObject(CGameObject* _pObjet, UINT _iLayerIdx)
 	assert(0 <= _iLayerIdx && _iLayerIdx < MAX_LAYER);
 
 	m_arrLayer[_iLayerIdx].AddGameObject(_pObjet);
+	
+	if (m_State != LEVEL_STATE::STOP)
+	{
+		_pObjet->begin();
+	}
 }
 
 void CLevel::AddGameObejct(CGameObject* _pObject, const wstring& _strLayerName)

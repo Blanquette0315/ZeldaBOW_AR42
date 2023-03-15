@@ -204,12 +204,6 @@ void DecalUI::ShowShaderParam(CMaterial* _pMtrl)
 				_pMtrl->GetScalarParam(vecScalar[i].eParam, &iOutput);
 				ParamUI::Param_Int(vecScalar[i].strName, &iOutput);
 				_pMtrl->SetScalarParam(vecScalar[i].eParam, &iOutput);
-
-				// 임시로 해두는 저장. 여기서 할게 아니라 이제 단축키 등을 만들어서 저장을 해야한다.
-				if (iInput != iOutput)
-				{
-					_pMtrl->Save(L"material\\mtrl.mtrl");
-				}
 			}
 			break;
 			case FLOAT_0:

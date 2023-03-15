@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CreateTestLevel.h"
 
-
 #include <Engine/CEventMgr.h>
 #include <Engine/CResMgr.h>
 #include <Engine/CCollisionMgr.h>
@@ -18,32 +17,30 @@
 #include "CCameraScript.h"
 
 #include "CSaveLoadMgr.h"
-#include <PhysEngine/Export/PhysX_API.h>
-
 
 void CreateTestLevel()
 {
-//#ifdef _DEBUG
-//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test Level2.lv");
-//	
-//	ChangeLevel(Level);
-//	return;
-//#else
-//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\MainLevel.lv");
-//	CLevelMgr::GetInst()->RegisterLevel(Level->GetRelativePath(), Level);
-//	ChangeLevelAndPlay(Level);
-//	return;
-//#endif
+	//#ifdef _DEBUG
+	//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test Level2.lv");
+	//	
+	//	ChangeLevel(Level);
+	//	return;
+	//#else
+	//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\MainLevel.lv");
+	//	CLevelMgr::GetInst()->RegisterLevel(Level->GetRelativePath(), Level);
+	//	ChangeLevelAndPlay(Level);
+	//	return;
+	//#endif
 
 	CLevel* pLevel = new CLevel;
 
-	// Layer �̸� ����
+	// Layer 이름 설정
 	pLevel->GetLayer(1)->SetName(L"Player");
 	pLevel->GetLayer(2)->SetName(L"PlayerProjectile");
 	pLevel->GetLayer(3)->SetName(L"Monster");
 	pLevel->GetLayer(4)->SetName(L"MonsterProjectile");
 
-	// Camera Object �߰�
+	// Camera Object 추가
 	CGameObject* pCamObj = new CGameObject;
 	pCamObj->SetName(L"MainCamera");
 
@@ -55,10 +52,10 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pCamObj, 0);
 
-	// Directional Light �߰�
-	// ���� ���⼺ ������ ���϶��� 0.7, �㿡�� 0.2������ �ΰ� ����Ѵ�.
-	// ������ �׷��� �ʿ䰡 ���� ������ CRenderMesh�� �߰����� �ʴ´�.
-	// Directional Light�� ���� ������ �ʿ� ���� ������ ���� �ʾҴ�.
+	// Directional Light 추가
+	// 보통 방향성 광원은 낮일때는 0.7, 밤에는 0.2정도를 두고 사용한다.
+	// 광원은 그려질 필요가 없기 때문에 CRenderMesh는 추가하지 않는다.
+	// Directional Light는 방향 정보가 필요 없기 때문에 넣지 않았다.
 	CGameObject* pDirLight = new CGameObject;
 	pDirLight->SetName(L"DirectionalLight");
 
@@ -73,25 +70,25 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pDirLight, 0);
 
 
-	// Point Light �߰�
+	// Point Light 추가
 	/*CGameObject* pPointLight = new CGameObject;
 	pPointLight->SetName(L"PointLight");
-	
+
 	pPointLight->AddComponent(new CTransform);
 	pPointLight->AddComponent(new CLight3D);
-	
+
 	pPointLight->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
-	
-	
+
+
 	pPointLight->Light3D()->SetLightColor(Vec3(1.f, 0.f, 0.f));
 	pPointLight->Light3D()->SetLightSpecular(Vec3(0.4f, 0.4f, 0.4f));
 	pPointLight->Light3D()->SetLightAmbient(Vec3(0.f, 0.f, 0.f));
 	pPointLight->Light3D()->SetRadius(500.f);
 	pPointLight->Light3D()->SetLightType(LIGHT_TYPE::POINT);
-	
+
 	pLevel->AddGameObject(pPointLight, 0);*/
 
-	// Spot Light �߰�
+	// Spot Light 추가
 	/*CGameObject* pSpotLight = new CGameObject;
 	pSpotLight->SetName(L"SpotLight");
 
@@ -112,7 +109,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pSpotLight, 0);*/
 
-	// SkyBox �߰�
+	// SkyBox 추가
 	CGameObject* pSkyBox = new CGameObject;
 	pSkyBox->SetName(L"SkyBox");
 
@@ -132,7 +129,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pSkyBox, 0);
 
-	// GameObject �ʱ�ȭ
+	// GameObject 초기화
 	CGameObject* pObject = nullptr;
 
 	pObject = new CGameObject;
@@ -141,46 +138,15 @@ void CreateTestLevel()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CRigidBody);
+	pObject->AddComponent(new CCollider);
 	pObject->AddComponent(new CPlayerScript);
 	//Sphere
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 400.f));
-	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
-
-	pObject->Collider()->SetType(COLLIDER_TYPE::COLLIDER_CUBE);
-	pObject->Collider()->SetOffsetPos(Vec3(100.f, 0.f, 0.f));
-	//pObject->Collider()->SetRotationX(XM_PI / 4.f);
-	//pObject->Collider()->SetRotationY(XM_PI / 4.f);
-	pObject->Collider()->SetRotationZ(XM_PI / 4.f);
-	pObject->Collider()->SetRadius(150.f);
-	pLevel->AddGameObject(pObject, 1);
-
-
-	PhysData* pData = new PhysData;
-	pData->SetWorldPosition(5.f, 0.f, 4.f);
-	pData->mCollider->SetBoxCollider(1.5f);
-	pData->isDinamic = true;
-	pData->SetLockAxis_Rotation(true, true, true);
-	pData->SetLockAxis_Position(true, true, true);
-
-	pObject = new CGameObject;
-	pObject->SetName(L"Obj1");
-
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CCollider);
-
-	pObject->Transform()->SetRelativePos(Vec3(500.f, 0.f, 400.f));
-	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
+	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 128.f));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
-	pObject->Collider()->SetType(COLLIDER_TYPE::COLLIDER_CUBE);
-	pObject->Collider()->SetRadius(150.f);
 
 	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::SPHERE, false, true);
 	pObject->RigidBody()->SetMass(10.f);
@@ -191,11 +157,42 @@ void CreateTestLevel()
 	pObject->RigidBody()->SetGravityOption(true);
 	//pObject->RigidBody()->CreateActor();
 
-	pData->EaterObj = pObject;
-	PhysX_Create_Actor(pData);
+	pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+	pObject->Collider()->SetRadius(129.f);
 
-	// ��Į ����
-	/*CGameObject* pDecal = new CGameObject;
+	pLevel->AddGameObject(pObject, 0);
+
+	pObject = new CGameObject;
+	pObject->SetName(L"Player");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CRigidBody);
+	//pObject->AddComponent(new CCollider);
+	//Sphere
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 1000.f, 400.f));
+	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+
+	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::SPHERE, false, true);
+	pObject->RigidBody()->SetMass(10.f);
+	pObject->RigidBody()->SetRestitution(0.f);
+	//pObject->RigidBody()->SetStaticFriction(0.f);
+	//pObject->RigidBody()->SetDynamicFriction(0.f);
+	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
+	pObject->RigidBody()->SetGravityOption(true);
+	//pObject->RigidBody()->CreateActor();
+
+	//pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+	//pObject->Collider()->SetRadius(128.f);
+
+	pLevel->AddGameObject(pObject, 0);
+
+	// 데칼 생성
+	CGameObject* pDecal = new CGameObject;
 	pDecal->SetName(L"Decal");
 
 	pDecal->AddComponent(new CTransform);
@@ -203,130 +200,132 @@ void CreateTestLevel()
 
 	pDecal->Transform()->SetRelativePos(0.f, 500.f, 0.f);
 	pDecal->Transform()->SetRelativeScale(250.f, 250.f, 250.f);
-	
+
 	pDecal->Decal()->SetRenderType(true);
 	pDecal->Decal()->SetDecalTexture(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\MagicCircle.png"));
 
-	pLevel->AddGameObject(pDecal, 0);*/
+	pLevel->AddGameObject(pDecal, 0);
 
-	// �� ����
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Plane_0");
+	// 벽 생성
+	pObject = new CGameObject;
+	pObject->SetName(L"Plane_0");
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CRigidBody);
 
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 400.f));
-	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
+	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 100.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(XM_PI / 2.f, 0.f, 0.f));
-	
+
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
-	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true);
+	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true, true);
 	pObject->RigidBody()->SetLockAxis_Pos(true, true, true);
+	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
 	pObject->RigidBody()->SetStaticFriction(0.f);
 	pObject->RigidBody()->SetDynamicFriction(0.f);
 	pObject->RigidBody()->SetRestitution(0.f);
 	pObject->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
 	//pObject->RigidBody()->CreateActor();
 
-	//pLevel->AddGameObject(pObject, 0);
+	pLevel->AddGameObject(pObject, 0);
 
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Plane_1");
+	pObject = new CGameObject;
+	pObject->SetName(L"Plane_1");
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
 
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 1000.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI / 2.f, 0.f, 0.f));
 
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
 
-	////Instantiate(pObject, Vec3(0.f, 500.f, 400.f), 0);
-	//pLevel->AddGameObject(pObject, 0);
+	//Instantiate(pObject, Vec3(0.f, 500.f, 400.f), 0);
+	pLevel->AddGameObject(pObject, 0);
 
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Plane_2");
+	pObject = new CGameObject;
+	pObject->SetName(L"Plane_2");
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CRigidBody);
 
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 900.f));
-	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
+	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 100.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
-	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true);
+	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true, true);
 	pObject->RigidBody()->SetLockAxis_Pos(true, true, true);
+	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
 	pObject->RigidBody()->SetRestitution(0.f);
 	//pObject->RigidBody()->CreateActor();
 
 	//Instantiate(pObject, Vec3(0.f, 0.f, 900.f), 0);
 	pLevel->AddGameObject(pObject, 0);
 
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Plane_3");
+	pObject = new CGameObject;
+	pObject->SetName(L"Plane_3");
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
 
 	pObject->Transform()->SetRelativePos(Vec3(500.f, 500.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(0.f, XM_PI / 2.f, 0.f));
 
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
-	////Instantiate(pObject, Vec3(500.f, 0.f, 400.f), 0);
-	//pLevel->AddGameObject(pObject, 0);
+	//Instantiate(pObject, Vec3(500.f, 0.f, 400.f), 0);
+	pLevel->AddGameObject(pObject, 0);
 
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Plane_4");
+	pObject = new CGameObject;
+	pObject->SetName(L"Plane_4");
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
 
 	pObject->Transform()->SetRelativePos(Vec3(-500.f, 500.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(0.f, -XM_PI / 2.f, 0.f));
 
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
-	////Instantiate(pObject, Vec3(-500.f, 0.f, 400.f), 0);
-	//pLevel->AddGameObject(pObject, 0);
+	//Instantiate(pObject, Vec3(-500.f, 0.f, 400.f), 0);
+	pLevel->AddGameObject(pObject, 0);
 
-	//// Particle Object
-	//CGameObject* pParticle = new CGameObject;
-	//pParticle->SetName(L"Particle");
-	//pParticle->AddComponent(new CTransform);
-	//pParticle->AddComponent(new CParticleSystem);
-	//
-	//pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
-	//
-	//pParticle->ParticleSystem()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleRenderMtrl"));
-	//pParticle->ParticleSystem()->SetCS((CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateShader").Get());
-	//pParticle->ParticleSystem()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Bubbles50px"));
+	// Particle Object
+	CGameObject* pParticle = new CGameObject;
+	pParticle->SetName(L"Particle");
+	pParticle->AddComponent(new CTransform);
+	pParticle->AddComponent(new CParticleSystem);
 
-	//pParticle->ParticleSystem()->SetMinMaxLifeTime(Vec2(0.2f, 1.f));
-	//pParticle->ParticleSystem()->SetMinMaxSpeed(Vec2(100.f, 300.f));
-	//pParticle->ParticleSystem()->Set_SE_Color(Vec4(0.24f, 0.28f, 0.8f, 1.f), Vec4(0.78f, 0.74f, 0.9f, 1.f));
-	//pParticle->ParticleSystem()->Set_SE_Scale(Vec4(50.f, 50.f, 1.f, 0.f), Vec4(10.f, 10.f, 1.f, 0.f));
-	//pParticle->ParticleSystem()->SetWorldSpawn(true);
-	//
-	//pParticle->ParticleSystem()->SetFrequency(5.f);
-	//pParticle->ParticleSystem()->SetSpawnRange(100.f);
-	//
-	//pLevel->AddGameObject(pParticle, 0);
+	pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+
+	pParticle->ParticleSystem()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleRenderMtrl"));
+	pParticle->ParticleSystem()->SetCS((CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateShader").Get());
+	pParticle->ParticleSystem()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Bubbles50px"));
+
+	pParticle->ParticleSystem()->SetMinMaxLifeTime(Vec2(0.2f, 1.f));
+	pParticle->ParticleSystem()->SetMinMaxSpeed(Vec2(100.f, 300.f));
+	pParticle->ParticleSystem()->Set_SE_Color(Vec4(0.24f, 0.28f, 0.8f, 1.f), Vec4(0.78f, 0.74f, 0.9f, 1.f));
+	pParticle->ParticleSystem()->Set_SE_Scale(Vec4(50.f, 50.f, 1.f, 0.f), Vec4(10.f, 10.f, 1.f, 0.f));
+	pParticle->ParticleSystem()->SetWorldSpawn(true);
+
+	pParticle->ParticleSystem()->SetFrequency(5.f);
+	pParticle->ParticleSystem()->SetSpawnRange(100.f);
+
+	pLevel->AddGameObject(pParticle, 0);
 
 	// PostProcess Object
 	/*CGameObject* pPostProcess = new CGameObject;
@@ -344,15 +343,15 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pPostProcess, 0);*/
 
 
-	// �浹 ���̾� ����
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+	// 충돌 레이어 지정
+	CCollisionMgr::GetInst()->CollisionLayerCheck(0, 1);
 
-	// Level ����
+	// Level 저장
 	//pLevel->SetName(L"Test Level2");
 	//CSaveLoadMgr::GetInst()->SaveLevel(pLevel);
 	//CLevelMgr::GetInst()->RegisterLevel(pLevel->GetRelativePath(), pLevel);
 
-	// ���� ����
-	// ���� �׽�Ʈ ������ ���� ������ ��ȯ
+	// 레벨 설정
+	// 만든 테스트 레벨을 지금 레벨로 전환
 	ChangeLevel(pLevel);
 }

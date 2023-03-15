@@ -125,22 +125,7 @@ void CCollider::finaltick()
 	if (0 < m_iOverlapCount)
 		vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 
-	// 함수로 바꿀거임
-	{
-		double sinr_cosp = 2 * (Q_Rot.w * Q_Rot.x + Q_Rot.y * Q_Rot.z);
-		double cosr_cosp = 1 - 2 * (Q_Rot.x * Q_Rot.x + Q_Rot.y * Q_Rot.y);
-		vRot.x = std::atan2(sinr_cosp, cosr_cosp);
-
-		// pitch (y-axis rotation)
-		double sinp = std::sqrt(1 + 2 * (Q_Rot.w * Q_Rot.y - Q_Rot.x * Q_Rot.z));
-		double cosp = std::sqrt(1 - 2 * (Q_Rot.w * Q_Rot.y - Q_Rot.x * Q_Rot.z));
-		vRot.y = 2 * std::atan2(sinp, cosp) - XM_PI / 2;
-
-		// yaw (z-axis rotation)
-		double siny_cosp = 2 * (Q_Rot.w * Q_Rot.z + Q_Rot.x * Q_Rot.y);
-		double cosy_cosp = 1 - 2 * (Q_Rot.y * Q_Rot.y + Q_Rot.z * Q_Rot.z);
-		vRot.z = std::atan2(siny_cosp, cosy_cosp);
-	}
+	QuaternionToEuler(Q_Rot, vRot);
 
 	if (COLLIDER_TYPE::COLLIDER_CUBE == m_eType)
 	{
