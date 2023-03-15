@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "01. Project\Engine\Engine.vcxproj", "{52CDA592-AF87-4A4A-98FF-D1F10C37F1A5}"
-	ProjectSection(ProjectDependencies) = postProject
-		{69987C7E-41E8-402A-B94C-E17572B93288} = {69987C7E-41E8-402A-B94C-E17572B93288}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TemProgram", "01. Project\TemProgram\TemProgram.vcxproj", "{491426CB-A7D7-4734-BCA3-C0BF83D2E270}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,6 +17,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Script", "01. Project\Scrip
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysEngine", "01. Project\PhysEngine\PhysEngine.vcxproj", "{69987C7E-41E8-402A-B94C-E17572B93288}"
+	ProjectSection(ProjectDependencies) = postProject
+		{52CDA592-AF87-4A4A-98FF-D1F10C37F1A5} = {52CDA592-AF87-4A4A-98FF-D1F10C37F1A5}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

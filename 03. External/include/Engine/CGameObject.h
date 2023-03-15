@@ -5,7 +5,7 @@ class CComponent;
 class CTransform;
 class CRenderComponent;
 class CMeshRender;
-class CCollider2D;
+class CCollider;
 class CAnimator2D;
 class CCamera;
 class CScript;
@@ -74,7 +74,7 @@ public:
     GET_COMPONENT(Transform, TRANSFORM);
     GET_COMPONENT(MeshRender, MESHRENDER);
     GET_COMPONENT(Camera, CAMERA);
-    //GET_COMPONENT(Collider2D, COLLIDER2D);
+    GET_COMPONENT(Collider, COLLIDER);
     GET_COMPONENT(Animator2D, ANIMATOR2D);
     GET_COMPONENT(Light2D, LIGHT2D);
     GET_COMPONENT(Light3D, LIGHT3D);

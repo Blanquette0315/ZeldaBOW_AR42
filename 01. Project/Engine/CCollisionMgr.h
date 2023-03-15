@@ -11,7 +11,7 @@ union COLLIDER_ID
 };
 
 class CLevel;
-class CCollider2D;
+class CCollider;
 
 class CCollisionMgr :
 	public CSingleton<CCollisionMgr>
@@ -25,8 +25,8 @@ public:
 
 private:
 	void CollisionBtwLayer(CLevel* _pCurLevel, int _iLeft, int _iRight);
-	void CollisionBtwCollider(CCollider2D* _pLeft, CCollider2D* _pRight);
-	bool IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight);
+	void CollisionBtwCollider(CCollider* _pLeft, CCollider* _pRight);
+	bool IsCollision(CCollider* _pLeft, CCollider* _pRight);
 
 public:
 	void clear()
@@ -36,6 +36,7 @@ public:
 	}
 	void CollisionLayerCheck(int _iLeft, int _iRight);
 	void CollisionLayerRelease(int _iLeft, int _iRight);
+	bool IsCollisionBtwLayer(int _iLeft, int _iRight);
 
 	// i번째의 Layer 설정을 가져온다.
 	WORD GetLayerMat(int _iLeft) { return m_matrix[_iLeft]; }
