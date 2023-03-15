@@ -176,6 +176,11 @@ void Factory::CreateActoer(PhysData* data)
 
 	PxShape* shape = CreateShape(mMaterial, mCollider,data->isTrigger);
 
+	// Seting Filter
+	PxFilterData PxFilter;
+	PxFilter.word0 = data->GetFilterData0();
+	shape->setQueryFilterData(PxFilter);
+
 	///로컬 포지션을 지정
 	shape->setLocalPose(PxTransform(data->CenterPoint.x, data->CenterPoint.y, data->CenterPoint.z));
 

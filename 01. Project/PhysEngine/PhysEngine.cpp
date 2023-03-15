@@ -148,8 +148,6 @@ void  PhysEngine::Update_Actor(PhysData* data)
 		data->Rotation.y = Tr.q.y;
 		data->Rotation.z = Tr.q.z;
 		data->Rotation.w = Tr.q.w;
-
-		data->DVelocity = Vector3(Dynamic->getLinearVelocity().x, Dynamic->getLinearVelocity().y, Dynamic->getLinearVelocity().z);
 	}
 	else
 	{
@@ -368,6 +366,7 @@ void PhysEngine::UpdateDynamicVelocity(PxRigidDynamic* Dynamic, PhysData* Data)
 		Pox = PxVec3(Data->Velocity.x, Velocity.y, Data->Velocity.z);
 	}
 	//PxVec3 Pox = PxVec3(data->Velocity.x, data->Velocity.y, data->Velocity.z);
+
 	Dynamic->setLinearVelocity(Pox);
 	Data->isVelocity = false;
 }

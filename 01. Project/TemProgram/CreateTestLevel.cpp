@@ -139,7 +139,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CRigidBody);
 	pObject->AddComponent(new CPlayerScript);
-	//
+	//Sphere
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 400.f));
 	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
@@ -150,11 +150,11 @@ void CreateTestLevel()
 	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::SPHERE, false, true);
 	pObject->RigidBody()->SetMass(10.f);
 	pObject->RigidBody()->SetRestitution(0.f);
-	pObject->RigidBody()->SetStaticFriction(0.f);
-	pObject->RigidBody()->SetDynamicFriction(0.f);
+	//pObject->RigidBody()->SetStaticFriction(0.f);
+	//pObject->RigidBody()->SetDynamicFriction(0.f);
 	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
 	pObject->RigidBody()->SetGravityOption(true);
-	pObject->RigidBody()->CreateActor();
+	//pObject->RigidBody()->CreateActor();
 
 	pLevel->AddGameObject(pObject, 0);
 
@@ -193,7 +193,8 @@ void CreateTestLevel()
 	pObject->RigidBody()->SetStaticFriction(0.f);
 	pObject->RigidBody()->SetDynamicFriction(0.f);
 	pObject->RigidBody()->SetRestitution(0.f);
-	pObject->RigidBody()->CreateActor();
+	pObject->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
+	//pObject->RigidBody()->CreateActor();
 
 	pLevel->AddGameObject(pObject, 0);
 
@@ -231,7 +232,7 @@ void CreateTestLevel()
 	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true);
 	pObject->RigidBody()->SetLockAxis_Pos(true, true, true);
 	pObject->RigidBody()->SetRestitution(0.f);
-	pObject->RigidBody()->CreateActor();
+	//pObject->RigidBody()->CreateActor();
 
 	//Instantiate(pObject, Vec3(0.f, 0.f, 900.f), 0);
 	pLevel->AddGameObject(pObject, 0);

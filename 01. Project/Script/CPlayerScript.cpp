@@ -63,51 +63,83 @@ void CPlayerScript::tick()
 		RigidBody()->SetKeyRelease(true);
 	}
 
-	if (RigidBody()->GetPxVeloctiy().y == 0.f)
+	if (RigidBody()->RayCast())//(!RigidBody()->IsAir())
 	{
-
 		if (KEY_PRESSED(KEY::LEFT))
 		{
-			RigidBody()->AddVelocity(Vec3(-5.f, 0.f, 0.f));
+			RigidBody()->AddVelocity(Vec3(-2.f, 0.f, 0.f));
 		}
 
 		if (KEY_PRESSED(KEY::RIGHT))
 		{
-			RigidBody()->AddVelocity(Vec3(5.f, 0.f, 0.f));
+			RigidBody()->AddVelocity(Vec3(2.f, 0.f, 0.f));
 		}
 
 		if (KEY_PRESSED(KEY::UP))
 		{
-			RigidBody()->AddVelocity(Vec3(0.f, 0.f, 5.f));
+			RigidBody()->AddVelocity(Vec3(0.f, 0.f, 2.f));
 		}
 
 		if (KEY_PRESSED(KEY::DOWN))
 		{
-			RigidBody()->AddVelocity(Vec3(0.f, 0.f, -5.f));
+			RigidBody()->AddVelocity(Vec3(0.f, 0.f, -2.f));
 		}
 
-		if (m_fAccTime == 0.f)
+		if (KEY_TAP(KEY::SPACE))
 		{
-			if (KEY_PRESSED(KEY::SPACE))
-			{
-				m_fAccTime += FDT;
-				
-				//RigidBody()->SetVelocity(Vec3(0.f, 0.f, 5.f));
-				RigidBody()->AddForce(Vec3(0.f, 50000.f, 0.f));
-			}
-		}
-		else if (m_fAccTime != 0.f)
-		{
-			if (m_fAccTime > 5.f * FDT)
-			{
-				m_fAccTime = 0.f;
-			}
-			else
-			{
-				m_fAccTime += FDT;
-			}
+			//RigidBody()->SetVelocity(Vec3(0.f, 0.f, 5.f));
+			RigidBody()->AddForce(Vec3(0.f, 50000.f, 0.f));
 		}
 	}
+
+	
+	
+
+	//if (RigidBody()->GetPxVeloctiy().y == 0.f)
+	//{
+	//	if (KEY_PRESSED(KEY::LEFT))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(-5.f, 0.f, 0.f));
+	//	}
+
+	//	if (KEY_PRESSED(KEY::RIGHT))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(5.f, 0.f, 0.f));
+	//	}
+
+	//	if (KEY_PRESSED(KEY::UP))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(0.f, 0.f, 5.f));
+	//	}
+
+	//	if (KEY_PRESSED(KEY::DOWN))
+	//	{
+	//		RigidBody()->AddVelocity(Vec3(0.f, 0.f, -5.f));
+	//	}
+	//	
+
+	//	if (m_fAccTime == 0.f)
+	//	{
+	//		if (KEY_PRESSED(KEY::SPACE))
+	//		{
+	//			m_fAccTime += FDT;
+	//			
+	//			//RigidBody()->SetVelocity(Vec3(0.f, 0.f, 5.f));
+	//			RigidBody()->AddForce(Vec3(0.f, 50000.f, 0.f));
+	//		}
+	//	}
+	//	else if (m_fAccTime != 0.f)
+	//	{
+	//		if (m_fAccTime > 5.f * FDT)
+	//		{
+	//			m_fAccTime = 0.f;
+	//		}
+	//		else
+	//		{
+	//			m_fAccTime += FDT;
+	//		}
+	//	}
+	//}
 }
 
 void CPlayerScript::BeginOverlap(CCollider2D* _pOther)

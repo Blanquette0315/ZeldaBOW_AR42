@@ -12,6 +12,15 @@
 using namespace DirectX;
 using namespace SimpleMath;
 
+// FILTER_GROUP using at Collider filter Setting
+enum class FILTER_GROUP
+{
+	NONE = -1,
+	ePlayer = (1 << 0),
+	eGround = (1 << 1),
+};
+
+
 /*
 Dinamic 객체
 	힘에 의해서 움직일 수도 있고 충돌도 가능한 객체
@@ -76,7 +85,6 @@ public:
 
 	int TriggerCount = 0;
 
-
 	int Enter_Count		= 0;
 	int Stay_Count		= 0;
 	int Exit_Count		= 0;
@@ -84,6 +92,15 @@ public:
 	PhysData* TriggerStay_List[10];
 	PhysData* TriggerExit_List[10];
 	//PhysData* TriggerList[10];
+
+private:
+	uint32_t m_iFilterData0; // word0 is PxU32(uint32_t)
+
+public:
+	void SetFilterData0(FILTER_GROUP _eFilterGroup);
+	void SetFilterData0(uint32_t _FilterData);
+	uint32_t GetFilterData0();
+
 public:
 	//이동에 관한 축변환을 막는다
 	void SetLockAxis_Position(bool x, bool y, bool z);
@@ -91,9 +108,6 @@ public:
 	//회전에 관한 축변환을 막는다
 	void SetLockAxis_Rotation(bool x, bool y, bool z);
 	Vector3 GetLockAxis_Rotation();
-
-	//임시
-	Vector3 DVelocity;
 
 private:
 	///위치 데이터
@@ -129,14 +143,3 @@ private:
 	friend class PhysEngine;
 	friend class BaseEventCallBack;
 };
-
-struct FilterGroup
-{
-	enum Enum
-	{
-		eWall = (1 << 0),
-		ePlayer = (1 << 0),
-	};
-};
-
-
