@@ -67,7 +67,7 @@ void CPlayerScript::tick()
 	if (KEY_PRESSED(KEY::Y))
 	{
 		Vec3 vRot = Transform()->GetRelativeRotation();
-		vRot.z += 20.f * DT * XM_PI;
+		vRot.z += 2.f * FDT * XM_PI;
 		Transform()->SetRelativeRotation(vRot);
 	}
 

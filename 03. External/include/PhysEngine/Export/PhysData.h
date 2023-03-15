@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysEngineDLL.h"
-//#include "SimpleMath.h"
+#include "SimpleMath.h"
 #include <vector>
 
 #include "PhysScene.h"

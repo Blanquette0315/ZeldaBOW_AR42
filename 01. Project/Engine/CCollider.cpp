@@ -9,7 +9,17 @@ CCollider::CCollider()
 	: CComponent(COMPONENT_TYPE::COLLIDER)
 	, m_pPhysData(nullptr)
 	, m_eType(COLLIDER_TYPE::COLLIDER_CUBE)
-	, m_bBeCreateActor(false)
+	, m_iOverlapCount(0)
+{
+}
+
+CCollider::CCollider(const CCollider& _origin)
+	: CComponent(COMPONENT_TYPE::COLLIDER)
+	, m_pPhysData(nullptr)
+	, m_eType(_origin.m_eType)
+	, m_vOffsetPos(_origin.m_vOffsetPos)
+	, m_vScale(_origin.m_vScale)
+	, m_vRot(_origin.m_vRot)
 	, m_iOverlapCount(0)
 {
 }
@@ -172,4 +182,29 @@ void CCollider::EndOverlap(CCollider* _pOther)
 	{
 		vecScripts[i]->EndOverlap(_pOther);
 	}
+}
+
+void CCollider::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "COLLIDER";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "ColliderType";
+	_emitter << YAML::Value << (UINT)m_eType;
+	_emitter << YAML::Key << "OffsetPos";
+	_emitter << YAML::Value << m_vOffsetPos;
+	_emitter << YAML::Key << "Scale";
+	_emitter << YAML::Value << m_vScale;
+	_emitter << YAML::Key << "Rotation";
+	_emitter << YAML::Value << m_vRot;
+
+	_emitter << YAML::EndMap;
+}
+
+void CCollider::LoadFromYAML(YAML::Node& _node)
+{
+	m_eType = (COLLIDER_TYPE)(_node["COLLIDER"]["ColliderType"].as<UINT>());
+	m_vOffsetPos = _node["COLLIDER"]["OffsetPos"].as<Vec3>();
+	m_vScale = _node["COLLIDER"]["Scale"].as<Vec3>();
+	m_vRot = _node["COLLIDER"]["Rotation"].as<Vec3>();
 }

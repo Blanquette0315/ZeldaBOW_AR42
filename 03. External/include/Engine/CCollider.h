@@ -53,8 +53,8 @@ public:
     void EndOverlap(CCollider* _pOther);
 
 public:
-    virtual void SaveToYAML(YAML::Emitter& _emitter) override {};
-    virtual void LoadFromYAML(YAML::Node& _node) override {};
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
     CLONE(CCollider);
 public:

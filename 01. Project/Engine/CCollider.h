@@ -16,9 +16,6 @@ private:
     Vec3            m_vFinalRot;
 
     int             m_iOverlapCount;
-
-    bool            m_bBeCreateActor;
-
 public:
     void SetType(COLLIDER_TYPE _type) { m_eType = _type; }
     void SetOffsetPos(Vec3 _vOffset) { m_vOffsetPos = _vOffset; }
@@ -53,8 +50,8 @@ public:
     void EndOverlap(CCollider* _pOther);
 
 public:
-    virtual void SaveToYAML(YAML::Emitter& _emitter) override {};
-    virtual void LoadFromYAML(YAML::Node& _node) override {};
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
     CLONE(CCollider);
 public:

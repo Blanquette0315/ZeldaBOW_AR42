@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysEngineDLL.h"
-///#include "SimpleMath.h"
+#include "SimpleMath.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
