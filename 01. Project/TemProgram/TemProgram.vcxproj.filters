@@ -147,6 +147,9 @@
     <Filter Include="03. UI\01. Inspector\ResUI\SoundUI">
       <UniqueIdentifier>{0ecb6d9f-7145-4133-a8e6-0b976524143b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\05. Tool">
+      <UniqueIdentifier>{f9a257b5-ccdd-404d-a833-dbac36936111}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -335,6 +338,9 @@
     <ClInclude Include="SoundUI.h">
       <Filter>03. UI\01. Inspector\ResUI\SoundUI</Filter>
     </ClInclude>
+    <ClInclude Include="ExportToolUI.h">
+      <Filter>03. UI\05. Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -505,6 +511,9 @@
     </ClCompile>
     <ClCompile Include="SoundUI.cpp">
       <Filter>03. UI\01. Inspector\ResUI\SoundUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ExportToolUI.cpp">
+      <Filter>03. UI\05. Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

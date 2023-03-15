@@ -23,8 +23,13 @@ public:
     virtual int Load(const wstring& _strFilePath) override { return S_OK; }
 
     CLONE_ASSERT(CMesh);
+
 public:
     CMesh(bool _bEngineRes = false);
     ~CMesh();
+
+public:
+    ComPtr<ID3D11Buffer> GetVB() { return m_VB; }
+    ComPtr<ID3D11Buffer> GetIB() { return m_IB; }
 };
 

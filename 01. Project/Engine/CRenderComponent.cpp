@@ -4,6 +4,7 @@
 CRenderComponent::CRenderComponent(COMPONENT_TYPE _eType)
 	: CComponent(_eType)
 	, m_bIsDynamicMtrl(false)
+	
 {
 }
 

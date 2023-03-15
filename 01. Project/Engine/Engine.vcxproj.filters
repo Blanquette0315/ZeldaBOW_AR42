@@ -172,6 +172,12 @@
     <Filter Include="Engine\03. Mgr\10. PhysMgr">
       <UniqueIdentifier>{801b50d5-67ab-436e-99df-70deec5ca22c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Mgr\11. ExportMgr">
+      <UniqueIdentifier>{215cf939-fd6b-455c-bef2-01d92b775d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\Detour">
+      <UniqueIdentifier>{72e73177-3a23-4b86-99d2-b8e1569bcdf9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -357,6 +363,60 @@
     <ClInclude Include="CPhysMgr.h">
       <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CExportMgr.h">
+      <Filter>Engine\03. Mgr\11. ExportMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourAlloc.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourAssert.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourCommon.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourCrowd.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourLocalBoundary.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourMath.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourNavMesh.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourNavMeshBuilder.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourNavMeshQuery.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourNode.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourObstacleAvoidance.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourPathCorridor.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourPathQueue.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourProximityGrid.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourStatus.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourTileCache.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourTileCacheBuilder.h">
+      <Filter>Module\Detour</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -526,6 +586,54 @@
     </ClCompile>
     <ClCompile Include="CPhysMgr.cpp">
       <Filter>Engine\03. Mgr\10. PhysMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CExportMgr.cpp">
+      <Filter>Engine\03. Mgr\11. ExportMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourAlloc.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourAssert.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourCommon.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourCrowd.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourLocalBoundary.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourNavMesh.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourNavMeshBuilder.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourNavMeshQuery.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourNode.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourObstacleAvoidance.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourPathCorridor.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourPathQueue.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourProximityGrid.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourTileCache.cpp">
+      <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourTileCacheBuilder.cpp">
+      <Filter>Module\Detour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

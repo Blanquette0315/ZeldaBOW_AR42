@@ -42,5 +42,8 @@ public:
     CRenderComponent(COMPONENT_TYPE _eComponentType);
     CRenderComponent(const CRenderComponent& _origin);
     ~CRenderComponent();
+
+
+
 };
 

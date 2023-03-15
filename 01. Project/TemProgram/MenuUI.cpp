@@ -13,6 +13,7 @@
 #include "CSaveLoadMgr.h"
 
 
+
 MenuUI::MenuUI()
 	: UI("##MenuUI")
 {
@@ -162,6 +163,15 @@ void MenuUI::render()
                 }
             }
 
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Tool"))
+        {
+            if (ImGui::MenuItem("NavMesh-Export"))
+            {
+                CImGuiMgr::GetInst()->FindUI("ExportTool")->Open();
+            }
             ImGui::EndMenu();
         }
 
