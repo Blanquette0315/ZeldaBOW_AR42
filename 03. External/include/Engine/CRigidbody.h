@@ -21,6 +21,7 @@ private:
     Vec3 m_vVelocity;
     Vec3 m_vForce;
     bool m_bKeyRelease;
+    Vec2 m_vCapsuleSize;
 
 public:
     PhysData* GetRigidData() { return m_pPhysData; }
@@ -116,6 +117,10 @@ public:
     void SetSphereCollider(float _fRadius) { m_pPhysData->mCollider->SetSphereCollider(_fRadius / 100.f); }
     
     void SetCapsuleCollider(float _fRadius, float _fHeight) { m_pPhysData->mCollider->SetCapsuleCollider(_fRadius / 100.f, _fHeight / 100.f); }
+    void SetCapsuleHeight(float _fHeight) { m_vCapsuleSize.y = _fHeight; }
+    void SetCapsuleRadius(float _fRadius) { m_vCapsuleSize.x = _fRadius; }
+    void SetCapsuleSize(float _fRadius, float _fHeight) { m_vCapsuleSize = Vec2(_fRadius, _fHeight); }
+    void SetCapsuleSize(Vec2 _vSize) { m_vCapsuleSize = _vSize; }
 
     void SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList);
 

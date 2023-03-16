@@ -191,7 +191,8 @@ enum class DEBUG_SHAPE
 	SPHERE,
 	CONE,
 	FRUSTUM,
-
+	CYLINDER,
+	
 	END,
 };
 

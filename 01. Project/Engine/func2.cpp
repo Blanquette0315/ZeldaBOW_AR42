@@ -277,6 +277,11 @@ void DebugDrawFrustum(Vec4 _vColor, Vec3 _vPosition, Vec3 _vRotation, float _fDu
 	CRenderMgr::GetInst()->DebugDraw(DEBUG_SHAPE::FRUSTUM, _vColor, _vPosition, Vec3::Zero, _vRotation, 0.f, 0.f, _fDuration);
 }
 
+void DebugDrawCylinder(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration)
+{
+	CRenderMgr::GetInst()->DebugDraw(DEBUG_SHAPE::CYLINDER, _vColor, _vPosition, _vScale, _vRotation, 0.f, 0.f, _fDuration);
+}
+
 const char* ToString(RES_TYPE _type)
 {
 	return RES_TYPE_CHAR[(UINT)_type];
