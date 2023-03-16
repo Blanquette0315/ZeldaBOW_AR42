@@ -157,10 +157,8 @@ void CreateTestLevel()
 	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
 	pObject->RigidBody()->SetGravityOption(true);
 
-	/*pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
-	pObject->Collider()->SetRadius(129.f);*/
-	pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_CAPSULE);
-	pObject->Collider()->SetCapsuleSize(65.f, 130.f);
+	/*pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_CAPSULE);
+	pObject->Collider()->SetCapsuleSize(65.f, 130.f);*/
 
 	pLevel->AddGameObject(pObject, 0);
 

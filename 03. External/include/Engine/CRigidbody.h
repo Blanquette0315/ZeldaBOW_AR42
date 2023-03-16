@@ -33,7 +33,6 @@ public:
     bool RayCast();
 
     // Hypothalamic Normal Vector Check
-    Vec3 GetHypothalmicDir(Vec3 _vDir);
     Vec3 GetHitNormal();
 
     // ===== Collider Filter Setting =====
