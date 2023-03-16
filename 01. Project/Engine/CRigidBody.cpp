@@ -213,13 +213,18 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
 	Vec3 vDir = Vec3(0.f, -1.f, 0.f).Normalize();
 	m_pToGroundRay->SetDirection(vDir.x, vDir.y, vDir.z);
-	m_pToGroundRay->SetMaxDistance(1.f / 100.f);
+	m_pToGroundRay->SetMaxDistance(20.f / 100.f);
 	m_pToGroundRay->SetQueryFilterData0(FILTER_GROUP::eGround);
 }
 
 bool CRigidBody::RayCast()
 {
 	return PhysX_RayCast(m_pToGroundRay);
+}
+
+Vec3 CRigidBody::GetHitNormal()
+{
+	return m_pToGroundRay->Hit.HitNormal;
 }
 
 void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)

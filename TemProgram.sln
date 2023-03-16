@@ -17,9 +17,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Script", "01. Project\Scrip
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysEngine", "01. Project\PhysEngine\PhysEngine.vcxproj", "{69987C7E-41E8-402A-B94C-E17572B93288}"
-	ProjectSection(ProjectDependencies) = postProject
-		{52CDA592-AF87-4A4A-98FF-D1F10C37F1A5} = {52CDA592-AF87-4A4A-98FF-D1F10C37F1A5}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

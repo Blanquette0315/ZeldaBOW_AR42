@@ -43,46 +43,69 @@ void CPlayerScript::begin()
 
 void CPlayerScript::tick()
 {
-	if (KEY_RELEASE(KEY::LEFT))
-	{
-		RigidBody()->SetKeyRelease(true);
-	}
-
-	if (KEY_RELEASE(KEY::RIGHT))
-	{
-		RigidBody()->SetKeyRelease(true);
-	}
-
-	if (KEY_RELEASE(KEY::UP))
-	{
-		RigidBody()->SetKeyRelease(true);
-	}
-
-	if (KEY_RELEASE(KEY::DOWN))
-	{
-		RigidBody()->SetKeyRelease(true);
-	}
-
 	if (RigidBody()->RayCast())//(!RigidBody()->IsAir())
 	{
+		if (KEY_RELEASE(KEY::LEFT))
+		{
+			RigidBody()->SetKeyRelease(true);
+		}
+
+		if (KEY_RELEASE(KEY::RIGHT))
+		{
+			RigidBody()->SetKeyRelease(true);
+		}
+
+		if (KEY_RELEASE(KEY::UP))
+		{
+			RigidBody()->SetKeyRelease(true);
+		}
+
+		if (KEY_RELEASE(KEY::DOWN))
+		{
+			RigidBody()->SetKeyRelease(true);
+		}
+
+
 		if (KEY_PRESSED(KEY::LEFT))
 		{
-			RigidBody()->AddVelocity(Vec3(-2.f, 0.f, 0.f));
+			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+			Vec3 vMove = Vec3(-1.f, 0.f, 0.f).Normalize();
+
+			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+			vRealMove *= 2.f;
+
+			RigidBody()->AddVelocity(vRealMove);
 		}
 
 		if (KEY_PRESSED(KEY::RIGHT))
 		{
-			RigidBody()->AddVelocity(Vec3(2.f, 0.f, 0.f));
+			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+			Vec3 vMove = Vec3(1.f, 0.f, 0.f).Normalize();
+
+			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+			vRealMove *= 2.f;
+
+			RigidBody()->AddVelocity(vRealMove);
 		}
 
 		if (KEY_PRESSED(KEY::UP))
 		{
-			RigidBody()->AddVelocity(Vec3(0.f, 0.f, 2.f));
+			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+			Vec3 vMove = Vec3(0.f, 0.f, 1.f).Normalize();
+
+			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+			vRealMove *= 2.f;
+			RigidBody()->AddVelocity(vRealMove);
 		}
 
 		if (KEY_PRESSED(KEY::DOWN))
 		{
-			RigidBody()->AddVelocity(Vec3(0.f, 0.f, -2.f));
+			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+			Vec3 vMove = Vec3(0.f, 0.f, -1.f).Normalize();
+
+			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+			vRealMove *= 2.f;
+			RigidBody()->AddVelocity(vRealMove);
 		}
 
 		if (KEY_TAP(KEY::SPACE))

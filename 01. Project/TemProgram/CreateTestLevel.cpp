@@ -138,7 +138,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CRigidBody);
-	pObject->AddComponent(new CCollider);
+	//pObject->AddComponent(new CCollider);
 	pObject->AddComponent(new CPlayerScript);
 	//Sphere
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 400.f));
@@ -156,41 +156,41 @@ void CreateTestLevel()
 	//pObject->RigidBody()->SetDynamicFriction(0.f);
 	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
 	pObject->RigidBody()->SetGravityOption(true);
-	//pObject->RigidBody()->CreateActor();
 
+	/*pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+	pObject->Collider()->SetRadius(129.f);*/
 	pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_CAPSULE);
 	pObject->Collider()->SetCapsuleSize(65.f, 130.f);
 
 	pLevel->AddGameObject(pObject, 0);
 
-	pObject = new CGameObject;
-	pObject->SetName(L"Player");
+	//pObject = new CGameObject;
+	//pObject->SetName(L"Player");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CRigidBody);
-	//pObject->AddComponent(new CCollider);
-	//Sphere
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 1000.f, 400.f));
-	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender);
+	//pObject->AddComponent(new CRigidBody);
+	////pObject->AddComponent(new CCollider);
+	////Sphere
+	//pObject->Transform()->SetRelativePos(Vec3(0.f, 1000.f, 400.f));
+	//pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 
-	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::SPHERE, false, true);
-	pObject->RigidBody()->SetMass(10.f);
-	pObject->RigidBody()->SetRestitution(0.f);
-	//pObject->RigidBody()->SetStaticFriction(0.f);
-	//pObject->RigidBody()->SetDynamicFriction(0.f);
-	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
-	pObject->RigidBody()->SetGravityOption(true);
-	//pObject->RigidBody()->CreateActor();
+	//pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::SPHERE, false, true);
+	//pObject->RigidBody()->SetMass(10.f);
+	//pObject->RigidBody()->SetRestitution(0.f);
+	////pObject->RigidBody()->SetStaticFriction(0.f);
+	////pObject->RigidBody()->SetDynamicFriction(0.f);
+	//pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
+	//pObject->RigidBody()->SetGravityOption(true);
 
-	//pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
-	//pObject->Collider()->SetRadius(128.f);
+	////pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+	////pObject->Collider()->SetRadius(128.f);
 
-	pLevel->AddGameObject(pObject, 0);
+	//pLevel->AddGameObject(pObject, 0);
 
 	// 데칼 생성
 	CGameObject* pDecal = new CGameObject;
@@ -227,7 +227,6 @@ void CreateTestLevel()
 	pObject->RigidBody()->SetDynamicFriction(0.f);
 	pObject->RigidBody()->SetRestitution(0.f);
 	pObject->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
-	//pObject->RigidBody()->CreateActor();
 
 	pLevel->AddGameObject(pObject, 0);
 
@@ -264,7 +263,6 @@ void CreateTestLevel()
 
 	pObject->RigidBody()->UpdateTransformData(RIGIDCOLLIDER_TYPE::CUBE, true, true);
 	pObject->RigidBody()->SetRestitution(0.f);
-	//pObject->RigidBody()->CreateActor();
 
 	//Instantiate(pObject, Vec3(0.f, 0.f, 900.f), 0);
 	pLevel->AddGameObject(pObject, 0);
