@@ -60,7 +60,7 @@ void CCollider::begin()
 	}
 
 	m_pPhysData = PhysX_Create_Data();
-	m_pPhysData->EaterObj = GetOwner();
+	m_pPhysData->BOWObj = GetOwner();
 	m_pPhysData->isKinematic = true;
 	m_pPhysData->SetTrigger(true);
 	if (m_eType == COLLIDER_TYPE::COLLIDER_CUBE)

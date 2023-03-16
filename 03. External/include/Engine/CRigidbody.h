@@ -31,6 +31,10 @@ public:
     void SetKeyRelease(bool _b) { m_bKeyRelease = _b; }
     bool RayCast();
 
+    // Hypothalamic Normal Vector Check
+    Vec3 GetHypothalmicDir(Vec3 _vDir);
+    Vec3 GetHitNormal();
+
     // ===== Collider Filter Setting =====
     void SetColliderFilter(FILTER_GROUP _eGroup) { m_pPhysData->SetFilterData0(_eGroup); }
     void SetColliderFilter(uint32_t _Filter) { m_pPhysData->SetFilterData0(_Filter); }
@@ -65,8 +69,8 @@ public:
     void SetWorldRotation(float _x, float _y, float _z) { m_pPhysData->SetRotation(_x, _y, _z); }
     void SetWorldRotation(Vec3 _vWorldPos);
     // Rotate Setting : Origin Rotation + Rotate
-    void SetRotate(float _x, float _y, float _z) { m_pPhysData->SetRotate(_x, _y, _z); }
-    void SetRotate(Vec3 _vRot) { m_pPhysData->SetRotate(_vRot.x, _vRot.y, _vRot.z); }
+    /*void SetRotate(float _x, float _y, float _z) { m_pPhysData->SetRotate(_x, _y, _z); }
+    void SetRotate(Vec3 _vRot) { m_pPhysData->SetRotate(_vRot.x, _vRot.y, _vRot.z); }*/
     
     Vec4 GetWorldRoation() { return m_pPhysData->Rotation; }
     

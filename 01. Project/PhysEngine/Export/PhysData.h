@@ -49,7 +49,7 @@ class  PHYS_ENGINEDLL PhysData
 public:
 	 PhysData();
 	 ~PhysData();
-	 void* EaterObj = nullptr;
+	 void* BOWObj = nullptr;
 
 	Vector3 WorldPosition;	//위치
 	Vector4 Rotation;		//회전
@@ -92,6 +92,8 @@ public:
 	PhysData* TriggerStay_List[10];
 	PhysData* TriggerExit_List[10];
 	//PhysData* TriggerList[10];
+
+	//bool m_bGround;
 
 private:
 	uint32_t m_iFilterData0; // word0 is PxU32(uint32_t)
