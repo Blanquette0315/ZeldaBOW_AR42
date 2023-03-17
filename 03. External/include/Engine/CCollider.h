@@ -21,6 +21,7 @@ public:
     void SetOffsetPos(Vec3 _vOffset) { m_vOffsetPos = _vOffset; }
     void SetScale(Vec3 _vScale) { m_vScale = _vScale; }
     void SetRadius(float _fRadius) { m_vScale = Vec3(_fRadius, _fRadius, _fRadius); }
+    void SetCapsuleSize(float _fRadius, float _fHeight) { m_vScale = Vec3(_fRadius, _fHeight, _fRadius); }
 
     void SetRotationX(float _fRadian) { m_vRot.x = _fRadian; }
     void SetRotationY(float _fRadian) { m_vRot.y = _fRadian; }

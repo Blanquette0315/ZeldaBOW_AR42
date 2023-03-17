@@ -45,7 +45,10 @@ void CCollider::begin()
 	Vec3 vRot = m_vRot;
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
-	matRot *= XMMatrixRotationZ(m_vRot.z);
+	if(m_eType != COLLIDER_TYPE::COLLIDER_CAPSULE)
+		matRot *= XMMatrixRotationZ(m_vRot.z);
+	else
+		matRot *= XMMatrixRotationZ(m_vRot.z + XM_PI * 0.5f);
 	CGameObject* pParent = GetOwner();
 	while (true)
 	{
@@ -60,7 +63,7 @@ void CCollider::begin()
 	}
 
 	m_pPhysData = PhysX_Create_Data();
-	m_pPhysData->EaterObj = GetOwner();
+	m_pPhysData->BOWObj = GetOwner();
 	m_pPhysData->isKinematic = true;
 	m_pPhysData->SetTrigger(true);
 	if (m_eType == COLLIDER_TYPE::COLLIDER_CUBE)
@@ -70,6 +73,10 @@ void CCollider::begin()
 	else if (m_eType == COLLIDER_TYPE::COLLIDER_SPHERE)
 	{
 		m_pPhysData->mCollider->SetSphereCollider(m_vScale.x / 100.f);
+	}
+	else if (m_eType == COLLIDER_TYPE::COLLIDER_CAPSULE)
+	{
+		m_pPhysData->mCollider->SetCapsuleCollider(m_vScale.x / 100.f, m_vScale.y / 200.f);
 	}
 	m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
 	Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
@@ -98,7 +105,10 @@ void CCollider::finaltick()
 	Vec3 vRot = m_vRot;
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
-	matRot *= XMMatrixRotationZ(m_vRot.z);
+	if (m_eType != COLLIDER_TYPE::COLLIDER_CAPSULE)
+		matRot *= XMMatrixRotationZ(m_vRot.z);
+	else
+		matRot *= XMMatrixRotationZ(m_vRot.z + XM_PI * 0.5f);
 	CGameObject* pParent = GetOwner();
 	while (true)
 	{
@@ -131,9 +141,13 @@ void CCollider::finaltick()
 	{
 		DebugDrawCube(vColor, m_vFinalPos, m_vScale * 2.f, vRot);
 	}
-	if (COLLIDER_TYPE::COLLIDER_SPHERE == m_eType)
+	else if (COLLIDER_TYPE::COLLIDER_SPHERE == m_eType)
 	{
 		DebugDrawSphere(vColor, m_vFinalPos, m_vScale.x);
+	}
+	else if (COLLIDER_TYPE::COLLIDER_CAPSULE == m_eType)
+	{
+		DebugDrawCylinder(vColor, m_vFinalPos, Vec3(m_vScale.x * 2.f, m_vScale.x * 2.f + m_vScale.y, m_vScale.x * 2.f), vRot - Vec3(0.f, 0.f, XM_PI * 0.5f));
 	}
 #endif
 }

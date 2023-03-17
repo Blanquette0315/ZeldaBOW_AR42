@@ -429,6 +429,15 @@ void CResMgr::CreateDefaultMesh()
 	// ===========
 
 	CreateConeMesh(0.5f, 1.f, 50);
+
+	// ===============
+	//  Cylinder Mesh
+	// ===============
+
+	pMesh = new CMesh(true);
+	CreateCylinder(0.5f, 0.5f, 1.f, 50, 1, vecVtx, vecIdx);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	AddRes<CMesh>(L"CylinderMesh", pMesh);
 }
 
 namespace
@@ -485,6 +494,197 @@ void CResMgr::CreateConeMesh(float radius, float height, size_t tessellation)
 	CMesh* pMesh = new CMesh(true);
 	pMesh->Create(vertices.data(), vertices.size(), indices.data(), indices.size());
 	AddRes<CMesh>(L"ConeMesh", pMesh);
+}
+
+void CResMgr::CreateCylinder(float bottomRadius, float topRadius, float height, UINT sliceCount, UINT stackCount, vector<Vtx>& Vertices, vector<UINT>& Indices)
+{
+	Vertices.clear();
+	Indices.clear();
+
+	//
+	// Build Stacks.
+	// 
+
+	float stackHeight = height / stackCount;
+
+	// Amount to increment radius as we move up each stack level from bottom to top.
+	float radiusStep = (topRadius - bottomRadius) / stackCount;
+
+	UINT ringCount = stackCount + 1;
+
+	// Compute vertices for each stack ring starting at the bottom and moving up.
+	for (UINT i = 0; i < ringCount; ++i)
+	{
+		float y = -0.5f * height + i * stackHeight;
+		float r = bottomRadius + i * radiusStep;
+
+		// vertices of ring
+		float dTheta = 2.0f * XM_PI / sliceCount;
+		for (UINT j = 0; j <= sliceCount; ++j)
+		{
+			Vtx vertex;
+
+			float c = cosf(j * dTheta);
+			float s = sinf(j * dTheta);
+
+			vertex.vPos = XMFLOAT3(r * c, y, r * s);
+
+			vertex.vUV.x = (float)j / sliceCount;
+			vertex.vUV.y = 1.0f - (float)i / stackCount;
+
+			// Cylinder can be parameterized as follows, where we introduce v
+			// parameter that goes in the same direction as the v tex-coord
+			// so that the bitangent goes in the same direction as the v tex-coord.
+			//   Let r0 be the bottom radius and let r1 be the top radius.
+			//   y(v) = h - hv for v in [0,1].
+			//   r(v) = r1 + (r0-r1)v
+			//
+			//   x(t, v) = r(v)*cos(t)
+			//   y(t, v) = h - hv
+			//   z(t, v) = r(v)*sin(t)
+			// 
+			//  dx/dt = -r(v)*sin(t)
+			//  dy/dt = 0
+			//  dz/dt = +r(v)*cos(t)
+			//
+			//  dx/dv = (r0-r1)*cos(t)
+			//  dy/dv = -h
+			//  dz/dv = (r0-r1)*sin(t)
+
+			// This is unit length.
+			vertex.vTangent = XMFLOAT3(-s, 0.0f, c);
+
+			float dr = bottomRadius - topRadius;
+			XMFLOAT3 bitangent(dr * c, -height, dr * s);
+
+			XMVECTOR T = XMLoadFloat3(&vertex.vTangent);
+			XMVECTOR B = XMLoadFloat3(&bitangent);
+			XMVECTOR N = XMVector3Normalize(XMVector3Cross(T, B));
+			XMStoreFloat3(&vertex.vNormal, N);
+
+			Vertices.push_back(vertex);
+		}
+	}
+
+	// Add one because we duplicate the first and last vertex per ring
+	// since the texture coordinates are different.
+	UINT ringVertexCount = sliceCount + 1;
+
+	// Compute indices for each stack.
+	for (UINT i = 0; i < stackCount; ++i)
+	{
+		for (UINT j = 0; j < sliceCount; ++j)
+		{
+			Indices.push_back(i * ringVertexCount + j);
+			Indices.push_back((i + 1) * ringVertexCount + j);
+			Indices.push_back((i + 1) * ringVertexCount + j + 1);
+
+			Indices.push_back(i * ringVertexCount + j);
+			Indices.push_back((i + 1) * ringVertexCount + j + 1);
+			Indices.push_back(i * ringVertexCount + j + 1);
+		}
+	}
+
+	BuildCylinderTopCap(bottomRadius, topRadius, height, sliceCount, stackCount, Vertices, Indices);
+	BuildCylinderBottomCap(bottomRadius, topRadius, height, sliceCount, stackCount, Vertices, Indices);
+}
+
+void CResMgr::BuildCylinderTopCap(float bottomRadius, float topRadius, float height, UINT sliceCount, UINT stackCount, vector<Vtx>& Vertices, vector<UINT>& Indices)
+{
+	UINT baseIndex = (UINT)Vertices.size();
+
+	float y = 0.5f * height;
+	float dTheta = 2.0f * XM_PI / sliceCount;
+
+	// Duplicate cap ring vertices because the texture coordinates and normals differ.
+	Vtx _vtx;
+	_vtx.vNormal = Vec3(0.f, 0.f, 1.f);
+	_vtx.vBinormal = Vec3(0.0f, 1.0f, 0.0f);
+	_vtx.vTangent = Vec3(1.0f, 0.0f, 0.0f);
+	for (UINT i = 0; i <= sliceCount; ++i)
+	{
+		float x = topRadius * cosf(i * dTheta);
+		float z = topRadius * sinf(i * dTheta);
+
+		// Scale down by the height to try and make top cap texture coord area
+		// proportional to base.
+		float u = x / height + 0.5f;
+		float v = z / height + 0.5f;
+
+		/*
+		* 	Vec3 vPos;
+			Vec4 vColor;
+			Vec2 vUV;
+
+			Vec3 vTangent;
+			Vec3 vBinormal;
+			Vec3 vNormal;
+		*/
+		_vtx.vPos = Vec3(x, y, z);
+		_vtx.vUV = Vec2(u, v);
+		Vertices.push_back(_vtx);
+	}
+
+	// Cap center vertex.
+	_vtx.vPos = Vec3(0.0f, y, 0.0f);
+	_vtx.vUV = Vec2(0.5f, 0.5f);
+	Vertices.push_back(_vtx);
+
+	// Index of center vertex.
+	UINT centerIndex = (UINT)Vertices.size() - 1;
+
+	for (UINT i = 0; i < sliceCount; ++i)
+	{
+		Indices.push_back(centerIndex);
+		Indices.push_back(baseIndex + i + 1);
+		Indices.push_back(baseIndex + i);
+	}
+}
+
+void CResMgr::BuildCylinderBottomCap(float bottomRadius, float topRadius, float height, UINT sliceCount, UINT stackCount, vector<Vtx>& Vertices, vector<UINT>& Indices)
+{
+	// 
+	// Build bottom cap.
+	//
+
+	UINT baseIndex = (UINT)Vertices.size();
+	float y = -0.5f * height;
+
+	// vertices of ring
+	float dTheta = 2.0f * XM_PI / sliceCount;
+	Vtx _vtx;
+	_vtx.vNormal = Vec3(0.f, 0.f, -1.f);
+	_vtx.vBinormal = Vec3(0.0f, -1.0f, 0.0f);
+	_vtx.vTangent = Vec3(1.0f, 0.0f, 0.0f);
+	for (UINT i = 0; i <= sliceCount; ++i)
+	{
+		float x = bottomRadius * cosf(i * dTheta);
+		float z = bottomRadius * sinf(i * dTheta);
+
+		// Scale down by the height to try and make top cap texture coord area
+		// proportional to base.
+		float u = x / height + 0.5f;
+		float v = z / height + 0.5f;
+
+		_vtx.vPos = Vec3(x, y, z);
+		_vtx.vUV = Vec2(u, v);
+		Vertices.push_back(_vtx);
+	}
+
+	// Cap center vertex.
+	_vtx.vPos = Vec3(0.0f, y, 0.0f);
+	_vtx.vUV = Vec2(0.5f, 0.5f);
+	Vertices.push_back(_vtx);
+
+	// Cache the index of center vertex.
+	UINT centerIndex = (UINT)Vertices.size() - 1;
+
+	for (UINT i = 0; i < sliceCount; ++i)
+	{
+		Indices.push_back(centerIndex);
+		Indices.push_back(baseIndex + i);
+		Indices.push_back(baseIndex + i + 1);
+	}
 }
 
 void CResMgr::CreateDefaultTexture()

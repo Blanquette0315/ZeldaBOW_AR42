@@ -53,6 +53,9 @@ public:
 	const vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutInfo() { return m_vecLayoutInfo; }
 
 	void CreateConeMesh(float radius, float height, size_t tessellation);
+	void CreateCylinder(float bottomRadius, float topRadius, float height, UINT sliceCount, UINT stackCount, vector<Vtx>& Vertcies, vector<UINT>& Indices);
+	void BuildCylinderTopCap(float bottomRadius, float topRadius, float height, UINT sliceCount, UINT stackCount, vector<Vtx>& Vertcies, vector<UINT>& Indices);
+	void BuildCylinderBottomCap(float bottomRadius, float topRadius, float height, UINT sliceCount, UINT stackCount, vector<Vtx>& Vertcies, vector<UINT>& Indices);
 
 private:
 	void InitSound();

@@ -42,6 +42,7 @@ void PhysCollider::SetSphereCollider(float Radius)
 void PhysCollider::SetCapsuleCollider(float Radius, float Height)
 {
 	Size = { Radius, Height,0.0f};
+	Collider_Capsule = CreateCapsule(Radius, Height);
 	Shape_type = PhysCollider::TYPE::CAPSULE;
 }
 
@@ -94,7 +95,10 @@ Phys_Collider_Box* PhysCollider::CreateBox(float Size_x, float Size_y, float Siz
 
 Phys_Collider_Capsule* PhysCollider::CreateCapsule(float Radius, float Height)
 {
-	return nullptr;
+	Collider_Capsule = new Phys_Collider_Capsule();
+	Collider_Capsule->Initialize();
+	Collider_Capsule->SetSize(Radius, Height);
+	return Collider_Capsule;
 }
 
 Vector3 PhysCollider::GetCenter()

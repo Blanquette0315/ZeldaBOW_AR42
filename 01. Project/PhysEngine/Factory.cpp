@@ -112,7 +112,7 @@ physx::PxShape* Factory::CreateSphereCollider(physx::PxMaterial* m, Phys_Collide
 
 physx::PxShape* Factory::CreateCapsuleCollider(physx::PxMaterial* m, Phys_Collider_Capsule* c, bool isTrigger)
 {
-	PxCapsuleGeometry temp = PxCapsuleGeometry(c->Radius,c->Helght);
+	PxCapsuleGeometry temp = PxCapsuleGeometry(c->m_Radius,c->m_Helght);
 	PxShape* shape = m_Phys->createShape(temp, *m, false, CreateShapeFlag(isTrigger));
 	return shape;
 }

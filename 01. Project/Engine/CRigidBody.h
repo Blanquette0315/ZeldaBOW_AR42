@@ -21,6 +21,7 @@ private:
     Vec3 m_vVelocity;
     Vec3 m_vForce;
     bool m_bKeyRelease;
+    Vec2 m_vCapsuleSize;
 
 public:
     PhysData* GetRigidData() { return m_pPhysData; }
@@ -30,6 +31,9 @@ public:
     void CreateActor() { PhysX_Create_Actor(m_pPhysData); }
     void SetKeyRelease(bool _b) { m_bKeyRelease = _b; }
     bool RayCast();
+
+    // Hypothalamic Normal Vector Check
+    Vec3 GetHitNormal();
 
     // ===== Collider Filter Setting =====
     void SetColliderFilter(FILTER_GROUP _eGroup) { m_pPhysData->SetFilterData0(_eGroup); }
@@ -65,8 +69,8 @@ public:
     void SetWorldRotation(float _x, float _y, float _z) { m_pPhysData->SetRotation(_x, _y, _z); }
     void SetWorldRotation(Vec3 _vWorldPos);
     // Rotate Setting : Origin Rotation + Rotate
-    void SetRotate(float _x, float _y, float _z) { m_pPhysData->SetRotate(_x, _y, _z); }
-    void SetRotate(Vec3 _vRot) { m_pPhysData->SetRotate(_vRot.x, _vRot.y, _vRot.z); }
+    /*void SetRotate(float _x, float _y, float _z) { m_pPhysData->SetRotate(_x, _y, _z); }
+    void SetRotate(Vec3 _vRot) { m_pPhysData->SetRotate(_vRot.x, _vRot.y, _vRot.z); }*/
     
     Vec4 GetWorldRoation() { return m_pPhysData->Rotation; }
     
@@ -116,6 +120,10 @@ public:
     void SetSphereCollider(float _fRadius) { m_pPhysData->mCollider->SetSphereCollider(_fRadius / 100.f); }
     
     void SetCapsuleCollider(float _fRadius, float _fHeight) { m_pPhysData->mCollider->SetCapsuleCollider(_fRadius / 100.f, _fHeight / 100.f); }
+    void SetCapsuleHeight(float _fHeight) { m_vCapsuleSize.y = _fHeight; }
+    void SetCapsuleRadius(float _fRadius) { m_vCapsuleSize.x = _fRadius; }
+    void SetCapsuleSize(float _fRadius, float _fHeight) { m_vCapsuleSize = Vec2(_fRadius, _fHeight); }
+    void SetCapsuleSize(Vec2 _vSize) { m_vCapsuleSize = _vSize; }
 
     void SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList);
 
