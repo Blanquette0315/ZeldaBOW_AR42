@@ -10,6 +10,7 @@ using namespace SimpleMath;
 struct PHYS_ENGINEDLL RaycastHit
 {
 	Vector3 HitPoint	= { 0,0,0 };		//충돌 위치
+	Vector3 HitNormal = { 0,0,0 };			//충돌한 오브젝트 노말
 	int HitCount		= 0;				//충돌한 오브젝트 개수
 	int FaceIndex		= 0;				//충돌한 오브젝트의 face인덱슨
 };

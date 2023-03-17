@@ -12,6 +12,7 @@ CRigidBody::CRigidBody()
 	, m_pToGroundRay(new PhysRayCast)
 	, m_eRigidColliderType(RIGIDCOLLIDER_TYPE::CUBE)
 	, m_bKeyRelease(false)
+	, m_vCapsuleSize(Vec2(1.f, 2.f))
 {
 }
 
@@ -21,6 +22,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_pToGroundRay(new PhysRayCast)
 	, m_eRigidColliderType(_origin.m_eRigidColliderType)
 	, m_bKeyRelease(false)
+	, m_vCapsuleSize(_origin.m_vCapsuleSize)
 {
 }
 
@@ -38,7 +40,7 @@ CRigidBody::~CRigidBody()
 
 void CRigidBody::begin()
 {
-	m_pPhysData->EaterObj = GetOwner();
+	m_pPhysData->BOWObj = GetOwner();
 	UpdateTransformData(m_eRigidColliderType, m_pPhysData->isKinematic, m_pPhysData->isDinamic);
 	CreateActor();
 }
@@ -58,7 +60,10 @@ void CRigidBody::tick()
 		Vec3 vRot = {};
 
 		QuaternionToEuler(vQRot, vRot);
-		Transform()->SetRelativeRotation(vRot);
+		if (m_eRigidColliderType != RIGIDCOLLIDER_TYPE::CAPSULE)
+			Transform()->SetRelativeRotation(vRot);
+		else
+			Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
 
 		// ToGroundRay Refresh
 		vPos = Transform()->GetRelativePos();
@@ -125,6 +130,8 @@ void CRigidBody::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << (UINT)m_eRigidColliderType;
 	_emitter << YAML::Key << "PhysDataColliderFilter";
 	_emitter << YAML::Value << m_pPhysData->GetFilterData0();
+	_emitter << YAML::Key << "CapsuleSize";
+	_emitter << YAML::Value << m_vCapsuleSize;
 
 	_emitter << YAML::EndMap;
 }
@@ -144,6 +151,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	m_pPhysData->SetLockAxis_Rotation((bool)LocakAxisRot.x, (bool)LocakAxisRot.y, (bool)LocakAxisRot.z);
 	m_eRigidColliderType = (RIGIDCOLLIDER_TYPE)(_node["RIGIDBODY"]["PhysDataColliderType"].as<UINT>());
 	uint32_t Filter = _node["RIGIDBODY"]["PhysDataColliderFilter"].as<uint32_t>();
+	m_vCapsuleSize = _node["RIGIDBODY"]["CapsuleSize"].as<Vec2>();
 
 	SetColliderFilter(Filter);
 }
@@ -172,7 +180,7 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 
 	case RIGIDCOLLIDER_TYPE::CAPSULE:
 	{
-
+		SetCapsuleCollider(m_vCapsuleSize.x, m_vCapsuleSize.y * 0.5f);
 	}
 	break;
 	
@@ -205,7 +213,7 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
 	Vec3 vDir = Vec3(0.f, -1.f, 0.f).Normalize();
 	m_pToGroundRay->SetDirection(vDir.x, vDir.y, vDir.z);
-	m_pToGroundRay->SetMaxDistance(1.f / 100.f);
+	m_pToGroundRay->SetMaxDistance(20.f / 100.f);
 	m_pToGroundRay->SetQueryFilterData0(FILTER_GROUP::eGround);
 }
 
@@ -214,13 +222,29 @@ bool CRigidBody::RayCast()
 	return PhysX_RayCast(m_pToGroundRay);
 }
 
+Vec3 CRigidBody::GetHitNormal()
+{
+	return m_pToGroundRay->Hit.HitNormal;
+}
+
 void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)
 {
-	DirectX::XMMATRIX _P = DirectX::XMMatrixRotationX(_vWorldRot.x);
-	DirectX::XMMATRIX _Y = DirectX::XMMatrixRotationY(_vWorldRot.y);
-	DirectX::XMMATRIX _R = DirectX::XMMatrixRotationZ(_vWorldRot.z);
-
-
+	DirectX::XMMATRIX _P;
+	DirectX::XMMATRIX _Y;
+	DirectX::XMMATRIX _R;
+	if (m_eRigidColliderType == RIGIDCOLLIDER_TYPE::CAPSULE)
+	{
+		_P = DirectX::XMMatrixRotationX(_vWorldRot.x);
+		_Y = DirectX::XMMatrixRotationY(_vWorldRot.y);
+		_R = DirectX::XMMatrixRotationZ(_vWorldRot.z + XM_PI * 0.5f);
+	}
+	else
+	{
+		_P = DirectX::XMMatrixRotationX(_vWorldRot.x);
+		_Y = DirectX::XMMatrixRotationY(_vWorldRot.y);
+		_R = DirectX::XMMatrixRotationZ(_vWorldRot.z);
+	}
+	
 	Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(_R * _Y * _P);
 	
 	m_pPhysData->Rotation = (Vec4)Q_Rot;

@@ -191,7 +191,7 @@ void PhysEngine::Delete_Actor(PhysData* data)
 	}
 
 	data->ActorObj = nullptr;
-	data->EaterObj = nullptr;
+	data->BOWObj = nullptr;
 
 	delete data;
 	data = nullptr;
@@ -357,6 +357,8 @@ void PhysEngine::UpdateDynamicVelocity(PxRigidDynamic* Dynamic, PhysData* Data)
 	//속력값이 변경되었다면 변경된 값으로 업데이트
 	PxVec3 Velocity = Dynamic->getLinearVelocity();
 	PxVec3 Pox;
+	Pox = PxVec3(Data->Velocity.x, Data->Velocity.y, Data->Velocity.z);
+	
 	if (Velocity.y == 0.0f)
 	{
 		Pox = PxVec3(Data->Velocity.x, Data->Velocity.y, Data->Velocity.z);
@@ -365,6 +367,7 @@ void PhysEngine::UpdateDynamicVelocity(PxRigidDynamic* Dynamic, PhysData* Data)
 	{
 		Pox = PxVec3(Data->Velocity.x, Velocity.y, Data->Velocity.z);
 	}
+
 	//PxVec3 Pox = PxVec3(data->Velocity.x, data->Velocity.y, data->Velocity.z);
 
 	Dynamic->setLinearVelocity(Pox);

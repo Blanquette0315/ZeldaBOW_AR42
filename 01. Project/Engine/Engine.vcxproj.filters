@@ -488,9 +488,6 @@
     <ClCompile Include="CGameObject.cpp">
       <Filter>Engine\05. GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="CComponent.cpp">
-      <Filter>Engine\06. Component</Filter>
-    </ClCompile>
     <ClCompile Include="CTransform.cpp">
       <Filter>Engine\06. Component\01. Transform</Filter>
     </ClCompile>
@@ -601,6 +598,9 @@
     </ClCompile>
     <ClCompile Include="CCollider.cpp">
       <Filter>Engine\06. Component\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="CComponent.cpp">
+      <Filter>Engine\06. Component</Filter>
     </ClCompile>
     <ClCompile Include="CExportMgr.cpp">
       <Filter>Engine\03. Mgr\11. ExportMgr</Filter>

@@ -204,6 +204,17 @@ void CEditor::CreateDebugDrawObject()
 	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"FrustumDebugDrawMtrl"));
 
 	m_DebugDrawObject[(UINT)DEBUG_SHAPE::FRUSTUM] = pDebugObj;
+
+	// DEBUG_SHAPE::CYLINDER
+	pDebugObj = new CGameObjectEX;
+
+	pDebugObj->AddComponent(new CTransform);
+	pDebugObj->AddComponent(new CMeshRender);
+
+	pDebugObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CylinderMesh"));
+	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugDrawMtrl"));
+
+	m_DebugDrawObject[(UINT)DEBUG_SHAPE::CYLINDER] = pDebugObj;
 }
 
 void CEditor::DebugDraw(tDebugShapeInfo& _info)
@@ -217,18 +228,22 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	{
 		pDebugObj->Transform()->SetRelativeScale(Vec3(_info.fRadius * 2.f, _info.fRadius * 2.f, _info.fRadius * 2.f));
 	}
-	if (DEBUG_SHAPE::RECT == _info.eShape || DEBUG_SHAPE::CUBE == _info.eShape)
+	else if (DEBUG_SHAPE::RECT == _info.eShape || DEBUG_SHAPE::CUBE == _info.eShape)
 	{
 		pDebugObj->Transform()->SetRelativeScale(_info.vScale);
 	}
-	if (DEBUG_SHAPE::CONE == _info.eShape)
+	else if (DEBUG_SHAPE::CONE == _info.eShape)
 	{
 		float length = tan(_info.fAngle / 180 * XM_PI) * _info.fRadius;
 		pDebugObj->Transform()->SetRelativeScale(Vec3(length, length, _info.fRadius));
 	}
-	if (DEBUG_SHAPE::FRUSTUM == _info.eShape)
+	else if (DEBUG_SHAPE::FRUSTUM == _info.eShape)
 	{
 		//pDebugObj->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::MAT_0, &pDebugObj->Camera()->GetFrustum().GetMatInv());
+	}
+	else if (DEBUG_SHAPE::CYLINDER == _info.eShape)
+	{
+		pDebugObj->Transform()->SetRelativeScale(_info.vScale);
 	}
 
 	pDebugObj->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC4_0, _info.vColor);

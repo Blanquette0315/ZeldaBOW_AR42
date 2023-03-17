@@ -43,10 +43,10 @@ void CTimeMgr::tick()
 
 	m_llPrevCount.QuadPart = m_llCurCount.QuadPart;
 
-	// 60 프레임을 초과할 경우 강제 방어
-	/*if ((1.f / 60.f) < m_fDeltaTime)
+	// 120 프레임을 초과할 경우 강제 방어
+	/*if ((1.f / 120.f) < m_fDeltaTime)
 	{
-		m_fDeltaTime = (1.f / 60.f);
+		m_fDeltaTime = (1.f / 240.f);
 	}*/
 
 	g_global.fDT = m_fDeltaTime;

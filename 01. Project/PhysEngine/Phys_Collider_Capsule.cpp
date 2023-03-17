@@ -18,4 +18,6 @@ void Phys_Collider_Capsule::Release()
 
 void Phys_Collider_Capsule::SetSize(float& Radius, float& Helght)
 {
+	m_Radius = Radius;
+	m_Helght = Helght;
 }

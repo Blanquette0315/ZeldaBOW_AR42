@@ -45,14 +45,14 @@ void CCollisionMgr::tick()
 					{
 						PhysData* TargetData = pPhysData->TriggerExit_List[i];
 						if (TargetData == nullptr) { continue; }
-						if ((unsigned long long)TargetData->EaterObj == 0xdddddddddddddddd)
+						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd)
 						{
 							pPhysData->TriggerExit_List[i] = nullptr;
 							pPhysData->Exit_Count--;
 							continue;
 						}
 
-						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
+						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->BOWObj);
 						if (!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
 							(pOther == vecObjects[iObjectNum]))
 						{
@@ -89,14 +89,14 @@ void CCollisionMgr::tick()
 						PhysData* TargetData = pPhysData->TriggerStay_List[i];
 
 						if (TargetData == nullptr) { continue; }
-						if ((unsigned long long)TargetData->EaterObj == 0xdddddddddddddddd)
+						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd)
 						{
 							pPhysData->TriggerStay_List[i] = nullptr;
 							pPhysData->Stay_Count--;
 							continue;
 						}
 
-						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
+						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->BOWObj);
 						// Dead check
 						if (pOther->IsDead())
 						{
@@ -118,14 +118,14 @@ void CCollisionMgr::tick()
 					{
 						PhysData* TargetData = pPhysData->TriggerEnter_List[i];
 						if (TargetData == nullptr) { continue; }
-						if ((unsigned long long)TargetData->EaterObj == 0xdddddddddddddddd)
+						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd)
 						{
 							pPhysData->TriggerEnter_List[i] = nullptr;
 							pPhysData->Enter_Count--;
 							continue;
 						}
 
-						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
+						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->BOWObj);
 						if (!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
 							(pOther == vecObjects[iObjectNum]))
 						{
@@ -179,14 +179,14 @@ void CCollisionMgr::tick()
 					{
 						PhysData* TargetData = pPhysData->TriggerExit_List[i];
 						if (TargetData == nullptr) { continue; }
-						if ((unsigned long long)TargetData->EaterObj == 0xdddddddddddddddd)
+						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd)
 						{
 							pPhysData->TriggerExit_List[i] = nullptr;
 							pPhysData->Exit_Count--;
 							continue;
 						}
 
-						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
+						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->BOWObj);
 						if (!IsCollisionBtwLayer(vecObjects[iObjectNum]->GetLayerIdx(), pOther->GetLayerIdx()) ||
 							(pOther == vecObjects[iObjectNum]))
 						{
@@ -224,14 +224,14 @@ void CCollisionMgr::tick()
 						PhysData* TargetData = pPhysData->TriggerStay_List[i];
 
 						if (TargetData == nullptr) { continue; }
-						if ((unsigned long long)TargetData->EaterObj == 0xdddddddddddddddd)
+						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd)
 						{
 							pPhysData->TriggerStay_List[i] = nullptr;
 							pPhysData->Stay_Count--;
 							continue;
 						}
 
-						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->EaterObj);
+						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->BOWObj);
 						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther->Collider());
 					}
 				}

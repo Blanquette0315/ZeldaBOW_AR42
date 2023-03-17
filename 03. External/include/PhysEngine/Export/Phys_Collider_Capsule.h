@@ -12,7 +12,7 @@ public:
 	void SetSize(float& Radius,float& Helght);
 	
 
-	float Radius;
-	float Helght;
+	float m_Radius;
+	float m_Helght;
 };
 
