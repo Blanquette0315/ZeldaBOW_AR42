@@ -204,6 +204,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CMeshRender.h" />
     <ClInclude Include="CMRT.h" />
+    <ClInclude Include="CNavMgr.h" />
     <ClInclude Include="CPaintShader.h" />
     <ClInclude Include="CParticleSystem.h" />
     <ClInclude Include="CParticleUpdateShader.h" />
@@ -286,6 +287,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CMeshRender.cpp" />
     <ClCompile Include="CMRT.cpp" />
+    <ClCompile Include="CNavMgr.cpp" />
     <ClCompile Include="CPaintShader.cpp" />
     <ClCompile Include="CParticleSystem.cpp" />
     <ClCompile Include="CParticleUpdateShader.cpp" />

@@ -7,7 +7,7 @@ class ExportToolUI :
     public UI
 {
 private:
-    //ListUI_EX* m_List;
+    ListUI_EX* m_List;
 
 public:
     virtual void Open() override;
@@ -15,8 +15,7 @@ public:
     virtual void render_update() override;
 
 private:
-    /*void AddGameObject();
-    void RemoveGameObject();*/
+    void ExportSelectedObject(DWORD_PTR _selectedIdx);
 
 public:
     ExportToolUI();

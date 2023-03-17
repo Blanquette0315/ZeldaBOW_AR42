@@ -22,6 +22,7 @@ private:
 
 
 public:
+    virtual void Open() override;
     virtual void update() override;
     virtual void render_update() override;
 

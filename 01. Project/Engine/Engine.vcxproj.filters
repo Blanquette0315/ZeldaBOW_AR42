@@ -181,6 +181,9 @@
     <Filter Include="Module\Detour">
       <UniqueIdentifier>{72e73177-3a23-4b86-99d2-b8e1569bcdf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Mgr\12. NavMgr">
+      <UniqueIdentifier>{2675b8ef-b855-4846-ac4b-992684c7aae8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -423,6 +426,9 @@
     <ClInclude Include="DetourTileCacheBuilder.h">
       <Filter>Module\Detour</Filter>
     </ClInclude>
+    <ClInclude Include="CNavMgr.h">
+      <Filter>Engine\03. Mgr\12. NavMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -643,6 +649,9 @@
     </ClCompile>
     <ClCompile Include="DetourTileCacheBuilder.cpp">
       <Filter>Module\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="CNavMgr.cpp">
+      <Filter>Engine\03. Mgr\12. NavMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

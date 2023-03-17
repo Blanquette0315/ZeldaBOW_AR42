@@ -6,6 +6,7 @@ class ListUI_EX :
 private:
     vector<string> m_vecItemKey;
     vector<string> m_vecItemName;
+    vector<void*> m_vecData;
     UINT m_iSelectIdx;
 
     UI* m_DBCInst;
@@ -61,6 +62,12 @@ public:
     void InitNotRes(vector<string>& _vecItemName, UINT _Initial);
     virtual void render_update() override;
     virtual void Close() override;
+
+    void ClearDataVec() { m_vecData.clear(); }
+    void PushData(void* _data) { m_vecData.push_back(_data); }
+    void AssignDataVec(const vector<void*>& _vecData) { m_vecData.assign(_vecData.begin(), _vecData.end()); }
+    const vector<void*>& GetData() { return m_vecData; }
+
 
 public:
     ListUI_EX();

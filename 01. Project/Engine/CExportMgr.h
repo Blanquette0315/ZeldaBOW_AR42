@@ -3,21 +3,7 @@
 class CGameObject;
 class dtNavMesh;
 
-#include "DetourNavMesh.h"
 
-struct NavMeshSetHeader
-{
-    int magic;
-    int version;
-    int numTiles;
-    dtNavMeshParams params;
-};
-
-struct NavMeshTileHeader
-{
-    dtTileRef tileRef;
-    int dataSize;
-};
 
 class CExportMgr :
     public CSingleton<CExportMgr>
@@ -35,21 +21,24 @@ private:
     D3D11_BUFFER_DESC           m_CopyBufferDesc;
     D3D11_MAPPED_SUBRESOURCE    m_MappedResource;
 
+    UINT                        m_iAccumVtxCount; // accumulate vertex count for divide (vtx1,idx1) (vtx2, idx2)... 
+
 
 
 private:
     void CreateBuffer(UINT _byteWidth);
 
 public:
+    float GetScale() { return m_fScale; }
+
+public:
     void SaveAsObj();
-    void SaveForNavMesh(CGameObject* _pObj);
-    wstring GetProperName(const wstring& _name);
+    void SaveForNavMesh(CGameObject* _pObj, std::ofstream& _file);
+    wstring GetProperName();
 
     void ClearVec() { m_vecExportObj.clear(); }
     void RegisterObj(CGameObject* _pObj) { m_vecExportObj.push_back(_pObj); }
     void AssignVector(const vector<CGameObject*>& _vecCopy) { m_vecExportObj.assign(_vecCopy.begin(), _vecCopy.end()); }
-
-    dtNavMesh* LoadNavMesh(wstring _path);
 public:
     CExportMgr();
     ~CExportMgr();

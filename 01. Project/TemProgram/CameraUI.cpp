@@ -21,6 +21,23 @@ CameraUI::~CameraUI()
 }
 
 
+void CameraUI::Open()
+{
+	UI::Open();
+	vector<string> vecInitName = {};
+	vecInitName.reserve(MAX_LAYER);
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		vecInitName.push_back(std::to_string(i + 1));
+	}
+
+	m_uiList->SetMultiSelect(true);
+	m_uiList->AddDynamicSelected(this, (FUNC_0)&CameraUI::SetLayerOnOff);
+	m_iVisibleLayer = GetTarget()->Camera()->GetLayerMask();
+	m_uiList->InitNotRes(vecInitName, m_iVisibleLayer);
+	m_bInit = true;
+}
+
 void CameraUI::update()
 {
 	if (nullptr != GetTarget())
@@ -32,22 +49,6 @@ void CameraUI::update()
 		m_eProjType = GetTarget()->Camera()->GetProjType();
 		m_iVisibleLayer = GetTarget()->Camera()->GetLayerMask();
 		m_iCamIdx = GetTarget()->Camera()->GetCamIdx();
-
-		// init
-		if (m_bInit == false)
-		{
-			vector<string> vecInitName = {};
-			vecInitName.reserve(MAX_LAYER);
-			for (int i = 0; i < MAX_LAYER; ++i)
-			{
-				vecInitName.push_back(std::to_string(i + 1));
-			}
-
-			m_uiList->SetMultiSelect(true);
-			m_uiList->AddDynamicSelected(this, (FUNC_0)&CameraUI::SetLayerOnOff);
-			m_uiList->InitNotRes(vecInitName, m_iVisibleLayer);
-			m_bInit = true;
-		}
 
 		m_bShowDebugDraw = GetTarget()->Camera()->Is_ShowDebugDraw();
 	}
