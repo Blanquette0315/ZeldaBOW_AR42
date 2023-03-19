@@ -13,7 +13,7 @@
 
 #include "TransformUI.h"
 #include "MeshRenderUI.h"
-#include "Collider2DUI.h"
+#include "ColliderUI.h"
 #include "Light2DUI.h"
 #include "Light3DUI.h"
 #include "CameraUI.h"
@@ -61,6 +61,10 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA] = new CameraUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetSize(ImVec2(0.f, 280.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER] = new ColliderUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER]->SetSize(ImVec2(0.f, 220.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = new ParticleSystemUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]->SetSize(ImVec2(0.f, 330.f));

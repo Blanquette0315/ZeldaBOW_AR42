@@ -63,9 +63,6 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\CameraUI">
       <UniqueIdentifier>{edf0a1f3-388c-4b66-95fa-c745bc3e971a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. UI\01. Inspector\ComponentUI\Collider2DUI">
-      <UniqueIdentifier>{a5180044-3c4a-4a35-9d38-1f4cc2a42bcb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. UI\01. Inspector\ComponentUI\Light2DUI">
       <UniqueIdentifier>{934deca0-fef9-42e5-b1d4-867538155b36}</UniqueIdentifier>
     </Filter>
@@ -147,6 +144,9 @@
     <Filter Include="03. UI\01. Inspector\ResUI\SoundUI">
       <UniqueIdentifier>{0ecb6d9f-7145-4133-a8e6-0b976524143b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\ColliderUI">
+      <UniqueIdentifier>{a5180044-3c4a-4a35-9d38-1f4cc2a42bcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -215,8 +215,8 @@
     <ClInclude Include="ListUI.h">
       <Filter>03. UI\ModuleUI\ListUI</Filter>
     </ClInclude>
-    <ClInclude Include="Collider2DUI.h">
-      <Filter>03. UI\01. Inspector\ComponentUI\Collider2DUI</Filter>
+    <ClInclude Include="ColliderUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\ColliderUI</Filter>
     </ClInclude>
     <ClInclude Include="Light2DUI.h">
       <Filter>03. UI\01. Inspector\ComponentUI\Light2DUI</Filter>
@@ -388,8 +388,8 @@
     <ClCompile Include="ListUI.cpp">
       <Filter>03. UI\ModuleUI\ListUI</Filter>
     </ClCompile>
-    <ClCompile Include="Collider2DUI.cpp">
-      <Filter>03. UI\01. Inspector\ComponentUI\Collider2DUI</Filter>
+    <ClCompile Include="ColliderUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\ColliderUI</Filter>
     </ClCompile>
     <ClCompile Include="Light2DUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\Light2DUI</Filter>
