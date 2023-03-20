@@ -35,6 +35,71 @@ CCollider::~CCollider()
 
 void CCollider::begin()
 {
+	CreateColliderActor();
+}
+
+void CCollider::finaltick()
+{
+	//FinalPos
+	Vec3 vObjectPos = Transform()->GetWorldPos();
+	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetWorldRotMat());
+	m_vFinalPos = vColliderWorldOffset + vObjectPos;
+
+	Vec3 vRot = m_vRot;
+	Matrix matRot = XMMatrixRotationX(m_vRot.x);
+	matRot *= XMMatrixRotationY(m_vRot.y);
+	if (m_eType != COLLIDER_TYPE::COLLIDER_CAPSULE)
+		matRot *= XMMatrixRotationZ(m_vRot.z);
+	else
+		matRot *= XMMatrixRotationZ(m_vRot.z + XM_PI * 0.5f);
+	CGameObject* pParent = GetOwner();
+	while (true)
+	{
+		if (nullptr == pParent)
+			break;
+		Vec3 vParentRot = pParent->Transform()->GetRelativeRotation();
+		matRot *= XMMatrixRotationX(vParentRot.x);
+		matRot *= XMMatrixRotationY(vParentRot.y);
+		matRot *= XMMatrixRotationZ(vParentRot.z);
+		
+		pParent = pParent->GetParent();
+	}
+
+	Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
+
+	// DebugDraw
+#ifdef _DEBUG
+	Vec4 vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+	if (0 < m_iOverlapCount)
+		vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+
+	QuaternionToEuler(Q_Rot, vRot);
+
+	if (COLLIDER_TYPE::COLLIDER_CUBE == m_eType)
+	{
+		DebugDrawCube(vColor, m_vFinalPos, m_vScale * 2.f, vRot);
+	}
+	else if (COLLIDER_TYPE::COLLIDER_SPHERE == m_eType)
+	{
+		DebugDrawSphere(vColor, m_vFinalPos, m_vScale.x);
+	}
+	else if (COLLIDER_TYPE::COLLIDER_CAPSULE == m_eType)
+	{
+		DebugDrawCylinder(vColor, m_vFinalPos, Vec3(m_vScale.x * 2.f, m_vScale.x * 2.f + m_vScale.y, m_vScale.x * 2.f), vRot - Vec3(0.f, 0.f, XM_PI * 0.5f));
+	}
+#endif
+
+	if (m_pPhysData == nullptr)
+		return;
+
+	// Physx update
+	PhysX_Update_Actor(m_pPhysData);
+	m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
+	m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
+}
+
+void CCollider::CreateColliderActor()
+{
 	if (m_pPhysData != nullptr)
 		return;
 
@@ -45,7 +110,7 @@ void CCollider::begin()
 	Vec3 vRot = m_vRot;
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
-	if(m_eType != COLLIDER_TYPE::COLLIDER_CAPSULE)
+	if (m_eType != COLLIDER_TYPE::COLLIDER_CAPSULE)
 		matRot *= XMMatrixRotationZ(m_vRot.z);
 	else
 		matRot *= XMMatrixRotationZ(m_vRot.z + XM_PI * 0.5f);
@@ -92,64 +157,13 @@ void CCollider::begin()
 	PhysX_Create_Actor(m_pPhysData);
 }
 
-void CCollider::finaltick()
+void CCollider::DeleteColliderActor()
 {
 	if (m_pPhysData == nullptr)
 		return;
 
-	//FinalPos
-	Vec3 vObjectPos = Transform()->GetWorldPos();
-	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetWorldRotMat());
-	m_vFinalPos = vColliderWorldOffset + vObjectPos;
-
-	Vec3 vRot = m_vRot;
-	Matrix matRot = XMMatrixRotationX(m_vRot.x);
-	matRot *= XMMatrixRotationY(m_vRot.y);
-	if (m_eType != COLLIDER_TYPE::COLLIDER_CAPSULE)
-		matRot *= XMMatrixRotationZ(m_vRot.z);
-	else
-		matRot *= XMMatrixRotationZ(m_vRot.z + XM_PI * 0.5f);
-	CGameObject* pParent = GetOwner();
-	while (true)
-	{
-		if (nullptr == pParent)
-			break;
-		Vec3 vParentRot = pParent->Transform()->GetRelativeRotation();
-		matRot *= XMMatrixRotationX(vParentRot.x);
-		matRot *= XMMatrixRotationY(vParentRot.y);
-		matRot *= XMMatrixRotationZ(vParentRot.z);
-		
-		pParent = pParent->GetParent();
-	}
-
-	// Physx update
-	PhysX_Update_Actor(m_pPhysData);
-	m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
-	Quaternion Q_Rot = SimpleMath::Quaternion::CreateFromRotationMatrix(matRot);
-	m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
-
-
-	// DebugDraw
-#ifdef _DEBUG
-	Vec4 vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	if (0 < m_iOverlapCount)
-		vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-
-	QuaternionToEuler(Q_Rot, vRot);
-
-	if (COLLIDER_TYPE::COLLIDER_CUBE == m_eType)
-	{
-		DebugDrawCube(vColor, m_vFinalPos, m_vScale * 2.f, vRot);
-	}
-	else if (COLLIDER_TYPE::COLLIDER_SPHERE == m_eType)
-	{
-		DebugDrawSphere(vColor, m_vFinalPos, m_vScale.x);
-	}
-	else if (COLLIDER_TYPE::COLLIDER_CAPSULE == m_eType)
-	{
-		DebugDrawCylinder(vColor, m_vFinalPos, Vec3(m_vScale.x * 2.f, m_vScale.x * 2.f + m_vScale.y, m_vScale.x * 2.f), vRot - Vec3(0.f, 0.f, XM_PI * 0.5f));
-	}
-#endif
+	PhysX_Delete_Actor(m_pPhysData);
+	m_pPhysData = nullptr;
 }
 
 void CCollider::BeginOverlap(CCollider* _pOther)

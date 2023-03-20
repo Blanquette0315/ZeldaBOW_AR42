@@ -169,7 +169,7 @@
     <ClInclude Include="GraphicsShaderUI.h" />
     <ClInclude Include="DecalUI.h" />
     <ClInclude Include="InputTextUI.h" />
-    <ClInclude Include="Collider2DUI.h" />
+    <ClInclude Include="ColliderUI.h" />
     <ClInclude Include="ComboBoxUI.h" />
     <ClInclude Include="CommonUI.h" />
     <ClInclude Include="ComponentUI.h" />
@@ -234,7 +234,7 @@
     <ClCompile Include="GraphicsShaderUI.cpp" />
     <ClCompile Include="DecalUI.cpp" />
     <ClCompile Include="InputTextUI.cpp" />
-    <ClCompile Include="Collider2DUI.cpp" />
+    <ClCompile Include="ColliderUI.cpp" />
     <ClCompile Include="ComboBoxUI.cpp" />
     <ClCompile Include="CommonUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />

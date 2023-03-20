@@ -41,6 +41,9 @@ public:
     Vec3 GetFinalPos() { return m_vFinalPos; }
 
     PhysData* GetPhysData() { return m_pPhysData; }
+
+    void CreateColliderActor();
+    void DeleteColliderActor();
 public:
     virtual void begin() override;
     virtual void finaltick() override;
