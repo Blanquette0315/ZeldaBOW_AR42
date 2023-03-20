@@ -19,9 +19,14 @@ private:
     PhysRayCast* const m_pToGroundRay;
     RIGIDCOLLIDER_TYPE m_eRigidColliderType;
     Vec3 m_vVelocity;
+    Vec3 m_vSaveVelocity;
     Vec3 m_vForce;
     bool m_bKeyRelease;
+    Vec3 m_vBoxSize;
+    float m_fShpereSize;
     Vec2 m_vCapsuleSize;
+    bool m_bGround;
+    bool m_bColScaleSize;
 
 public:
     PhysData* GetRigidData() { return m_pPhysData; }
@@ -30,7 +35,8 @@ public:
     RIGIDCOLLIDER_TYPE GetRigidColliderType() { return m_eRigidColliderType; }
     void CreateActor() { PhysX_Create_Actor(m_pPhysData); }
     void SetKeyRelease(bool _b) { m_bKeyRelease = _b; }
-    bool RayCast();
+    void SetGround(bool _bGround) { m_bGround = _bGround; }
+    bool IsGround();
 
     // Hypothalamic Normal Vector Check
     Vec3 GetHitNormal();
@@ -75,8 +81,8 @@ public:
     Vec4 GetWorldRoation() { return m_pPhysData->Rotation; }
     
     // Center Point Setting
-    //void SetCenterPoint(float _x, float _y, float _z) { m_pPhysData->CenterPoint = Vec3(_x, _y, _z); }
-    //void SetCenterPoint(Vec3);
+    void SetCenterPoint(float _x, float _y, float _z) { m_pPhysData->CenterPoint = Vec3(_x, _y, _z); }
+    void SetCenterPoint(Vec3 _vPoint) { m_pPhysData->CenterPoint = Vec3(_vPoint.x, _vPoint.y, _vPoint.z); }
 
     // Velocity Setting
     void SetVelocity(float _x, float _y, float _z) { m_vVelocity = Vec3(_x, _y, _z); }
@@ -88,8 +94,10 @@ public:
     //Vec3 GetPxVeloctiy() { return m_pPhysData->GetVelocity(); }
 
     // Force Setting
-    void AddForce(float _x, float _y, float _z) { m_vForce = Vec3(_x, _y, _z); }
-    void AddForce(Vec3 _vForce) { m_pPhysData->AddForce(_vForce.x, _vForce.y, _vForce.z); }
+    void SetForce(float _x, float _y, float _z) { m_vForce = Vec3(_x, _y, _z); }
+    void SetForce(Vec3 _vForce) { m_vForce = _vForce; }
+    void AddForce(float _x, float _y, float _z) { m_vForce += Vec3(_x, _y, _z); }
+    void AddForce(Vec3 _vForce) { m_vForce += _vForce; }
 
     // ===== PhysX Data Option =====
     // Gravity Option Setting
@@ -113,12 +121,20 @@ public:
     Vec3 GetLockAxis_Rot() { return m_pPhysData->GetLockAxis_Rotation(); }
 
     // ===== RigidBody Collider Setting =====
+    void SetColldierScaleSize(bool _bYes) { m_bColScaleSize = _bYes; }
+
     void SetBoxCollider(float _fSizex, float _fSizey, float _fSizez) { m_pPhysData->mCollider->SetBoxCollider(_fSizex / 100.f, _fSizey / 100.f, _fSizez / 100.f); }
     void SetBoxCollider(Vec3 _vSize) { m_pPhysData->mCollider->SetBoxCollider(_vSize.x / 100.f, _vSize.y / 100.f, _vSize.z / 100.f); }
     void SetBoxCollider(float _fRadius) { m_pPhysData->mCollider->SetBoxCollider(_fRadius / 100.f); }
 
+    void SetBoxSize(Vec3 _vSize) { m_vBoxSize = _vSize; }
+    void SetBoxSize(float _x, float _y, float _z) { m_vBoxSize = Vec3(_x, _y, _z); }
+    void SetBoxSize(float _fRadius) { m_vBoxSize = Vec3(_fRadius, _fRadius, _fRadius); }
+
     void SetSphereCollider(float _fRadius) { m_pPhysData->mCollider->SetSphereCollider(_fRadius / 100.f); }
     
+    void SetSphereSize(float _fRadius) { m_fShpereSize = _fRadius; }
+
     void SetCapsuleCollider(float _fRadius, float _fHeight) { m_pPhysData->mCollider->SetCapsuleCollider(_fRadius / 100.f, _fHeight / 100.f); }
     void SetCapsuleHeight(float _fHeight) { m_vCapsuleSize.y = _fHeight; }
     void SetCapsuleRadius(float _fRadius) { m_vCapsuleSize.x = _fRadius; }

@@ -27,7 +27,7 @@ bool RaycastManager::RayCast(PhysRayCast* ray)
 	PxQueryFilterData QFilterData;
 	QFilterData.data.word0 = ray->GetQueryFilterData0();
 	bool Collision = m_Scene->raycast(O, D, ray->MaxDistance, buffer, PxHitFlags(PxHitFlag::eDEFAULT), QFilterData);
-
+	
 	//충돌한 카운터개수
 	ray->Hit.HitCount = buffer.getNbAnyHits();
 	

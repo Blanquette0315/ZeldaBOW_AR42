@@ -13,6 +13,8 @@ CRigidBody::CRigidBody()
 	, m_eRigidColliderType(RIGIDCOLLIDER_TYPE::CUBE)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(Vec2(1.f, 2.f))
+	, m_bGround(false)
+	, m_bColScaleSize(false)
 {
 }
 
@@ -23,6 +25,8 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_eRigidColliderType(_origin.m_eRigidColliderType)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(_origin.m_vCapsuleSize)
+	, m_bGround(false)
+	, m_bColScaleSize(false)
 {
 }
 
@@ -51,6 +55,7 @@ void CRigidBody::tick()
 	{
 		Vec3 vPrePos = GetWorldPosition();
 
+
 		PhysX_Update_Actor(m_pPhysData);
 		// Reflect simulation results to Transform
 		Vec3 vPos = GetWorldPosition();
@@ -70,6 +75,9 @@ void CRigidBody::tick()
 		vPos.y -= Transform()->GetRelativeScale().y * 0.5f;
 		vPos /= 100.f;
 		m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
+
+		PhysX_RayCast(m_pToGroundRay);
+		//m_bGround = PhysX_RayCast(m_pToGroundRay);
 	}
 }
 
@@ -78,7 +86,8 @@ void CRigidBody::finaltick()
 	if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 	{
 		// Velocity gathering update : Engine -> PhysX
-		if (m_vVelocity != Vec3(0.f, 0.f, 0.f))
+
+		/*if (m_vVelocity != Vec3(0.f, 0.f, 0.f))
 		{
 			m_pPhysData->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
 			m_vVelocity = Vec3(0.f, 0.f, 0.f);
@@ -90,10 +99,45 @@ void CRigidBody::finaltick()
 				m_pPhysData->SetVelocity(0.f, 0.f, 0.f);
 				m_bKeyRelease = false;
 			}
+		}*/
+
+		
+
+		if (m_bGround)
+		{
+			if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
+			{
+				m_pPhysData->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+				m_vSaveVelocity = m_vVelocity;
+				m_vVelocity = Vec3(0.f, 0.f, 0.f);
+			}
+			else
+			{
+				if (m_bKeyRelease)
+				{
+					m_pPhysData->SetVelocity(0.f, 0.f, 0.f);
+					m_vVelocity = Vec3(0.f, 0.f, 0.f);
+					m_vSaveVelocity = m_vVelocity;
+					m_bKeyRelease = false;
+				}
+			}
+		}
+		else
+		{
+			if (m_pPhysData->m_vPxLinearVelocity.y != 0.f)
+			{
+				if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
+				{
+					m_pPhysData->SetVelocity(m_vSaveVelocity.x, m_pPhysData->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
+					m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
+				}
+			}
 		}
 
 		// ...
 		// will be added Force
+		m_pPhysData->AddForce(m_vForce.x, m_vForce.y, m_vForce.z);
+		m_vForce = Vec3(0.f, 0.f, 0.f);
 		// ...
 	}
 }
@@ -168,13 +212,19 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	{
 	case RIGIDCOLLIDER_TYPE::CUBE:
 	{
-		SetBoxCollider(Transform()->GetRelativeScale() * 0.5f);
+		if (m_bColScaleSize)
+			SetBoxCollider(Transform()->GetRelativeScale() * 0.5f);
+		else
+			SetBoxCollider(m_vBoxSize);
 	}
 		break;
 
 	case RIGIDCOLLIDER_TYPE::SPHERE:
 	{
-		SetSphereCollider(Transform()->GetRelativeScale().x * 0.5f);
+		if (m_bColScaleSize)
+			SetSphereCollider(Transform()->GetRelativeScale().x * 0.5f);
+		else
+			SetSphereCollider(m_fShpereSize);
 	}
 	break;
 
@@ -213,13 +263,13 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
 	Vec3 vDir = Vec3(0.f, -1.f, 0.f).Normalize();
 	m_pToGroundRay->SetDirection(vDir.x, vDir.y, vDir.z);
-	m_pToGroundRay->SetMaxDistance(20.f / 100.f);
+	m_pToGroundRay->SetMaxDistance(25.f / 100.f);
 	m_pToGroundRay->SetQueryFilterData0(FILTER_GROUP::eGround);
 }
 
-bool CRigidBody::RayCast()
+bool CRigidBody::IsGround()
 {
-	return PhysX_RayCast(m_pToGroundRay);
+	return m_bGround;
 }
 
 Vec3 CRigidBody::GetHitNormal()

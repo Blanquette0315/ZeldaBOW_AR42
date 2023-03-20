@@ -18,6 +18,7 @@ enum class FILTER_GROUP
 	NONE = -1,
 	ePlayer = (1 << 0),
 	eGround = (1 << 1),
+	eWall = (1 << 2 ),
 };
 
 
@@ -93,6 +94,7 @@ public:
 	PhysData* TriggerExit_List[10];
 	//PhysData* TriggerList[10];
 
+	Vector3 m_vPxLinearVelocity;
 	//bool m_bGround;
 
 private:

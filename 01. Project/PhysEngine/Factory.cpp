@@ -182,7 +182,7 @@ void Factory::CreateActoer(PhysData* data)
 	shape->setQueryFilterData(PxFilter);
 
 	///로컬 포지션을 지정
-	shape->setLocalPose(PxTransform(data->CenterPoint.x, data->CenterPoint.y, data->CenterPoint.z));
+	//shape->setLocalPose(PxTransform(data->CenterPoint.x, data->CenterPoint.y, data->CenterPoint.z));
 
 	///물리 객체 생성
 	if (data->isDinamic == true)
