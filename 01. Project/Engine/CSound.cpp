@@ -2,6 +2,9 @@
 #include "CSound.h"
 
 #include "CResMgr.h"
+#include "CSoundMgr.h"
+#include "CGameObject.h"
+#include "CTransform.h"
 
 FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL* channelcontrol, FMOD_CHANNELCONTROL_TYPE controltype
 	, FMOD_CHANNELCONTROL_CALLBACK_TYPE callbacktype
@@ -24,7 +27,7 @@ CSound::~CSound()
 	}
 }
 
-int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap)
+int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap, CGameObject* _pObj, Vec3 _vPos, Vec2 _v3DMinMaxDistance)
 {
 	if (_iRoopCount <= -1)
 	{
@@ -50,6 +53,48 @@ int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap)
 	pChannel->setMode(FMOD_LOOP_NORMAL);
 	pChannel->setLoopCount(_iRoopCount);
 
+	pChannel->set3DMinMaxDistance(_v3DMinMaxDistance.x, _v3DMinMaxDistance.y);
+
+	if (_pObj == nullptr)
+	{
+		if (_vPos != Vec3::Zero)
+		{
+			pChannel->set3DAttributes((FMOD_VECTOR*)(&_vPos), 0);
+		}
+	}
+	else
+	{
+		pChannel->set3DAttributes((FMOD_VECTOR*)(_pObj->Transform()->GetRelativePosPointer()), 0);
+		CSoundMgr::GetInst()->pushToSoundlist(pChannel, _pObj);
+	}
+	m_listChannel.push_back(pChannel);
+
+	int iIdx = -1;
+	pChannel->getIndex(&iIdx);
+
+	return iIdx;
+}
+
+int CSound::PlayBGM(float _fVolume)
+{
+	int iRoopCount = -1;
+
+	if (!m_listChannel.empty())
+	{
+		return -1;
+	}
+
+	FMOD::Channel* pChannel = nullptr;
+	g_pFMOD->playSound(m_pSound, nullptr, false, &pChannel);
+
+	pChannel->setVolume(_fVolume);
+
+	pChannel->setCallback(CHANNEL_CALLBACK);
+	pChannel->setUserData(this);
+
+	pChannel->setMode(FMOD_LOOP_NORMAL);
+	pChannel->setLoopCount(iRoopCount);
+	pChannel->set3DMinMaxDistance(100000.f, 100000.f);
 	m_listChannel.push_back(pChannel);
 
 	int iIdx = -1;
@@ -87,6 +132,8 @@ void CSound::SetVolume(float _f, int _iChannelIdx)
 
 void CSound::RemoveChannel(FMOD::Channel* _pTargetChannel)
 {
+	CSoundMgr::GetInst()->eraseFromSoundlist(_pTargetChannel);
+
 	list<FMOD::Channel*>::iterator iter = m_listChannel.begin();
 	for (; iter != m_listChannel.end(); ++iter)
 	{
@@ -102,7 +149,7 @@ int CSound::Load(const wstring& _strFilePath)
 {
 	string path(_strFilePath.begin(), _strFilePath.end());
 
-	if (FMOD_OK != g_pFMOD->createSound(path.c_str(), FMOD_DEFAULT, nullptr, &m_pSound))
+	if (FMOD_OK != g_pFMOD->createSound(path.c_str(), FMOD_3D|FMOD_3D_LINEARSQUAREROLLOFF, nullptr, &m_pSound))
 	{
 		assert(nullptr);
 	}

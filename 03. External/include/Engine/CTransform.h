@@ -32,6 +32,7 @@ public:
     void SetRelativePos_Z(float _z) { m_vRelativePos.z = _z; }
 
     Vec3 GetRelativePos() { return m_vRelativePos; }
+    Vec3* GetRelativePosPointer() { return &m_vRelativePos; }
     Vec3 GetWorldPos() { return m_matWorld.Translation(); }
 
     Vec3 GetRelativeScale() { return m_vRelativeScale; }
@@ -41,6 +42,7 @@ public:
 
     Vec3 GetRelativeRotation() { return m_vRelativeRotation; }
     Vec3 GetRelativeDir(DIR _eType) { return m_vRelativeDir[(UINT)_eType]; }
+    Vec3* GetRelativeDirPointer(DIR _eType) { return &m_vRelativeDir[(UINT)_eType]; }
     Vec3 GetWorldDir(DIR _eType) { return m_vWorldDir[(UINT)_eType]; }
 
     void SetIgnoreParentScale(bool _bIgn) { m_bIgnParentScale = _bIgn; }
