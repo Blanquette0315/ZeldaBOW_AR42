@@ -22,6 +22,7 @@
 #include "Animator2DUI.h"
 #include "SkyBoxUI.h"
 #include "DecalUI.h"
+#include "RigidBodyUI.h"
 #include "ScriptUI.h"
 
 #include "MeshUI.h"
@@ -81,6 +82,10 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL] = new DecalUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]->SetSize(ImVec2(0.f, 250.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY] = new RigidBodyUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]->SetSize(ImVec2(0.f, 450.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]);
 
 	// ResourceUI
 	m_arrResUI[(UINT)RES_TYPE::MESH] = new MeshUI;

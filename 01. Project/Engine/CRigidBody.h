@@ -3,21 +3,13 @@
 
 #include <PhysEngine/Export/PhysX_API.h>
 
-enum class RIGIDCOLLIDER_TYPE
-{
-    CUBE,
-    SPHERE,
-    CAPSULE,
-    TRIANGLE,
-};
-
 class CRigidBody :
     public CComponent
 {
 private:
     PhysData* const m_pPhysData;
     PhysRayCast* const m_pToGroundRay;
-    RIGIDCOLLIDER_TYPE m_eRigidColliderType;
+    COLLIDER_TYPE m_eRigidColliderType;
     Vec3 m_vVelocity;
     Vec3 m_vSaveVelocity;
     Vec3 m_vForce;
@@ -31,8 +23,9 @@ private:
 public:
     PhysData* GetRigidData() { return m_pPhysData; }
 
-    void UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bKinematick, bool _bDinamic = false);
-    RIGIDCOLLIDER_TYPE GetRigidColliderType() { return m_eRigidColliderType; }
+    void UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinematick, bool _bDinamic = false);
+    void SetColliderType(COLLIDER_TYPE _eColliderType) { m_eRigidColliderType = _eColliderType; }
+    COLLIDER_TYPE GetRigidColliderType() { return m_eRigidColliderType; }
     void CreateActor() { PhysX_Create_Actor(m_pPhysData); }
     void SetKeyRelease(bool _b) { m_bKeyRelease = _b; }
     void SetGround(bool _bGround) { m_bGround = _bGround; }
@@ -83,12 +76,16 @@ public:
     // Center Point Setting
     void SetCenterPoint(float _x, float _y, float _z) { m_pPhysData->CenterPoint = Vec3(_x, _y, _z); }
     void SetCenterPoint(Vec3 _vPoint) { m_pPhysData->CenterPoint = Vec3(_vPoint.x, _vPoint.y, _vPoint.z); }
+    Vec3 GetCenterPoint() { return m_pPhysData->CenterPoint; }
 
     // Velocity Setting
     void SetVelocity(float _x, float _y, float _z) { m_vVelocity = Vec3(_x, _y, _z); }
     void SetVelocity(Vec3 _vVelocity) { m_vVelocity = _vVelocity; }
     void AddVelocity(float _x, float _y, float _z) { m_vVelocity += Vec3(_x, _y, _z); }
     void AddVelocity(Vec3 _vVelocity) { m_vVelocity += Vec3(_vVelocity.x, _vVelocity.y, _vVelocity.z); }
+
+    Vec3 GetVelocity() { return m_vVelocity; }
+    Vec3 GetSaveVelocity() { return m_vSaveVelocity; }
 
     // Get direction of movement on Physx side
     //Vec3 GetPxVeloctiy() { return m_pPhysData->GetVelocity(); }
@@ -98,6 +95,8 @@ public:
     void SetForce(Vec3 _vForce) { m_vForce = _vForce; }
     void AddForce(float _x, float _y, float _z) { m_vForce += Vec3(_x, _y, _z); }
     void AddForce(Vec3 _vForce) { m_vForce += _vForce; }
+
+    Vec3 GetForce() { return m_vForce; }
 
     // ===== PhysX Data Option =====
     // Gravity Option Setting
@@ -122,6 +121,7 @@ public:
 
     // ===== RigidBody Collider Setting =====
     void SetColldierScaleSize(bool _bYes) { m_bColScaleSize = _bYes; }
+    bool GetColliderScaleSize() { return m_bColScaleSize; }
 
     void SetBoxCollider(float _fSizex, float _fSizey, float _fSizez) { m_pPhysData->mCollider->SetBoxCollider(_fSizex / 100.f, _fSizey / 100.f, _fSizez / 100.f); }
     void SetBoxCollider(Vec3 _vSize) { m_pPhysData->mCollider->SetBoxCollider(_vSize.x / 100.f, _vSize.y / 100.f, _vSize.z / 100.f); }
@@ -130,16 +130,19 @@ public:
     void SetBoxSize(Vec3 _vSize) { m_vBoxSize = _vSize; }
     void SetBoxSize(float _x, float _y, float _z) { m_vBoxSize = Vec3(_x, _y, _z); }
     void SetBoxSize(float _fRadius) { m_vBoxSize = Vec3(_fRadius, _fRadius, _fRadius); }
+    Vec3 GetBoxSize() { return m_vBoxSize; }
 
     void SetSphereCollider(float _fRadius) { m_pPhysData->mCollider->SetSphereCollider(_fRadius / 100.f); }
     
     void SetSphereSize(float _fRadius) { m_fShpereSize = _fRadius; }
+    float GetSphereSize() { return  m_fShpereSize; }
 
     void SetCapsuleCollider(float _fRadius, float _fHeight) { m_pPhysData->mCollider->SetCapsuleCollider(_fRadius / 100.f, _fHeight / 100.f); }
     void SetCapsuleHeight(float _fHeight) { m_vCapsuleSize.y = _fHeight; }
     void SetCapsuleRadius(float _fRadius) { m_vCapsuleSize.x = _fRadius; }
     void SetCapsuleSize(float _fRadius, float _fHeight) { m_vCapsuleSize = Vec2(_fRadius, _fHeight); }
     void SetCapsuleSize(Vec2 _vSize) { m_vCapsuleSize = _vSize; }
+    Vec2 GetCapsuleSize() { return m_vCapsuleSize; }
 
     void SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList);
 

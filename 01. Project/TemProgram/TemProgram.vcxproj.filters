@@ -147,6 +147,9 @@
     <Filter Include="03. UI\01. Inspector\ResUI\SoundUI">
       <UniqueIdentifier>{0ecb6d9f-7145-4133-a8e6-0b976524143b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\RigidBodyUI">
+      <UniqueIdentifier>{3736483e-0620-4535-bd04-0e73bf46927a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -335,6 +338,9 @@
     <ClInclude Include="SoundUI.h">
       <Filter>03. UI\01. Inspector\ResUI\SoundUI</Filter>
     </ClInclude>
+    <ClInclude Include="RigidBodyUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\RigidBodyUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -505,6 +511,9 @@
     </ClCompile>
     <ClCompile Include="SoundUI.cpp">
       <Filter>03. UI\01. Inspector\ResUI\SoundUI</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBodyUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\RigidBodyUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

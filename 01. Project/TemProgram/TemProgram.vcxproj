@@ -204,6 +204,7 @@
     <ClInclude Include="ParticleSystemUI.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RigidBodyUI.h" />
     <ClInclude Include="RTextureUI.h" />
     <ClInclude Include="ScriptUI.h" />
     <ClInclude Include="SkyBoxUI.h" />
@@ -269,6 +270,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RigidBodyUI.cpp" />
     <ClCompile Include="RTextureUI.cpp" />
     <ClCompile Include="ScriptUI.cpp" />
     <ClCompile Include="SkyBoxUI.cpp" />

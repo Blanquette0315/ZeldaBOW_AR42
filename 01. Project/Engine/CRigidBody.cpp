@@ -10,7 +10,7 @@ CRigidBody::CRigidBody()
 	: CComponent(COMPONENT_TYPE::RIGIDBODY)
 	, m_pPhysData(new PhysData)
 	, m_pToGroundRay(new PhysRayCast)
-	, m_eRigidColliderType(RIGIDCOLLIDER_TYPE::CUBE)
+	, m_eRigidColliderType(COLLIDER_TYPE::COLLIDER_CUBE)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(Vec2(1.f, 2.f))
 	, m_bGround(false)
@@ -65,7 +65,7 @@ void CRigidBody::tick()
 		Vec3 vRot = {};
 
 		QuaternionToEuler(vQRot, vRot);
-		if (m_eRigidColliderType != RIGIDCOLLIDER_TYPE::CAPSULE)
+		if (m_eRigidColliderType != COLLIDER_TYPE::COLLIDER_CAPSULE)
 			Transform()->SetRelativeRotation(vRot);
 		else
 			Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
@@ -193,7 +193,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	m_pPhysData->SetLockAxis_Position((bool)LockAxisPos.x, (bool)LockAxisPos.y, (bool)LockAxisPos.z);
 	Vec3 LocakAxisRot = _node["RIGIDBODY"]["PhysDataLockAxis_Rotation"].as<Vec3>();
 	m_pPhysData->SetLockAxis_Rotation((bool)LocakAxisRot.x, (bool)LocakAxisRot.y, (bool)LocakAxisRot.z);
-	m_eRigidColliderType = (RIGIDCOLLIDER_TYPE)(_node["RIGIDBODY"]["PhysDataColliderType"].as<UINT>());
+	m_eRigidColliderType = (COLLIDER_TYPE)(_node["RIGIDBODY"]["PhysDataColliderType"].as<UINT>());
 	uint32_t Filter = _node["RIGIDBODY"]["PhysDataColliderFilter"].as<uint32_t>();
 	m_vCapsuleSize = _node["RIGIDBODY"]["CapsuleSize"].as<Vec2>();
 
@@ -201,7 +201,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 }
 
 
-void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bKinematick, bool _bDinamic)
+void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinematick, bool _bDinamic)
 {
 	// PhysData Position Setting
 	RigidBody()->SetWorldPosition(Transform()->GetRelativePos());
@@ -210,7 +210,7 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	m_eRigidColliderType = _eColliderType;
 	switch (_eColliderType)
 	{
-	case RIGIDCOLLIDER_TYPE::CUBE:
+	case COLLIDER_TYPE::COLLIDER_CUBE:
 	{
 		if (m_bColScaleSize)
 			SetBoxCollider(Transform()->GetRelativeScale() * 0.5f);
@@ -219,7 +219,7 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	}
 		break;
 
-	case RIGIDCOLLIDER_TYPE::SPHERE:
+	case COLLIDER_TYPE::COLLIDER_SPHERE:
 	{
 		if (m_bColScaleSize)
 			SetSphereCollider(Transform()->GetRelativeScale().x * 0.5f);
@@ -228,13 +228,13 @@ void CRigidBody::UpdateTransformData(RIGIDCOLLIDER_TYPE _eColliderType, bool _bK
 	}
 	break;
 
-	case RIGIDCOLLIDER_TYPE::CAPSULE:
+	case COLLIDER_TYPE::COLLIDER_CAPSULE:
 	{
 		SetCapsuleCollider(m_vCapsuleSize.x, m_vCapsuleSize.y * 0.5f);
 	}
 	break;
 	
-	case RIGIDCOLLIDER_TYPE::TRIANGLE:
+	case COLLIDER_TYPE::COLLIDER_TRI:
 	{
 
 	}
@@ -282,7 +282,7 @@ void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)
 	DirectX::XMMATRIX _P;
 	DirectX::XMMATRIX _Y;
 	DirectX::XMMATRIX _R;
-	if (m_eRigidColliderType == RIGIDCOLLIDER_TYPE::CAPSULE)
+	if (m_eRigidColliderType == COLLIDER_TYPE::COLLIDER_CAPSULE)
 	{
 		_P = DirectX::XMMatrixRotationX(_vWorldRot.x);
 		_Y = DirectX::XMMatrixRotationY(_vWorldRot.y);

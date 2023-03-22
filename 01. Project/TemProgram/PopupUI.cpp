@@ -283,6 +283,16 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 	break;
 
 	case COMPONENT_TYPE::RIGIDBODY:
+	{
+		if (_Select)
+		{
+			_Target->AddComponent(new CRigidBody);
+		}
+		else
+		{
+			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::RIGIDBODY));
+		}
+	}
 		break;
 
 	case COMPONENT_TYPE::ANIMATOR2D:
