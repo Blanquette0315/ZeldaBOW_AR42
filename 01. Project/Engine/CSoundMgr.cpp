@@ -36,7 +36,7 @@ void CSoundMgr::tick()
 	{
 		FMOD::Channel* pChannel = iter->first;
 		CGameObject* pObj = iter->second;
-
-		pChannel->set3DAttributes((FMOD_VECTOR*)(pObj->Transform()->GetRelativePosPointer()), 0);
+		Vec3 vObjPos = pObj->Transform()->GetWorldPos();
+		pChannel->set3DAttributes((FMOD_VECTOR*)(&vObjPos), 0);
 	}
 }

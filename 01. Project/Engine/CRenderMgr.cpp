@@ -85,7 +85,10 @@ void CRenderMgr::render()
 
 	if (GetMainCam() != nullptr)
 	{
-		CSound::g_pFMOD->set3DListenerAttributes(0, (FMOD_VECTOR*)(GetMainCam()->Transform()->GetRelativePosPointer()), 0, (FMOD_VECTOR*)(GetMainCam()->Transform()->GetRelativeDirPointer(DIR::FRONT)), (FMOD_VECTOR*)(GetMainCam()->Transform()->GetRelativeDirPointer(DIR::UP)));
+		Vec3 vCamPos = GetMainCam()->Transform()->GetWorldPos();
+		Vec3 vCamDirFront = GetMainCam()->Transform()->GetWorldDir(DIR::FRONT);
+		Vec3 vCamDirUp = GetMainCam()->Transform()->GetWorldDir(DIR::UP);
+		CSound::g_pFMOD->set3DListenerAttributes(0, (FMOD_VECTOR*)(&vCamPos), 0, (FMOD_VECTOR*)(&vCamDirFront), (FMOD_VECTOR*)(&vCamDirUp));
 	}
 
 	if (LEVEL_STATE::PLAY == pCurLevel->GetState())

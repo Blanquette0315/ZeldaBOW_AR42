@@ -64,7 +64,8 @@ int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap, CGameObject* _
 	}
 	else
 	{
-		pChannel->set3DAttributes((FMOD_VECTOR*)(_pObj->Transform()->GetRelativePosPointer()), 0);
+		Vec3 vObjPos = _pObj->Transform()->GetWorldPos();
+		pChannel->set3DAttributes((FMOD_VECTOR*)(&vObjPos), 0);
 		CSoundMgr::GetInst()->pushToSoundlist(pChannel, _pObj);
 	}
 	m_listChannel.push_back(pChannel);
