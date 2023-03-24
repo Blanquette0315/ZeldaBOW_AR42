@@ -14,6 +14,7 @@
 #include "CFontMgr.h"
 #include "CSound.h"
 #include "CPhysMgr.h"
+#include "CSoundMgr.h"
 
 #include <PhysEngine/Export/PhysCollider.h>
 
@@ -79,6 +80,7 @@ void CEngine::tick()
 
 	CLevelMgr::GetInst()->progress();
 
+	CSoundMgr::GetInst()->tick();
 	CCollisionMgr::GetInst()->tick();
 }
 

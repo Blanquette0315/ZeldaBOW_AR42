@@ -83,6 +83,14 @@ void CRenderMgr::render()
 	// ㄴ 게임 모드일 때는 게임내의 카메라가, 에디터 모드일 때는 에디터용 카메라로 랜더링이 이루어져야 한다.
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
 
+	if (GetMainCam() != nullptr)
+	{
+		Vec3 vCamPos = GetMainCam()->Transform()->GetWorldPos();
+		Vec3 vCamDirFront = GetMainCam()->Transform()->GetWorldDir(DIR::FRONT);
+		Vec3 vCamDirUp = GetMainCam()->Transform()->GetWorldDir(DIR::UP);
+		CSound::g_pFMOD->set3DListenerAttributes(0, (FMOD_VECTOR*)(&vCamPos), 0, (FMOD_VECTOR*)(&vCamDirFront), (FMOD_VECTOR*)(&vCamDirUp));
+	}
+
 	if (LEVEL_STATE::PLAY == pCurLevel->GetState())
 	{
 		render_game();
