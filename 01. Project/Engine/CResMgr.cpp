@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CResMgr.h"
+#include "CGameObject.h"
 
 CResMgr::CResMgr()
 	: m_iLayoutOffset(0)
