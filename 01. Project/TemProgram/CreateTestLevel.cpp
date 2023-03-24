@@ -148,9 +148,9 @@ void CreateTestLevel()
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 
-	pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_SPHERE, false, true);
-	//pObject->RigidBody()->SetCapsuleSize(64.f, 128.f);
-	pObject->RigidBody()->SetSphereSize(100.f);
+	pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
+	pObject->RigidBody()->SetCapsuleSize(64.f, 128.f);
+	//pObject->RigidBody()->SetSphereSize(128.f);
 	pObject->RigidBody()->SetMass(10.f);
 	pObject->RigidBody()->SetRestitution(0.f);
 	pObject->RigidBody()->SetStaticFriction(0.6f);

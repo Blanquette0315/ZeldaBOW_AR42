@@ -13,6 +13,7 @@ CRigidBody::CRigidBody()
 	, m_eRigidColliderType(COLLIDER_TYPE::COLLIDER_CUBE)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(Vec2(1.f, 2.f))
+	, m_fShpereSize(1.f)
 	, m_bGround(false)
 	, m_bColScaleSize(false)
 {
@@ -25,6 +26,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_eRigidColliderType(_origin.m_eRigidColliderType)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(_origin.m_vCapsuleSize)
+	, m_fShpereSize(_origin.m_fShpereSize)
 	, m_bGround(false)
 	, m_bColScaleSize(false)
 {
@@ -176,6 +178,12 @@ void CRigidBody::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_pPhysData->GetFilterData0();
 	_emitter << YAML::Key << "CapsuleSize";
 	_emitter << YAML::Value << m_vCapsuleSize;
+	_emitter << YAML::Key << "BoxSize";
+	_emitter << YAML::Value << m_vBoxSize;
+	_emitter << YAML::Key << "SphereSize";
+	_emitter << YAML::Value << m_fShpereSize;
+	_emitter << YAML::Key << "ColScaleSize";
+	_emitter << YAML::Value << m_bColScaleSize;
 
 	_emitter << YAML::EndMap;
 }
@@ -196,6 +204,9 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	m_eRigidColliderType = (COLLIDER_TYPE)(_node["RIGIDBODY"]["PhysDataColliderType"].as<UINT>());
 	uint32_t Filter = _node["RIGIDBODY"]["PhysDataColliderFilter"].as<uint32_t>();
 	m_vCapsuleSize = _node["RIGIDBODY"]["CapsuleSize"].as<Vec2>();
+	m_vBoxSize = _node["RIGIDBODY"]["BoxSize"].as<Vec3>();
+	m_fShpereSize = _node["RIGIDBODY"]["SphereSize"].as<float>();
+	m_bColScaleSize = _node["RIGIDBODY"]["ColScaleSize"].as<bool>();
 
 	SetColliderFilter(Filter);
 }
