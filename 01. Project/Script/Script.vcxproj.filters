@@ -37,6 +37,7 @@
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CNavTestSCR.h" />
+    <ClInclude Include="CTestSCR.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -55,5 +56,6 @@
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CNavTestSCR.cpp" />
+    <ClCompile Include="CTestSCR.cpp" />
   </ItemGroup>
 </Project>

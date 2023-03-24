@@ -31,6 +31,10 @@ public:
     void SetRelativePos_XY(float _x, float _y) { m_vRelativePos.x = _x; m_vRelativePos.y = _y; }
     void SetRelativePos_Z(float _z) { m_vRelativePos.z = _z; }
 
+    void SetWorldPos(Vec3 _vPos);
+    void SetWorldScale(Vec3 _vScale);
+    void SetWorldRotation(Vec3 _vRot);
+
     Vec3 GetRelativePos() { return m_vRelativePos; }
     Vec3 GetWorldPos() { return m_matWorld.Translation(); }
 
