@@ -162,8 +162,8 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pObject, 0);
 
-	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
-	pSound->Play(1, 0.3f, true, pObject);//Vec3(0.f, 500.f, 400.f));
+	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
+	//pSound->Play(1, 0.3f, true, pObject);//Vec3(0.f, 500.f, 400.f));
 	//pSound->PlayBGM(0.6f);
 
 	//pObject = new CGameObject;

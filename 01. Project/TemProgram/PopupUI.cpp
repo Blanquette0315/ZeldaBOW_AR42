@@ -271,14 +271,14 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 
 	case COMPONENT_TYPE::COLLIDER:
 	{
-		/*if (_Select)
+		if (_Select)
 		{
-			_Target->AddComponent(new CCollider2D);
+			_Target->AddComponent(new CCollider);
 		}
 		else
 		{
-			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::COLLIDER2D));
-		}*/
+			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::COLLIDER));
+		}
 	}
 	break;
 
