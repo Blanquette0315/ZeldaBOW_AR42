@@ -44,6 +44,7 @@ public:
 public:
     UINT GetWidth() { return m_Desc.Width; }
     UINT GetHeight() { return m_Desc.Height; }
+    UINT GetArraySize() { return m_Desc.ArraySize; }
 
     // 픽셀 색상 정보 가져오기
     void GetPixelVector(vector<vector<tBGRA>>& _inVec);
@@ -52,10 +53,16 @@ public:
     ComPtr<ID3D11Texture2D> GetTex2D() { return m_Tex2D; }
 
     // 각각의 View 가져오기
-    ComPtr<ID3D11RenderTargetView> GetRTV() { return m_RTV; }
-    ComPtr<ID3D11DepthStencilView> GetDSV() { return m_DSV; }
-    ComPtr<ID3D11ShaderResourceView> GetSRV() { return m_SRV; }
-    ComPtr<ID3D11UnorderedAccessView> GetUAV() { return m_UAV; }
+    ComPtr<ID3D11RenderTargetView>      GetRTV() { return m_RTV; }
+    ComPtr<ID3D11DepthStencilView>      GetDSV() { return m_DSV; }
+    ComPtr<ID3D11ShaderResourceView>    GetSRV() { return m_SRV; }
+    ComPtr<ID3D11UnorderedAccessView>   GetUAV() { return m_UAV; }
+    const D3D11_TEXTURE2D_DESC&         GetDesc() { return m_Desc; }
+    void*                               GetSysMem() { return m_Image.GetPixels(); }
+    UINT                                GetRowPitch() const { return (UINT)m_Image.GetImages()->rowPitch; }
+    UINT                                GetSlicePitch()const { return (UINT)m_Image.GetImages()->slicePitch; }
+
+    void GenerateMip(UINT _iMipLevel);
 
     // PIPELINE_STAGE
     void UpdateData(UINT _iRegisterNum, UINT _iPipelineStage);
@@ -70,11 +77,13 @@ private:
 
     // 파일로 부터 로딩
     virtual int Load(const wstring& _strFilePath);
+    int Load(const wstring& _strFilePath, int _iMipLevel);
 
     // GPU메모리에 직접 Texture를 생성
     void Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iBindFlag);
     void Create(ComPtr<ID3D11Texture2D> _Tex2D); // 이미 존재하는 ID3D11Texture2D를 받아와 저장하고, View를 생성
-    
+    int CreateArrayTexture(const vector<Ptr<CTexture>>& _vecTex, int _iMapLevel);
+
 public:
     CLONE_ASSERT(CTexture);
 

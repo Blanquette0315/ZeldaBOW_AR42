@@ -4,7 +4,7 @@
 
 #include "CMesh.h"
 #include "CTexture.h"
-#include "CGrapicsShader.h"
+#include "CGraphicsShader.h"
 #include "CComputeShader.h"
 #include "CMaterial.h"
 #include "CPrefab.h"
@@ -39,6 +39,7 @@ public:
 	template<typename T>
 	wstring GetNewResName();
 
+	Ptr<CTexture> LoadTexture(const wstring& _strKey, const wstring& _strRelativePath, int _iMapLevel);
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _FORMAT, UINT _iBindFlag);
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
 
@@ -94,7 +95,7 @@ RES_TYPE GetType()
 		return RES_TYPE::COMPUTE_SHADER;
 	}
 
-	if (typeid(T).hash_code() == typeid(CGrapicsShader).hash_code())
+	if (typeid(T).hash_code() == typeid(CGraphicsShader).hash_code())
 	{
 		return RES_TYPE::GRAPHICS_SHADER;
 	}

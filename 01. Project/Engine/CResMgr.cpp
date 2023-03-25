@@ -77,3 +77,29 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, ComPtr<ID3D11Textur
 
 	return pTex;
 }
+
+Ptr<CTexture> CResMgr::LoadTexture(const wstring& _strKey, const wstring& _strRelativePath, int _iMapLevel)
+{
+	CTexture* pRes = FindRes<CTexture>(_strKey).Get();
+	if (nullptr != pRes)
+	{
+		return pRes;
+	}
+
+	pRes = new CTexture;
+
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	if (FAILED(pRes->Load(strFilePath, _iMapLevel)))
+	{
+		return nullptr;
+	}
+
+	pRes->SetKey(_strKey);
+	pRes->SetRelativePath(_strRelativePath);
+
+	m_arrRes[(UINT)RES_TYPE::TEXTURE].insert(make_pair(_strKey, pRes));
+
+	return pRes;
+}

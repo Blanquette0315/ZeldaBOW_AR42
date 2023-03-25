@@ -105,18 +105,22 @@ void CEventMgr::tick()
 		case EVENT_TYPE::ADD_RES:
 		{
 			// wParam : RES_TYPE, lParam : Resource Adress	
-			wstring strKey = ((CRes*)m_vecEvent[i].lParam)->GetKey();
+			CRes* pRes = (CRes*)m_vecEvent[i].lParam;
+			wstring strKey = pRes->GetKey();
 			CResMgr::GetInst()->AddRes(strKey, (RES_TYPE)m_vecEvent[i].wParam, (CRes*)m_vecEvent[i].lParam);
+			pRes->Release();
 		}
+			break;
 
 		case EVENT_TYPE::DELETE_RES:
 		{
 			// wParam : RES_TYPE, lParam : Resource Adress
-			if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)m_vecEvent[i].wParam, ((CRes*)m_vecEvent[i].lParam)->GetKey()))
+			CRes* pRes = (CRes*)m_vecEvent[i].lParam;
+			if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)m_vecEvent[i].wParam, pRes->GetKey()))
 			{
-				// 만약 DeleteRes가 실패했다면 말이 안되기 때문에 메세지 박스를 띄워준다.
 				MessageBox(nullptr, L"리소스 삭제 실패", L"에러", MB_OK);
 			}
+			pRes->Release();
 			m_bLevelChanged = true;
 		}
 			break;

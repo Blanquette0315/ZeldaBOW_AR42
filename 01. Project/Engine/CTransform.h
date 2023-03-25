@@ -47,6 +47,7 @@ public:
     bool GetIgnoreParentScale() { return m_bIgnParentScale; }
 
     const Matrix& GetWorldMat() { return m_matWorld; }
+    const Matrix& GetWorldInvMat() { return m_matWorldInv; }
     const Matrix& GetWorldRotMat() { return m_matWorldRot; }
 
 public:

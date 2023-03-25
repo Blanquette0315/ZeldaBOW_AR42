@@ -3,7 +3,7 @@
 
 #include "CDevice.h"
 #include "CConstBuffer.h"
-#include "CGrapicsShader.h"
+#include "CGraphicsShader.h"
 
 #include "CPathMgr.h"
 

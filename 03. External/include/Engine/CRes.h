@@ -15,7 +15,7 @@ private:
     bool            m_bEngineRes;   // 엔진에서 제공해주는 리소스인지 Editor에서 만들어진 리소스인지 확인
     bool            m_bChangeName;  // 리소스의 이름이 변경되면 체크해준다. (우선 지금은 Mtrl이름이 변경되면 CheckRelativePath()를 통과시켜주기 위함이다.)
 
-private:
+public:
     void AddRef()
     {
         ++m_iRefCount;

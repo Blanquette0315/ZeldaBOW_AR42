@@ -10,7 +10,7 @@ private:
 	static UINT ParamCount;
 
 public:
-	static void Param_Int(const string& _ParamName, int* _pInOut);
+	static bool Param_Int(const string& _ParamName, int* _pInOut);
 	static void Param_Float(const string& _ParamName, float* _pInOut);
 	static void Param_Vec2(const string& _ParamName, Vec2* _pInOut);
 	static void Param_Vec3(const string& _ParamName, Vec3* _pInOut);

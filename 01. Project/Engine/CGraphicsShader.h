@@ -1,6 +1,6 @@
 #pragma once
 #include "CShader.h"
-class CGrapicsShader :
+class CGraphicsShader :
     public CShader
 {
 private:
@@ -57,7 +57,7 @@ public:
     SHADER_DOMAIN GetDomain() { return m_eDomain; }
 
 public:
-    CGrapicsShader();
-    ~CGrapicsShader();
+    CGraphicsShader();
+    ~CGraphicsShader();
 };
 

@@ -13,14 +13,19 @@
 UINT ParamUI::ParamCount = 0;
 
 
-void ParamUI::Param_Int(const string& _ParamName, int* _pInOut)
+bool ParamUI::Param_Int(const string& _ParamName, int* _pInOut)
 {
 	char szName[50] = "";
 	sprintf_s(szName, 50, "##Int%d", ParamCount++);
 
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
-	ImGui::InputInt(szName, _pInOut);
+	if (ImGui::InputInt(szName, _pInOut))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void ParamUI::Param_Float(const string& _ParamName, float* _pInOut)

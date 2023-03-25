@@ -208,6 +208,7 @@ void LoadWStringFromFile(wstring& _str, FILE* _pFile)
 #include "CGameObject.h"
 #include "CTransform.h"
 #include "CEventMgr.h"
+#include "CRes.h"
 
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx)
 {
@@ -218,6 +219,28 @@ void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx)
 	evn.wParam = (DWORD_PTR)_pNewObj;
 	evn.lParam = (DWORD_PTR)_iLayerIdx;
 
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
+void AddRes(CRes* _Res, RES_TYPE _Type)
+{
+	_Res->AddRef();
+
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::ADD_RES;
+	evn.wParam = (DWORD_PTR)_Type;
+	evn.lParam = (DWORD_PTR)_Res;
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
+void DeleteRes(CRes* _Res, RES_TYPE _Type)
+{
+	_Res->AddRef();
+
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::DELETE_RES;
+	evn.wParam = (DWORD_PTR)_Type;
+	evn.lParam = (DWORD_PTR)_Res;
 	CEventMgr::GetInst()->AddEvent(evn);
 }
 

@@ -40,7 +40,6 @@ void CLayer::finaltick()
 		if ((*iter)->IsDead())
 		{
 			iter = m_vecParent.erase(iter);
-			int i = 0;
 		}
 		else
 		{

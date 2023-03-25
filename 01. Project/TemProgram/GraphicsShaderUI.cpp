@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GraphicsShaderUI.h"
 
-#include <Engine/CGrapicsShader.h>
+#include <Engine/CGraphicsShader.h>
 
 GraphicsShaderUI::GraphicsShaderUI()
 	: ResUI("GraphicsShader##UI", RES_TYPE::GRAPHICS_SHADER)
@@ -29,9 +29,9 @@ void GraphicsShaderUI::update()
 
 	if (GetTarget().Get() != nullptr)
 	{
-		// dynamic cast로 CRes가 아닌 CGrapicsShader로 변경해 데이터를 가져옴.
+		// dynamic cast로 CRes가 아닌 CGraphicsShader로 변경해 데이터를 가져옴.
 		// 이때, dnynamic cast가 실패할 경우, 잘못되었다고 판단해 assert를 건다.
-		CGrapicsShader* pTargetShader = dynamic_cast<CGrapicsShader*>(GetTarget().Get());
+		CGraphicsShader* pTargetShader = dynamic_cast<CGraphicsShader*>(GetTarget().Get());
 		assert(pTargetShader);
 
 		if (!m_bUpdateOnce)
@@ -97,9 +97,9 @@ void GraphicsShaderUI::render_update()
 	char ShaderDomain[50] = "";
 	switch (m_eDomainType)
 	{
-	case SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQIE:
+	case SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE:
 	{
-		sprintf_s(ShaderDomain, 50, "DOMAIN_DEFERRED_OPAQIE");
+		sprintf_s(ShaderDomain, 50, "DOMAIN_DEFERRED_OPAQUE");
 	}
 		break;
 

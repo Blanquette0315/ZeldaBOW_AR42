@@ -198,15 +198,16 @@ void CStructuredBuffer::UpdateData(UINT _iRegisterNum, UINT _PipelineStage)
 
 void CStructuredBuffer::UpdateData_CS(UINT _iRegisterNum, bool _bShaderRes)
 {
-	m_iRecentRegisterNumRW = _iRegisterNum;
 	// t레지스터에 바인딩 걸 경우
 	if (_bShaderRes)
 	{
+		m_iRecentRegisterNum = _iRegisterNum;
 		CONTEXT->CSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
 	}
 	// u레지스터에 바인딩 할 경우
 	else
 	{
+		m_iRecentRegisterNumRW = _iRegisterNum;
 		UINT i = -1;
 		CONTEXT->CSSetUnorderedAccessViews(_iRegisterNum, 1, m_UAV.GetAddressOf(), &i);
 	}
@@ -214,17 +215,25 @@ void CStructuredBuffer::UpdateData_CS(UINT _iRegisterNum, bool _bShaderRes)
 
 void CStructuredBuffer::Clear()
 {
-	ID3D11ShaderResourceView* pSRV = nullptr;
-	CONTEXT->VSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
-	CONTEXT->HSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
-	CONTEXT->DSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
-	CONTEXT->GSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
-	CONTEXT->PSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+	if (-1 != m_iRecentRegisterNum)
+	{
+		ID3D11ShaderResourceView* pSRV = nullptr;
+		CONTEXT->VSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+		CONTEXT->HSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+		CONTEXT->DSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+		CONTEXT->GSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+		CONTEXT->PSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+		// u레지스터는 0~7번까지만 사용이 가능하기 때문에 t레지스터와 동일하게 최근 번호를 사용하면, 문제가 된다.
+		// t레지스터는 15번도 사용이 가능하기 때문에
+		CONTEXT->CSSetShaderResources(m_iRecentRegisterNum, 1, &pSRV);
+		m_iRecentRegisterNum = -1;
+	}
 
-	// u레지스터는 0~7번까지만 사용이 가능하기 때문에 t레지스터와 동일하게 최근 번호를 사용하면, 문제가 된다.
-	// t레지스터는 15번도 사용이 가능하기 때문에
-	CONTEXT->CSSetShaderResources(m_iRecentRegisterNumRW, 1, &pSRV);
-	ID3D11UnorderedAccessView* pUAV = nullptr;
-	UINT i = -1;
-	CONTEXT->CSSetUnorderedAccessViews(m_iRecentRegisterNumRW, 1, &pUAV, &i);
+	if (-1 != m_iRecentRegisterNumRW)
+	{
+		ID3D11UnorderedAccessView* pUAV = nullptr;
+		UINT i = -1;
+		CONTEXT->CSSetUnorderedAccessViews(m_iRecentRegisterNumRW, 1, &pUAV, &i);
+		m_iRecentRegisterNumRW = -1;
+	}
 }

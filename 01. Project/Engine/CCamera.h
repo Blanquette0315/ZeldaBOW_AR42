@@ -22,6 +22,8 @@ private:
     float       m_FOV;          // 시야각
     float       m_fScale;       // 투영 범위 배율
 
+    tRay                    m_ray;      // 마우스 방향을 향하는 직선
+
     UINT        m_iLayerMask;
 
     vector<CGameObject*>    m_vecDeferred;
@@ -72,9 +74,12 @@ public:
 
     CFrustum& GetFrustum() { return m_Frustum; }
 
+    const tRay& GetRay() { return m_ray; }
+
 protected:
     void CalcViewMat();
     void CalcProjMat();
+    void CalRay();  // 마우스 방향으로 광선 연산
 
 private:
     void SortObject();

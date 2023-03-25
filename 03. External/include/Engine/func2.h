@@ -146,6 +146,10 @@ class CLevel;
 void ChangeLevel(CLevel* _NextLevel);
 void ChangeLevelAndPlay(CLevel* _NextLevel);
 
+class CRes;
+void AddRes(CRes* _Res, RES_TYPE _Type);
+void DeleteRes(CRes* _Res, RES_TYPE _Type);
+
 // ==================
 // =   Debug Draw   =
 // ==================

@@ -43,9 +43,6 @@
     <Filter Include="Engine\05. GameObject">
       <UniqueIdentifier>{43cc4015-d5be-49c7-9594-3e12c2d6dda8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component">
-      <UniqueIdentifier>{2bb932bc-7a8f-421b-a8cc-1928df9d4ec4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\07. Resource">
       <UniqueIdentifier>{c062258a-b229-4818-af14-86ad3e918d7f}</UniqueIdentifier>
     </Filter>
@@ -67,12 +64,6 @@
     <Filter Include="Engine\07. Resource\02. Shader\02. ComputeShader">
       <UniqueIdentifier>{69354b5d-4854-442a-ba54-c7f724891a10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\01. Transform">
-      <UniqueIdentifier>{bdcf5edc-0174-452c-929a-de5b62abae29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent">
-      <UniqueIdentifier>{d734968f-0869-4ef0-9199-590ce80e18c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\07. Resource\03. Texture">
       <UniqueIdentifier>{13c51367-e350-4c56-a5eb-e50b800acb00}</UniqueIdentifier>
     </Filter>
@@ -82,23 +73,8 @@
     <Filter Include="Engine\07. Resource\04. Material">
       <UniqueIdentifier>{eee59a42-a06c-4146-b302-7c36d24c6d27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\00. Script">
-      <UniqueIdentifier>{c49ae0d1-0977-42aa-8403-ef96c03291a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Module">
       <UniqueIdentifier>{6b56f224-953e-40b0-944f-fbda24c8ec0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\01. MeshRender">
-      <UniqueIdentifier>{4f228731-1711-41e4-8f63-e6a2d0a1ecfd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\02. ParticleSystem">
-      <UniqueIdentifier>{740a7045-8800-421d-88ee-af55ece32e80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\03. TileMap">
-      <UniqueIdentifier>{b421429a-a606-46a7-81e6-4bd182ff3087}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\03. Camera">
-      <UniqueIdentifier>{b7408aa0-e360-4ee4-a7b4-827b280f7c81}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\03. Mgr\06. RenderMgr">
       <UniqueIdentifier>{f38d4528-49b1-450e-98ce-4ce6ca7604db}</UniqueIdentifier>
@@ -109,23 +85,11 @@
     <Filter Include="Engine\07. Resource\05. Prefab">
       <UniqueIdentifier>{3351a7f2-b346-4f84-89ea-9f12d2e9bd69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\04. Collider">
-      <UniqueIdentifier>{2674bee4-e15d-4ca5-9134-ad7f6059a1b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSL\Header">
       <UniqueIdentifier>{e97d3438-6c17-4714-9a62-8e209c6149be}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\03. Mgr\08. CollisionMgr">
       <UniqueIdentifier>{df54e532-ca44-4813-831c-4c5e0a21ee74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\05. Animation2D">
-      <UniqueIdentifier>{25a7678b-a6b3-407f-8a6d-d457af9b0d15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\05. Animation2D\Animation2D">
-      <UniqueIdentifier>{4cd5c7f8-1199-4a6e-993c-4da3a886e1bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\06. Light2D">
-      <UniqueIdentifier>{40ec9bbd-721e-4c2e-b0f1-8d2699c0794b}</UniqueIdentifier>
     </Filter>
     <Filter Include="HLSL\Render">
       <UniqueIdentifier>{a926670f-8b70-4567-89b6-e77f22bbbc64}</UniqueIdentifier>
@@ -151,29 +115,11 @@
     <Filter Include="HLSL\Render\3D">
       <UniqueIdentifier>{b37ef59a-2601-415a-8173-1818c33e2955}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\07. Light3D">
-      <UniqueIdentifier>{baaba50b-5e0f-4e3f-bf9e-d1bd030c9d46}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Mgr\06. RenderMgr\MRT">
       <UniqueIdentifier>{75e2764e-334e-4209-9b83-c3ac98450bcd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\Decal">
-      <UniqueIdentifier>{96dcfc98-e94e-4f70-bcd2-05a3482848ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\SkyBox">
-      <UniqueIdentifier>{85712983-3875-45e5-9b9c-2ca8e766ff29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\03. Camera\Frustum">
-      <UniqueIdentifier>{ede13713-1290-4c68-bf37-ce55874c4183}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\LandScape">
-      <UniqueIdentifier>{ac1d224d-247c-43e1-a135-84caaadb09e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Mgr\10. PhysMgr">
       <UniqueIdentifier>{801b50d5-67ab-436e-99df-70deec5ca22c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Component\08. RigidBody">
-      <UniqueIdentifier>{51b92768-9a8b-4730-b62c-1847216727f3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\03. Mgr\11. ExportMgr">
       <UniqueIdentifier>{215cf939-fd6b-455c-bef2-01d92b775d14}</UniqueIdentifier>
@@ -186,6 +132,72 @@
     </Filter>
     <Filter Include="Engine\03. Mgr\13. SoundMgr">
       <UniqueIdentifier>{32aaee3b-a9cd-4718-97e0-13a5ef6df6ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\LandScape">
+      <UniqueIdentifier>{98f746db-3291-413c-8d29-8d9a4329ad81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\LandScape\HeightMap">
+      <UniqueIdentifier>{89c1f94f-7322-4ca3-ba02-1a46aa333342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\LandScape\RayCast">
+      <UniqueIdentifier>{583a10b9-3754-42b8-b4b8-ccbaa2fcfd88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\LandScape\WeightMap">
+      <UniqueIdentifier>{1776f65e-2436-48b7-9019-4f2541c83e44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component">
+      <UniqueIdentifier>{2bb932bc-7a8f-421b-a8cc-1928df9d4ec4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\01. Transform">
+      <UniqueIdentifier>{bdcf5edc-0174-452c-929a-de5b62abae29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent">
+      <UniqueIdentifier>{d734968f-0869-4ef0-9199-590ce80e18c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\01. MeshRender">
+      <UniqueIdentifier>{4f228731-1711-41e4-8f63-e6a2d0a1ecfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\02. ParticleSystem">
+      <UniqueIdentifier>{740a7045-8800-421d-88ee-af55ece32e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\03. TileMap">
+      <UniqueIdentifier>{b421429a-a606-46a7-81e6-4bd182ff3087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\Decal">
+      <UniqueIdentifier>{96dcfc98-e94e-4f70-bcd2-05a3482848ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\SkyBox">
+      <UniqueIdentifier>{85712983-3875-45e5-9b9c-2ca8e766ff29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\LandScape">
+      <UniqueIdentifier>{ac1d224d-247c-43e1-a135-84caaadb09e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\00. Script">
+      <UniqueIdentifier>{c49ae0d1-0977-42aa-8403-ef96c03291a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\03. Camera">
+      <UniqueIdentifier>{b7408aa0-e360-4ee4-a7b4-827b280f7c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\03. Camera\Frustum">
+      <UniqueIdentifier>{ede13713-1290-4c68-bf37-ce55874c4183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\04. Collider">
+      <UniqueIdentifier>{2674bee4-e15d-4ca5-9134-ad7f6059a1b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\05. Animation2D">
+      <UniqueIdentifier>{25a7678b-a6b3-407f-8a6d-d457af9b0d15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\05. Animation2D\Animation2D">
+      <UniqueIdentifier>{4cd5c7f8-1199-4a6e-993c-4da3a886e1bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\06. Light2D">
+      <UniqueIdentifier>{40ec9bbd-721e-4c2e-b0f1-8d2699c0794b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\07. Light3D">
+      <UniqueIdentifier>{baaba50b-5e0f-4e3f-bf9e-d1bd030c9d46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\08. RigidBody">
+      <UniqueIdentifier>{51b92768-9a8b-4730-b62c-1847216727f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +264,7 @@
     <ClInclude Include="CShader.h">
       <Filter>Engine\07. Resource\02. Shader</Filter>
     </ClInclude>
-    <ClInclude Include="CGrapicsShader.h">
+    <ClInclude Include="CGraphicsShader.h">
       <Filter>Engine\07. Resource\02. Shader\01. GraphicsShader</Filter>
     </ClInclude>
     <ClInclude Include="CComputeShader.h">
@@ -435,6 +447,15 @@
     <ClInclude Include="CSoundMgr.h">
       <Filter>Engine\03. Mgr\13. SoundMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CHeightMapShader.h">
+      <Filter>HLSL\Compute\LandScape\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="CRaycastShader.h">
+      <Filter>HLSL\Compute\LandScape\RayCast</Filter>
+    </ClInclude>
+    <ClInclude Include="CWeightMapShader.h">
+      <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -485,7 +506,7 @@
     <ClCompile Include="CShader.cpp">
       <Filter>Engine\07. Resource\02. Shader</Filter>
     </ClCompile>
-    <ClCompile Include="CGrapicsShader.cpp">
+    <ClCompile Include="CGraphicsShader.cpp">
       <Filter>Engine\07. Resource\02. Shader\01. GraphicsShader</Filter>
     </ClCompile>
     <ClCompile Include="CComputeShader.cpp">
@@ -662,6 +683,15 @@
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Engine\03. Mgr\13. SoundMgr</Filter>
     </ClCompile>
+    <ClCompile Include="CHeightMapShader.cpp">
+      <Filter>HLSL\Compute\LandScape\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CRaycastShader.cpp">
+      <Filter>HLSL\Compute\LandScape\RayCast</Filter>
+    </ClCompile>
+    <ClCompile Include="CWeightMapShader.cpp">
+      <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -731,6 +761,18 @@
     </FxCompile>
     <FxCompile Include="Tess.fx">
       <Filter>HLSL\Render\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="heightmap.fx">
+      <Filter>HLSL\Compute\LandScape\HeightMap</Filter>
+    </FxCompile>
+    <FxCompile Include="landscape.fx">
+      <Filter>HLSL\Render\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="raycast.fx">
+      <Filter>HLSL\Compute\LandScape\RayCast</Filter>
+    </FxCompile>
+    <FxCompile Include="weightmap.fx">
+      <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

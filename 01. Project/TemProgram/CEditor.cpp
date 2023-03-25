@@ -17,6 +17,7 @@
 #include "CEditorCam.h"
 
 CEditor::CEditor()
+	: m_DebugDrawObject{}
 {
 }
 

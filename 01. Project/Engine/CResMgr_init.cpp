@@ -734,10 +734,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "BINORMAL");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "NORMAL");
 
-	CGrapicsShader* pShader = nullptr;
+	CGraphicsShader* pShader = nullptr;
 
 	// std2D Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
@@ -752,10 +752,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_1, "Output Texture 2");
 	pShader->AddTexureParam(TEX_2, "Output Texture 3");
 
-	AddRes<CGrapicsShader>(L"Std2DShader", pShader);
+	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
 
 	// std2DAlphaBlend Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D_AlphaBlend");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
@@ -772,10 +772,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_1, "Output Texture 2");
 	pShader->AddTexureParam(TEX_2, "Output Texture 3");
 
-	AddRes<CGrapicsShader>(L"Std2DAlphaBlendShader", pShader);
+	AddRes<CGraphicsShader>(L"Std2DAlphaBlendShader", pShader);
 
 	// Grid Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\editor.fx", "VS_Grid");
 	pShader->CreatePixelShader(L"shader\\editor.fx", "PS_Grid");
 
@@ -785,10 +785,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
-	AddRes<CGrapicsShader>(L"GridShader", pShader);
+	AddRes<CGraphicsShader>(L"GridShader", pShader);
 
 	// DebufDraw Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\debugdraw.fx", "VS_DebugDraw");
 	pShader->CreatePixelShader(L"shader\\debugdraw.fx", "PS_DebugDraw");
 
@@ -798,10 +798,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
-	AddRes<CGrapicsShader>(L"DebugDrawShader", pShader);
+	AddRes<CGraphicsShader>(L"DebugDrawShader", pShader);
 
 	// Frustum Debug Draw Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\Frustum.fx", "VS_Frustum");
 	pShader->CreateGeometryShader(L"shader\\Frustum.fx", "GS_Frustum");
 	pShader->CreatePixelShader(L"shader\\Frustum.fx", "PS_Frustum");
@@ -812,10 +812,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
-	AddRes<CGrapicsShader>(L"FrustumDebugDrawShader", pShader);
+	AddRes<CGraphicsShader>(L"FrustumDebugDrawShader", pShader);
 
 	// ParticleRenderShader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
 	pShader->CreateGeometryShader(L"shader\\particlerender.fx", "GS_ParticleRender");
 	pShader->CreatePixelShader(L"shader\\particlerender.fx", "PS_ParticleRender");
@@ -827,10 +827,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDSType(DS_TYPE::NO_WRITE);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
-	AddRes<CGrapicsShader>(L"ParticleRenderShader", pShader);
+	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
 
 	// postprocess
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_PostProcess");
 	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_PostProcess");
 	
@@ -839,20 +839,20 @@ void CResMgr::CreateDefaultGrapicsShader()
 	//pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POST_PROCESS);
 	
-	AddRes<CGrapicsShader>(L"PostProcessShader", pShader);
+	AddRes<CGraphicsShader>(L"PostProcessShader", pShader);
 
 	// TileMap Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 
-	AddRes<CGrapicsShader>(L"TileMapShader", pShader);
+	AddRes<CGraphicsShader>(L"TileMapShader", pShader);
 
 	// Std3DShader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std3d.fx", "VS_Std3D");
 	pShader->CreatePixelShader(L"shader\\std3d.fx", "PS_Std3D");
 
@@ -863,10 +863,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
 
-	AddRes<CGrapicsShader>(L"Std3DShader", pShader);
+	AddRes<CGraphicsShader>(L"Std3DShader", pShader);
 
 	// Decal Shader (forward)
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\Decal.fx", "VS_Decal");
 	pShader->CreatePixelShader(L"shader\\Decal.fx", "PS_Decal");
 
@@ -877,10 +877,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->AddTexureParam(TEX_1, "Decal Texture");
 
-	AddRes<CGrapicsShader>(L"DecalShader", pShader);
+	AddRes<CGraphicsShader>(L"DecalShader", pShader);
 
 	// SkyBox Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\SkyBox.fx", "VS_SkyBox");
 	pShader->CreatePixelShader(L"shader\\SkyBox.fx", "PS_SkyBox");
 
@@ -889,10 +889,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDSType(DS_TYPE::LESS_EQUAL);			// 스카이 박스가 카메라의 far끝에 위치하기 때문에 LESS로 하면 짤린다. 자새히 설명하면, TargetClear시 깊이를 1로 셋팅해주는데, 매시의 표면이 1로 걸리기 때문에 해당 부분이 Depth Test를 통과하지 못해 랜더링이 되지 않게 된다.
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);	// 지금 스카이 박스는 Forward 랜더링 방식으로 하기 때문에 DOMAIN_OPAQUE를 넣어준다.
 
-	AddRes<CGrapicsShader>(L"SkyBoxShader", pShader);
+	AddRes<CGraphicsShader>(L"SkyBoxShader", pShader);
 
 	// Tess Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\Tess.fx", "VS_TESS");
 	pShader->CreateHullShader(L"shader\\tess.fx", "HS_TESS");
 	pShader->CreateDomainShader(L"shader\\tess.fx", "DS_TESS");
@@ -910,27 +910,27 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddScalarParam(INT_2, "Tess Vtx2 Factor  ");
 	pShader->AddScalarParam(INT_3, "Tess Inside Factor");
 
-	AddRes<CGrapicsShader>(L"TessShader", pShader);
+	AddRes<CGraphicsShader>(L"TessShader", pShader);
 
 
 
 	// ====== 지연 렌더링 셰이더 ======
 	// Std3D_Deferred Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std3d_deferred.fx", "VS_Std3D_Deferred");
 	pShader->CreatePixelShader(L"shader\\std3d_deferred.fx", "PS_Std3D_Deferred");
 
 	pShader->SetRSType(RS_TYPE::CULL_BACK);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQIE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
 
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
 
-	AddRes<CGrapicsShader>(L"Std3D_DeferredShader", pShader);
+	AddRes<CGraphicsShader>(L"Std3D_DeferredShader", pShader);
 
 	// DirLight Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\light.fx", "VS_DirLightShader");
 	pShader->CreatePixelShader(L"shader\\light.fx", "PS_DirLightShader");
 
@@ -942,10 +942,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
 
-	AddRes<CGrapicsShader>(L"DirLightShader", pShader);
+	AddRes<CGraphicsShader>(L"DirLightShader", pShader);
 
 	// PointLight Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\light.fx", "VS_PointLightShader");
 	pShader->CreatePixelShader(L"shader\\light.fx", "PS_PointLightShader");
 
@@ -958,10 +958,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
 
-	AddRes<CGrapicsShader>(L"PointLightShader", pShader);
+	AddRes<CGraphicsShader>(L"PointLightShader", pShader);
 
 	// SpotLight Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\light.fx", "VS_SpotLightShader");
 	pShader->CreatePixelShader(L"shader\\light.fx", "PS_SpotLightShader");
 
@@ -974,10 +974,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
 
-	AddRes<CGrapicsShader>(L"SpotLightShader", pShader);
+	AddRes<CGraphicsShader>(L"SpotLightShader", pShader);
 
 	// Deferred_Merge Shader
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\deferred_merge.fx", "VS_Merge");
 	pShader->CreatePixelShader(L"shader\\deferred_merge.fx", "PS_Merge");
 
@@ -994,10 +994,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	// 해당 셰이더는 물체를 그릴 셰이더가 아닌 MRT의 랜더 타겟 병합 목적이므로
 	// 파라미터를 공개할 필요가 없다.
 
-	AddRes<CGrapicsShader>(L"Deferred_MergeShader", pShader);
+	AddRes<CGraphicsShader>(L"Deferred_MergeShader", pShader);
 
 	// Deferred_Decal Shader (Deferred)
-	pShader = new CGrapicsShader;
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\Decal.fx", "VS_DeferredDecal");
 	pShader->CreatePixelShader(L"shader\\Decal.fx", "PS_DeferredDecal");
 
@@ -1008,7 +1008,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->AddTexureParam(TEX_1, "Decal Texture");
 
-	AddRes<CGrapicsShader>(L"Deferred_DecalShader", pShader);
+	AddRes<CGraphicsShader>(L"Deferred_DecalShader", pShader);
 }
 
 #include "CPaintShader.h"
@@ -1032,77 +1032,77 @@ void CResMgr::CreateDefaultMaterial()
 	CMaterial* pMtrl = nullptr;
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"Std2DShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes<CMaterial>(L"Std2DMtrl", pMtrl);
 
 	//Load<CMaterial>(L"Std2DMtrl", L"material\\mtrl.mtrl");
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"Std2DAlphaBlendShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
 	AddRes<CMaterial>(L"Std2DAlphaBlendMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"GridShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"GridShader"));
 	AddRes<CMaterial>(L"GridMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"DebugDrawShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DebugDrawShader"));
 	AddRes<CMaterial>(L"DebugDrawMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"FrustumDebugDrawShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"FrustumDebugDrawShader"));
 	AddRes<CMaterial>(L"FrustumDebugDrawMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"ParticleRenderShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes<CMaterial>(L"ParticleRenderMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"PostProcessShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
 	AddRes<CMaterial>(L"PostProcessMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"TileMapShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
 	AddRes<CMaterial>(L"TileMapMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"Std3DShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std3DShader"));
 	AddRes<CMaterial>(L"Std3DMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"Std3D_DeferredShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std3D_DeferredShader"));
 	AddRes<CMaterial>(L"Std3D_DeferredMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"Deferred_MergeShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Deferred_MergeShader"));
 	AddRes<CMaterial>(L"Deferred_MergeMtrl", pMtrl);
 	
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"DirLightShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DirLightShader"));
 	AddRes<CMaterial>(L"DirLightMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"PointLightShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PointLightShader"));
 	AddRes<CMaterial>(L"PointLightMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"SpotLightShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"SpotLightShader"));
 	AddRes<CMaterial>(L"SpotLightMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"DecalShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DecalShader"));
 	AddRes<CMaterial>(L"DecalMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"Deferred_DecalShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Deferred_DecalShader"));
 	AddRes<CMaterial>(L"Deferred_DecalMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"SkyBoxShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"SkyBoxShader"));
 	AddRes<CMaterial>(L"SkyBoxMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGrapicsShader>(L"TessShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TessShader"));
 	AddRes<CMaterial>(L"TessMtrl", pMtrl);
 }
 

@@ -190,7 +190,7 @@ void MaterialUI::SetShader(DWORD_PTR _strShaderKey)
 	string strKey = (char*)_strShaderKey;
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
 
-	Ptr<CGrapicsShader> pShader = CResMgr::GetInst()->FindRes<CGrapicsShader>(wstrKey);
+	Ptr<CGraphicsShader> pShader = CResMgr::GetInst()->FindRes<CGraphicsShader>(wstrKey);
 	assert(nullptr != pShader);
 
 	((CMaterial*)GetTarget().Get())->SetShader(pShader);
@@ -210,16 +210,11 @@ void MaterialUI::ShowShaderParam(CMaterial* _pMtrl)
 			case INT_2:
 			case INT_3:
 			{
-				int iInput, iOutput;
+				int iInput = 0;
 				_pMtrl->GetScalarParam(vecScalar[i].eParam, &iInput);
-				_pMtrl->GetScalarParam(vecScalar[i].eParam, &iOutput);
-				ParamUI::Param_Int(vecScalar[i].strName, &iOutput);
-				_pMtrl->SetScalarParam(vecScalar[i].eParam, &iOutput);
-
-				// 임시로 해두는 저장. 여기서 할게 아니라 이제 단축키 등을 만들어서 저장을 해야한다.
-				if (iInput != iOutput)
+				if (ParamUI::Param_Int(vecScalar[i].strName, &iInput))
 				{
-					_pMtrl->Save(L"material\\mtrl.mtrl");
+					_pMtrl->SetScalarParam(vecScalar[i].eParam, &iInput);
 				}
 			}
 			break;

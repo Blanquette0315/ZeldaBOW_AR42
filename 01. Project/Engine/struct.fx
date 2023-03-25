@@ -38,4 +38,11 @@ struct tParticleShare
     uint3 iPadding;
 };
 
+struct tRaycastOut
+{
+    float2 vUV;
+    int iDist;
+    int success;
+};
+
 #endif

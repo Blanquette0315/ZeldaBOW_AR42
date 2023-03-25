@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "CGrapicsShader.h"
+#include "CGraphicsShader.h"
 
 #include "CPathMgr.h"
 #include "CResMgr.h"
 #include "CDevice.h"
 
-CGrapicsShader::CGrapicsShader()
+CGraphicsShader::CGraphicsShader()
 	: CShader(RES_TYPE::GRAPHICS_SHADER)
 	, m_eTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 	, m_eRSType(RS_TYPE::CULL_BACK)
@@ -15,11 +15,11 @@ CGrapicsShader::CGrapicsShader()
 {
 }
 
-CGrapicsShader::~CGrapicsShader()
+CGraphicsShader::~CGraphicsShader()
 {
 }
 
-void CGrapicsShader::CreateVertexShader(const wstring& _strRelativePath, const string& _strFuncName)
+void CGraphicsShader::CreateVertexShader(const wstring& _strRelativePath, const string& _strFuncName)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
@@ -50,7 +50,7 @@ void CGrapicsShader::CreateVertexShader(const wstring& _strRelativePath, const s
 	assert(!FAILED(hr));
 }
 
-void CGrapicsShader::CreateHullShader(const wstring& _strRelativePath, const string& _strFuncName)
+void CGraphicsShader::CreateHullShader(const wstring& _strRelativePath, const string& _strFuncName)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
@@ -75,7 +75,7 @@ void CGrapicsShader::CreateHullShader(const wstring& _strRelativePath, const str
 	assert(!FAILED(hr));
 }
 
-void CGrapicsShader::CreateDomainShader(const wstring& _strRelativePath, const string& _strFuncName)
+void CGraphicsShader::CreateDomainShader(const wstring& _strRelativePath, const string& _strFuncName)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
@@ -100,7 +100,7 @@ void CGrapicsShader::CreateDomainShader(const wstring& _strRelativePath, const s
 	assert(!FAILED(hr));
 }
 
-void CGrapicsShader::CreateGeometryShader(const wstring& _strRelativePath, const string& _strFuncName)
+void CGraphicsShader::CreateGeometryShader(const wstring& _strRelativePath, const string& _strFuncName)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
@@ -120,7 +120,7 @@ void CGrapicsShader::CreateGeometryShader(const wstring& _strRelativePath, const
 	assert(!FAILED(hr));
 }
 
-void CGrapicsShader::CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName)
+void CGraphicsShader::CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
@@ -140,7 +140,7 @@ void CGrapicsShader::CreatePixelShader(const wstring& _strRelativePath, const st
 	assert(!FAILED(hr));
 }
 
-void CGrapicsShader::UpdateData()
+void CGraphicsShader::UpdateData()
 {
 	// 다른 Shader들은 GS를 안쓰는데, 잔류해 있으면 문제가 되므로 모두다 Setting을 해준다.
 	// 해당 Shader가 GS를 사용하지 않을 경우 nullptr이 들어가 있기 때문에 문제가 발생하지 않는다.
