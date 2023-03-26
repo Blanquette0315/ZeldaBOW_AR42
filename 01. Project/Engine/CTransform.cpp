@@ -12,10 +12,17 @@ CTransform::CTransform()
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3(1.f, 0.f, 0.f);
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3(0.f, 1.f, 0.f);
 	m_vRelativeDir[(UINT)DIR::FRONT]	= Vec3(0.f, 0.f, 1.f);
+	m_BoundingBox.SetOwner(GetOwner());
 }
 
 CTransform::~CTransform()
 {
+}
+
+CGameObject* CTransform::CheckRay(tRay _ray)
+{
+	m_BoundingBox.SetOwner(GetOwner());
+	return m_BoundingBox.CheckRay(_ray);
 }
 
 void CTransform::begin()
@@ -37,17 +44,17 @@ void CTransform::finaltick()
 
 	Matrix matTrans = XMMatrixTranslation(m_vRelativePos.x, m_vRelativePos.y, m_vRelativePos.z);
 	
-	Matrix matRot = XMMatrixRotationX(m_vRelativeRotation.x);
-	matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
-	matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
-	m_matWorldRot = m_matWorld * matRot;
+	m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
+	m_matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
+	m_matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
+	m_matWorldRot = m_matWorld * m_matRot;
 
 	// 회전 행렬을 이용해서 현재 물체의 우, 상, 전 방향을 구해놓는다.
-	m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), matRot);
-	m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), matRot);
-	m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), matRot);
+	m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matRot);
+	m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
+	m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matRot);
 
-	m_matWorld = matScale * matRot * matTrans;
+	m_matWorld = matScale * m_matRot * matTrans;
 
 	// 만약 부모 오브젝트가 있다면
 	if (GetOwner()->GetParent())
@@ -108,6 +115,7 @@ void CTransform::finaltick()
 	m_vWorldDir[(UINT)DIR::FRONT].Normalize();
 
 	m_matWorldInv = XMMatrixInverse(nullptr, m_matWorld);
+	m_matRotInv = XMMatrixInverse(nullptr, m_matRot);
 }
 
 void CTransform::UpdateData()

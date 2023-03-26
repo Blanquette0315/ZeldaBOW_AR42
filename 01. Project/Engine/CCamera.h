@@ -8,6 +8,7 @@ class CCamera :
 {
 private:
     CFrustum    m_Frustum;
+    tRay        m_ray;
 
     Matrix      m_matView;      // ºä Çà·Ä
     Matrix      m_matViewInv;   // ºä ¿ªÇà·Ä
@@ -72,9 +73,12 @@ public:
 
     CFrustum& GetFrustum() { return m_Frustum; }
 
+    const tRay& GetRay() { return m_ray; }
+
 protected:
     void CalcViewMat();
     void CalcProjMat();
+    void CalRay();
 
 private:
     void SortObject();

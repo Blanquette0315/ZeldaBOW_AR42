@@ -184,6 +184,9 @@
     <Filter Include="Engine\03. Mgr\12. NavMgr">
       <UniqueIdentifier>{2675b8ef-b855-4846-ac4b-992684c7aae8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Component\01. Transform\BoundingBox">
+      <UniqueIdentifier>{b5e7fb0d-fc00-48d5-8739-057d9e361c2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -429,6 +432,9 @@
     <ClInclude Include="CNavMgr.h">
       <Filter>Engine\03. Mgr\12. NavMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CBoundingBox.h">
+      <Filter>Engine\06. Component\01. Transform\BoundingBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -652,6 +658,9 @@
     </ClCompile>
     <ClCompile Include="CNavMgr.cpp">
       <Filter>Engine\03. Mgr\12. NavMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoundingBox.cpp">
+      <Filter>Engine\06. Component\01. Transform\BoundingBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

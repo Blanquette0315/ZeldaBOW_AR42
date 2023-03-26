@@ -1,19 +1,6 @@
 #pragma once
 #include "CEntity.h"
 
-// 절도체 6면을 이루기 위해 필요한 면 정의
-enum class FACE_TYPE
-{
-    FT_NEAR,
-    FT_FAR,
-    FT_UP,
-    FT_DOWN,
-    FT_LEFT,
-    FT_RIGHT,
-
-    END,
-};
-
 class CCamera;
 
 class CFrustum :

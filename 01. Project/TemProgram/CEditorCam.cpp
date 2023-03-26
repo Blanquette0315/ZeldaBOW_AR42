@@ -7,5 +7,7 @@ void CEditorCam::finaltick()
 
 	CalcProjMat();
 
+	CalRay();
+
 	GetFrustum().finaltick();
 }

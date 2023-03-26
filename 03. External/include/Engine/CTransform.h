@@ -1,5 +1,6 @@
 #pragma once
 #include "CComponent.h"
+#include "CBoundingBox.h"
 
 class CTransform :
     public CComponent
@@ -14,7 +15,13 @@ private:
 
     Matrix  m_matWorld;
     Matrix  m_matWorldInv; // 월드의 역행렬
+
+    Matrix  m_matRot;
+    Matrix  m_matRotInv;
+
     Matrix  m_matWorldRot;
+
+    CBoundingBox m_BoundingBox;
 
     bool    m_bIgnParentScale;
 
@@ -51,7 +58,15 @@ public:
     bool GetIgnoreParentScale() { return m_bIgnParentScale; }
 
     const Matrix& GetWorldMat() { return m_matWorld; }
+    const Matrix& GetRotMat() { return m_matRot; }
     const Matrix& GetWorldRotMat() { return m_matWorldRot; }
+
+    const Matrix& GetWorldMatInv() { return m_matWorldInv; }
+    const Matrix& GetRotMatInv() { return m_matRotInv; }
+
+public:
+    CGameObject* CheckRay(tRay _ray);
+    static void ClearBoundingBoxDist() { CBoundingBox::ClearDist(); }
 
 public:
     virtual void begin() override;

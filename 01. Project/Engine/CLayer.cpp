@@ -40,7 +40,6 @@ void CLayer::finaltick()
 		if ((*iter)->IsDead())
 		{
 			iter = m_vecParent.erase(iter);
-			int i = 0;
 		}
 		else
 		{
@@ -70,7 +69,6 @@ void CLayer::AddGameObject(CGameObject* _pObject)
 		pObj->m_iLayerIdx = m_iLayerIdx;
 	}
 }
-
 
 void CLayer::DeregisterObject(CGameObject* _pObj)
 {
