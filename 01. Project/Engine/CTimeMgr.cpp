@@ -49,7 +49,7 @@ void CTimeMgr::tick()
 		m_fDeltaTime = (1.f / 240.f);
 	}*/
 
-	g_global.fDT = m_fDeltaTime;
+	g_global.fDT = FDT;
 	g_global.fAccTime += m_fDeltaTime;
 
 	m_fEffDeltaTime = m_fDeltaTime;

@@ -900,7 +900,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 
-	pShader->SetRSType(RS_TYPE::WIER_FRAME);
+	pShader->SetRSType(RS_TYPE::WIRE_FRAME);
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::LESS);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);

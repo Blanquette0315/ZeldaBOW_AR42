@@ -181,9 +181,9 @@ void GraphicsShaderUI::render_update()
 	}
 		break;
 
-	case RS_TYPE::WIER_FRAME:
+	case RS_TYPE::WIRE_FRAME:
 	{
-		sprintf_s(Rs_type, 50, "WIER_FRAME");
+		sprintf_s(Rs_type, 50, "WIRE_FRAME");
 	}
 		break;
 	}

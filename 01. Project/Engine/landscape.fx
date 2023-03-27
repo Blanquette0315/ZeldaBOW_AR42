@@ -37,7 +37,7 @@ struct VS_OUT
     float3 vLocalPos : POSITION;
     float2 vUV : TEXCOORD;
     
-    float3 vWorldPos : POSITION1;
+    float3 vViewPos : POSITION1;
 };
 
 
@@ -48,7 +48,7 @@ VS_OUT VS_LandScape(VS_IN _in)
     output.vLocalPos = _in.vPos;
     output.vUV = _in.vUV;
     
-    output.vWorldPos = mul(float4(_in.vPos, 1.f), g_matWorld).xyz;
+    output.vViewPos = mul(float4(_in.vPos, 1.f), g_matWV).xyz;
     
     return output;
 }
@@ -66,10 +66,10 @@ PatchTess PatchConstFunc(InputPatch<VS_OUT, 3> _patch, uint _patchId : SV_Primit
 {
     PatchTess factor = (PatchTess) 0.f;
         
-    float3 vUpDown = (_patch[1].vWorldPos + _patch[2].vWorldPos) / 2.f;
-    float3 vLeftRight = (_patch[0].vWorldPos + _patch[2].vWorldPos) / 2.f;
-    float3 vSlide = (_patch[0].vWorldPos + _patch[1].vWorldPos) / 2.f;
-    float3 vMid = (_patch[0].vWorldPos + _patch[1].vWorldPos + _patch[2].vWorldPos) / 3.f;
+    float3 vUpDown = (_patch[1].vViewPos + _patch[2].vViewPos) / 2.f;
+    float3 vLeftRight = (_patch[0].vViewPos + _patch[2].vViewPos) / 2.f;
+    float3 vSlide = (_patch[0].vViewPos + _patch[1].vViewPos) / 2.f;
+    float3 vMid = (_patch[0].vViewPos + _patch[1].vViewPos + _patch[2].vViewPos) / 3.f;
     
     factor.EdgeFactor[0] = pow(2, (int) GetTessFactor(vUpDown, 1, 4, 500.f, 2000.f));
     factor.EdgeFactor[1] = pow(2, (int) GetTessFactor(vLeftRight, 1, 4, 500.f, 2000.f));

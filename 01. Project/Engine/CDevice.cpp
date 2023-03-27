@@ -256,7 +256,7 @@ int CDevice::CreateRasterizerState()
 	desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
 
-	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::WIER_FRAME].GetAddressOf());
+	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::WIRE_FRAME].GetAddressOf());
 
 	return hr;
 }

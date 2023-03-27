@@ -63,7 +63,7 @@ enum class RS_TYPE
 	CULL_BACK,
 	CULL_FRONT,
 	CULL_NONE,
-	WIER_FRAME,
+	WIRE_FRAME,
 	END,
 };
 
