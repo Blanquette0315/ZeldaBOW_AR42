@@ -153,6 +153,9 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\ColliderUI">
       <UniqueIdentifier>{a5180044-3c4a-4a35-9d38-1f4cc2a42bcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. ImGui\ImGuizmo">
+      <UniqueIdentifier>{4a8385dd-684b-4c28-b9de-4e26081755e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -347,6 +350,9 @@
     <ClInclude Include="ExportToolUI.h">
       <Filter>03. UI\05. Tool</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>02. ImGui\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -523,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="ExportToolUI.cpp">
       <Filter>03. UI\05. Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>02. ImGui\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -43,6 +43,7 @@ public:
 	ComPtr<ID3D11BlendState> GetBlendState(BS_TYPE _eType) { return m_arrBS[(UINT)_eType]; }
 
 	Vec2 GetRenderResolution() { return m_vRenderResolution; }
+	const HWND& GetMainHWND() { return m_hWnd; }
 
 private:
 	int CreateSwapchain();

@@ -172,6 +172,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CScriptMgr.h" />
+    <ClInclude Include="CTestSCR.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="CNavTestSCR.h" />
     <ClInclude Include="pch.h" />
@@ -185,6 +186,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
     <ClCompile Include="CNavTestSCR.cpp" />
+    <ClCompile Include="CTestSCR.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

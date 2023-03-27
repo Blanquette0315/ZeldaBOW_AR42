@@ -199,6 +199,9 @@
     <Filter Include="Engine\06. Component\08. RigidBody">
       <UniqueIdentifier>{51b92768-9a8b-4730-b62c-1847216727f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Component\01. Transform\BoundingBox">
+      <UniqueIdentifier>{b5e7fb0d-fc00-48d5-8739-057d9e361c2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -456,6 +459,9 @@
     <ClInclude Include="CWeightMapShader.h">
       <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
     </ClInclude>
+    <ClInclude Include="CBoundingBox.h">
+      <Filter>Engine\06. Component\01. Transform\BoundingBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -679,6 +685,9 @@
     </ClCompile>
     <ClCompile Include="CNavMgr.cpp">
       <Filter>Engine\03. Mgr\12. NavMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoundingBox.cpp">
+      <Filter>Engine\06. Component\01. Transform\BoundingBox</Filter>
     </ClCompile>
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Engine\03. Mgr\13. SoundMgr</Filter>

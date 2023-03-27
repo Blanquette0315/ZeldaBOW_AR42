@@ -168,6 +168,7 @@
     <ClInclude Include="ExportToolUI.h" />
     <ClInclude Include="GraphicsShaderUI.h" />
     <ClInclude Include="DecalUI.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="InputTextUI.h" />
     <ClInclude Include="ColliderUI.h" />
     <ClInclude Include="ComboBoxUI.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="ExportToolUI.cpp" />
     <ClCompile Include="GraphicsShaderUI.cpp" />
     <ClCompile Include="DecalUI.cpp" />
+    <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="InputTextUI.cpp" />
     <ClCompile Include="ColliderUI.cpp" />
     <ClCompile Include="ComboBoxUI.cpp" />

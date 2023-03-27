@@ -132,9 +132,9 @@ void CGameObject::finaltick()
 		}
 	}
 
-	// Register Layer
-	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
-	pCurLevel->GetLayer(m_iLayerIdx)->RegisterObject(this);
+	//// Register Layer
+	//CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
+	//pCurLevel->GetLayer(m_iLayerIdx)->RegisterObject(this);
 }
 
 void CGameObject::render()

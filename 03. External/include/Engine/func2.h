@@ -1,10 +1,14 @@
 #pragma once
 
+class CGameObject;
 // ====================== JM ======================================
+
 wstring ConvertStrToWstr(const string& _str);
 string ConvertWstrToStr(const wstring& _wstr);
 vector<wstring> ConvertStrToWstrVec(const vector<string>& _vecStr);
 vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr);
+
+bool PickingObj(CGameObject*& _pObjOut);
 
 template <typename T1, typename T2>
 int GetMapIdx(const map<T1, T2>& _map, T2 _key);

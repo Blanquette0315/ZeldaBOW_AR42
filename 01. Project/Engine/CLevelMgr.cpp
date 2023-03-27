@@ -29,7 +29,7 @@ void CLevelMgr::progress()
 {
 	// 이제 tick이 안돌기 때문에 정지 상태에서 Layer들을 Clear해주지 않으면 계속 쌓이게 되는 문제가 발생한다.
 	m_pCurLevel->ClearLayer();
-
+	m_pCurLevel->RegisterObjects();
 	if (LEVEL_STATE::PLAY == m_pCurLevel->GetState())
 	{
 		m_pCurLevel->tick();

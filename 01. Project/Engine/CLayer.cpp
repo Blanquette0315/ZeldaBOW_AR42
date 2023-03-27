@@ -70,7 +70,6 @@ void CLayer::AddGameObject(CGameObject* _pObject)
 	}
 }
 
-
 void CLayer::DeregisterObject(CGameObject* _pObj)
 {
 	vector<CGameObject*>::iterator iter = m_vecParent.begin();

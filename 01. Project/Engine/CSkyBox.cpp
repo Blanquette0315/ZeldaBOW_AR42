@@ -43,11 +43,13 @@ void CSkyBox::render()
 
 	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
 	{
+		GetCurMaterial()->SetTexParam(TEX_CUBE_0, nullptr);
 		GetCurMaterial()->SetTexParam(TEX_0, m_pSkyBoxTex);
 	}
 
 	else if (m_eSkyBoxType == SKYBOX_TYPE::CUBE)
 	{
+		GetCurMaterial()->SetTexParam(TEX_0, nullptr);
 		GetCurMaterial()->SetTexParam(TEX_CUBE_0, m_pSkyBoxTex);
 	}
 

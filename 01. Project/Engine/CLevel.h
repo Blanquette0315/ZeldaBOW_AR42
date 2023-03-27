@@ -49,6 +49,10 @@ public:
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
     const wstring& GetRelativePath() { return m_strRelativePath; }
 
+public:
+    void RegisterObjects();
+
+public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
     virtual void LoadFromYAML(YAML::Node& _node) override;
 

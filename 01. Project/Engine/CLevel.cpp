@@ -3,6 +3,8 @@
 
 #include "CCollisionMgr.h"
 
+#include "CRenderMgr.h"
+
 #include "CLayer.h"
 #include "CGameObject.h"
 
@@ -31,10 +33,10 @@ void CLevel::begin()
 
 void CLevel::tick()
 {
-	for (UINT i = 0; i < MAX_LAYER; ++i)
-	{
-		m_arrLayer[i].clear();
-	}
+	//for (UINT i = 0; i < MAX_LAYER; ++i)
+	//{
+	//	m_arrLayer[i].clear();
+	//}
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
@@ -168,6 +170,31 @@ const vector<CGameObject*> CLevel::GetGameObjects()
 	}
 
 	return temVec;
+}
+
+void CLevel::RegisterObjects()
+{
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecParent = m_arrLayer[i].GetParentObject();
+		for (size_t j = 0; j < vecParent.size(); ++j)
+		{
+			m_arrLayer[vecParent[j]->GetLayerIdx()].RegisterObject(vecParent[j]);
+			if (vecParent[j]->Camera())
+			{
+				CRenderMgr::GetInst()->RegisterCamera(vecParent[j]->Camera());
+			}
+			const vector<CGameObject*>& vecChild = vecParent[j]->GetChildObject();
+			for (size_t k = 0; k < vecChild.size(); ++k)
+			{
+				m_arrLayer[vecChild[k]->GetLayerIdx()].RegisterObject(vecChild[k]);
+				if (vecChild[k]->Camera())
+				{
+					CRenderMgr::GetInst()->RegisterCamera(vecChild[k]->Camera());
+				}
+			}
+		}
+	}
 }
 
 void CLevel::SaveToYAML(YAML::Emitter& _emitter)

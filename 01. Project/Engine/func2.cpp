@@ -357,6 +357,30 @@ vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr)
 	return vecStr;
 }
 
+#include "CCamera.h"
+
+bool PickingObj(CGameObject*& _pObjOut)
+{
+	const vector<CGameObject*>& vecObj = CFrustum::GetInFrustumObjs();
+
+	// Clear static dist member to find nearest obj.
+	CTransform::ClearBoundingBoxDist();
+	
+	for (size_t i = 0; i < vecObj.size(); ++i)
+	{
+		CGameObject* pTmp = nullptr;
+		pTmp = vecObj[i]->Transform()->CheckRay(CRenderMgr::GetInst()->GetMainCam()->GetRay());
+		if (pTmp)
+		{
+			_pObjOut = pTmp;
+		}
+	}
+	if (_pObjOut)
+		return true;
+	else
+		return false;
+}
+
 void QuaternionToEuler(Vec4 _vQRot, Vec3& _vERot)
 {
 	// roll (x-axis rotation)

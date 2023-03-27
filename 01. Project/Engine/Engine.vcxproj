@@ -177,6 +177,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="..\..\03. External\include\DirectXTex\DirectXTex.h" />
     <ClInclude Include="CAnimation2D.h" />
     <ClInclude Include="CAnimator2D.h" />
+    <ClInclude Include="CBoundingBox.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionMgr.h" />
@@ -263,6 +264,7 @@ call EngineCopy.bat</Command>
   <ItemGroup>
     <ClCompile Include="CAnimation2D.cpp" />
     <ClCompile Include="CAnimator2D.cpp" />
+    <ClCompile Include="CBoundingBox.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionMgr.cpp" />

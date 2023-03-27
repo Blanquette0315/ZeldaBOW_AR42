@@ -8,21 +8,22 @@ class CCamera :
 {
 private:
     CFrustum    m_Frustum;
+    tRay        m_ray;
 
-    Matrix      m_matView;      // ºä Çà·Ä
-    Matrix      m_matViewInv;   // ºä ¿ªÇà·Ä
-    Matrix      m_matProj;      // Åõ¿µ Çà·Ä
-    Matrix      m_matProjInv;   // Åõ¿µ ¿ªÇà·Ä
+    Matrix      m_matView;      // ï¿½ï¿½ ï¿½ï¿½ï¿½
+    Matrix      m_matViewInv;   // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+    Matrix      m_matProj;      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    Matrix      m_matProjInv;   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    PROJ_TYPE   m_eProjType;    // Åõ¿µ ¹æ½Ä
-    float       m_fAspectRatio; // Á¾È¾ºñ
+    PROJ_TYPE   m_eProjType;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    float       m_fAspectRatio; // ï¿½ï¿½È¾ï¿½ï¿½
 
     float       m_fNear;
-    float       m_fFar;         // Ä«¸Þ¶ó ÃÖ´ë ½Ã¾ß
-    float       m_FOV;          // ½Ã¾ß°¢
-    float       m_fScale;       // Åõ¿µ ¹üÀ§ ¹èÀ²
+    float       m_fFar;         // Ä«ï¿½Þ¶ï¿½ ï¿½Ö´ï¿½ ï¿½Ã¾ï¿½
+    float       m_FOV;          // ï¿½Ã¾ß°ï¿½
+    float       m_fScale;       // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    tRay                    m_ray;      // ¸¶¿ì½º ¹æÇâÀ» ÇâÇÏ´Â Á÷¼±
+    tRay                    m_ray;      // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     UINT        m_iLayerMask;
 
@@ -79,7 +80,7 @@ public:
 protected:
     void CalcViewMat();
     void CalcProjMat();
-    void CalRay();  // ¸¶¿ì½º ¹æÇâÀ¸·Î ±¤¼± ¿¬»ê
+    void CalRay();
 
 private:
     void SortObject();

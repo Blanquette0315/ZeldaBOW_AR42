@@ -1,24 +1,14 @@
 #pragma once
 #include "CEntity.h"
 
-// 절도체 6면을 이루기 위해 필요한 면 정의
-enum class FACE_TYPE
-{
-    FT_NEAR,
-    FT_FAR,
-    FT_UP,
-    FT_DOWN,
-    FT_LEFT,
-    FT_RIGHT,
-
-    END,
-};
-
 class CCamera;
 
 class CFrustum :
     public CEntity
 {
+private:
+    static vector<CGameObject*> m_pInFrustumObj;
+
 private:
     CCamera*    m_pOwnerCam;
 
@@ -35,6 +25,9 @@ public:
 
     Matrix& GetMatInv() { return m_matInv; }
 
+    static const vector<CGameObject*>& GetInFrustumObjs() { return m_pInFrustumObj; }
+    static void PushBackInFrustumObjs(CGameObject* _pObj) { m_pInFrustumObj.push_back(_pObj); }
+    static void ClearInFrustumObjs() { m_pInFrustumObj.clear(); }
 public:
 
     CLONE(CFrustum);

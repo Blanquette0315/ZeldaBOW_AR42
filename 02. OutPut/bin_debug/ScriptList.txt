@@ -2,4 +2,4 @@ CMissileScript
 CMonsterScript
 CNavTestSCR
 CPlayerScript
-NavTestSCR
+CTestSCR

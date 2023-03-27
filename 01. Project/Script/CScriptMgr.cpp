@@ -3,8 +3,9 @@
 
 #include "CMissileScript.h"
 #include "CMonsterScript.h"
-#include "CPlayerScript.h"
 #include "CNavTestSCR.h"
+#include "CPlayerScript.h"
+#include "CTestSCR.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
@@ -12,6 +13,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CMonsterScript");
 	_vec.push_back(L"CNavTestSCR");
 	_vec.push_back(L"CPlayerScript");
+	_vec.push_back(L"CTestSCR");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
@@ -24,6 +26,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CNavTestSCR;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if (L"CTestSCR" == _strScriptName)
+		return new CTestSCR;
 	return nullptr;
 }
 
@@ -42,6 +46,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
+		break;
+	case (UINT)SCRIPT_TYPE::TESTSCR:
+		return new CTestSCR;
 		break;
 	}
 	return nullptr;
@@ -66,6 +73,11 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 	case SCRIPT_TYPE::PLAYERSCRIPT:
 		return L"CPlayerScript";
 		break;
+
+	case SCRIPT_TYPE::TESTSCR:
+		return L"CTestSCR";
+		break;
+
 	}
 	return nullptr;
 }
