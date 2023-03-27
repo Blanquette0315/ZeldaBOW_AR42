@@ -1,12 +1,5 @@
 #pragma once
 
-// ray
-struct tRay
-{
-	Vec3 vStart;
-	Vec3 vDir;
-};
-
 // 폰트 사용을 위한 구조체
 struct tFont
 {

@@ -10,20 +10,18 @@ private:
     CFrustum    m_Frustum;
     tRay        m_ray;
 
-    Matrix      m_matView;      // �� ���
-    Matrix      m_matViewInv;   // �� �����
-    Matrix      m_matProj;      // ���� ���
-    Matrix      m_matProjInv;   // ���� �����
+    Matrix      m_matView;     
+    Matrix      m_matViewInv;  
+    Matrix      m_matProj;     
+    Matrix      m_matProjInv;  
 
-    PROJ_TYPE   m_eProjType;    // ���� ���
-    float       m_fAspectRatio; // ��Ⱦ��
+    PROJ_TYPE   m_eProjType;   
+    float       m_fAspectRatio;
 
     float       m_fNear;
-    float       m_fFar;         // ī�޶� �ִ� �þ�
-    float       m_FOV;          // �þ߰�
-    float       m_fScale;       // ���� ���� ����
-
-    tRay                    m_ray;      // ���콺 ������ ���ϴ� ����
+    float       m_fFar;        
+    float       m_FOV;         
+    float       m_fScale;      
 
     UINT        m_iLayerMask;
 

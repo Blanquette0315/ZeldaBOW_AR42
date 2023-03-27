@@ -23,8 +23,6 @@ public:
     void Create(Ptr<CTexture>(&_arrTex)[8], Vec4 (&arrClear)[8], Ptr<CTexture> _pDesTex);
     const D3D11_VIEWPORT& GetViewPort() { return m_tViewPort; }
     void OMSet(); // 해당 MRT가 지닌 랜더 타겟을 랜더 타겟으로 지정하는 함수이다.
-
-    const D3D11_VIEWPORT& GetViewPort() { return m_tViewPort; }
     void Clear();
 
     CLONE_DUMMY(CMRT);
