@@ -18,6 +18,13 @@ private:
     Ptr<CPrefab> m_Prefab;
     Ptr<CPrefab> m_Prefab1;
 
+    PhysRayCast* m_pWallRay;
+
+    bool    m_bGround;
+    bool    m_bJump;
+    bool    m_bKeyRelease;
+    bool    m_bWall;
+
 
 public:
     virtual void begin() override;
