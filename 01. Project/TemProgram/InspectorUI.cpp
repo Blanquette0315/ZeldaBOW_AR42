@@ -31,6 +31,8 @@
 #include "GraphicsShaderUI.h"
 #include "SoundUI.h"
 
+#include <Engine/CDevice.h>
+
 InspectorUI::InspectorUI()
 	: UI("Inspector")
 	, m_TargetObj(nullptr)
@@ -43,7 +45,7 @@ InspectorUI::InspectorUI()
 {
 	// ComponentUI
 	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM] = new TransformUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetSize(ImVec2(0.f, 120.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetSize(ImVec2(0.f, 210.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER] = new MeshRenderUI;
@@ -143,6 +145,21 @@ InspectorUI::~InspectorUI()
 
 void InspectorUI::update()
 {
+	if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+	{
+		if (GetActiveWindow() == CDevice::GetInst()->GetMainHWND())
+		{
+			if (!ImGui::IsWindowFocused())
+			{
+				CGameObject* pObjPicked = nullptr;
+				if (PickingObj(pObjPicked))
+				{
+					SetTargetObject(pObjPicked);
+				}
+			}
+		}
+	}
+
 	if (!IsValid(m_TargetObj))
 	{
 		SetTargetObject(nullptr);

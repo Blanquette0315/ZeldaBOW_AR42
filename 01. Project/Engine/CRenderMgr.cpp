@@ -83,6 +83,8 @@ void CRenderMgr::render()
 	// ㄴ 게임 모드일 때는 게임내의 카메라가, 에디터 모드일 때는 에디터용 카메라로 랜더링이 이루어져야 한다.
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
 
+	// clear InFrustumObj vector before sort objs.
+	CFrustum::ClearInFrustumObjs();
 	if (LEVEL_STATE::PLAY == pCurLevel->GetState())
 	{
 		render_game();

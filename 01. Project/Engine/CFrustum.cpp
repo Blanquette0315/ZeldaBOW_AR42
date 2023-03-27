@@ -3,6 +3,10 @@
 
 #include "CCamera.h"
 
+#include "CGameObject.h"
+
+vector<CGameObject*> CFrustum::m_pInFrustumObj = {};
+
 CFrustum::CFrustum(CCamera* _OwnerCam)
 	: m_pOwnerCam(_OwnerCam)
 {

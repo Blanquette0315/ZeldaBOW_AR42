@@ -245,8 +245,12 @@ void CCamera::SortObject()
 				{
 					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
 					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 200.f))
+					{
 						continue;
+					}
 				}
+				// pushback for picking
+				CFrustum::PushBackInFrustumObjs(vecObj[j]);
 
 				Ptr<CGrapicsShader> pShader = pRenderCom->GetCurMaterial()->GetShader();
 

@@ -32,20 +32,26 @@ void CTestSCR::tick()
 
 	if (KEY_TAP(KEY::RBTN))
 	{
-		CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
-		const vector<CGameObject*>& vecObj = pLevel->GetLayer(0)->GetParentObject();
-		CGameObject* pObjOut = nullptr;
-		CTransform::ClearBoundingBoxDist();
-		
-		for (size_t i = 0; i < vecObj.size(); ++i)
-		{
-			CGameObject* pTmp = nullptr;
-			pTmp = vecObj[i]->Transform()->CheckRay(CRenderMgr::GetInst()->GetMainCam()->GetRay());
-			if (pTmp)
-			{
-				pObjOut = pTmp;
-			}
-		}
+		//CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
+		//const vector<CGameObject*>& vecObj = pLevel->GetLayer(0)->GetParentObject();
+		//CGameObject* pObjOut = nullptr;
+		//CTransform::ClearBoundingBoxDist();
+		//
+		//for (size_t i = 0; i < vecObj.size(); ++i)
+		//{
+		//	CGameObject* pTmp = nullptr;
+		//	pTmp = vecObj[i]->Transform()->CheckRay(CRenderMgr::GetInst()->GetMainCam()->GetRay());
+		//	if (pTmp)
+		//	{
+		//		pObjOut = pTmp;
+		//	}
+		//}
+		//CGameObject* pTmp = nullptr;
+
+		//if (PickingObj(pTmp))
+		//{
+		//	int test = 1;
+		//}
 	}
 }
 

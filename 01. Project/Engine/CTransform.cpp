@@ -40,9 +40,9 @@ void CTransform::finaltick()
 	// ㄴ=> 월드 행렬을 만들어 냄
 	m_matWorld = XMMatrixIdentity();
 
-	Matrix matScale = XMMatrixScaling(m_vRelativeScale.x, m_vRelativeScale.y, m_vRelativeScale.z);
+	m_matScale = XMMatrixScaling(m_vRelativeScale.x, m_vRelativeScale.y, m_vRelativeScale.z);
 
-	Matrix matTrans = XMMatrixTranslation(m_vRelativePos.x, m_vRelativePos.y, m_vRelativePos.z);
+	m_matTrans = XMMatrixTranslation(m_vRelativePos.x, m_vRelativePos.y, m_vRelativePos.z);
 	
 	m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
 	m_matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
@@ -54,7 +54,8 @@ void CTransform::finaltick()
 	m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
 	m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matRot);
 
-	m_matWorld = matScale * m_matRot * matTrans;
+	m_matWorld = m_matScale * m_matRot * m_matTrans;
+	m_matLocal = m_matWorld;
 
 	// 만약 부모 오브젝트가 있다면
 	if (GetOwner()->GetParent())
@@ -80,19 +81,12 @@ void CTransform::finaltick()
 				
 				if(pParent->Transform()->m_bIgnParentScale)
 				{
-					Matrix matParentScaleInv = XMMatrixScaling(vParentScale.x, vParentScale.y, vParentScale.z);
-					matParentScaleInv = XMMatrixInverse(nullptr, matParentScaleInv);
-					m_matWorld = m_matWorld * matParentScaleInv * pParent->Transform()->GetWorldMat();
+					m_matWorld = m_matWorld * pParent->Transform()->m_matScaleInv * pParent->Transform()->m_matWorld;
 					pParent = nullptr;
 				}
 				else
 				{
-					Matrix matParentRot = XMMatrixRotationX(vParentRot.x);
-					matParentRot *= XMMatrixRotationY(vParentRot.y);
-					matParentRot *= XMMatrixRotationZ(vParentRot.z);
-					Matrix matParentTrans = XMMatrixTranslation(vParentPos.x, vParentPos.y, vParentPos.z);
-
-					m_matWorld = m_matWorld * matParentRot * matParentTrans;
+					m_matWorld = m_matWorld * pParent->Transform()->m_matRot * pParent->Transform()->m_matTrans;
 					pParent = pParent->GetParent();
 				}
 			}
@@ -101,7 +95,7 @@ void CTransform::finaltick()
 		// 부모 오브젝트의 크기를 무시하지 않기로 한 경우
 		else
 		{
-			m_matWorld *= GetOwner()->GetParent()->Transform()->GetWorldMat();
+			m_matWorld *= GetOwner()->GetParent()->Transform()->m_matWorld;
 		}
 	}
 	// WorldDir 구하기
@@ -115,7 +109,10 @@ void CTransform::finaltick()
 	m_vWorldDir[(UINT)DIR::FRONT].Normalize();
 
 	m_matWorldInv = XMMatrixInverse(nullptr, m_matWorld);
+
+	m_matScaleInv = XMMatrixInverse(nullptr, m_matScale);
 	m_matRotInv = XMMatrixInverse(nullptr, m_matRot);
+	m_matTransInv = XMMatrixInverse(nullptr, m_matTrans);
 }
 
 void CTransform::UpdateData()
@@ -147,24 +144,19 @@ void CTransform::SetWorldPos(Vec3 _vPos)
 	{
 		while (pParent)
 		{
-			Vec3 vParentRot = pParent->Transform()->GetRelativeRotation();
-			Vec3 vParentPos = pParent->Transform()->GetRelativePos();
+			const Matrix& vParentTransMatInv = pParent->Transform()->m_matTransInv;
+			const Matrix& vParentRotMatInv = pParent->Transform()->m_matRotInv;
 
-			Matrix matParentRot = XMMatrixRotationX(vParentRot.x);
-			matParentRot *= XMMatrixRotationY(vParentRot.y);
-			matParentRot *= XMMatrixRotationZ(vParentRot.z);
-			Matrix matParentTrans = XMMatrixTranslation(vParentPos.x, vParentPos.y, vParentPos.z);
-
-			Matrix matInv = XMMatrixInverse(nullptr, matParentRot * matParentTrans);
+			Matrix matInv = vParentTransMatInv * vParentRotMatInv;
 			matWorldCopy *= matInv;
+			pParent = pParent->GetParent();
 		}
 	}
 	else
 	{
 		if (pParent)
 		{
-			Matrix matInv = XMMatrixInverse(nullptr, pParent->Transform()->GetWorldMat());
-			matWorldCopy *= matInv;
+			matWorldCopy *= pParent->Transform()->m_matWorldInv;
 		}
 	}
 
@@ -178,19 +170,10 @@ void CTransform::SetWorldScale(Vec3 _vScale)
 	CGameObject* pOwner = GetOwner();
 	CGameObject* pParent = pOwner->GetParent();
 
-	if (!m_bIgnParentScale)
+	if (!m_bIgnParentScale && pParent)
 	{
-		Vec3 vSumScale = Vec3(1.f, 1.f, 1.f);
-		while (pParent)
-		{
-			vSumScale *= pParent->Transform()->GetRelativeScale();
-
-			if (pParent->Transform()->GetIgnoreParentScale())
-				break;
-
-			pParent = pParent->GetParent();
-		}
-		SetRelativeScale(_vScale / vSumScale);
+		_vScale = XMVector3TransformNormal(_vScale, pParent->Transform()->GetWorldMatInv());
+		SetRelativeScale(_vScale);
 	}
 	else
 	{
@@ -203,36 +186,21 @@ void CTransform::SetWorldRotation(Vec3 _vRot)
 	CGameObject* pOwner = GetOwner();
 	CGameObject* pParent = pOwner->GetParent();
 
-	Vec3 vSumRot = Vec3(0.f, 0.f, 0.f);
+	Matrix tmp = XMMatrixIdentity();
 	while (pParent)
 	{
-		vSumRot += pParent->Transform()->GetRelativeRotation();
+		tmp *= pParent->Transform()->GetWorldRotMat();
 		pParent = pParent->GetParent();
 	}
-	SetRelativeRotation(_vRot - vSumRot);
+	XMVector3TransformNormal(_vRot, XMMatrixInverse(nullptr, tmp));
+	SetRelativeRotation(_vRot);
 }
 
 Vec3 CTransform::GetWorldScale()
 {
-	// 위쪽으로 모든 부모의 크기값을 누적해서 역행렬을 만들어 준다.
-	Vec3 vWorldScale = m_vRelativeScale;
-
-	if (m_bIgnParentScale)
-		return vWorldScale;
-
-	CGameObject* pParent = GetOwner()->GetParent();
-	while (pParent)
-	{
-		vWorldScale *= pParent->Transform()->GetRelativeScale();
-
-		// 부모 오브젝트도 그 위로 크기를 무시하기로 한 경우 크기를 더 이상 누적할 필요 없다.
-		if (pParent->Transform()->m_bIgnParentScale)
-			pParent = nullptr;
-		else
-			pParent = pParent->GetParent();
-	}
-
-	return vWorldScale;
+	XMVECTOR vScale;
+	XMMatrixDecompose(&vScale, nullptr, nullptr, m_matWorld);
+	return Vec3(vScale);
 }
 
 RECT CTransform::GetRectCoord()
@@ -246,6 +214,15 @@ RECT CTransform::GetRectCoord()
 	Temp.bottom = (LONG)(vWorldPos.y - (m_vRelativeScale.y * 0.5f));
 
 	return Temp;
+}
+
+Vec3 CTransform::GetWorldRotation()
+{
+	XMVECTOR vQuat;
+	Vec3 vEuler;
+	XMMatrixDecompose(nullptr, &vQuat, nullptr, m_matWorld);
+	QuaternionToEuler(vQuat, vEuler);
+	return vEuler;
 }
 
 void CTransform::SaveToYAML(YAML::Emitter& _emitter)

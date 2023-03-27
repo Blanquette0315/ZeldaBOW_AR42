@@ -8,7 +8,7 @@
 #include "UI.h"
 #include "ParamUI.h"
 #include "CommonUI.h"
-
+#include "ImGuizmo.h"
 
 #include "InspectorUI.h"
 #include "ContentUI.h"
@@ -77,7 +77,6 @@ void CImGuiMgr::init(HWND _hWnd)
 
     // 파일 변경감지 핸들 등록
     m_NotifyHandle = FindFirstChangeNotification(CPathMgr::GetInst()->GetContentPath(), true, FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME);
-
 }
 
 void CImGuiMgr::progress()
@@ -85,7 +84,6 @@ void CImGuiMgr::progress()
     // 알림 확인
     ObserveContent();
 #ifdef _DEBUG
-
     // ImGui가 그려지기 위해 필요한 3가지 함수들
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -129,7 +127,7 @@ void CImGuiMgr::progress()
     }
 #else
 #endif
-}
+} 
 
 void CImGuiMgr::ObserveContent()
 {

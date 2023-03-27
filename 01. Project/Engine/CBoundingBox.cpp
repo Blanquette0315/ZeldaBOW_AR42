@@ -35,10 +35,6 @@ CBoundingBox::~CBoundingBox()
 
 CGameObject* CBoundingBox::CheckRay(tRay _ray)
 {
-	// picking bool should be added
-	if (m_pOwner->Camera())
-		return nullptr;
-
 	CTransform* pTransform = m_pOwner->Transform();
 
 	// Set CenterPos
@@ -58,7 +54,8 @@ CGameObject* CBoundingBox::CheckRay(tRay _ray)
 	//vRayDir = XMVector3TransformNormal(vRayDir, pTransform->GetRotMatInv());
 
 	vRayPos = XMVector3TransformCoord(vRayPos, pTransform->GetWorldMatInv());
-	vRayDir = XMVector3TransformNormal(vRayDir, pTransform->GetRotMatInv());
+	vRayDir = XMVector3TransformNormal(vRayDir, pTransform->GetWorldMatInv());
+	vRayDir.Normalize();
 
 	// Set 8 Point
 	for (int z = -1; z < 2; z+=2)
@@ -105,9 +102,10 @@ CGameObject* CBoundingBox::CheckRay(tRay _ray)
 			vInsecPoint.y >= -m_fExtent[(UINT)DIR::UP] && vInsecPoint.y <= m_fExtent[(UINT)DIR::UP] &&
 			vInsecPoint.z >= -m_fExtent[(UINT)DIR::FRONT] && vInsecPoint.z <= m_fExtent[(UINT)DIR::FRONT])
 		{
-			float fDist = (vInsecPoint - vRayPos).Length();
+			float fDist = (m_vCenterPos - _ray.vStart).Length();
 			if (fDist < m_fDist)
 			{
+				m_fDist = fDist;
 				return m_pOwner;
 			}
 			else

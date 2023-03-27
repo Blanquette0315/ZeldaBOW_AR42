@@ -7,6 +7,9 @@ class CFrustum :
     public CEntity
 {
 private:
+    static vector<CGameObject*> m_pInFrustumObj;
+
+private:
     CCamera*    m_pOwnerCam;
 
     Matrix      m_matInv;
@@ -22,6 +25,9 @@ public:
 
     Matrix& GetMatInv() { return m_matInv; }
 
+    static const vector<CGameObject*>& GetInFrustumObjs() { return m_pInFrustumObj; }
+    static void PushBackInFrustumObjs(CGameObject* _pObj) { m_pInFrustumObj.push_back(_pObj); }
+    static void ClearInFrustumObjs() { m_pInFrustumObj.clear(); }
 public:
 
     CLONE(CFrustum);
