@@ -27,15 +27,18 @@ void CSaveLoadMgr::init()
 	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;
 }
 
-void CSaveLoadMgr::SaveLevel(CLevel* _Level)
+void CSaveLoadMgr::SaveLevel(CLevel* _Level, const wstring& _customName)
 {
 	assert(_Level);
 
 	// °æ·Î
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-
+	
 	wstring RelativePath = L"level\\";
-	RelativePath += _Level->GetName();
+	if (_customName.empty())
+		RelativePath += _Level->GetName();
+	else
+		RelativePath += _customName;
 	RelativePath += L".lv";
 	strFilePath += RelativePath;
 

@@ -62,7 +62,7 @@ void CLandScape::CreateMesh()
 		}
 	}
 
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	pMesh->SetKey(L"LandscapeMesh");
 
