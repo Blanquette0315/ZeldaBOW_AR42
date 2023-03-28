@@ -186,20 +186,23 @@ void CTransform::SetWorldRotation(Vec3 _vRot)
 	CGameObject* pOwner = GetOwner();
 	CGameObject* pParent = pOwner->GetParent();
 
-	Matrix tmp = XMMatrixIdentity();
-	while (pParent)
+	if (!m_bIgnParentScale && pParent)
 	{
-		tmp *= pParent->Transform()->GetWorldRotMat();
-		pParent = pParent->GetParent();
+		_vRot = XMVector3TransformNormal(_vRot, pParent->Transform()->GetWorldMatInv());
+		SetRelativeRotation(_vRot);
 	}
-	XMVector3TransformNormal(_vRot, XMMatrixInverse(nullptr, tmp));
-	SetRelativeRotation(_vRot);
+	else
+	{
+		SetRelativeRotation(_vRot);
+	}
 }
 
 Vec3 CTransform::GetWorldScale()
 {
 	XMVECTOR vScale;
-	XMMatrixDecompose(&vScale, nullptr, nullptr, m_matWorld);
+	XMVECTOR vDummy;
+	XMVECTOR vDummy2;
+	XMMatrixDecompose(&vScale, &vDummy, &vDummy2, m_matWorld);
 	return Vec3(vScale);
 }
 
@@ -219,8 +222,10 @@ RECT CTransform::GetRectCoord()
 Vec3 CTransform::GetWorldRotation()
 {
 	XMVECTOR vQuat;
+	XMVECTOR vDummy;
+	XMVECTOR vDummy2;
 	Vec3 vEuler;
-	XMMatrixDecompose(nullptr, &vQuat, nullptr, m_matWorld);
+	XMMatrixDecompose(&vDummy, &vQuat, &vDummy2, m_matWorld);
 	QuaternionToEuler(vQuat, vEuler);
 	return vEuler;
 }

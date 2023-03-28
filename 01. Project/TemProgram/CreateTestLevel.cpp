@@ -20,6 +20,9 @@
 
 void CreateTestLevel()
 {
+	//CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
+	//ChangeLevel(Level);
+	//return;
 	//#ifdef _DEBUG
 	//	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test Level2.lv");
 	//	

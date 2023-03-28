@@ -10,6 +10,9 @@
 #include "CKeyMgr.h"
 #include "CResMgr.h"
 
+#include "CExportMgr.h"
+#include "CKeyMgr.h"
+
 CLandScape::CLandScape()
 	: CRenderComponent(COMPONENT_TYPE::LANDSCAPE)
 	, m_iXFaceCount(1)

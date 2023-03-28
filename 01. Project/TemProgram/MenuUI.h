@@ -5,6 +5,7 @@ class MenuUI :
     public UI
 {
 private:
+    LEVEL_STATE m_ePrevState;
 
 public:
     virtual void render() override;

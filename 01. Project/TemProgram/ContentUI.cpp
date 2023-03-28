@@ -137,17 +137,14 @@ void ContentUI::ReloadContent()
 	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	Inspector->SetTargetLevel(nullptr);
 
-	// Content ������ �ִ� ��� ���ҽ����� �˻� �� �ε�
+	// Content 
 	wstring strFolderPath = CPathMgr::GetInst()->GetContentPath();
 	FindContentFileName(strFolderPath);
 
-	// ���ϸ��� Ȯ���ڸ� Ȯ�� �� �˸��� ���ҽ��� �������� �˾Ƴ���.
 	for (size_t i = 0; i < m_vecContentName.size(); ++i)
 	{
 		RES_TYPE resType = GetResTypeByExt(m_vecContentName[i]);
 
-		// ���ҽ� Ÿ�Կ� �ش��ϴ� ���ҽ��� ��ηκ��� �ε�
-		// End�� ��ȯ�Ǿ��ٴ� �Ҹ��� �� �� ���� Ȯ���ڶ�� �ǹ̷� �ѱ��.
 		if (RES_TYPE::END == resType)
 			continue;
 
@@ -166,24 +163,28 @@ void ContentUI::ReloadContent()
 
 		case RES_TYPE::MESH:
 			break;
+
 		case RES_TYPE::TEXTURE:
 			CResMgr::GetInst()->Load<CTexture>(m_vecContentName[i], m_vecContentName[i]);
 			break;
+
 		case RES_TYPE::SOUND:
 			CResMgr::GetInst()->Load<CSound>(m_vecContentName[i], m_vecContentName[i]);
 			break;
 
 		case RES_TYPE::LEVEL:
 		{
-			// vector�� ��� �߰��Ǵ��� Ȯ���غ��� ��.
-			m_vecLevelName.push_back(m_vecContentName[i]);
-			ResetContent();
+			// if the file was not tmpSave
+			if (m_vecContentName[i].rfind(L"tmpSave.lv") == -1)
+			{
+				m_vecLevelName.push_back(m_vecContentName[i]);
+				ResetContent();
+			}
 		}
 			break;
 		}
 	}
 
-	// �ε��� ���ҽ��� ���� ���Ϸ� �����ϴ��� Ȯ��
 	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i)
 	{
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource((RES_TYPE)i);
@@ -191,13 +192,11 @@ void ContentUI::ReloadContent()
 		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
 		for (iter; iter != mapRes.end(); ++iter)
 		{
-			// Engine Res Ÿ���̸� Ȯ������ �ʴ´�.
 			if (iter->second->IsEngineRes())
 			{
 				continue;
 			}
 
-			// ���� ���ҽ��� �ƴѵ�, ��ΰ� ���ٴ� ���� ���� �ȵǱ� ������ �ߴ��� �ɾ��ش�.
 			wstring strRelativePath = iter->second->GetRelativePath();
 			assert(!strRelativePath.empty());
 

@@ -80,7 +80,6 @@ CGameObject* CBoundingBox::CheckRay(tRay _ray)
 	m_Plane[(UINT)FACE_TYPE::FT_LEFT] = XMPlaneFromPoints(m_Point[4], m_Point[6], m_Point[2]);
 	m_Plane[(UINT)FACE_TYPE::FT_RIGHT] = XMPlaneFromPoints(m_Point[3], m_Point[7], m_Point[5]);
 	
-	// back direction of ray should be removed.
 
 	for (UINT i = 0; i < (UINT)FACE_TYPE::END; ++i)
 	{

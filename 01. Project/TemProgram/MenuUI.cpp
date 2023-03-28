@@ -16,6 +16,7 @@
 
 MenuUI::MenuUI()
 	: UI("##MenuUI")
+    , m_ePrevState(LEVEL_STATE::STOP)
 {
 }
 
@@ -84,9 +85,6 @@ void MenuUI::render()
                 ImGui::EndMenu();
             }
 
-
-
-
             ImGui::EndMenu();
         }
 
@@ -108,6 +106,14 @@ void MenuUI::render()
                 evn.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
                 evn.wParam = (DWORD_PTR)LEVEL_STATE::PLAY;
                 CEventMgr::GetInst()->AddEvent(evn);
+
+                if (m_ePrevState == LEVEL_STATE::STOP)
+                {
+                    CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
+                    CSaveLoadMgr::SaveLevel(pCurLevel, L"tmpSave");
+                }
+
+                m_ePrevState = LEVEL_STATE::PLAY;
             }
 
             if (ImGui::MenuItem("Pause", nullptr, nullptr, PauseEnable))
@@ -120,10 +126,14 @@ void MenuUI::render()
 
             if (ImGui::MenuItem("Stop", nullptr, nullptr, StopEnable))
             {
-                tEvent evn = {};
-                evn.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
-                evn.wParam = (DWORD_PTR)LEVEL_STATE::STOP;
-                CEventMgr::GetInst()->AddEvent(evn);
+                //tEvent evn = {};
+                //evn.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
+                //evn.wParam = (DWORD_PTR)LEVEL_STATE::STOP;
+                //CEventMgr::GetInst()->AddEvent(evn);
+
+                CLevel* pChangeLevel = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\tmpSave.lv");
+                ChangeLevel(pChangeLevel);
+                m_ePrevState = LEVEL_STATE::STOP;
             }
 
             ImGui::EndMenu();
