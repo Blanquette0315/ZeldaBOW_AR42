@@ -108,6 +108,9 @@ public:
     bool IsDead() { return m_bDead; }
     void Destroy();
 
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
+
     CLONE(CGameObject);
 
 public:

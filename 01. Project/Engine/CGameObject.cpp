@@ -395,3 +395,20 @@ void CGameObject::Destroy()
 
 	CEventMgr::GetInst()->AddEvent(eve);
 }
+
+void CGameObject::SaveToYAML(YAML::Emitter& _emitter)
+{
+	CEntity::SaveToYAML(_emitter);
+
+	_emitter << YAML::Key << "FrustumCulling";
+	_emitter << YAML::Value << m_bFrustumCul;
+	_emitter << YAML::Key << "Rendering";
+	_emitter << YAML::Value << m_bRender;
+}
+
+void CGameObject::LoadFromYAML(YAML::Node& _node)
+{
+	CEntity::LoadFromYAML(_node);
+	SAFE_LOAD_FROM_YAML(bool, m_bFrustumCul, _node["FrustumCulling"]);
+	SAFE_LOAD_FROM_YAML(bool, m_bRender, _node["Rendering"]);
+}

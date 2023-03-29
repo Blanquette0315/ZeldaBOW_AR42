@@ -102,14 +102,14 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     
     if (g_int_3 > 0)
     {
-        int2 iUV = vDepthMapUV.xy * int2(4096, 4096);
+        int2 iUV = vDepthMapUV.xy * int2(16384, 16384);
 
         for (int j = 0; j < 5; j++)
         {
             for (int i = 0; i < 5; i++)
             {
-                vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / 4096;
-                vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / 4096;
+                vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / 16384;
+                vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / 16384;
                 float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
             
                 if (0.f != fDepth

@@ -57,7 +57,7 @@ void CEditor::init()
 	pEditorCam->AddComponent(new CCameraScript);
 
 	pEditorCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pEditorCam->Camera()->SetFar(10000.f);
+	pEditorCam->Camera()->SetFar(50000.f);
 	pEditorCam->Camera()->SetLayerMaskAll();
 	pEditorCam->Camera()->SetLayerMask(31); // UI는 마스킹 처리함.
 
