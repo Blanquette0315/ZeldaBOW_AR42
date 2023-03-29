@@ -10,6 +10,7 @@ CDecal::CDecal()
 {
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
 	SetRenderType(m_bLighting);
+	SetDynamicShadow(false);
 }
 
 CDecal::~CDecal()

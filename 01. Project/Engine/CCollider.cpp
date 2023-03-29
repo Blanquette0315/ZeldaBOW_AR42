@@ -42,7 +42,7 @@ void CCollider::finaltick()
 {
 	//FinalPos
 	Vec3 vObjectPos = Transform()->GetWorldPos();
-	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetWorldRotMat());
+	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetRotMat());
 	m_vFinalPos = vColliderWorldOffset + vObjectPos;
 
 	Vec3 vRot = m_vRot;
@@ -104,7 +104,7 @@ void CCollider::CreateColliderActor()
 		return;
 
 	Vec3 vObjectPos = Transform()->GetWorldPos();
-	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetWorldRotMat());
+	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vOffsetPos, Transform()->GetRotMat());
 	m_vFinalPos = vColliderWorldOffset + vObjectPos;
 
 	Vec3 vRot = m_vRot;

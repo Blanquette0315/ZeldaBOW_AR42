@@ -125,7 +125,7 @@ void CreateTestLevel()
 	pSkyBox->SkyBox()->SetSkyBoxTex(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
 	pSkyBox->SkyBox()->SetType(SKYBOX_TYPE::CUBE);
 
-	pSkyBox->SetFrustumCul(true);
+	pSkyBox->SetFrustumCul(false);
 
 	pLevel->AddGameObject(pSkyBox, 0);
 
@@ -175,7 +175,7 @@ void CreateTestLevel()
 
 	pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
 	pLandScape->LandScape()->SetFaceCount(16, 16);
-	pLandScape->SetFrustumCul(true);
+	pLandScape->SetFrustumCul(false);
 
 	pLevel->AddGameObject(pLandScape, 0);
 

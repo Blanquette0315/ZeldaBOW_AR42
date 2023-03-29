@@ -47,7 +47,6 @@ void CTransform::finaltick()
 	m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
 	m_matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
 	m_matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
-	m_matWorldRot = m_matWorld * m_matRot;
 
 	// 회전 행렬을 이용해서 현재 물체의 우, 상, 전 방향을 구해놓는다.
 	m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matRot);
@@ -189,7 +188,7 @@ void CTransform::SetWorldRotation(Vec3 _vRot)
 	Matrix tmp = XMMatrixIdentity();
 	while (pParent)
 	{
-		tmp *= pParent->Transform()->GetWorldRotMat();
+		tmp *= pParent->Transform()->GetRotMat();
 		pParent = pParent->GetParent();
 	}
 	XMVector3TransformNormal(_vRot, XMMatrixInverse(nullptr, tmp));
@@ -199,7 +198,9 @@ void CTransform::SetWorldRotation(Vec3 _vRot)
 Vec3 CTransform::GetWorldScale()
 {
 	XMVECTOR vScale;
-	XMMatrixDecompose(&vScale, nullptr, nullptr, m_matWorld);
+	XMVECTOR vDummy;
+	XMVECTOR vDummy2;
+	XMMatrixDecompose(&vScale, &vDummy, &vDummy2, m_matWorld);
 	return Vec3(vScale);
 }
 
@@ -219,10 +220,27 @@ RECT CTransform::GetRectCoord()
 Vec3 CTransform::GetWorldRotation()
 {
 	XMVECTOR vQuat;
+	XMVECTOR vDummy;
+	XMVECTOR vDummy2;
 	Vec3 vEuler;
-	XMMatrixDecompose(nullptr, &vQuat, nullptr, m_matWorld);
+	XMMatrixDecompose(&vDummy, &vQuat, &vDummy2, m_matWorld);
 	QuaternionToEuler(vQuat, vEuler);
 	return vEuler;
+}
+
+const Matrix& CTransform::GetWorldRotMat()
+{
+	Matrix matWorldRot = m_matRot;
+
+	CGameObject* pParent = GetOwner()->GetParent();
+
+	while (pParent)
+	{
+		matWorldRot *= pParent->Transform()->m_matRot;
+		pParent = pParent->GetParent();
+	}
+
+	return matWorldRot;
 }
 
 void CTransform::SaveToYAML(YAML::Emitter& _emitter)

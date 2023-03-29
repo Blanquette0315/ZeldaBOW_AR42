@@ -27,8 +27,6 @@ private:
     Matrix  m_matTrans;
     Matrix  m_matTransInv;
 
-    Matrix  m_matWorldRot;
-
     CBoundingBox m_BoundingBox;
 
     bool    m_bIgnParentScale;
@@ -69,7 +67,7 @@ public:
     const Matrix& GetLocalMat() { return m_matLocal; }
     const Matrix& GetWorldMat() { return m_matWorld; }
     const Matrix& GetWorldInvMat() { return m_matWorldInv; }
-    const Matrix& GetWorldRotMat() { return m_matWorldRot; }
+    const Matrix& GetWorldRotMat();
 
     const Matrix& GetWorldMatInv() { return m_matWorldInv; }
     

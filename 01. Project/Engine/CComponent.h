@@ -19,6 +19,7 @@ public:
     virtual void begin() {}
     virtual void tick() {}
     virtual void finaltick() = 0;
+    virtual void finaltick_module();
 
 public:
     COMPONENT_TYPE GetType() { return m_eType; }

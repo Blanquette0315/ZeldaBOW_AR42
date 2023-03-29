@@ -330,4 +330,33 @@ int IntersectsLay(float3 _vertices[3], float3 _vStart, float3 _vDir, out float3 
 
     return 1;
 }
+
+float ShadowGaussianSample(float2 _UV, int _int)
+{
+    if (1.f < _UV.x)
+        _UV.x = frac(_UV.x);
+    else if (_UV.x < 0.f)
+        _UV.x = 1 + frac(_UV.x);
+
+    if (1.f < _UV.y)
+        _UV.y = frac(_UV.y);
+    else if (_UV.y < 0.f)
+        _UV.y = 1 + frac(_UV.y);
+    
+    int2 iUV = _UV * int2((int) g_vRenderResolution.x, (int) g_vRenderResolution.y);
+    float fShadowPow = 0.f;
+    
+    for (int j = 0; j < 5; j++)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            _UV.x = (float) (iUV.x + (j - 2) * _int) / g_vRenderResolution.x;
+            _UV.y = (float) (iUV.y + (i - 2) * _int) / g_vRenderResolution.y;
+            
+            fShadowPow += g_tex_2.Sample(g_sam_0, _UV).y * GaussianFilter[j][i];
+        }
+    }
+    
+    return fShadowPow;
+}
 #endif

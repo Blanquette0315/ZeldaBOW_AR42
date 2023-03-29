@@ -15,7 +15,8 @@ private:
     Matrix      m_matProj;     
     Matrix      m_matProjInv;  
 
-    PROJ_TYPE   m_eProjType;   
+    PROJ_TYPE   m_eProjType;
+    float       m_fWidth;
     float       m_fAspectRatio;
 
     float       m_fNear;
@@ -32,6 +33,7 @@ private:
     vector<CGameObject*>    m_vecDecal;
     vector<CGameObject*>    m_vecTransparent;
     vector<CGameObject*>    m_vecPostProcess;
+    vector<CGameObject*>    m_vecDynamicShadow;
 
     int                     m_iCamIdx;
 
@@ -44,6 +46,9 @@ public:
 
     void SetAspectRatio(float _fRatio) { m_fAspectRatio = _fRatio; }
     float GetAspectRatio() { return m_fAspectRatio; }
+
+    void SetWidth(float _fWidth) { m_fWidth = _fWidth; }
+    float GetWidth() { return m_fWidth; }
 
     void SetNear(float _fNear) { m_fNear = _fNear; }
     float GetNear() { return m_fNear; }
@@ -80,8 +85,9 @@ protected:
     void CalcProjMat();
     void CalRay();
 
-private:
+public:
     void SortObject();
+    void SortShadowObject();
     void render_deferred();
     void render_deferreddecal();
     void render_opaque();
@@ -89,9 +95,11 @@ private:
     void render_decal();
     void render_transparent();
     void render_postprocess();
+    void render_depthmap();
 
 public:
     virtual void finaltick();
+    virtual void finaltick_module();
     void render();
 
 public:

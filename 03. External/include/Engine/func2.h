@@ -35,6 +35,8 @@ inline int GetMapIdx(const map<T1, T2>& _map, T1 _key)
 // Quaternion to Euler Angle
 void QuaternionToEuler(Vec4 _vQRot, Vec3& _vERot);
 
+Vec3 DecomposeRotMat(const Matrix& _matRot);
+
 template<typename T>
 void Safe_Del_Vec(vector<T*>& _vec)
 {

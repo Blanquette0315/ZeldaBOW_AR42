@@ -10,6 +10,7 @@ CSkyBox::CSkyBox()
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"));
 	SetType(m_eSkyBoxType);
 	SetSkyMesh();
+	SetDynamicShadow(false);
 }
 
 CSkyBox::~CSkyBox()
@@ -39,7 +40,6 @@ void CSkyBox::render()
 	Transform()->UpdateData();
 
 	GetCurMaterial()->SetScalarParam(INT_0, (void*)&m_eSkyBoxType);
-	GetCurMaterial()->SetScalarParam(MAT_0, (void*)&Transform()->GetWorldRotMat());
 
 	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
 	{

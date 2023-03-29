@@ -18,7 +18,7 @@ private:
     Ptr<CPrefab> m_Prefab;
     Ptr<CPrefab> m_Prefab1;
 
-    PhysRayCast* m_pWallRay;
+    //PhysRayCast* m_pWallRay;
 
     bool    m_bGround;
     bool    m_bJump;

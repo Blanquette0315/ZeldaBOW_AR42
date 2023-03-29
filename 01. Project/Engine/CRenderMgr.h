@@ -45,6 +45,7 @@ public:
 private:
 	void render_game();
 	void render_editor();
+	void render_dynamic_shadowdepth();
 
 	void UpdateNoiseTexture();
 	void UpdateLight2D();

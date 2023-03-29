@@ -926,6 +926,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
+	pShader->AddScalarParam(INT_3, "int");
 
 	AddRes<CGraphicsShader>(L"Std3D_DeferredShader", pShader);
 
@@ -941,6 +942,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
+
+	pShader->AddScalarParam(INT_3, "int");
 
 	AddRes<CGraphicsShader>(L"DirLightShader", pShader);
 
@@ -1009,6 +1012,18 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_1, "Decal Texture");
 
 	AddRes<CGraphicsShader>(L"Deferred_DecalShader", pShader);
+
+	// DepthmapShader
+	pShader = new CGraphicsShader;
+	pShader->SetDomain(SHADER_DOMAIN::NONE);
+	pShader->CreateVertexShader(L"Shader\\light.fx", "VS_DepthMap");
+	pShader->CreatePixelShader(L"Shader\\light.fx", "PS_DepthMap");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	AddRes<CGraphicsShader>(L"DepthMapShader", pShader);
 }
 
 #include "CPaintShader.h"
@@ -1104,6 +1119,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TessShader"));
 	AddRes<CMaterial>(L"TessMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DepthMapShader"));
+	AddRes<CMaterial>(L"DepthMapMtrl", pMtrl);
 }
 
 void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)

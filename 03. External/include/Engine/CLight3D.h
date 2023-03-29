@@ -15,9 +15,12 @@ private:
 
     int             m_iLightIdx;    // 광원 버퍼에서의 인덱스를 알기 위함. (MRT 구조로 랜더링을 바꾸면서 for문을 돌지 않으니 알아주어야 한다.)
 
+    CGameObject*    m_pLightCam;    // 광원 시점용 카메라
+
 public:
     const tLightInfo& GetLightInfo() { return m_Info; }
 
+    void SetLightDirection(Vec3 _vDir);
     void SetLightColor(Vec3 _vColor) { m_Info.vDiff = _vColor; }
     void SetLightSpecular(Vec3 _vSpec) { m_Info.vSpec = _vSpec; }
     void SetLightAmbient(Vec3 _vColor) { m_Info.vEmb = _vColor; }
@@ -41,6 +44,7 @@ public:
 public:
     virtual void finaltick() override;
     void render();
+    void render_depthmap();
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
@@ -49,5 +53,6 @@ public:
     CLONE(CLight3D);
 public:
     CLight3D();
+    CLight3D(const CLight3D& _origin);
     ~CLight3D();
 };
