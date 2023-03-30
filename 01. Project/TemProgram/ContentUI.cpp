@@ -357,7 +357,7 @@ RES_TYPE ContentUI::GetResTypeByExt(wstring _filename)
 	else if (strExt == L".mesh")
 		return RES_TYPE::MESH;
 	else if (strExt == L".dds" || strExt == L".DDS" || strExt == L".tga" || strExt == L".TGA"
-		|| strExt == L".png" || strExt == L".PNG" || strExt == L".jpg" || strExt == L".JPG" || strExt == L".jepg" || strExt == L".JEPG"
+		|| strExt == L".png" || strExt == L".PNG" || strExt == L".jpg" || strExt == L".JPG" || strExt == L".jpeg" || strExt == L".JPEG"
 		|| strExt == L".bmp" || strExt == L".BMP")
 		return RES_TYPE::TEXTURE;
 	else if (strExt == L".mp3" || strExt == L".MP3" || strExt == L".wav" || strExt == L".WAV" || strExt == L".ogg" || strExt == L".OGG")

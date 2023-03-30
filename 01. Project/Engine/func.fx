@@ -272,6 +272,24 @@ bool IsBinding(in Texture2D _tex)
     return true;
 }
 
+float encode(float4 _value)
+{
+    uint rgba = (uint(_value.x * 255.f) << 24) + (uint(_value.y * 255.f) << 16) + (uint(_value.z * 255.f) << 8) + uint(_value.w * 255.f);
+    return asfloat(rgba);
+}
+
+float4 decode(float _value)
+{
+    uint rgba = asint(_value);
+
+    float r = (float) (rgba >> 24) / 255.f;
+    float g = (float) ((rgba & 0x00ff0000) >> 16) / 255.f;
+    float b = (float) ((rgba & 0x0000ff00) >> 8) / 255.f;
+    float a = (float) (rgba & 0x000000ff) / 255.f;
+
+    return float4(r, g, b, a);
+}
+
 float GetTessFactor(float3 _vPos, int _iMinLevel, int _iMaxLevel, float _MinDistance, float _MaxDistance)
 {
     float fDistance = length(_vPos);

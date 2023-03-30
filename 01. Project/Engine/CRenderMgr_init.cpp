@@ -148,8 +148,8 @@ void CRenderMgr::CreateMRT()
 		Ptr<CTexture> arrRTTex[8] =
 		{
 			CResMgr::GetInst()->CreateTexture(L"DepthMapTex"
-											, 16384, 16384
-											, DXGI_FORMAT_R32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+											, 4096, 4096
+											, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
 		Vec4 arrClear[8] = {
@@ -159,7 +159,7 @@ void CRenderMgr::CreateMRT()
 		// Depth Stencil Texture ¸¸µé±â
 		Ptr<CTexture> pDepthStencilTex
 			= CResMgr::GetInst()->CreateTexture(L"DepthMapDSTex"
-				, 16384, 16384
+				, 4096, 4096
 				, DXGI_FORMAT_D32_FLOAT, D3D11_BIND_DEPTH_STENCIL);
 
 

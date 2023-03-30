@@ -9,6 +9,9 @@
 #define DepthMap        g_tex_2
 #define LightVP         g_mat_0
 
+#define DepthMapResolution 4096
+#define Bias               0.01f
+
 struct VS_IN
 {
     float3 vPos : POSITION;
@@ -100,38 +103,78 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     float fShadowPow = 0.f;
     float2 vDepthMapUV = float2((vLightProj.x / 2.f) + 0.5f, -(vLightProj.y / 2.f) + 0.5f);
     
-    if (g_int_3 > 0)
+    if(g_btex_3)
     {
-        int2 iUV = vDepthMapUV.xy * int2(16384, 16384);
-
-        for (int j = 0; j < 5; j++)
+        if (g_int_3 > 0)
         {
-            for (int i = 0; i < 5; i++)
+            int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
+
+            for (int j = 0; j < 5; j++)
             {
-                vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / 16384;
-                vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / 16384;
-                float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
+                for (int i = 0; i < 5; i++)
+                {
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
+                    float fDepth = encode(g_tex_3.Sample(g_sam_0, vDepthMapUV));
             
-                if (0.f != fDepth
+                    if (0.f != fDepth
                 && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
                 && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
-                && vLightProj.z >= fDepth + 0.0001f)
-                {
-                    fShadowPow += 0.9f * GaussianFilter[j][i];
+                && vLightProj.z >= fDepth + Bias)
+                    {
+                        fShadowPow += 0.9f * GaussianFilter[j][i];
+                    }
                 }
+            }
+        }
+        else
+        {
+            float fDepth = encode(g_tex_3.Sample(g_sam_0, vDepthMapUV));
+    
+            if (0.f != fDepth
+        && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
+        && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+        && vLightProj.z >= fDepth + Bias)
+            {
+                fShadowPow = 0.9f;
             }
         }
     }
     else
     {
-        float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
+        if (g_int_3 > 0)
+        {
+            int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
+
+            for (int j = 0; j < 5; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
+                    float fDepth = encode(DepthMap.Sample(g_sam_0, vDepthMapUV));
+            
+                    if (0.f != fDepth
+                && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
+                && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+                && vLightProj.z >= fDepth + Bias)
+                    {
+                        fShadowPow += 0.9f * GaussianFilter[j][i];
+                    }
+                }
+            }
+        }
+        else
+        {
+            float fDepth = encode(DepthMap.Sample(g_sam_0, vDepthMapUV));
     
-        if (0.f != fDepth
+            if (0.f != fDepth
         && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
         && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
-        && vLightProj.z >= fDepth + 0.0001f)
-        {
-            fShadowPow = 0.9f;
+        && vLightProj.z >= fDepth + Bias)
+            {
+                fShadowPow = 0.9f;
+            }
         }
     }
     
