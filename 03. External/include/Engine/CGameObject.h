@@ -45,6 +45,7 @@ public:
     void begin();
     void tick();
     void finaltick();
+    void finaltick_module();    // 레벨에 포함되지 않고 사용 하는 경우
     void render();
 
 public:
@@ -106,6 +107,9 @@ public:
 
     bool IsDead() { return m_bDead; }
     void Destroy();
+
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
     CLONE(CGameObject);
 

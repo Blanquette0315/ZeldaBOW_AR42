@@ -60,10 +60,23 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     tLightColor LightColor = (tLightColor) 0.f;
     CalcLight3D(vViewPos.xyz, vViewNormal.xyz, g_int_0, LightColor);
     
+    float fShadowPow = 0.f;
+    
+    // 그림자 판정
+    if (g_int_3 <= 0)
+    {
+        fShadowPow = g_tex_2.Sample(g_sam_0, vUV).y;
+    }
+    else
+    {
+        fShadowPow = ShadowGaussianSample(vUV, g_int_3);
+    }
+    
+    output.vDiffuse = LightColor.vDiff * (1.f - fShadowPow) + LightColor.vEmb;
+
     // deferred MRT의 Data RenderTarget에 a자리에 스페큘러 계수를 넣어두었었다.
     float SpecCoef = g_tex_2.Sample(g_sam_0, vUV).x;
     
-    output.vDiffuse = LightColor.vDiff + LightColor.vEmb;
     output.vSpecular = LightColor.vSpec * SpecCoef;
     
     // ImGui상에서 이미지로 보기 위해 알파를 1로 두었다.
@@ -202,6 +215,41 @@ PS_OUT PS_SpotLightShader(VS_OUT _in)
     output.vSpecular.a = 1.f;
     
     return output;
+}
+
+// ===============
+// DepthMap Shader
+// MRT : ShadowMap MRT
+// RS : CULL_BACK
+// BS : Default
+// DS : Less
+// ===============
+struct VS_DEPTH_IN
+{
+    float3 vPos : POSITION;
+};
+
+struct VS_DEPTH_OUT
+{
+    float4 vPosition : SV_Position;
+    float4 vProjPos : POSITION;
+};
+
+VS_DEPTH_OUT VS_DepthMap(VS_DEPTH_IN _in)
+{
+    VS_DEPTH_OUT output = (VS_DEPTH_OUT) 0.f;
+
+    output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
+    output.vProjPos = output.vPosition;
+
+    return output;
+}
+
+float4 PS_DepthMap(VS_DEPTH_OUT _in) : SV_Target
+{
+    float fOut = 0.f;
+    fOut = _in.vProjPos.z / _in.vProjPos.w;
+    return decode(fOut);
 }
 
 #endif

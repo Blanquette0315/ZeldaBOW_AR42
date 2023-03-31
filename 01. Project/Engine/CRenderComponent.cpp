@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "CRenderComponent.h"
 
+#include "CTransform.h"
+
 CRenderComponent::CRenderComponent(COMPONENT_TYPE _eType)
 	: CComponent(_eType)
 	, m_bIsDynamicMtrl(false)
-	
+	, m_bDynamicShadow(true)
 {
 }
 
@@ -15,6 +17,7 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 	, m_pCurMtrl(nullptr)
 	, m_pDynamicMtrl(nullptr)
 	, m_bIsDynamicMtrl(_origin.m_bIsDynamicMtrl)
+	, m_bDynamicShadow(_origin.m_bDynamicShadow)
 {
 	if (_origin.m_pCurMtrl == _origin.m_pSharedMtrl)
 	{
@@ -29,6 +32,17 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 CRenderComponent::~CRenderComponent()
 {
 	m_pDynamicMtrl = nullptr;
+}
+
+void CRenderComponent::render_depthmap()
+{
+	Transform()->UpdateData();
+
+	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DepthMapMtrl");
+
+	pMtrl->UpdateData();
+
+	m_pMesh->render();
 }
 
 Ptr<CMaterial> CRenderComponent::GetSharedMaterial()
@@ -73,6 +87,8 @@ void CRenderComponent::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << YAML::BeginMap;
 	SaveResourceRef<CMaterial>(m_pSharedMtrl, _emitter);
 	_emitter << YAML::EndMap;
+	_emitter << YAML::Key << "RenderComponent_IsDynamicShadow";
+	_emitter << YAML::Value << m_bDynamicShadow;
 }
 
 void CRenderComponent::LoadFromYAML(YAML::Node& _node)
@@ -82,4 +98,5 @@ void CRenderComponent::LoadFromYAML(YAML::Node& _node)
 	node = _node["RenderComponentMaterial"];
 	LoadResourceRef<CMaterial>(m_pSharedMtrl, node);
 	m_pCurMtrl = m_pSharedMtrl;
+	m_bDynamicShadow = _node["RenderComponent_IsDynamicShadow"].as<bool>();
 }

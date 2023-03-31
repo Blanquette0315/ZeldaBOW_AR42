@@ -24,6 +24,7 @@ CCamera::CCamera()
 	, m_Frustum(this)
 	, m_eProjType(PROJ_TYPE::ORTHOGRAPHICS)
 	, m_fAspectRatio(1.f)
+	, m_fWidth(0.f)
 	, m_FOV(XM_PI / 2.f)
 	, m_fNear(1.f)
 	, m_fFar(2000.f)
@@ -34,6 +35,7 @@ CCamera::CCamera()
 {
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
+	m_fWidth = vRenderResolution.x;
 }
 
 CCamera::~CCamera()
@@ -48,6 +50,25 @@ void CCamera::finaltick()
 	CalcProjMat();
 
 	// Frustum 구성
+	m_Frustum.finaltick();
+
+	CalRay();
+
+	// Frustum DebugRender
+	if (Is_ShowDebugDraw())
+	{
+		DebugDrawFrustum(Vec4(0.2f, 0.8f, 0.2f, 1.f), Vec3(0.f, 0.f, 0.f), Vec3(0.f, 0.f, 0.f));
+		Ptr<CMaterial> pCamMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"FrustumDebugDrawMtrl");
+		pCamMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &GetFrustum().GetMatInv());
+	}
+}
+
+void CCamera::finaltick_module()
+{
+	CalcViewMat();
+
+	CalcProjMat();
+
 	m_Frustum.finaltick();
 
 	CalRay();
@@ -90,8 +111,6 @@ void CCamera::CalcProjMat()
 	// 투영 행렬 계산
 	// =============
 
-	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
-
 	if (PROJ_TYPE::PERSPECTIVE == m_eProjType)
 	{
 		// 원근 투영
@@ -100,7 +119,7 @@ void CCamera::CalcProjMat()
 	else
 	{
 		// 직교 투영
-		m_matProj = XMMatrixOrthographicLH(vRenderResolution.x * m_fScale, vRenderResolution.y * m_fScale, 1.f, m_fFar);
+		m_matProj = XMMatrixOrthographicLH(m_fWidth * m_fScale, m_fWidth / m_fAspectRatio * m_fScale, 1.f, m_fFar);
 	}
 
 	m_matProjInv = XMMatrixInverse(nullptr, m_matProj);
@@ -241,7 +260,7 @@ void CCamera::SortObject()
 				}
 
 				// Frustum Culling 실패 시
-				if (!vecObj[j]->IS_FrustumCul())
+				if (vecObj[j]->IS_FrustumCul())
 				{
 					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
 					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 200.f))
@@ -281,6 +300,38 @@ void CCamera::SortObject()
 					m_vecPostProcess.push_back(vecObj[j]);
 					break;
 				}
+			}
+		}
+	}
+}
+
+void CCamera::SortShadowObject()
+{
+	m_vecDynamicShadow.clear();
+
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
+
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		CLayer* pLayer = pCurLevel->GetLayer(i);
+		const vector<CGameObject*>& vecObj = pLayer->GetObjects();
+
+		for (size_t j = 0; j < vecObj.size(); ++j)
+		{
+			CRenderComponent* pRenderCom = vecObj[j]->GetRenderComponent();
+
+			if (vecObj[j]->IS_FrustumCul())
+			{
+				//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
+				if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 200.f))
+				{
+					continue;
+				}
+			}
+
+			if (pRenderCom && pRenderCom->IsDynamicShadow())
+			{
+				m_vecDynamicShadow.push_back(vecObj[j]);
 			}
 		}
 	}
@@ -340,6 +391,19 @@ void CCamera::render_postprocess()
 	{
 		CRenderMgr::GetInst()->CopyRenderTarget();
 		m_vecPostProcess[i]->render();
+	}
+}
+
+void CCamera::render_depthmap()
+{
+	// 광원 카메라의 View, Proj 세팅
+	g_transform.matView = m_matView;
+	g_transform.matViewInv = m_matViewInv;
+	g_transform.matProj = m_matProj;
+
+	for (size_t i = 0; i < m_vecDynamicShadow.size(); ++i)
+	{
+		m_vecDynamicShadow[i]->GetRenderComponent()->render_depthmap();
 	}
 }
 

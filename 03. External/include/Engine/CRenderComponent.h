@@ -15,9 +15,11 @@ private:
     Ptr<CMaterial>          m_pCurMtrl;         // 현재 사용 중인 재질
 
     bool                    m_bIsDynamicMtrl;
+    bool                    m_bDynamicShadow;
 
 public:
     virtual void render() = 0;
+    virtual void render_depthmap();
 
 public:
     void SetMesh(Ptr<CMesh> _pMesh) { m_pMesh = _pMesh; }
@@ -30,6 +32,9 @@ public:
     Ptr<CMaterial> GetDynamicMaterial();
 
     bool IsDynamicMtrl() { return m_bIsDynamicMtrl; }
+
+    void SetDynamicShadow(bool _bSet) { m_bDynamicShadow = _bSet; }
+    bool IsDynamicShadow() { return m_bDynamicShadow; }
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

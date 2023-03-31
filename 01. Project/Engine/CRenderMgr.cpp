@@ -117,7 +117,10 @@ void CRenderMgr::render()
 
 void CRenderMgr::render_game()
 {
-	// �������� ������ ī�޶�� ����
+	// Dir 광원 시점에서 Shadow맵핑을 위한 DepthMap 생성
+	render_dynamic_shadowdepth();
+
+	// 렌더링의 기준을 카메라로 설정
 	for (size_t i = 0; i < m_vecCam.size(); ++i)
 	{
 		m_vecCam[i]->render();
@@ -128,7 +131,21 @@ void CRenderMgr::render_editor()
 {
 	assert(m_EditorCam);
 
+	// Dir 광원 시점에서 Shadow맵핑을 위한 DepthMap 생성
+	render_dynamic_shadowdepth();
+
 	m_EditorCam->render();
+}
+
+void CRenderMgr::render_dynamic_shadowdepth()
+{
+	m_arrMRT[(UINT)MRT_TYPE::SHADOW]->OMSet();
+
+	for (size_t i = 0; i < m_vecLight3D.size(); ++i)
+	{
+		if (LIGHT_TYPE::DIRECTIONAL == m_vecLight3D[i]->GetLightType())
+			m_vecLight3D[i]->render_depthmap();
+	}
 }
 
 void CRenderMgr::UpdateNoiseTexture()

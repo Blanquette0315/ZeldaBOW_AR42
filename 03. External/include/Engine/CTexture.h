@@ -63,11 +63,11 @@ public:
     UINT                                GetSlicePitch()const { return (UINT)m_Image.GetImages()->slicePitch; }
 
     void GenerateMip(UINT _iMipLevel);
+    void SaveTexture(const wstring& _strRelativePath);
 
     // PIPELINE_STAGE
     void UpdateData(UINT _iRegisterNum, UINT _iPipelineStage);
     static void Clear(UINT _iRegisterNum);
-
 
     void UpdateData_CS(UINT _iRegisterNum, bool _bShaderRes = false);
     static void Clear_CS(UINT _iRegisterNum);

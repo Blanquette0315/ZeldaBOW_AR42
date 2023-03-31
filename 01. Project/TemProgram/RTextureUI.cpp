@@ -43,4 +43,9 @@ void RTextureUI::render_update()
 	_itoa_s(pTargetTex->GetHeight(), szNum, 10);
 	ImGui::Text("Height "); ImGui::SameLine();
 	ImGui::InputText("##TexHight", szNum, 50, ImGuiInputTextFlags_ReadOnly);
+
+	if (ImGui::Button("SaveTexture##texture", ImVec2(100.f, 24.f)))
+	{
+		pTargetTex->SaveTexture(pTargetTex->GetKey());
+	}
 }

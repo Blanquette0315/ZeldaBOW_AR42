@@ -52,8 +52,6 @@ void CRenderMgr::init()
 
 	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DecalMtrl");
 	pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
-
-	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_DecalMtrl");
 }
 
 void CRenderMgr::CreateMRT()
@@ -141,6 +139,32 @@ void CRenderMgr::CreateMRT()
 
 		m_arrMRT[(UINT)MRT_TYPE::LIGHT] = new CMRT;
 		m_arrMRT[(UINT)MRT_TYPE::LIGHT]->Create(arrRTTex, arrClear, pDSTex);
+	}
+
+	// =============
+	// ShadowMap MRT
+	// =============
+	{
+		Ptr<CTexture> arrRTTex[8] =
+		{
+			CResMgr::GetInst()->CreateTexture(L"DepthMapTex"
+											, 4096, 4096
+											, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+		};
+
+		Vec4 arrClear[8] = {
+				 Vec4(0.f, 0.f, 0.f, 0.f)
+		};
+
+		// Depth Stencil Texture ¸¸µé±â
+		Ptr<CTexture> pDepthStencilTex
+			= CResMgr::GetInst()->CreateTexture(L"DepthMapDSTex"
+				, 4096, 4096
+				, DXGI_FORMAT_D32_FLOAT, D3D11_BIND_DEPTH_STENCIL);
+
+
+		m_arrMRT[(UINT)MRT_TYPE::SHADOW] = new CMRT;
+		m_arrMRT[(UINT)MRT_TYPE::SHADOW]->Create(arrRTTex, arrClear, pDepthStencilTex);
 	}
 }
 

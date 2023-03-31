@@ -137,6 +137,32 @@ void CGameObject::finaltick()
 	//pCurLevel->GetLayer(m_iLayerIdx)->RegisterObject(this);
 }
 
+void CGameObject::finaltick_module()
+{
+	// Component
+	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
+	{
+		if (nullptr != m_arrCom[i])
+			m_arrCom[i]->finaltick_module();
+	}
+
+	// Child Object
+	vector<CGameObject*>::iterator iter = m_vecChild.begin();
+	for (; iter != m_vecChild.end();)
+	{
+		(*iter)->finaltick_module();
+
+		if ((*iter)->IsDead())
+		{
+			iter = m_vecChild.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
 void CGameObject::render()
 {
 	if (nullptr == m_pRenderComponent)
@@ -368,4 +394,21 @@ void CGameObject::Destroy()
 	eve.wParam = (DWORD_PTR)this;
 
 	CEventMgr::GetInst()->AddEvent(eve);
+}
+
+void CGameObject::SaveToYAML(YAML::Emitter& _emitter)
+{
+	CEntity::SaveToYAML(_emitter);
+
+	_emitter << YAML::Key << "FrustumCulling";
+	_emitter << YAML::Value << m_bFrustumCul;
+	_emitter << YAML::Key << "Rendering";
+	_emitter << YAML::Value << m_bRender;
+}
+
+void CGameObject::LoadFromYAML(YAML::Node& _node)
+{
+	CEntity::LoadFromYAML(_node);
+	SAFE_LOAD_FROM_YAML(bool, m_bFrustumCul, _node["FrustumCulling"]);
+	SAFE_LOAD_FROM_YAML(bool, m_bRender, _node["Rendering"]);
 }

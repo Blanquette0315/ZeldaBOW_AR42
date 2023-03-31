@@ -150,7 +150,7 @@ InspectorUI::~InspectorUI()
 
 void InspectorUI::update()
 {
-	if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+	if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered())
 	{
 		if (GetActiveWindow() == CDevice::GetInst()->GetMainHWND())
 		{

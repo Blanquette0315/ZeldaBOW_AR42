@@ -6,6 +6,11 @@
 #include "func.fx"
 
 #define fSpecCoefficent g_float_0
+#define DepthMap        g_tex_2
+#define LightVP         g_mat_0
+
+#define DepthMapResolution 4096
+#define Bias               0.01f
 
 struct VS_IN
 {
@@ -86,6 +91,94 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vData.x = fSpecCoefficent;
+    
+    // shadow
+    // ViewPos -> WorldPos
+    float3 vWorldPos = mul(float4(_in.vViewPos.xyz, 1.f), g_matViewInv).xyz;
+    
+    // WorldPos -> Light
+    float4 vLightProj = mul(float4(vWorldPos, 1.f), LightVP);
+    vLightProj.xyz /= vLightProj.w;
+
+    float fShadowPow = 0.f;
+    float2 vDepthMapUV = float2((vLightProj.x / 2.f) + 0.5f, -(vLightProj.y / 2.f) + 0.5f);
+    
+    if(g_btex_3)
+    {
+        if (g_int_3 > 0)
+        {
+            int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
+
+            for (int j = 0; j < 5; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
+                    float fDepth = encode(g_tex_3.Sample(g_sam_0, vDepthMapUV));
+            
+                    if (0.f != fDepth
+                && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
+                && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+                && vLightProj.z >= fDepth + Bias)
+                    {
+                        fShadowPow += 0.9f * GaussianFilter[j][i];
+                    }
+                }
+            }
+        }
+        else
+        {
+            float fDepth = encode(g_tex_3.Sample(g_sam_0, vDepthMapUV));
+    
+            if (0.f != fDepth
+        && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
+        && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+        && vLightProj.z >= fDepth + Bias)
+            {
+                fShadowPow = 0.9f;
+            }
+        }
+    }
+    else
+    {
+        if (g_int_3 > 0)
+        {
+            int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
+
+            for (int j = 0; j < 5; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
+                    float fDepth = encode(DepthMap.Sample(g_sam_0, vDepthMapUV));
+            
+                    if (0.f != fDepth
+                && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
+                && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+                && vLightProj.z >= fDepth + Bias)
+                    {
+                        fShadowPow += 0.9f * GaussianFilter[j][i];
+                    }
+                }
+            }
+        }
+        else
+        {
+            float fDepth = encode(DepthMap.Sample(g_sam_0, vDepthMapUV));
+    
+            if (0.f != fDepth
+        && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
+        && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+        && vLightProj.z >= fDepth + Bias)
+            {
+                fShadowPow = 0.9f;
+            }
+        }
+    }
+    
+    output.vData.y = fShadowPow;
     
     return output;
 }

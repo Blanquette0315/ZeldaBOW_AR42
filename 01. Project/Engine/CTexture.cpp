@@ -420,6 +420,17 @@ int CTexture::CreateArrayTexture(const vector<Ptr<CTexture>>& _vecTex, int _iMap
 	return hr;
 }
 
+void CTexture::SaveTexture(const wstring& _strRelativePath)
+{
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += L"texture\\engine\\" + _strRelativePath + L".png";
+	ScratchImage image;
+	HRESULT hr = CaptureTexture(DEVICE, CONTEXT, m_Tex2D.Get(), image);
+	assert(!FAILED(hr));
+	//SaveToDDSFile(*image.GetImages(), DDS_FLAGS_NONE, strFilePath.c_str());
+	SaveToWICFile(*image.GetImages(), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_PNG), strFilePath.c_str());
+}
+
 void CTexture::UpdateData(UINT _iRegisterNum, UINT _iPipelineStage)
 {
 	if ((UINT)PIPELINE_STAGE::VS & _iPipelineStage)
