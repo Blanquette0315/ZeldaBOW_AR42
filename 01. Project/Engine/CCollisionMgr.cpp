@@ -19,7 +19,7 @@ CCollisionMgr::~CCollisionMgr()
 
 void CCollisionMgr::tick()
 {
-	CollisionLayerCheck(1, 1);
+	CollisionLayerCheck(0, 0);
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
 
 	for (int iLayer = 0; iLayer < MAX_LAYER; ++iLayer)

@@ -70,7 +70,9 @@ physx::PxShape* Factory::CreateShape(PhysMaterial* m, PhysCollider* c, bool isTr
 		shape = CreateTriangleCollider(pMaterial, c->GetTriangleCollider());
 		break;
 	case PhysCollider::TYPE::TERRAIN:
+	{
 		//shape = CreateHeightFieldCollider(pMaterial, c);
+	}
 		break;
 	}
 
@@ -158,7 +160,7 @@ void Factory::CreateStaticActor(PhysData* Data, physx::PxShape* shape, physx::Px
 
 	body->attachShape(*shape);
 	m_Scene->addActor(*body);
-	
+
 	//서로 연결
 	body->userData = Data;
 	Data->ActorObj = body;
@@ -246,11 +248,13 @@ physx::PxShape* Factory::CreateTriangleCollider(physx::PxMaterial* m, Phys_Colli
 	meshDesc.points.count		= c->GetVertexCount();
 	meshDesc.points.stride		= sizeof(Phys_Base_Vector3);
 	meshDesc.points.data		= c->GetVertexList();
+	//meshDesc.points.data		= &(c->GetVertexList())[0];
 
 	//페이스 관련 데이터
 	meshDesc.triangles.count	= c->GetIndexCount() / 3;
 	meshDesc.triangles.stride	= 3 * sizeof(unsigned int);
 	meshDesc.triangles.data		= c->GetIndexList();
+	//meshDesc.triangles.data		= &(c->GetIndexList())[0];
 
 	PxTriangleMesh* triMesh = m_Cooking->createTriangleMesh(meshDesc, m_Phys->getPhysicsInsertionCallback());
 	PxTriangleMeshGeometry geom;

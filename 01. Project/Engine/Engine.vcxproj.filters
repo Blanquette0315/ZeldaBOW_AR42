@@ -199,6 +199,9 @@
     <Filter Include="Engine\06. Component\08. RigidBody">
       <UniqueIdentifier>{51b92768-9a8b-4730-b62c-1847216727f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL\Compute\LandScape\RayCast\RayMap">
+      <UniqueIdentifier>{75593a41-2f3b-4876-80da-ae9631abe30d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -456,6 +459,9 @@
     <ClInclude Include="CWeightMapShader.h">
       <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
     </ClInclude>
+    <ClInclude Include="CRaymapShader.h">
+      <Filter>HLSL\Compute\LandScape\RayCast\RayMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -692,6 +698,9 @@
     <ClCompile Include="CWeightMapShader.cpp">
       <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
     </ClCompile>
+    <ClCompile Include="CRaymapShader.cpp">
+      <Filter>HLSL\Compute\LandScape\RayCast\RayMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -773,6 +782,9 @@
     </FxCompile>
     <FxCompile Include="weightmap.fx">
       <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
+    </FxCompile>
+    <FxCompile Include="raymap.fx">
+      <Filter>HLSL\Compute\LandScape\RayCast\RayMap</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include "CRaycastShader.h"
 #include "CHeightMapShader.h"
 #include "CWeightMapShader.h"
+#include "CRaymapShader.h"
 
 class CLandScape :
     public CRenderComponent
@@ -23,6 +24,9 @@ private:
     Ptr<CHeightMapShader>   m_pCSHeightMap;     // 높이맵 쉐이더
     Ptr<CTexture>           m_pHeightMap;       // 높이맵 텍스쳐
 
+    Ptr<CRaymapShader>      m_pCSRayMap;
+    Ptr<CTexture>           m_pRayMap;
+
 
     Ptr<CWeightMapShader>   m_pCSWeightMap;     // 가중치 쉐이더
     CStructuredBuffer*      m_pWeightMapBuffer; // 가중치 저장 버퍼
@@ -32,6 +36,12 @@ private:
 
     LANDSCAPE_MOD           m_eMod; 	        // 지형 툴모드에서 상태값
 
+    ComPtr<ID3D11Buffer>    m_pCopyBuffer;      // CopyBuffer
+    D3D11_BUFFER_DESC       m_CopyBufferDesc;
+    D3D11_MAPPED_SUBRESOURCE    m_MappedResource;
+    Vector3* m_arrVertexPos;
+    UINT* m_arrIndice;
+
 
 public:
     virtual void finaltick() override;
@@ -39,12 +49,17 @@ public:
 
 public:
     void SetFaceCount(UINT _X, UINT _Z);
+    void CreateActor();
 
 private:
     void CreateMesh();
     void CreateMaterial();
     void CreateTexture();
     void Raycasting();
+
+    void BrushAreaShow(bool _Show);
+
+    void CreateCpBuffer(UINT _byteWidth);
 
     CLONE(CLandScape);
 public:

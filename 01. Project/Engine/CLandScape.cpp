@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "CLandScape.h"
 
+#include "CDevice.h"
 #include "CStructuredBuffer.h"
 
 #include "CTransform.h"
+#include "CRigidBody.h"
 #include "CCamera.h"
 
 #include "CRenderMgr.h"
@@ -22,6 +24,8 @@ CLandScape::CLandScape()
 	, m_iWeightIdx(0)
 	, m_eMod(LANDSCAPE_MOD::NONE)
 {
+	m_MappedResource = {};
+
 	SetFaceCount(1, 1);
 
 	CreateMaterial();
@@ -50,7 +54,11 @@ CLandScape::~CLandScape()
 void CLandScape::finaltick()
 {
 	if (KEY_TAP(KEY::NUM_0))
+	{
 		m_eMod = LANDSCAPE_MOD::NONE;
+
+		BrushAreaShow(true);
+	}
 	else if (KEY_TAP(KEY::NUM_1))
 		m_eMod = LANDSCAPE_MOD::HEIGHT_MAP;
 	else if (KEY_TAP(KEY::NUM_2))
@@ -62,6 +70,8 @@ void CLandScape::finaltick()
 	}
 
 	Raycasting();
+
+	BrushAreaShow(false);
 
 	if (KEY_PRESSED(KEY::LBTN))
 	{
@@ -102,6 +112,17 @@ void CLandScape::finaltick()
 		}
 	}
 
+
+	if (KEY_TAP(KEY::NUM_5))
+	{
+		// 높이 맵을 파일로 세이브
+		HRESULT hr = S_OK;
+		ScratchImage& pImage = m_pHeightMap->GetScratchImage();
+		hr = DirectX::CaptureTexture(DEVICE, CONTEXT, m_pHeightMap->GetTex2D().Get(), pImage);
+		wstring strFileName = CPathMgr::GetInst()->GetContentPath();
+		strFileName += L"texture\\landscape\\TempHight.dds";
+		hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
+	}
 }
 
 void CLandScape::render()
@@ -130,6 +151,7 @@ void CLandScape::render()
 
 		// 타일 텍스쳐 전달
 		GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_ARR_0, m_pTileArrTex);
+		GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_4, m_pRayMap);
 
 		// 업데이트
 		GetCurMaterial()->UpdateData();
@@ -149,6 +171,60 @@ void CLandScape::SetFaceCount(UINT _X, UINT _Z)
 
 	// 면 개수에 맞는 메시 생성
 	CreateMesh();
+}
+
+void CLandScape::CreateActor()
+{
+	Ptr<CMesh> pMesh = GetMesh();
+	ComPtr<ID3D11Buffer> pVB = pMesh->GetVB();
+	ComPtr<ID3D11Buffer> pIB = pMesh->GetIB();
+
+	// vertex pos
+	D3D11_BUFFER_DESC vbDesc;
+	pVB->GetDesc(&vbDesc);
+	UINT numVertices = vbDesc.ByteWidth / sizeof(Vtx);
+
+	CreateCpBuffer(vbDesc.ByteWidth);
+
+	CONTEXT->CopyResource(m_pCopyBuffer.Get(), pVB.Get());
+
+	Vtx* arrVertices = new Vtx[numVertices];
+
+	CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
+	memcpy(arrVertices, m_MappedResource.pData, sizeof(Vtx) * numVertices);
+	CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
+
+	m_arrVertexPos = new Vector3[numVertices];
+
+	for (int i = 0; i < numVertices; ++i)
+	{
+		m_arrVertexPos[i].x = arrVertices[i].vPos.x;
+		m_arrVertexPos[i].y = arrVertices[i].vPos.y;
+		m_arrVertexPos[i].z = arrVertices[i].vPos.z;
+	}
+
+	// vertex index
+	D3D11_BUFFER_DESC ibDesc;
+	pIB->GetDesc(&ibDesc);
+	UINT numIndices = ibDesc.ByteWidth / sizeof(DWORD);
+
+	CreateCpBuffer(ibDesc.ByteWidth);
+
+	CONTEXT->CopyResource(m_pCopyBuffer.Get(), pIB.Get());
+
+	m_arrIndice = new UINT[numIndices];
+
+	CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
+	memcpy(m_arrIndice, m_MappedResource.pData, sizeof(UINT) * numIndices);
+	CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
+
+	RigidBody()->SetTriangleCollider(numIndices, numVertices
+		, m_arrIndice
+		, m_arrVertexPos);
+
+	delete[] arrVertices;
+	delete[] m_arrVertexPos;
+	delete[] m_arrIndice;
 }
 
 
@@ -178,4 +254,28 @@ void CLandScape::Raycasting()
 	m_pCSRaycast->SetOuputBuffer(m_pCrossBuffer);
 
 	m_pCSRaycast->Execute();
+}
+
+void CLandScape::BrushAreaShow(bool _Show)
+{
+	m_pCSRayMap->SetInputBuffer(m_pCrossBuffer);
+	m_pCSRayMap->SetBrushTex(m_pBrushTex);
+	m_pCSRayMap->SetBrushIndex(0);
+	m_pCSRayMap->SetBrushScale(m_vBrushScale);
+	m_pCSRayMap->SetRayMap(m_pRayMap);
+	m_pCSRayMap->SetBrushShow(_Show);
+	m_pCSRayMap->Execute();
+}
+
+void CLandScape::CreateCpBuffer(UINT _byteWidth)
+{
+	if (m_pCopyBuffer.Get())
+		m_pCopyBuffer = nullptr;
+
+	m_CopyBufferDesc.Usage = D3D11_USAGE_STAGING;
+	m_CopyBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	m_CopyBufferDesc.BindFlags = 0;
+	m_CopyBufferDesc.ByteWidth = _byteWidth;
+	m_CopyBufferDesc.MiscFlags = 0;
+	HRESULT hr = DEVICE->CreateBuffer(&m_CopyBufferDesc, nullptr, m_pCopyBuffer.GetAddressOf());
 }

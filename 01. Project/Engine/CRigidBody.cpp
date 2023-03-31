@@ -5,6 +5,7 @@
 #include "CPhysMgr.h"
 #include "CTransform.h"
 #include "CMeshRender.h"
+#include "CLandScape.h"
 
 CRigidBody::CRigidBody()
 	: CComponent(COMPONENT_TYPE::RIGIDBODY)
@@ -47,6 +48,10 @@ CRigidBody::~CRigidBody()
 void CRigidBody::begin()
 {
 	m_pPhysData->BOWObj = GetOwner();
+	if (nullptr != LandScape())
+	{
+		LandScape()->CreateActor();
+	}
 	UpdateTransformData(m_eRigidColliderType, m_pPhysData->isKinematic, m_pPhysData->isDinamic);
 	CreateActor();
 }
@@ -247,7 +252,6 @@ void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinema
 	
 	case COLLIDER_TYPE::COLLIDER_TRI:
 	{
-
 	}
 	break;
 	}
@@ -313,5 +317,5 @@ void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)
 
 void CRigidBody::SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList)
 {
-
+	m_pPhysData->mCollider->CreateTriangle(_iIdxSize, _iVertexSize, IdxArray, _vecVertexList);
 }

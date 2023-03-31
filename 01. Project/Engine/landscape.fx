@@ -225,7 +225,15 @@ PS_OUT PS_LandScape(DS_OUT _in)
                 iMaxWeightIdx = i;
             }
         }
+        
         output.vColor = float4(vColor.rgb, 1.f);
+        
+        float RayColor = g_tex_4.Sample(g_sam_0, _in.vFullUV).x;
+        if (RayColor != 0.f)
+        {
+            output.vColor.y += 1.f;
+        }
+        
 
         // 타일 노말
         if (-1 != iMaxWeightIdx)

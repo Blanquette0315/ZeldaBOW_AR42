@@ -125,6 +125,15 @@ void CLandScape::CreateMaterial()
 		AddRes(m_pCSRaycast.Get(), RES_TYPE::COMPUTE_SHADER);
 	}
 
+	m_pCSRayMap = (CRaymapShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"RayMapShader").Get();
+	if (nullptr == m_pCSRayMap)
+	{
+		m_pCSRayMap = new CRaymapShader();
+		m_pCSRayMap->CreateComputeShader(L"shader\\raymap.fx", "CS_RayMap");
+		m_pCSRayMap->SetKey(L"RayMapShader");
+		AddRes(m_pCSRayMap.Get(), RES_TYPE::COMPUTE_SHADER);
+	}
+
 	// ======================
 	// 높이 수정 컴퓨트 쉐이더
 	// ======================
@@ -157,6 +166,12 @@ void CLandScape::CreateTexture()
 		, 2048, 2048
 		, DXGI_FORMAT_R32_FLOAT
 		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
+	m_pRayMap = CResMgr::GetInst()->CreateTexture(L"LandRayTexture"
+		, 2048, 2048
+		, DXGI_FORMAT_R32_FLOAT
+		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
 
 	Ptr<CMaterial> pMtrl = GetSharedMaterial();
 	pMtrl->SetScalarParam(SCALAR_PARAM::INT_0, &m_iXFaceCount);
