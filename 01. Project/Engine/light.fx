@@ -20,7 +20,7 @@
 #define LightVP         g_mat_0
 
 #define DepthMapResolution 4096
-#define Bias               0.0019f
+#define Bias               0.0003f
 
 struct VS_IN
 {
@@ -89,7 +89,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
                 {
                     vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
                     vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
-                    float fDepth = encode(g_tex_4.Sample(g_sam_0, vDepthMapUV));
+                    float fDepth = encode(g_tex_4.Sample(g_sam_1, vDepthMapUV));
             
                     if (0.f != fDepth
                 && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
@@ -103,7 +103,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         }
         else
         {
-            float fDepth = encode(g_tex_4.Sample(g_sam_0, vDepthMapUV));
+            float fDepth = encode(g_tex_4.Sample(g_sam_1, vDepthMapUV));
     
             if (0.f != fDepth
         && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
@@ -126,7 +126,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
                 {
                     vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
                     vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
-                    float fDepth = encode(DepthMap.Sample(g_sam_0, vDepthMapUV));
+                    float fDepth = encode(DepthMap.Sample(g_sam_1, vDepthMapUV));
             
                     if (0.f != fDepth
                 && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
@@ -140,7 +140,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         }
         else
         {
-            float fDepth = encode(DepthMap.Sample(g_sam_0, vDepthMapUV));
+            float fDepth = encode(DepthMap.Sample(g_sam_1, vDepthMapUV));
     
             if (0.f != fDepth
         && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
