@@ -37,15 +37,6 @@ void CLight3D::CalcuRelativeScale()
 	Transform()->SetRelativeScale(Vec3(length, length, m_Info.fRadius));
 }
 
-void CLight3D::ShadowRenderUpdate()
-{
-	// 방향성 광원인 경우 그림자 처리를 위해서 광원카메라로 투영시킬 수 있게 View * Proj 행렬을 전달
-	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl");
-	Matrix matLightVP = m_pLightCam->Camera()->GetViewMat() * m_pLightCam->Camera()->GetProjMat();
-	pMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &matLightVP);
-	pMtrl->SetTexParam(TEX_PARAM::TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DepthMapTex"));
-}
-
 void CLight3D::finaltick()
 {
 	if (LIGHT_TYPE::POINT == m_Info.iLightType)
@@ -62,14 +53,6 @@ void CLight3D::finaltick()
 
 	// RenderMgr에 등록시킨 후, 인덱스를 리턴 받는다.
 	m_iLightIdx = CRenderMgr::GetInst()->RegisterLight3D(this);
-
-	if (LIGHT_TYPE::DIRECTIONAL == m_Info.iLightType)
-	{
-		m_pLightCam->Transform()->SetRelativePos(CRenderMgr::GetInst()->GetMainCam()->Transform()->GetRelativePos() - m_Info.vWorldDir * 5000.f);
-		m_pLightCam->Transform()->SetRelativeRotation(DecomposeRotMat(Transform()->GetWorldRotMat()));
-		m_pLightCam->finaltick_module();
-		ShadowRenderUpdate();
-	}
 }
 
 void CLight3D::render()
@@ -88,6 +71,13 @@ void CLight3D::render()
 	if (nullptr == m_pLightMtrl)
 		return;
 
+	if (LIGHT_TYPE::DIRECTIONAL == m_Info.iLightType)
+	{
+		m_pLightCam->Transform()->SetRelativePos(CRenderMgr::GetInst()->GetMainCam()->Transform()->GetRelativePos() - m_Info.vWorldDir * 5000.f);
+		m_pLightCam->Transform()->SetRelativeRotation(DecomposeRotMat(Transform()->GetWorldRotMat()));
+		m_pLightCam->finaltick_module();
+	}
+
 	// Transform Update
 	Transform()->UpdateData();
 
@@ -96,6 +86,14 @@ void CLight3D::render()
 
 	// 재질 바인딩 (셰이더, 상수, 텍스쳐(Target) 등등)
 	m_pLightMtrl->UpdateData();
+
+	// 방향성 광원인 경우 그림자 처리를 위해서 광원카메라로 투영시킬 수 있게 View * Proj 행렬을 전달
+	if (LIGHT_TYPE::DIRECTIONAL == (LIGHT_TYPE)m_Info.iLightType)
+	{
+		Matrix matLightVP = m_pLightCam->Camera()->GetViewMat() * m_pLightCam->Camera()->GetProjMat();
+		m_pLightMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &matLightVP);
+		m_pLightMtrl->SetTexParam(TEX_PARAM::TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"DepthMapTex"));
+	}
 
 	// 랜더링
 	m_pVolumeMesh->render();

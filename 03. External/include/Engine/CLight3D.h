@@ -39,7 +39,6 @@ public:
     float GetOutAngle() { return m_Info.fOutAngle; }
 
     void CalcuRelativeScale();
-    void ShadowRenderUpdate();
 
 public:
     virtual void finaltick() override;

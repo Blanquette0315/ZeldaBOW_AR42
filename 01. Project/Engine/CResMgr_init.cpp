@@ -926,8 +926,6 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
-	pShader->AddTexureParam(TEX_3, "Shadow Texture      ");
-	pShader->AddScalarParam(INT_3, "int");
 
 	AddRes<CGraphicsShader>(L"Std3D_DeferredShader", pShader);
 
@@ -945,6 +943,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
 
 	pShader->AddScalarParam(INT_3, "int");
+	pShader->AddTexureParam(TEX_4, "Shadow Texture      ");
 
 	AddRes<CGraphicsShader>(L"DirLightShader", pShader);
 
@@ -997,6 +996,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	// 해당 셰이더는 물체를 그릴 셰이더가 아닌 MRT의 랜더 타겟 병합 목적이므로
 	// 파라미터를 공개할 필요가 없다.
+	pShader->AddScalarParam(INT_3, "int");
 
 	AddRes<CGraphicsShader>(L"Deferred_MergeShader", pShader);
 
