@@ -7,9 +7,9 @@ CSkyBox::CSkyBox()
 	: CRenderComponent(COMPONENT_TYPE::SKYBOX)
 	, m_eSkyBoxType(SKYBOX_TYPE::SPHERE)
 {
-	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"));
 	SetType(m_eSkyBoxType);
 	SetSkyMesh();
+	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"));
 	SetDynamicShadow(false);
 }
 
@@ -65,10 +65,12 @@ void CSkyBox::SetSkyMesh()
 	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
 	{
 		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"), 0);
 	}
 	else
 	{
 		SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+		SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"), 0);
 	}
 }
 

@@ -176,6 +176,14 @@ void CMaterial::Save(const wstring& _strRelativePath)
 	if (nullptr != m_pShader)
 	{
 		// 상수 파라미터는 그대로 있는것을 저장하면 된다.
+		emitter << YAML::Key << "ConstMtrlDiff";
+		emitter << YAML::Value << m_tConst.mtrl.vDiff;
+		emitter << YAML::Key << "ConstMtrlSpec";
+		emitter << YAML::Value << m_tConst.mtrl.vSpec;
+		emitter << YAML::Key << "ConstMtrlAmb";
+		emitter << YAML::Value << m_tConst.mtrl.vAmb;
+		emitter << YAML::Key << "ConstMtrlEmv";
+		emitter << YAML::Value << m_tConst.mtrl.vEmv;
 		emitter << YAML::Key << "ConstIntArr";
 		emitter << YAML::Value << YAML::BeginSeq << m_tConst.iArr[0] << m_tConst.iArr[1] << m_tConst.iArr[2] << m_tConst.iArr[3] << YAML::EndSeq;
 		emitter << YAML::Key << "ConstFloatArr";
@@ -228,8 +236,10 @@ int CMaterial::Load(const wstring& _strFilePath)
 	// 상수, 참조 텍스쳐 정보 복구
 	if (nullptr != m_pShader)
 	{
-		tMtrlConst tConst;
-
+		SAFE_LOAD_FROM_YAML(Vec4, m_tConst.mtrl.vDiff, rootNode["ConstMtrlDiff"]);
+		SAFE_LOAD_FROM_YAML(Vec4, m_tConst.mtrl.vSpec, rootNode["ConstMtrlSpec"]);
+		SAFE_LOAD_FROM_YAML(Vec4, m_tConst.mtrl.vAmb, rootNode["ConstMtrlAmb"]);
+		SAFE_LOAD_FROM_YAML(Vec4, m_tConst.mtrl.vEmv, rootNode["ConstMtrlEmv"]);
 		for (UINT i = 0; i < 4; ++i)
 		{
 			m_tConst.iArr[i] = rootNode["ConstIntArr"][i].as<int>();

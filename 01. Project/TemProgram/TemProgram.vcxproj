@@ -83,12 +83,14 @@
     <OutDir>$(SolutionDir)02. OutPut\bin_debug\</OutDir>
     <IncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)03. External\Library\;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)03. External\Include\;$(SolutionDir)03. External\Include\FBXLoader\;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)02. OutPut\bin\</OutDir>
     <IncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)03. External\Library\;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)03. External\Include\;$(SolutionDir)03. External\Include\FBXLoader\;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -13,25 +13,24 @@ CRenderComponent::CRenderComponent(COMPONENT_TYPE _eType)
 CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 	: CComponent(_origin)
 	, m_pMesh(_origin.m_pMesh)
-	, m_pSharedMtrl(_origin.m_pSharedMtrl)
-	, m_pCurMtrl(nullptr)
-	, m_pDynamicMtrl(nullptr)
 	, m_bIsDynamicMtrl(_origin.m_bIsDynamicMtrl)
 	, m_bDynamicShadow(_origin.m_bDynamicShadow)
 {
-	if (_origin.m_pCurMtrl == _origin.m_pSharedMtrl)
+	if (false != _origin.m_vecMtrls.empty())
 	{
-		m_pCurMtrl = m_pSharedMtrl;
-	}
-	else if (_origin.m_pCurMtrl == _origin.m_pDynamicMtrl)
-	{
-		GetDynamicMaterial();
+		for (size_t i = 0; i < _origin.m_vecMtrls.size(); ++i)
+		{
+			SetSharedMaterial(_origin.m_vecMtrls[i].pSharedMtrl, i);
+		}
 	}
 }
 
 CRenderComponent::~CRenderComponent()
 {
-	m_pDynamicMtrl = nullptr;
+	for (size_t i = 0; i < m_vecMtrls.size(); ++i)
+	{
+		m_vecMtrls[i].pDynamicMtrl = nullptr;
+	}
 }
 
 void CRenderComponent::render_depthmap()
@@ -42,38 +41,71 @@ void CRenderComponent::render_depthmap()
 
 	pMtrl->UpdateData();
 
-	m_pMesh->render();
+	UINT count = m_pMesh->GetSubsetCount();
+	for (UINT i = 0; i < count; ++i)
+	{
+		m_pMesh->render(i);
+	}
 }
 
-Ptr<CMaterial> CRenderComponent::GetSharedMaterial()
+void CRenderComponent::SetMesh(Ptr<CMesh> _pMesh)
+{
+	m_pMesh = _pMesh;
+
+	if (!m_vecMtrls.empty())
+	{
+		m_vecMtrls.clear();
+		vector<tMtrlSet> vecMtrls;
+		m_vecMtrls.swap(vecMtrls);
+	}
+
+	m_vecMtrls.resize(m_pMesh->GetSubsetCount());
+}
+
+void CRenderComponent::SetSharedMaterial(Ptr<CMaterial> _pMtrl, UINT _iIdx)
+{
+	m_vecMtrls[_iIdx].pSharedMtrl = _pMtrl;
+	m_vecMtrls[_iIdx].pCurMtrl = _pMtrl;
+}
+
+Ptr<CMaterial> CRenderComponent::GetCurMaterial(UINT _iIdx)
+{
+	if (nullptr == m_vecMtrls[_iIdx].pCurMtrl)
+	{
+		m_vecMtrls[_iIdx].pCurMtrl = m_vecMtrls[_iIdx].pSharedMtrl;
+	}
+
+	return m_vecMtrls[_iIdx].pCurMtrl;
+}
+
+Ptr<CMaterial> CRenderComponent::GetSharedMaterial(UINT _iIdx)
 {
 	m_bIsDynamicMtrl = false;
-	m_pCurMtrl = m_pSharedMtrl;
+	m_vecMtrls[_iIdx].pCurMtrl = m_vecMtrls[_iIdx].pSharedMtrl;
 
-	//if (nullptr != m_pDynamicMtrl)
+	//if (m_vecMtrls[_iIdx].pDynamicMtrl.Get())
 	//{
-	//	m_pDynamicMtrl = nullptr;
+	//	m_vecMtrls[_iIdx].pDynamicMtrl = nullptr;
 	//}
 
-
-	return m_pSharedMtrl;
+	return m_vecMtrls[_iIdx].pSharedMtrl;
 }
 
-Ptr<CMaterial> CRenderComponent::GetDynamicMaterial()
+Ptr<CMaterial> CRenderComponent::GetDynamicMaterial(UINT _iIdx)
 {
 	m_bIsDynamicMtrl = true;
 	
-	if (nullptr != m_pDynamicMtrl)
+	if (nullptr != m_vecMtrls[_iIdx].pDynamicMtrl)
 	{
-		m_pCurMtrl = m_pDynamicMtrl;
-		return m_pDynamicMtrl;
+		m_vecMtrls[_iIdx].pCurMtrl = m_vecMtrls[_iIdx].pDynamicMtrl;
+		return m_vecMtrls[_iIdx].pDynamicMtrl;
 	}
 
-	m_pDynamicMtrl = m_pSharedMtrl->Clone();
-	m_pDynamicMtrl->SetName(m_pSharedMtrl->GetName());
-	m_pCurMtrl = m_pDynamicMtrl;
+	m_vecMtrls[_iIdx].pDynamicMtrl = m_vecMtrls[_iIdx].pSharedMtrl->Clone();
+	m_vecMtrls[_iIdx].pDynamicMtrl->SetName(m_vecMtrls[_iIdx].pSharedMtrl->GetName() + L"_Clone");
+	m_vecMtrls[_iIdx].pCurMtrl = m_vecMtrls[_iIdx].pDynamicMtrl;
 
-	return m_pCurMtrl;
+	return m_vecMtrls[_iIdx].pCurMtrl;
 }
 
 void CRenderComponent::SaveToYAML(YAML::Emitter& _emitter)
@@ -83,10 +115,20 @@ void CRenderComponent::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << YAML::BeginMap;
 	SaveResourceRef<CMesh>(m_pMesh, _emitter);
 	_emitter << YAML::EndMap;
-	_emitter << YAML::Key << "RenderComponentMaterial";
-	_emitter << YAML::Value << YAML::BeginMap;
-	SaveResourceRef<CMaterial>(m_pSharedMtrl, _emitter);
-	_emitter << YAML::EndMap;
+
+	UINT iMtrlCount = GetMtrlCount();
+
+	_emitter << YAML::Key << "RenderComponentMaterialCount";
+	_emitter << YAML::Value << iMtrlCount;
+
+	for (UINT i = 0; i < iMtrlCount; ++i)
+	{
+		_emitter << YAML::Key << "RenderComponentMaterial" + std::to_string(i);
+		_emitter << YAML::Value << YAML::BeginMap;
+		SaveResourceRef<CMaterial>(m_vecMtrls[i].pSharedMtrl, _emitter);
+		_emitter << YAML::EndMap;
+	}
+	
 	_emitter << YAML::Key << "RenderComponent_IsDynamicShadow";
 	_emitter << YAML::Value << m_bDynamicShadow;
 }
@@ -95,8 +137,18 @@ void CRenderComponent::LoadFromYAML(YAML::Node& _node)
 {
 	YAML::Node node = _node["RenderComponentMesh"];
 	LoadResourceRef<CMesh>(m_pMesh, node);
-	node = _node["RenderComponentMaterial"];
-	LoadResourceRef<CMaterial>(m_pSharedMtrl, node);
-	m_pCurMtrl = m_pSharedMtrl;
+
+	UINT iMtrlCount;
+	SAFE_LOAD_FROM_YAML(UINT, iMtrlCount, _node["RenderComponentMaterialCount"]);
+	m_vecMtrls.resize((size_t)iMtrlCount);
+
+	for (UINT i = 0; i < iMtrlCount; ++i)
+	{
+		node = _node["RenderComponentMaterial" + std::to_string(i)];
+		Ptr<CMaterial> pMtrl;
+		LoadResourceRef<CMaterial>(pMtrl, node);
+		SetSharedMaterial(pMtrl, i);
+	}
+
 	m_bDynamicShadow = _node["RenderComponent_IsDynamicShadow"].as<bool>();
 }

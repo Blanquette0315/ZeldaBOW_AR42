@@ -23,13 +23,12 @@ ContentUI::ContentUI()
 	m_Tree = new TreeUI("##ContentTree");
 	AddChild(m_Tree);
 
-	// Tree ����
+	// Tree
 	m_Tree->SetDummyRoot(true);
 
-	// Tree�� Delegate ���
+	// Tree Delegate
 	m_Tree->AddDynamic_Selected(this, (FUNC_1)& ContentUI::SetResourceToInspector);
 
-	// ���� ���ҽ� ���¸� ����
 	ResetContent();
 }
 
@@ -40,7 +39,6 @@ ContentUI::~ContentUI()
 
 void ContentUI::update()
 {
-	// ResMgr�� ISChanged������ �ϵ��� �����غ��ƾ���.
 	if (CEventMgr::GetInst()->IsLevelChanged() || CResMgr::GetInst()->IsChanged())
 	{
 		ResetContent();
@@ -78,7 +76,6 @@ void ContentUI::ResetContent()
 {
 	m_Tree->Clear();
 
-	// ContentUI�� Res �߰�
 	TreeNode* pRootNode = m_Tree->AddItem(nullptr, "Content", 0);
 
 	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i) 
@@ -114,7 +111,6 @@ void ContentUI::ResetContent()
 		}
 	}
 
-	// ContentUI�� Level �߰�
 	TreeNode* pLevelNode = m_Tree->AddItem(pRootNode, "All Level", 0, true);
 
 	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
@@ -155,13 +151,14 @@ void ContentUI::ReloadContent()
 			break;
 
 		case RES_TYPE::MESHDATA:
-
+			CResMgr::GetInst()->Load<CMeshData>(m_vecContentName[i], m_vecContentName[i]);
 			break;
 		case RES_TYPE::MATERIAL:
 			CResMgr::GetInst()->Load<CMaterial>(m_vecContentName[i], m_vecContentName[i]);
 			break;
 
 		case RES_TYPE::MESH:
+			CResMgr::GetInst()->Load<CMesh>(m_vecContentName[i], m_vecContentName[i]);
 			break;
 
 		case RES_TYPE::TEXTURE:
@@ -200,15 +197,8 @@ void ContentUI::ReloadContent()
 			wstring strRelativePath = iter->second->GetRelativePath();
 			assert(!strRelativePath.empty());
 
-			// �޸𸮿� �ε��� ���ҽ��� �ش��ϴ� ���� ���� �� �������� �ʴ� ���
-			// exists�Լ��� �Էµ� ��ο� ������ ������ �����ϴ����� Ȯ�����ش�.
 			if (!filesystem::exists(strFolderPath + strRelativePath))
 			{
-				// ���� ������ �������� �ʴ´ٸ�, ResMgr���� ���־ �ε��� ���ҽ��� ���� ���־�� �Ѵ�.
-				// ���ҽ� �޴������� �ش� ���ҽ��� �����Ѵ�.
-				// ���ҽ��� ���۷��� ī��Ʈ�� Ȯ���ؼ� 1�̸�, ResMgr�� �����ϰ� �ִٴ� ���̹Ƿ� ������ ����.
-				// ���� 1���� ���� ��쿡�� ���Ÿ� ���ش�.
-				// ���� �ٸ� ������ �������ε�, ������ �ع����� ������ �Ǳ� ������ �̷� ����� ����ߴ�.
 				if (iter->second->GetRefCount() <= 1)
 				{
 					tEvent evn = {};
@@ -218,18 +208,16 @@ void ContentUI::ReloadContent()
 
 					CEventMgr::GetInst()->AddEvent(evn);
 
-					MessageBox(nullptr, L"���� ���ҽ� ������", L"���ҽ� ���� Ȯ��", MB_OK);
+					MessageBox(nullptr, L"원본리소스삭제됨", L"리소스 변경 확인", MB_OK);
 				}
 				else
 				{
-					// �ش� ���ҽ��� �����ϴ� ��ü�� ����
-					MessageBox(nullptr, L"��� �� �� ���ҽ�/n���ҽ� ���� ����", L"���ҽ� ���� Ȯ��", MB_OK);
+					MessageBox(nullptr, L"사용 중 인 리소스/n/r리소스 삭제 실패", L"리소스 변경 확인", MB_OK);
 				}
 			}
 		}
 	}
 
-	// �ε��� ���� ������ ������ �ִ��� Ȯ��
 	for (size_t i = 0; i < m_vecLevelName.size(); ++i)
 	{
 		wstring strRelativePath = m_vecLevelName[i];
@@ -239,7 +227,7 @@ void ContentUI::ReloadContent()
 			// Erase Level Relative Path to m_vecLevelName
 			m_vecLevelName.erase(m_vecLevelName.begin() + i);
 			ResetContent();
-			MessageBox(nullptr, L"���� ���� ������", L"���ҽ� ���� Ȯ��", MB_OK);
+			MessageBox(nullptr, L"원본 레벨 삭제", L"리소스 변경 확인", MB_OK);
 		}
 	}
 }
@@ -297,37 +285,23 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 
 void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 {
-	// ���� ������ Tree�����̱� ������ ��������� ȣ���ϸ鼭 ��� ���� ������ ��ȸ�� ���̴�.
-
 	wstring strFolderPath = _strFolderPath + L"*.*";
 
-	// ��� ���ϸ��� �˾Ƴ���.
-	// �ڵ��� ����Ѵٴ� ���� Ŀ�� ������Ʈ�� ����ٴ� �ǹ̿� ����.
 	HANDLE hFindHandle = nullptr;
 
 	WIN32_FIND_DATA data = {};
 
-	// Ž���� �ڵ� ���
-	// FindFirstFile�� ������ ã�� �� �ִ� �Լ��̸�, �����쿡�� �������ش�.
-	// ��Ȯ���� Ž������ �ڵ��� ��ȯ���ִ� �Լ��̴�.
-	// ���� ���ڷ� �˻��� ������ ������ �����͸� ���� �ּҸ� �־��ָ� �ȴ�.
 	hFindHandle = FindFirstFile(strFolderPath.c_str(), &data);
 
 	if (INVALID_HANDLE_VALUE == hFindHandle)
 		return;
 
-	// Ž�� �ڵ��� �̿��ؼ� ��� ������ �� Ȯ���� �� ���� �ݺ�
-	// ���� ���� Ž���� ������ ���ٸ� false�� ��ȯ���ش�.
 	while (FindNextFile(hFindHandle, &data))
 	{
-		// �������� ������ ã�� ���� �츮���� �������� ���� ..������ �ٸ� �����鵵 �Բ� ã������ ������
-		// ���ϸ� ��� ���ؼ��� ���� ���´� ���ȣ���ؼ� ���� ������ Ž���ؾ� �Ѵ�.
-		// ���� ó�� : ..���� ���� Ž���� �ϸ� ��� ���ѷ����� ���� ������ ����ó�����־���.
 		if (FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes && wcscmp(data.cFileName, L".."))
 		{
 			FindContentFileName(_strFolderPath + data.cFileName + L"\\");
 		}
-		// ���� Ÿ���� �ƴϴ� == ���� Ÿ���̴�.
 		else
 		{
 			wstring strRelative = GetRelativePath(CPathMgr::GetInst()->GetContentPath(), _strFolderPath + data.cFileName);
@@ -335,18 +309,13 @@ void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 		}
 	}
 
-	// Ž���� ����� �������� FindClose�� �ݵ��� ȣ���� �־�� �Ѵ�.
 	FindClose(hFindHandle);
 }
 
 RES_TYPE ContentUI::GetResTypeByExt(wstring _filename)
 {
-	// path�� FileSystem ��� ������ ����� �����ϴ�.
-	// _wsplitpath_s�� ������� �ʾƵ� �ȴٴ� ������ �ִ�.
 	wstring strExt = path(_filename.c_str()).extension();
 
-	// if������ Ȯ���ڸ� �˻��� �б�ó���ؼ� �˸��� RES_TYPE�� ��ȯ���ش�.
-	// Shader���� �츮�� �ϵ��ڵ��� ����ϱ� ������ ������ �־���.
 	if (strExt == L".pref")
 		return RES_TYPE::PREFAB;
 	else if (strExt == L".mdat")
@@ -373,7 +342,6 @@ void ContentUI::AddGameObjectToTree(TreeNode* _ParentNode, CGameObject* _Object)
 	string strObjectName = string(_Object->GetName().begin(), _Object->GetName().end());
 	TreeNode* pCurNode = m_Tree->AddItem(_ParentNode, strObjectName.c_str(), (DWORD_PTR)_Object);
 
-	// �θ� ������Ʈ�� �־ �ش� ������Ʈ�� �ڽı��� ����Լ��� ���� ��带 �߰����ش�.
 	const vector<CGameObject*>& vecChild = _Object->GetChildObject();
 	for (size_t i = 0; i < vecChild.size(); ++i)
 	{

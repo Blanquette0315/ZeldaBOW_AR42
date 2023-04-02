@@ -202,6 +202,9 @@
     <Filter Include="Engine\06. Component\01. Transform\BoundingBox">
       <UniqueIdentifier>{b5e7fb0d-fc00-48d5-8739-057d9e361c2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\07. Resource\07. MeshData">
+      <UniqueIdentifier>{8d68f523-e4cb-4aa0-852e-47f5c4442e37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -462,6 +465,12 @@
     <ClInclude Include="CBoundingBox.h">
       <Filter>Engine\06. Component\01. Transform\BoundingBox</Filter>
     </ClInclude>
+    <ClInclude Include="CFBXLoader.h">
+      <Filter>Engine\07. Resource\07. MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshData.h">
+      <Filter>Engine\07. Resource\07. MeshData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -700,6 +709,12 @@
     </ClCompile>
     <ClCompile Include="CWeightMapShader.cpp">
       <Filter>HLSL\Compute\LandScape\WeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CFBXLoader.cpp">
+      <Filter>Engine\07. Resource\07. MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshData.cpp">
+      <Filter>Engine\07. Resource\07. MeshData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

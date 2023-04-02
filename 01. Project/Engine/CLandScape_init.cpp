@@ -71,6 +71,7 @@ void CLandScape::CreateMesh()
 	// 추가
 	AddRes(pMesh, RES_TYPE::MESH);
 	SetMesh(pMesh);
+	SetSharedMaterial(m_LandScapeMtrl, 0);
 }
 
 void CLandScape::CreateMaterial()
@@ -105,13 +106,13 @@ void CLandScape::CreateMaterial()
 	AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
 
 	// 재질
-	Ptr<CMaterial> pMtrl = new CMaterial(true);
-	pMtrl->SetShader(pShader);
-	pMtrl->SetKey(L"LandScapeMtrl");
-	SetSharedMaterial(pMtrl);
+	m_LandScapeMtrl = new CMaterial(true);
+	m_LandScapeMtrl->SetShader(pShader);
+	m_LandScapeMtrl->SetKey(L"LandScapeMtrl");
+	SetSharedMaterial(m_LandScapeMtrl);
 
 	// 추가
-	AddRes(pMtrl.Get(), RES_TYPE::MATERIAL);
+	AddRes(m_LandScapeMtrl.Get(), RES_TYPE::MATERIAL);
 
 	// =====================
 	// 지형 피킹 컴퓨트 쉐이더

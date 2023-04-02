@@ -33,23 +33,31 @@ void CMeshRender::render()
 	if (!IsActivate())
 		return;
 
-	if (nullptr == GetMesh() || nullptr == GetCurMaterial())
+	if (nullptr == GetMesh())
 		return;
 
 	// 위치정보 업데이트
 	Transform()->UpdateData();
 
 	// 사용할 재질 업데이트
-	GetCurMaterial()->UpdateData();
+	UINT iSubsetCount = GetMesh()->GetSubsetCount();
+
+	for (int i = 0; i < iSubsetCount; ++i)
+	{
+		if (nullptr != GetCurMaterial(i))
+		{
+			GetCurMaterial(i)->UpdateData();
+
+			// 사용할 메쉬 업데이트 및 렌더링
+			GetMesh()->render(i);
+		}
+	}
 
 	// Animator2D 컴포넌트가 있다면
 	if (Animator2D())
 	{
 		Animator2D()->UpdateData();
 	}
-
-	// 사용할 메쉬 업데이트 및 렌더링
-	GetMesh()->render();
 
 	// 사용한 텍스쳐 레지스터 비우기
 	CMaterial::Clear();

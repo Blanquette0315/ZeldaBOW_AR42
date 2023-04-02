@@ -32,6 +32,7 @@ private:
 
     LANDSCAPE_MOD           m_eMod; 	        // 지형 툴모드에서 상태값
 
+    Ptr<CMaterial>          m_LandScapeMtrl;
 
 public:
     virtual void finaltick() override;

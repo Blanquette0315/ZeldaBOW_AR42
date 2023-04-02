@@ -162,7 +162,6 @@ void CRenderMgr::CreateMRT()
 				, 4096, 4096
 				, DXGI_FORMAT_D32_FLOAT, D3D11_BIND_DEPTH_STENCIL);
 
-
 		m_arrMRT[(UINT)MRT_TYPE::SHADOW] = new CMRT;
 		m_arrMRT[(UINT)MRT_TYPE::SHADOW]->Create(arrRTTex, arrClear, pDepthStencilTex);
 	}

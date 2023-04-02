@@ -84,12 +84,14 @@
     <TargetName>$(ProjectName)_debug</TargetName>
     <IncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)03. External\Library\;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)03. External\Include\;$(SolutionDir)03. External\Include\FBXLoader\;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)03. External\Library\$(ProjectName)\</OutDir>
     <IncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)03. External\Library\;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)03. External\Include\;$(SolutionDir)03. External\Include\FBXLoader\;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -190,6 +192,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CExportMgr.h" />
+    <ClInclude Include="CFBXLoader.h" />
     <ClInclude Include="CFontMgr.h" />
     <ClInclude Include="CFrustum.h" />
     <ClInclude Include="CGameObject.h" />
@@ -204,6 +207,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CLight3D.h" />
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CMesh.h" />
+    <ClInclude Include="CMeshData.h" />
     <ClInclude Include="CMeshRender.h" />
     <ClInclude Include="CMRT.h" />
     <ClInclude Include="CNavMgr.h" />
@@ -277,6 +281,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CExportMgr.cpp" />
+    <ClCompile Include="CFBXLoader.cpp" />
     <ClCompile Include="CFontMgr.cpp" />
     <ClCompile Include="CFrustum.cpp" />
     <ClCompile Include="CGameObject.cpp" />
@@ -292,6 +297,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CLight3D.cpp" />
     <ClCompile Include="CMaterial.cpp" />
     <ClCompile Include="CMesh.cpp" />
+    <ClCompile Include="CMeshData.cpp" />
     <ClCompile Include="CMeshRender.cpp" />
     <ClCompile Include="CMRT.cpp" />
     <ClCompile Include="CNavMgr.cpp" />

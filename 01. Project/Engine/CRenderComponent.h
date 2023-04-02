@@ -4,15 +4,19 @@
 #include "CMesh.h"
 #include "CMaterial.h"
 
+struct tMtrlSet
+{
+    Ptr<CMaterial>  pCurMtrl;       // 현재 사용 할 메테리얼
+    Ptr<CMaterial>  pSharedMtrl;    // 공유 메테리얼
+    Ptr<CMaterial>  pDynamicMtrl;   // 공유 메테리얼의 복사본    
+};
+
 class CRenderComponent :
     public CComponent
 {
 private:
     Ptr<CMesh>              m_pMesh;
-
-    Ptr<CMaterial>          m_pSharedMtrl;      // 공유 재질
-    Ptr<CMaterial>          m_pDynamicMtrl;     // 동적 재질
-    Ptr<CMaterial>          m_pCurMtrl;         // 현재 사용 중인 재질
+    vector<tMtrlSet>        m_vecMtrls;
 
     bool                    m_bIsDynamicMtrl;
     bool                    m_bDynamicShadow;
@@ -22,14 +26,16 @@ public:
     virtual void render_depthmap();
 
 public:
-    void SetMesh(Ptr<CMesh> _pMesh) { m_pMesh = _pMesh; }
+    void SetMesh(Ptr<CMesh> _pMesh);
     Ptr<CMesh> GetMesh() { return m_pMesh; }
 
-    void SetSharedMaterial(Ptr<CMaterial> _pMtrl) { m_pSharedMtrl = _pMtrl; ; m_pCurMtrl = _pMtrl;}
-    Ptr<CMaterial> GetSharedMaterial();
+    UINT GetMtrlCount() { return (UINT)m_vecMtrls.size(); }
 
-    Ptr<CMaterial> GetCurMaterial() { return m_pCurMtrl; }
-    Ptr<CMaterial> GetDynamicMaterial();
+    void SetSharedMaterial(Ptr<CMaterial> _pMtrl, UINT _iIdx = 0);
+
+    Ptr<CMaterial> GetCurMaterial(UINT _iIdx = 0);
+    Ptr<CMaterial> GetSharedMaterial(UINT _idx = 0);
+    Ptr<CMaterial> GetDynamicMaterial(UINT _iIdx = 0);
 
     bool IsDynamicMtrl() { return m_bIsDynamicMtrl; }
 

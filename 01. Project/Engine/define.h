@@ -29,6 +29,8 @@ typedef Vector4 Vec4;
 #define CLONE_DUMMY(type) public: type* Clone() { return nullptr; }
 #define CLONE_ASSERT(type) public: type* Clone() { assert(nullptr); return nullptr; }
 
+#define SAFE_DELETE(p) if(nullptr != p) delete p; p = nullptr;
+
 #define MAX_LAYER 32
 
 #define SAFE_LOAD_FROM_YAML(type, variable, node) if(node.IsDefined()) { variable = node.as<type>(); }

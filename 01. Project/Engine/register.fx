@@ -19,6 +19,11 @@ cbuffer TRANSFORM : register(b0)
 
 cbuffer MATERIAL : register(b1)
 {
+    float4 vDiff;
+    float4 vSpec;
+    float4 vAmb;
+    float4 vEmv;
+    
     int g_int_0;
     int g_int_1;
     int g_int_2;

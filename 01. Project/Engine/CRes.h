@@ -49,7 +49,7 @@ public:
 
     void ChangeName(bool _Change) { m_bChangeName = _Change; }
 
-private:
+protected:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; if (m_bEngineRes){SetName(m_strKey);} }
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
 
@@ -74,6 +74,7 @@ public:
 
     friend class CResMgr;
     friend class CLandScape;
+    friend class CFBXLoader;
 
     template<typename T>
     friend class Ptr;

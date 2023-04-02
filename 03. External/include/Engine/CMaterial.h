@@ -22,6 +22,14 @@ public:
     void SetShader(Ptr<CGraphicsShader> _pShader) { m_pShader = _pShader; }
     Ptr<CGraphicsShader> GetShader() { return m_pShader; }
 
+    void SetMaterialCoefficient(Vec4 _vDiff, Vec4 _vSpec, Vec4 _vAmb, Vec4 _vEmis)
+    {
+        m_tConst.mtrl.vDiff = _vDiff;
+        m_tConst.mtrl.vAmb = _vAmb;
+        m_tConst.mtrl.vSpec = _vSpec;
+        m_tConst.mtrl.vEmv = _vEmis;
+    }
+
     void UpdateData();
     static void Clear();
 

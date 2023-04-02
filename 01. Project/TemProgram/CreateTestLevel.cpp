@@ -215,6 +215,21 @@ void CreateTestLevel()
 
 	//pLevel->AddGameObject(pObject, 0);
 
+	// ============
+	// FBX Loading
+	// ============	
+	{
+		Ptr<CMeshData> pMeshData = nullptr;
+		CGameObject* pObj = nullptr;
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\House.fbx");
+		pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\House.mdat");
+		pMeshData->Save(pMeshData->GetRelativePath());
+
+		pObj = pMeshData->Instantiate();
+		pObj->SetName(L"House");
+		pLevel->AddGameObject(pObj, 0);
+	}
+
 	// 데칼 생성
 	CGameObject* pDecal = new CGameObject;
 	pDecal->SetName(L"Decal");

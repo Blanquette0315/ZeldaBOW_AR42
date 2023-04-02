@@ -1,6 +1,8 @@
 #pragma once
 #include "CComputeShader.h"
 
+class CStructuredBuffer;
+
 class CHeightMapShader :
     public CComputeShader
 {
@@ -9,7 +11,7 @@ private:
     Ptr<CTexture>       m_pBrushTex;
     Vec2                m_vScale; // 높이 Brush 크기
     int                 m_iBrushIdx;
-    CStructuredBuffer* m_pInput; // Ray 충돌 위치    
+    CStructuredBuffer*  m_pInput; // Ray 충돌 위치    
 
 public:
     void SetHeightMap(Ptr<CTexture> _pTex) { m_pHeightMap = _pTex; }

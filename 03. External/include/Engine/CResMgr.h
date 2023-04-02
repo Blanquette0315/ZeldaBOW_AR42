@@ -9,6 +9,7 @@
 #include "CMaterial.h"
 #include "CPrefab.h"
 #include "CSound.h"
+#include "CMeshData.h"
 
 class CResMgr
 	: public CSingleton<CResMgr>
@@ -42,6 +43,8 @@ public:
 	Ptr<CTexture> LoadTexture(const wstring& _strKey, const wstring& _strRelativePath, int _iMapLevel);
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _FORMAT, UINT _iBindFlag);
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
+
+	Ptr<CMeshData> LoadFBX(const wstring& _strPath);
 
 	const map<wstring, Ptr<CRes>>& GetResource(RES_TYPE _eType)
 	{
@@ -83,6 +86,11 @@ RES_TYPE GetType()
 	if (typeid(T).hash_code() == typeid(CMesh).hash_code())
 	{
 		return RES_TYPE::MESH;
+	}
+
+	if (typeid(T).hash_code() == typeid(CMeshData).hash_code())
+	{
+		return RES_TYPE::MESHDATA;
 	}
 
 	if (typeid(T).hash_code() == typeid(CTexture).hash_code())
