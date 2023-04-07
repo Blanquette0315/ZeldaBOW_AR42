@@ -36,6 +36,7 @@ public:
     GET_OTHER_COMPONENT(Camera);
     GET_OTHER_COMPONENT(Collider);
     GET_OTHER_COMPONENT(Animator2D);
+    GET_OTHER_COMPONENT(Animator3D);
     GET_OTHER_COMPONENT(Light2D);
     GET_OTHER_COMPONENT(Light3D);
     GET_OTHER_COMPONENT(ParticleSystem);

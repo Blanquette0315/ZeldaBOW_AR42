@@ -221,13 +221,15 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\House.fbx");
-		pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\House.mdat");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Bear.fbx");
+		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Bear.mdat");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
 		pObj = pMeshData->Instantiate();
-		pObj->SetName(L"House");
+		pObj->SetName(L"Monster");
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 		pLevel->AddGameObject(pObj, 0);
+		//pObj->Animator3D()->Play(L"Take 001", true);
 	}
 
 	// 데칼 생성

@@ -20,8 +20,8 @@ struct Vtx
 	Vec3 vBinormal;
 	Vec3 vNormal;
 
-	// Vec4 vWeights;
-	// Vec4 vIndices;
+	Vec4 vWeights;
+	Vec4 vIndices;
 };
 
 struct tEvent
@@ -93,6 +93,51 @@ struct tAnim2DFrm
 	Vec2  vOffset;
 	Vec2  vFullsize;
 	float fDuration;
+};
+
+// ============
+// Animation 3D
+// ============
+struct tFrameTrans
+{
+	Vec4	vTranslate;
+	Vec4	vScale;
+	Vec4	qRot;
+};
+
+struct tMTKeyFrame
+{
+	double	dTime;
+	int		iFrame;
+	Vec3	vTranslate;
+	Vec3	vScale;
+	Vec4	qRot;
+};
+
+
+struct tMTBone
+{
+	wstring				strBoneName;
+	int					iDepth;
+	int					iParentIndx;
+	Matrix				matOffset;	// Offset 행렬(뼈 -> 루트 까지의 행렬)
+	Matrix				matBone;   // 이거 안씀
+	vector<tMTKeyFrame>	vecKeyFrame;
+};
+
+struct tMTAnimClip
+{
+	wstring			strAnimName;
+	int				iStartFrame;
+	int				iEndFrame;
+	int				iFrameLength;
+
+	double			dStartTime;
+	double			dEndTime;
+	double			dTimeLength;
+	float			fUpdateTime; // 이거 안씀
+
+	FbxTime::EMode	eMode;
 };
 
 // ======================
@@ -186,6 +231,7 @@ struct tMtrlConst
 	Matrix matArr[4];
 
 	int HasTex[(UINT)TEX_PARAM::TEX_END]; // 해당 멤버는 해당 텍스처 배열에 바인딩이 걸린게 있는지 확인하기 위한 멤버이다.
+	int	arrAnimData[4];	// 3D Animation 정보
 };
 
 struct tGlobalData

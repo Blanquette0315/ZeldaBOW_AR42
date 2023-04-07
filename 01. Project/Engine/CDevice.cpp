@@ -308,11 +308,24 @@ int CDevice::CreateDepthStencilState()
 int CDevice::CreateBlendState()
 {
 	HRESULT hr = S_OK;
+	D3D11_BLEND_DESC desc = {};
 
 	// Default ºí·£µù
-	m_arrBS[(UINT)BS_TYPE::DEFAULT] = nullptr;
+	desc.AlphaToCoverageEnable = false;
+	desc.IndependentBlendEnable = false;
 
-	D3D11_BLEND_DESC desc = {};
+	desc.RenderTarget[0].BlendEnable = true;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	hr = DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::DEFAULT].GetAddressOf());
 
 	// Alpha Blend
 	desc.AlphaToCoverageEnable = false;

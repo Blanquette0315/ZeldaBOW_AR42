@@ -20,7 +20,7 @@
 #define LightVP         g_mat_0
 
 #define DepthMapResolution 4096
-#define Bias               0.0003f
+#define Bias               0.0001f
 
 struct VS_IN
 {
@@ -165,9 +165,10 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     output.vDiffuse = LightColor.vDiff * (1.f - fShadowPow) + LightColor.vEmb;
 
     // deferred MRT의 Data RenderTarget에 a자리에 스페큘러 계수를 넣어두었었다.
-    float SpecCoef = g_tex_2.Sample(g_sam_0, vUV).x;
-    
-    output.vSpecular = LightColor.vSpec * SpecCoef;
+    float SpecCoef = g_tex_2.Sample(g_sam_1, vUV).x;
+    float4 vSpec = decode(SpecCoef);
+
+    output.vSpecular.xyz = LightColor.vSpec.xyz * vSpec.xyz;
     
     // ImGui상에서 이미지로 보기 위해 알파를 1로 두었다.
     output.vDiffuse.a = 1.f;
@@ -317,6 +318,8 @@ PS_OUT PS_SpotLightShader(VS_OUT _in)
 struct VS_DEPTH_IN
 {
     float3 vPos : POSITION;
+    float4 vWeights : BLENDWEIGHT;
+    float4 vIndices : BLENDINDICES;
 };
 
 struct VS_DEPTH_OUT
@@ -329,6 +332,11 @@ VS_DEPTH_OUT VS_DepthMap(VS_DEPTH_IN _in)
 {
     VS_DEPTH_OUT output = (VS_DEPTH_OUT) 0.f;
 
+    if (g_iAnim)
+    {
+        Skinning(_in.vPos, _in.vWeights, _in.vIndices, 0);
+    }
+    
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vProjPos = output.vPosition;
 

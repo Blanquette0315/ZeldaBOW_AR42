@@ -733,6 +733,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "TANGENT");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "BINORMAL");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "NORMAL");
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "BLENDWEIGHT");
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "BLENDINDICES");
 
 	CGraphicsShader* pShader = nullptr;
 
@@ -1029,6 +1031,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 #include "CPaintShader.h"
 #include "CParticleUpdateShader.h"
+#include "CAnimation3DShader.h"
 void CResMgr::CreateDefaultComputeShader()
 {
 	CComputeShader* pShader = nullptr;
@@ -1041,6 +1044,11 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader = new CParticleUpdateShader;
 	pShader->CreateComputeShader(L"shader\\particleupdate.fx", "CS_ParticleUpdate");
 	AddRes<CComputeShader>(L"ParticleUpdateShader", pShader);
+
+	// Animation3D Update Shader	
+	pShader = new CAnimation3DShader;
+	pShader->CreateComputeShader(L"shader\\animation3d.fx", "CS_Animation3D");
+	AddRes<CComputeShader>(L"Animation3DUpdateShader", pShader);
 }
 
 void CResMgr::CreateDefaultMaterial()

@@ -19,10 +19,10 @@ cbuffer TRANSFORM : register(b0)
 
 cbuffer MATERIAL : register(b1)
 {
-    float4 vDiff;
-    float4 vSpec;
-    float4 vAmb;
-    float4 vEmv;
+    float4 g_vDiff;
+    float4 g_vSpec;
+    float4 g_vAmb;
+    float4 g_vEmv;
     
     int g_int_0;
     int g_int_1;
@@ -63,6 +63,11 @@ cbuffer MATERIAL : register(b1)
     
     int g_btexarr_0;
     int g_btexarr_1;
+    
+    // 3D Animation Á¤º¸
+    int g_iAnim;
+    int g_iBoneCount;
+    int2 padding;
 };
 
 cbuffer GLOBAL : register(b2)
@@ -115,6 +120,9 @@ StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t14);
 
 // Noise Texture
 Texture2D g_Noise : register(t15);
+
+// Animation3D Bone Matrix Buffer
+StructuredBuffer<Matrix> g_arrBoneMat : register(t30);
 
 // RenderTarget CopyTex
 Texture2D g_RTCopyTex : register(t60);

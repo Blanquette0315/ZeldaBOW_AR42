@@ -246,6 +246,7 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 				pComponent = new CRigidBody;
 				break;
 			case COMPONENT_TYPE::ANIMATOR3D:
+				pComponent = new CAnimator3D;
 				break;
 			case COMPONENT_TYPE::SKYBOX:
 				pComponent = new CSkyBox;

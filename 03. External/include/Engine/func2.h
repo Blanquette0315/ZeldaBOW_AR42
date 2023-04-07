@@ -92,6 +92,8 @@ inline bool IsValid(CEntity* _pCom)
 	return true;
 }
 
+Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat);
+
 // ====================
 // = File Save / Load =
 // ====================

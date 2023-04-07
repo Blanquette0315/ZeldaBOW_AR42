@@ -15,6 +15,9 @@ struct VS_IN
     float3 vTangent : TANGENT;
     float3 vNormal : NORMAL;
     float3 vBinormal : BINORMAL;
+    
+    float4 vWeights : BLENDWEIGHT;
+    float4 vIndices : BLENDINDICES;
 };
 
 struct VS_OUT
@@ -32,6 +35,11 @@ struct VS_OUT
 VS_OUT VS_Std3D_Deferred(VS_IN _in)
 {
     VS_OUT output = (VS_OUT) 0.f;
+    
+    if (g_iAnim)
+    {
+        Skinning(_in.vPos, _in.vTangent, _in.vBinormal, _in.vNormal, _in.vWeights, _in.vIndices, 0);
+    }
     
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vUV = _in.vUV;
@@ -82,10 +90,22 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
         vNormal = normalize(mul(vNormal, matTBN));
     }
     
-    output.vColor = vObjColor;
+    output.vColor = vObjColor * g_vDiff;
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
-    output.vData.x = fSpecCoefficent;
+    float4 vSpecCoeff = float4(fSpecCoefficent, fSpecCoefficent, fSpecCoefficent, 1.f);
+       
+    // Spec ∏ ¿Ã ¿÷¿∏∏È
+    if (g_btex_2)
+    {
+        vSpecCoeff *= g_tex_2.Sample(g_sam_0, _in.vUV);
+    }
+    else
+    {
+        vSpecCoeff *= g_vSpec;
+    }
+    
+    output.vData.x = encode(vSpecCoeff);
     
     return output;
 }

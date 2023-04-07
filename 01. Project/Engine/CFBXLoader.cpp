@@ -239,7 +239,7 @@ void CFBXLoader::GetTangent(FbxMesh* _pMesh
 {
 	int iTangentCnt = _pMesh->GetElementTangentCount();
 	if (1 != iTangentCnt)
-		assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
+		return;//assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
 
 	// 탄젠트 data 의 시작 주소
 	FbxGeometryElementTangent* pTangent = _pMesh->GetElementTangent();
@@ -271,7 +271,7 @@ void CFBXLoader::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx
 {
 	int iBinormalCnt = _pMesh->GetElementBinormalCount();
 	if (1 != iBinormalCnt)
-		assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
+		return;//assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
 
 	// 종법선 data 의 시작 주소
 	FbxGeometryElementBinormal* pBinormal = _pMesh->GetElementBinormal();
@@ -473,7 +473,7 @@ void CFBXLoader::CreateMaterial()
 			pMaterial->SetKey(strPath);
 			pMaterial->SetRelativePath(strPath);
 
-			pMaterial->SetShader(CResMgr::GetInst()->FindRes<CGraphicsShader>(L"Std3DDeferredShader"));
+			pMaterial->SetShader(CResMgr::GetInst()->FindRes<CGraphicsShader>(L"Std3D_DeferredShader"));
 
 			wstring strTexKey = m_vecContainer[i].vecMtrl[j].strDiff;
 			Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(strTexKey);

@@ -2,6 +2,7 @@
 #include "CRenderComponent.h"
 
 #include "CTransform.h"
+#include "CAnimator3D.h"
 
 CRenderComponent::CRenderComponent(COMPONENT_TYPE _eType)
 	: CComponent(_eType)
@@ -39,12 +40,28 @@ void CRenderComponent::render_depthmap()
 
 	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DepthMapMtrl");
 
+	// Animator3D 업데이트
+	if (Animator3D())
+	{
+		Animator3D()->UpdateData();
+		pMtrl->SetAnim3D(true);
+		pMtrl->SetBoneCount(Animator3D()->GetBoneCount());
+	}
+
 	pMtrl->UpdateData();
 
-	UINT count = m_pMesh->GetSubsetCount();
-	for (UINT i = 0; i < count; ++i)
+	UINT iSubsetCount = m_pMesh->GetSubsetCount();
+	for (UINT i = 0; i < iSubsetCount; ++i)
 	{
 		m_pMesh->render(i);
+	}
+
+	if (Animator3D())
+	{
+		Animator3D()->SetFinalMatUpdate(false);
+		Animator3D()->ClearData();
+		pMtrl->SetAnim3D(false);
+		pMtrl->SetBoneCount(0);
 	}
 }
 
@@ -137,6 +154,11 @@ void CRenderComponent::LoadFromYAML(YAML::Node& _node)
 {
 	YAML::Node node = _node["RenderComponentMesh"];
 	LoadResourceRef<CMesh>(m_pMesh, node);
+
+	if (true == m_pMesh->IsAnimMesh())
+	{
+		Animator3D()->SetBones(m_pMesh->GetBones());
+	}
 
 	UINT iMtrlCount;
 	SAFE_LOAD_FROM_YAML(UINT, iMtrlCount, _node["RenderComponentMaterialCount"]);

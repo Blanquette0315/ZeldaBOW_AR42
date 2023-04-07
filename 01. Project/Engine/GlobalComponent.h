@@ -13,6 +13,6 @@
 #include "CSkyBox.h"
 #include "CLandScape.h"
 #include "CRigidBody.h"
+#include "CAnimator3D.h"
 
-//#include "CAnimator3D.h"
 //#include "CBoundingBox.h"

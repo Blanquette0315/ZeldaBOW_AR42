@@ -178,7 +178,10 @@ call EngineCopy.bat</Command>
   <ItemGroup>
     <ClInclude Include="..\..\03. External\include\DirectXTex\DirectXTex.h" />
     <ClInclude Include="CAnimation2D.h" />
+    <ClInclude Include="CAnimation3D.h" />
+    <ClInclude Include="CAnimation3DShader.h" />
     <ClInclude Include="CAnimator2D.h" />
+    <ClInclude Include="CAnimator3D.h" />
     <ClInclude Include="CBoundingBox.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCollider.h" />
@@ -267,7 +270,10 @@ call EngineCopy.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAnimation2D.cpp" />
+    <ClCompile Include="CAnimation3D.cpp" />
+    <ClCompile Include="CAnimation3DShader.cpp" />
     <ClCompile Include="CAnimator2D.cpp" />
+    <ClCompile Include="CAnimator3D.cpp" />
     <ClCompile Include="CBoundingBox.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCollider.cpp" />
@@ -358,6 +364,16 @@ call EngineCopy.bat</Command>
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="animation3d.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="compute.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

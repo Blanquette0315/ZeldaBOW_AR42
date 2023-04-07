@@ -156,6 +156,9 @@
     <Filter Include="02. ImGui\ImGuizmo">
       <UniqueIdentifier>{4a8385dd-684b-4c28-b9de-4e26081755e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\01. Inspector\ComponentUI\Animator3DUI">
+      <UniqueIdentifier>{fb03d164-23df-401c-a80c-88821c14128b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TemProgram.h">
@@ -353,6 +356,9 @@
     <ClInclude Include="ImGuizmo.h">
       <Filter>02. ImGui\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Animator3DUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\Animator3DUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -532,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="ImGuizmo.cpp">
       <Filter>02. ImGui\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator3DUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\Animator3DUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

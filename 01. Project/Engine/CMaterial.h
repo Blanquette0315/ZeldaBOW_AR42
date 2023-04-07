@@ -30,6 +30,9 @@ public:
         m_tConst.mtrl.vEmv = _vEmis;
     }
 
+    void SetAnim3D(bool _bTrue) { m_tConst.arrAnimData[0] = (int)_bTrue; }
+    void SetBoneCount(int _iBoneCount) { m_tConst.arrAnimData[1] = _iBoneCount; }
+
     void UpdateData();
     static void Clear();
 

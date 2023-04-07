@@ -20,6 +20,7 @@
 #include "ParticleSystemUI.h"
 #include "TileMapUI.h"
 #include "Animator2DUI.h"
+#include "Animator3DUI.h"
 #include "SkyBoxUI.h"
 #include "DecalUI.h"
 #include "RigidBodyUI.h"
@@ -80,6 +81,10 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = new Animator2DUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetSize(ImVec2(0.f, 450.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D] = new Animator3DUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D]->SetSize(ImVec2(0.f, 450.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX] = new SkyBoxUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX]->SetSize(ImVec2(0.f, 150.f));
