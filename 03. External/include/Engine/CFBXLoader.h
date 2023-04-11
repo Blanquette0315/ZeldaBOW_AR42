@@ -102,7 +102,7 @@ public:
 
 public:
 	int GetContainerCount() { return (int)m_vecContainer.size(); }
-	const tContainer& GetContainer(int _iIdx) { return m_vecContainer[_iIdx]; }
+	tContainer& GetContainer(int _iIdx) { return m_vecContainer[_iIdx]; }
 	vector<tBone*>& GetBones() { return m_vecBone; }
 	vector<tAnimClip*>& GetAnimClip() { return m_vecAnimClip; }
 

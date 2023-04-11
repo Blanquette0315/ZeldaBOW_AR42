@@ -221,8 +221,8 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Bear.fbx");
-		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Bear.mdat");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\bass_test.fbx");
+		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\bass_test.mdat");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
 		pObj = pMeshData->Instantiate();
