@@ -20,7 +20,7 @@
 #define LightVP         g_mat_0
 
 #define DepthMapResolution 4096
-#define Bias               0.0001f
+#define Bias               0.0003f
 
 struct VS_IN
 {

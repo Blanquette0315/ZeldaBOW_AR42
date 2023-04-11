@@ -238,8 +238,8 @@ void CFBXLoader::GetTangent(FbxMesh* _pMesh
 	, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
 {
 	int iTangentCnt = _pMesh->GetElementTangentCount();
-	if (1 != iTangentCnt)
-		return;//assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
+	if (1 > iTangentCnt)
+		assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
 
 	// 탄젠트 data 의 시작 주소
 	FbxGeometryElementTangent* pTangent = _pMesh->GetElementTangent();
@@ -270,8 +270,8 @@ void CFBXLoader::GetTangent(FbxMesh* _pMesh
 void CFBXLoader::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
 {
 	int iBinormalCnt = _pMesh->GetElementBinormalCount();
-	if (1 != iBinormalCnt)
-		return;//assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
+	if (1 > iBinormalCnt)
+		assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
 
 	// 종법선 data 의 시작 주소
 	FbxGeometryElementBinormal* pBinormal = _pMesh->GetElementBinormal();

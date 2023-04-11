@@ -86,7 +86,7 @@ int CTexture::Load(const wstring& _strFilePath, int _iMipLevel)
 	else
 	{
 		// .png .jpg .jpeg .bmp
-		hRet = LoadFromWICFile(_strFilePath.c_str(), WIC_FLAGS_NONE, nullptr, m_Image);
+		hRet = LoadFromWICFile(_strFilePath.c_str(), WIC_FLAGS_IGNORE_SRGB, nullptr, m_Image);
 	}
 
 	if (FAILED(hRet))
