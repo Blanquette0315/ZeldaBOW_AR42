@@ -17,8 +17,9 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 	, m_bIsDynamicMtrl(_origin.m_bIsDynamicMtrl)
 	, m_bDynamicShadow(_origin.m_bDynamicShadow)
 {
-	if (false != _origin.m_vecMtrls.empty())
+	if (false == _origin.m_vecMtrls.empty())
 	{
+		m_vecMtrls.resize(_origin.m_vecMtrls.size());
 		for (size_t i = 0; i < _origin.m_vecMtrls.size(); ++i)
 		{
 			SetSharedMaterial(_origin.m_vecMtrls[i].pSharedMtrl, i);

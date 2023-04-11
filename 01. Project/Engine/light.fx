@@ -79,7 +79,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     
     if (g_btex_4)
     {
-        if (g_int_3 > 0)
+        if (g_int_3 > -1)
         {
             int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
 
@@ -87,8 +87,8 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
-                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * (g_int_3 + 1)) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * (g_int_3 + 1)) / DepthMapResolution;
                     float fDepth = encode(g_tex_4.Sample(g_sam_1, vDepthMapUV));
             
                     if (0.f != fDepth
@@ -116,7 +116,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     }
     else
     {
-        if (g_int_3 > 0)
+        if (g_int_3 > -1)
         {
             int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
 
@@ -124,8 +124,8 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * g_int_3) / DepthMapResolution;
-                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * g_int_3) / DepthMapResolution;
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * (g_int_3 + 1)) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * (g_int_3 + 1)) / DepthMapResolution;
                     float fDepth = encode(DepthMap.Sample(g_sam_1, vDepthMapUV));
             
                     if (0.f != fDepth
