@@ -94,10 +94,14 @@ void CRenderMgr::CreateMRT()
 			CResMgr::GetInst()->CreateTexture(L"DataTargetTex"
 											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"EmissiveTargetTex"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
 		// 클리어 색상 정하기
 		Vec4 arrClear[8] = {
+			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),

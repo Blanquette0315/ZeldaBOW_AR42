@@ -14,6 +14,9 @@
 // g_tex_0 : Position Target tex
 // g_tex_1 : Normal Target Tex
 // g_tex_2 : Data Target Tex
+// g_tex_3 : Depth Tex
+// g_tex_4 : Shadow Tex
+// g_tex_5 : Emissive Tex
 // ==============================
 
 #define DepthMap        g_tex_3
@@ -162,7 +165,14 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     //    fShadowPow = ShadowGaussianSample(vUV, g_int_3);
     //}
     
-    output.vDiffuse = LightColor.vDiff * (1.f - fShadowPow) + LightColor.vEmb;
+    // Emissive Tex Sample
+    float4 vEmissive = float4(0.f, 0.f, 0.f, 1.f);
+    if (g_btex_5)
+    {
+        vEmissive = g_tex_5.Sample(g_sam_0, vUV);
+    }
+    
+    output.vDiffuse = LightColor.vDiff * (1.f - fShadowPow) + LightColor.vEmb + vEmissive;
 
     // deferred MRT의 Data RenderTarget에 a자리에 스페큘러 계수를 넣어두었었다.
     float SpecCoef = g_tex_2.Sample(g_sam_1, vUV).x;
