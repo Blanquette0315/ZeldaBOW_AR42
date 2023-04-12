@@ -93,9 +93,9 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     
     // if Binding EmissiveTex
     float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
-    if(g_btex_2)
+    if(g_btex_3)
     {
-        vEmissiveColor = g_tex_2.Sample(g_sam_0, _in.vUV);
+        vEmissiveColor = g_tex_3.Sample(g_sam_0, _in.vUV);
     }
     
     output.vColor = vObjColor * g_vDiff;

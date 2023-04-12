@@ -928,7 +928,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
-	pShader->AddTexureParam(TEX_2, "Emissive Texture    ");
+	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
+	pShader->AddTexureParam(TEX_3, "Emissive Texture    ");
 
 	AddRes<CGraphicsShader>(L"Std3D_DeferredShader", pShader);
 
