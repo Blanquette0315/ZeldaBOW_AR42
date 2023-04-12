@@ -54,6 +54,12 @@ CGameObject* CMeshData::Instantiate()
 CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
 {
 	wstring strFullPath = CPathMgr::GetInst()->GetContentPath();
+
+	path path_mesh = strFullPath + L"mesh\\" + path(_strPath).stem().wstring() + L"\\";
+	if (false == exists(path_mesh))
+	{
+		create_directory(path_mesh);
+	}
 	strFullPath += _strPath;
 
 	CFBXLoader loader;
@@ -67,7 +73,7 @@ CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
 	// ResMgr 에 메쉬 등록
 	if (nullptr != pMesh)
 	{
-		wstring strMeshKey = L"mesh\\";
+		wstring strMeshKey = L"mesh\\" + path(_strPath).stem().wstring() + L"\\";
 		strMeshKey += path(strFullPath).stem();
 		strMeshKey += L".mesh";
 		CResMgr::GetInst()->AddRes<CMesh>(strMeshKey, pMesh);

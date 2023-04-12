@@ -56,6 +56,9 @@ void CFBXLoader::LoadFbx(const wstring& _strPath)
 {
 	m_vecContainer.clear();
 
+	wstring wstrFileName = path(_strPath).stem();
+	string strFileName(wstrFileName.begin(), wstrFileName.end());
+
 	m_pImporter = FbxImporter::Create(m_pManager, "");
 
 	//wstring str = wstring_convert<codecvt_utf8<wchar_t>>().from_bytes(strName.c_str());
@@ -92,10 +95,10 @@ void CFBXLoader::LoadFbx(const wstring& _strPath)
 	m_pImporter->Destroy();
 
 	// 필요한 텍스쳐 로드
-	LoadTexture();
+	LoadTexture(wstrFileName);
 
 	// 필요한 메테리얼 생성
-	CreateMaterial();
+	CreateMaterial(wstrFileName);
 }
 
 void CFBXLoader::LoadMeshDataFromNode(FbxNode* _pNode)
@@ -387,11 +390,11 @@ wstring CFBXLoader::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char
 	return wstring(strName.begin(), strName.end());
 }
 
-void CFBXLoader::LoadTexture()
+void CFBXLoader::LoadTexture(const wstring& _strFileName)
 {
 	path path_content = CPathMgr::GetInst()->GetContentPath();
 
-	path path_fbx_texture = path_content.wstring() + L"texture\\FBXTexture\\";
+	path path_fbx_texture = path_content.wstring() + L"texture\\FBXTexture\\" + _strFileName + L"\\";
 	if (false == exists(path_fbx_texture))
 	{
 		create_directory(path_fbx_texture);
@@ -442,10 +445,17 @@ void CFBXLoader::LoadTexture()
 	}
 }
 
-void CFBXLoader::CreateMaterial()
+void CFBXLoader::CreateMaterial(const wstring& _strFileName)
 {
 	wstring strMtrlName;
 	wstring strPath;
+
+	path path_content = CPathMgr::GetInst()->GetContentPath();
+	path path_material = path_content.wstring() + L"material\\" + _strFileName + L"\\";
+	if (false == exists(path_material))
+	{
+		create_directory(path_material);
+	}
 
 	for (UINT i = 0; i < m_vecContainer.size(); ++i)
 	{
@@ -456,7 +466,7 @@ void CFBXLoader::CreateMaterial()
 			if (strMtrlName.empty())
 				strMtrlName = path(m_vecContainer[i].vecMtrl[j].strDiff).stem();
 
-			strPath = L"material\\";
+			strPath = L"material\\" + _strFileName + L"\\";
 			strPath += strMtrlName + L".mtrl";
 
 			// 재질 이름

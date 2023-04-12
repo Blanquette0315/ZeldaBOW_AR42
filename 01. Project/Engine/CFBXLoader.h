@@ -119,8 +119,8 @@ private:
 	Vec4 GetMtrlData(FbxSurfaceMaterial* _pSurface, const char* _pMtrlName, const char* _pMtrlFactorName);
 	wstring GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
 
-	void LoadTexture();
-	void CreateMaterial();
+	void LoadTexture(const wstring& _strFileName);
+	void CreateMaterial(const wstring& _strFileName);
 
 	// Animation
 	void LoadSkeleton(FbxNode* _pNode);

@@ -170,17 +170,17 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pObject, 0);
 
 	// LandScape 추가
-	CGameObject* pLandScape = new CGameObject;
-	pLandScape->SetName(L"LandScape");
+	//CGameObject* pLandScape = new CGameObject;
+	//pLandScape->SetName(L"LandScape");
 
-	pLandScape->AddComponent(new CTransform);
-	pLandScape->AddComponent(new CLandScape);
+	//pLandScape->AddComponent(new CTransform);
+	//pLandScape->AddComponent(new CLandScape);
 
-	pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
-	pLandScape->LandScape()->SetFaceCount(16, 16);
-	pLandScape->SetFrustumCul(false);
+	//pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
+	//pLandScape->LandScape()->SetFaceCount(16, 16);
+	//pLandScape->SetFrustumCul(false);
 
-	pLevel->AddGameObject(pLandScape, 0);
+	//pLevel->AddGameObject(pLandScape, 0);
 
 	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
 	//pSound->Play(1, 0.3f, true, pObject);//Vec3(0.f, 500.f, 400.f));
@@ -221,7 +221,7 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Bokoblin_Red.fbx");
 		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\bass_test.mdat");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
