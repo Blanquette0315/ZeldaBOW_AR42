@@ -202,6 +202,9 @@
     <Filter Include="HLSL\Compute\LandScape\RayCast\RayMap">
       <UniqueIdentifier>{75593a41-2f3b-4876-80da-ae9631abe30d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL\Render\3D\LandScape">
+      <UniqueIdentifier>{fc89eb20-6da6-483e-bb29-1371d24ce003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -785,6 +788,9 @@
     </FxCompile>
     <FxCompile Include="raymap.fx">
       <Filter>HLSL\Compute\LandScape\RayCast\RayMap</Filter>
+    </FxCompile>
+    <FxCompile Include="maxlandscape.fx">
+      <Filter>HLSL\Render\3D\LandScape</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

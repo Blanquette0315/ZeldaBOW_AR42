@@ -23,6 +23,7 @@ CLandScape::CLandScape()
 	, m_iWeightHeight(0)
 	, m_iWeightIdx(0)
 	, m_eMod(LANDSCAPE_MOD::NONE)
+	, m_bCurDataCooking(false)
 {
 	m_MappedResource = {};
 
@@ -49,20 +50,24 @@ CLandScape::~CLandScape()
 
 	if (nullptr != m_pWeightMapBuffer)
 		delete m_pWeightMapBuffer;
+
+	delete[] m_arrVertexPos;
+	delete[] m_arrIndice;
+}
+
+void CLandScape::begin()
+{
+	// LandStreamOut();
 }
 
 void CLandScape::finaltick()
 {
-	if (KEY_TAP(KEY::NUM_0))
+	m_iMaxVtxCount = m_iXFaceCount * m_iZFaceCount * 1048576 * 3;
+	
+	if (KEY_TAP(KEY::NUM_5))
 	{
-		m_eMod = LANDSCAPE_MOD::NONE;
-
-		BrushAreaShow(true);
+		LoadWightData();
 	}
-	else if (KEY_TAP(KEY::NUM_1))
-		m_eMod = LANDSCAPE_MOD::HEIGHT_MAP;
-	else if (KEY_TAP(KEY::NUM_2))
-		m_eMod = LANDSCAPE_MOD::SPLAT;
 
 	if (LANDSCAPE_MOD::NONE == m_eMod)
 	{
@@ -75,11 +80,22 @@ void CLandScape::finaltick()
 
 	if (KEY_PRESSED(KEY::LBTN))
 	{
+		m_bCurDataCooking = false;
+
 		if (LANDSCAPE_MOD::HEIGHT_MAP == m_eMod)
 		{
 			// 픽킹 정보를 system memory 로 가져옴
 			//tRaycastOut out = {};
 			//m_pCrossBuffer->GetData(&out);
+
+			if (KEY_PRESSED(KEY::LCTRL))
+			{
+				m_pCSHeightMap->IsDecrease(true);
+			}
+			else
+			{
+				m_pCSHeightMap->IsDecrease(false);
+			}
 
 			// 교점 위치정보를 토대로 높이를 수정 함
 			m_pCSHeightMap->SetInputBuffer(m_pCrossBuffer); // 픽킹 정보를 HeightMapShader 에 세팅
@@ -110,18 +126,6 @@ void CLandScape::finaltick()
 			if (3 <= m_iWeightIdx)
 				m_iWeightIdx = 0;
 		}
-	}
-
-
-	if (KEY_TAP(KEY::NUM_5))
-	{
-		// 높이 맵을 파일로 세이브
-		HRESULT hr = S_OK;
-		ScratchImage& pImage = m_pHeightMap->GetScratchImage();
-		hr = DirectX::CaptureTexture(DEVICE, CONTEXT, m_pHeightMap->GetTex2D().Get(), pImage);
-		wstring strFileName = CPathMgr::GetInst()->GetContentPath();
-		strFileName += L"texture\\landscape\\TempHight.dds";
-		hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
 	}
 }
 
@@ -173,60 +177,201 @@ void CLandScape::SetFaceCount(UINT _X, UINT _Z)
 	CreateMesh();
 }
 
-void CLandScape::CreateActor()
+void CLandScape::SetLandMod(LANDSCAPE_MOD _eMod)
 {
+	m_eMod = _eMod; 
+	if (_eMod == LANDSCAPE_MOD::NONE)
+	{
+		BrushAreaShow(true); 
+	}
+}
+
+void CLandScape::Cooking()
+{
+	if (m_arrVertexPos != nullptr)
+	{
+		delete[] m_arrVertexPos;
+		m_arrVertexPos = nullptr;
+	}
+	if (m_arrIndice != nullptr)
+	{
+		delete[] m_arrIndice;
+		m_arrIndice = nullptr;
+	}
+
+	LandStreamOut();
+
 	Ptr<CMesh> pMesh = GetMesh();
-	ComPtr<ID3D11Buffer> pVB = pMesh->GetVB();
-	ComPtr<ID3D11Buffer> pIB = pMesh->GetIB();
+	ComPtr<ID3D11Buffer> pVB = m_pSOBuffer;
 
 	// vertex pos
 	D3D11_BUFFER_DESC vbDesc;
 	pVB->GetDesc(&vbDesc);
-	UINT numVertices = vbDesc.ByteWidth / sizeof(Vtx);
+	m_inumVertices = vbDesc.ByteWidth / sizeof(Vec3);
 
 	CreateCpBuffer(vbDesc.ByteWidth);
 
 	CONTEXT->CopyResource(m_pCopyBuffer.Get(), pVB.Get());
 
-	Vtx* arrVertices = new Vtx[numVertices];
+	m_arrVertexPos = new Vec3[m_inumVertices];
 
 	CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
-	memcpy(arrVertices, m_MappedResource.pData, sizeof(Vtx) * numVertices);
+	memcpy(m_arrVertexPos, m_MappedResource.pData, sizeof(Vec3) * m_inumVertices);
 	CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
-
-	m_arrVertexPos = new Vector3[numVertices];
-
-	for (int i = 0; i < numVertices; ++i)
-	{
-		m_arrVertexPos[i].x = arrVertices[i].vPos.x;
-		m_arrVertexPos[i].y = arrVertices[i].vPos.y;
-		m_arrVertexPos[i].z = arrVertices[i].vPos.z;
-	}
 
 	// vertex index
-	D3D11_BUFFER_DESC ibDesc;
-	pIB->GetDesc(&ibDesc);
-	UINT numIndices = ibDesc.ByteWidth / sizeof(DWORD);
+	m_arrIndice = new UINT[m_inumVertices];
 
-	CreateCpBuffer(ibDesc.ByteWidth);
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		m_arrIndice[i] = i;
+	}
 
-	CONTEXT->CopyResource(m_pCopyBuffer.Get(), pIB.Get());
-
-	m_arrIndice = new UINT[numIndices];
-
-	CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
-	memcpy(m_arrIndice, m_MappedResource.pData, sizeof(UINT) * numIndices);
-	CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
-
-	RigidBody()->SetTriangleCollider(numIndices, numVertices
-		, m_arrIndice
-		, m_arrVertexPos);
-
-	delete[] arrVertices;
-	delete[] m_arrVertexPos;
-	delete[] m_arrIndice;
+	//SaveCookingData();
+	m_bCurDataCooking = true;
 }
 
+void CLandScape::CreateActor()
+{
+	if (m_bCurDataCooking == false)
+	{
+		Cooking();
+	}
+
+	//ComPtr<ID3D11Buffer> pVB = m_pSOBuffer;
+
+	//// vertex pos
+	//D3D11_BUFFER_DESC vbDesc;
+	//pVB->GetDesc(&vbDesc);
+	//UINT numVertices = vbDesc.ByteWidth / sizeof(Vec3);
+
+	//LoadCookingData();
+
+	RigidBody()->SetTriangleCollider(m_inumVertices, m_inumVertices
+		, m_arrIndice
+		, m_arrVertexPos, Transform()->GetRelativeScale());
+}
+
+void CLandScape::SaveCookingData()
+{
+	// CookingData를 파일로 세이브
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	wstring RelativePath = L"texture\\landscape\\TestCookingData.cookdata";
+	strFilePath += RelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+	fwrite(&m_inumVertices, sizeof(UINT), 1, pFile);
+
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		fwrite(&m_arrVertexPos[i], sizeof(Vec3), 1, pFile);
+	}
+
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		fwrite(&m_arrIndice[i], sizeof(UINT), 1, pFile);
+	}
+
+	fclose(pFile);
+}
+
+void CLandScape::LoadCookingData()
+{
+	// CookingData를 파일로부터 로딩
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	wstring RelativePath = L"texture\\landscape\\TestCookingData.cookdata";
+	strFilePath += RelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	fread(&m_inumVertices, sizeof(UINT), 1, pFile);
+
+	m_arrVertexPos = new Vec3[m_inumVertices];
+	m_arrIndice = new UINT[m_inumVertices];
+
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		fread(&m_arrVertexPos[i], sizeof(Vec3), 1, pFile);
+	}
+
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		fread(&m_arrIndice[i], sizeof(UINT), 1, pFile);
+	}
+
+	fclose(pFile);
+}
+
+void CLandScape::SaveHightImage()
+{
+	// 높이 맵을 파일로 세이브
+	HRESULT hr = S_OK;
+	ScratchImage& pImage = m_pHeightMap->GetScratchImage();
+	hr = DirectX::CaptureTexture(DEVICE, CONTEXT, m_pHeightMap->GetTex2D().Get(), pImage);
+	wstring strFileName = CPathMgr::GetInst()->GetContentPath();
+	strFileName += L"texture\\landscape\\TempHight.dds";
+	hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
+}
+
+void CLandScape::SaveWightData()
+{
+	// 가중치 맵을 파일로 세이브
+	// 가중치 구조화 버퍼 데이터 가져오기
+	int iWeightCount = m_iWeightWidth * m_iWeightHeight;
+	tWeight_4* vecWeight_4 = new  tWeight_4[iWeightCount];
+	m_pWeightMapBuffer->GetData(vecWeight_4, sizeof(tWeight_4) * iWeightCount);
+	
+	// 경로
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	wstring RelativePath = L"texture\\landscape\\TestWieghtMapData.buf";
+	strFilePath += RelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+	fwrite(&iWeightCount, sizeof(int), 1, pFile);
+	for (int i = 0; i < iWeightCount; ++i)
+	{
+		fwrite(&vecWeight_4[i], sizeof(tWeight_4), 1, pFile);
+	}
+
+	fclose(pFile);
+
+	delete[] vecWeight_4;
+}
+
+void CLandScape::LoadWightData()
+{
+	// 가중치 맵 데이터 로딩
+	int iWeightCount = 0;
+	 
+	// 경로
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	wstring RelativePath = L"texture\\landscape\\TestWieghtMapData.buf";
+	strFilePath += RelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	fread(&iWeightCount, sizeof(int), 1, pFile);
+
+	tWeight_4* vecWeight_4 = new  tWeight_4[iWeightCount];
+
+	for (int i = 0; i < iWeightCount; ++i)
+	{
+		fread(&vecWeight_4[i], sizeof(tWeight_4), 1, pFile);
+	}
+
+	fclose(pFile);
+
+	// 버퍼에 값 셋팅
+	m_pWeightMapBuffer->SetData(vecWeight_4, iWeightCount);
+
+	delete[] vecWeight_4;
+}
 
 void CLandScape::Raycasting()
 {
@@ -278,4 +423,51 @@ void CLandScape::CreateCpBuffer(UINT _byteWidth)
 	m_CopyBufferDesc.ByteWidth = _byteWidth;
 	m_CopyBufferDesc.MiscFlags = 0;
 	HRESULT hr = DEVICE->CreateBuffer(&m_CopyBufferDesc, nullptr, m_pCopyBuffer.GetAddressOf());
+}
+
+void CLandScape::CreateSOBuffer()
+{
+	if (m_pSOBuffer.Get())
+		m_pSOBuffer = nullptr;
+
+	D3D11_BUFFER_DESC Desc = {};
+	Desc.Usage = D3D11_USAGE_DEFAULT;
+	Desc.CPUAccessFlags = 0;
+	Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_STREAM_OUTPUT | D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
+	Desc.ByteWidth = sizeof(Vec3) * m_iMaxVtxCount;
+	Desc.MiscFlags = 0;
+
+	HRESULT hr = DEVICE->CreateBuffer(&Desc, nullptr, m_pSOBuffer.GetAddressOf());
+}
+
+void CLandScape::LandStreamOut()
+{
+	CreateSOBuffer();
+
+	// StreamOut Setting
+	CONTEXT->SOSetTargets(1, m_pSOBuffer.GetAddressOf(), 0);
+
+	if (nullptr == GetMesh() || nullptr == GetCurMaterial())
+		return;
+
+	Transform()->UpdateData();
+
+	// 재질 정보 업데이트
+	{
+		// 지형 면 개수 전달
+		m_pMaxTessMtrl->SetScalarParam(INT_0, &m_iXFaceCount);
+		m_pMaxTessMtrl->SetScalarParam(INT_1, &m_iZFaceCount);
+
+		Vec2 vResolution = Vec2(m_pHeightMap->GetWidth(), m_pHeightMap->GetHeight());
+		m_pMaxTessMtrl->SetScalarParam(SCALAR_PARAM::VEC2_0, &vResolution);
+		m_pMaxTessMtrl->SetTexParam(TEX_PARAM::TEX_0, GetCurMaterial()->GetTexParam(TEX_0));
+
+		// 업데이트
+		m_pMaxTessMtrl->UpdateData();
+	}
+
+	GetMesh()->render();
+
+	// Clear
+	CMaterial::Clear();
 }

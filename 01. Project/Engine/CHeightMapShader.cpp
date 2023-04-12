@@ -9,6 +9,7 @@ CHeightMapShader::CHeightMapShader()
 	: CComputeShader(32, 32, 1)
 	, m_iBrushIdx(0)
 	, m_pInput(nullptr)
+	, m_bDecrease(false)
 {
 }
 
@@ -22,6 +23,7 @@ void CHeightMapShader::UpdateData()
 	m_Param.iArr[0] = (int)m_pHeightMap->GetWidth();
 	m_Param.iArr[1] = (int)m_pHeightMap->GetHeight();
 	m_Param.iArr[2] = m_iBrushIdx;
+	m_Param.iArr[3] = (int)m_bDecrease;
 	m_Param.v2Arr[0] = m_vScale;
 
 	// ≥Ù¿Ã∏ 

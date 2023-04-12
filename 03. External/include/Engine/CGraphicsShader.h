@@ -8,12 +8,14 @@ private:
     ComPtr<ID3DBlob>                m_HSBlob;
     ComPtr<ID3DBlob>                m_DSBlob;
     ComPtr<ID3DBlob>                m_GSBlob;
+    ComPtr<ID3DBlob>                m_GWSOBlob;
     ComPtr<ID3DBlob>                m_PSBlob;
 
     ComPtr<ID3D11VertexShader>      m_VS;
     ComPtr<ID3D11HullShader>        m_HS;
     ComPtr<ID3D11DomainShader>      m_DS;
     ComPtr<ID3D11GeometryShader>    m_GS;
+    ComPtr<ID3D11GeometryShader>    m_GWSO;
     ComPtr<ID3D11PixelShader>       m_PS;
 
     ComPtr<ID3D11InputLayout>       m_Layout;
@@ -26,12 +28,14 @@ private:
 
     SHADER_DOMAIN                   m_eDomain;
 
+    bool m_bGWSOShader;
+
 public:
     void CreateVertexShader(const wstring& _strRelativePath, const string& _strFuncName);
     void CreateHullShader(const wstring& _strRelativePath, const string& _strFuncName);
     void CreateDomainShader(const wstring& _strRelativePath, const string& _strFuncName);
     void CreateGeometryShader(const wstring& _strRelativePath, const string& _strFuncName);
-
+    void CreateGeometryWithStreamOut(const wstring& _strRelativePath, const string& _strFuncName, D3D11_SO_DECLARATION_ENTRY* _pDecl, int _count);
     void CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName);
 
     void UpdateData();

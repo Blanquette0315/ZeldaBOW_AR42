@@ -67,7 +67,17 @@ physx::PxShape* Factory::CreateShape(PhysMaterial* m, PhysCollider* c, bool isTr
 		shape = CreateCapsuleCollider(pMaterial, c->GetCapsuleCollider(), isTrigger);
 		break;
 	case PhysCollider::TYPE::MESH:
+	{
 		shape = CreateTriangleCollider(pMaterial, c->GetTriangleCollider());
+
+		Vector3 size = c->GetSize();
+
+		PxGeometryHolder holder = shape->getGeometry();
+		holder.triangleMesh().triangleMesh->acquireReference();
+		holder.triangleMesh().scale.scale = PxVec3(size.x, size.y, size.z);
+		shape->setGeometry(holder.any());
+		holder.triangleMesh().triangleMesh->release();
+	}
 		break;
 	case PhysCollider::TYPE::TERRAIN:
 	{

@@ -175,7 +175,7 @@ void CreateTestLevel()
 	pLandScape->AddComponent(new CRigidBody);
 
 	pLandScape->Transform()->SetRelativePos(1.f, 1.f, 1.f);
-	pLandScape->Transform()->SetRelativeScale(100.f, 1.f, 100.f);
+	pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
 	pLandScape->LandScape()->SetFaceCount(16, 16);
 	pLandScape->SetFrustumCul(true);
 

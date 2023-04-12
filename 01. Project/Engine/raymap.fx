@@ -18,6 +18,12 @@ StructuredBuffer<tRaycastOut> LOCATION : register(t16); // 브러쉬 위치(좌상단 기
 [numthreads(32, 32, 1)]
 void CS_RayMap(int3 _iThreadID : SV_DispatchThreadID)
 {
+    if (BRUSH_SHOW != 0)
+    {
+        RAY_MAP[_iThreadID.xy] = 0.f;
+        return;
+    }
+    
     if (WIDTH <= _iThreadID.x || HEIGHT <= _iThreadID.y || !LOCATION[0].success)
     {
         return;
@@ -28,12 +34,6 @@ void CS_RayMap(int3 _iThreadID : SV_DispatchThreadID)
     
     if (_iThreadID.x < vCenterPos.x - (vScale.x / 2) || vCenterPos.x + (vScale.x / 2) < _iThreadID.x
         || _iThreadID.y < vCenterPos.y - (vScale.y / 2) || vCenterPos.y + (vScale.y / 2) < _iThreadID.y)
-    {
-        RAY_MAP[_iThreadID.xy] = 0.f;
-        return;
-    }
-
-    if (BRUSH_SHOW != 0)
     {
         RAY_MAP[_iThreadID.xy] = 0.f;
         return;

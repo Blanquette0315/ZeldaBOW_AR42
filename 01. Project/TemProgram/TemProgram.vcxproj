@@ -177,6 +177,7 @@
     <ClInclude Include="CreateTestLevel.h" />
     <ClInclude Include="CSaveLoadMgr.h" />
     <ClInclude Include="CurAnimEditor.h" />
+    <ClInclude Include="LandScapeUI.h" />
     <ClInclude Include="LayerCollisionUI.h" />
     <ClInclude Include="LevelUI.h" />
     <ClInclude Include="Light3DUI.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="CreateTestLevel.cpp" />
     <ClCompile Include="CSaveLoadMgr.cpp" />
     <ClCompile Include="CurAnimEditor.cpp" />
+    <ClCompile Include="LandScapeUI.cpp" />
     <ClCompile Include="LayerCollisionUI.cpp" />
     <ClCompile Include="LevelUI.cpp" />
     <ClCompile Include="Light3DUI.cpp" />

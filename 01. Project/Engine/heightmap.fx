@@ -41,7 +41,16 @@ void CS_HeightMap(int3 _iThreadID : SV_DispatchThreadID)
     // 브러쉬로 부터 알파값 샘플링
     //float4 vBrushColor = BRUSH_TEX.SampleLevel(g_sam_0, float3(vUV, BRUSH_IDX), 0);
     float4 vBrushColor = BRUSH_TEX.SampleLevel(g_sam_0, vUV, 0);
-    HEIGHT_MAP[_iThreadID.xy] += g_fDT * vBrushColor.a * 0.2f; // 브러쉬 알파값으로 높이 설정
+    
+    // true 일 경우 감소 모드, false일 경우 증가모드
+    if (g_int_3 == 0)
+    {
+        HEIGHT_MAP[_iThreadID.xy] += g_fDT * vBrushColor.a * 0.2f; // 브러쉬 알파값으로 높이 설정
+    }
+    else
+    {
+        HEIGHT_MAP[_iThreadID.xy] -= g_fDT * vBrushColor.a * 0.2f;
+    }
 
     // cos 그래프로 높이 설정
     //float vDist = (distance(vCenterPos, _iThreadID.xy) / vScale) * 3.1415926535f;        

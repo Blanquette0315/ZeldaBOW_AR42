@@ -33,7 +33,7 @@ public:
 
 public:
 	///Create
-	PHYS_ENGINEDLL Phys_Collider_Triangle*	CreateTriangle(int indexSize, int VertexSize,UINT* IndexArray,Vector3* VertexList);
+	PHYS_ENGINEDLL Phys_Collider_Triangle*	CreateTriangle(int indexSize, int VertexSize,UINT* IndexArray,Vector3* VertexList, Vector3 _Size);
 	PHYS_ENGINEDLL Phys_Collider_Sphere*	CreateSphere(float Radius);
 	PHYS_ENGINEDLL Phys_Collider_Box*		CreateBox(float Size_x, float Size_y, float Size_z);
 	PHYS_ENGINEDLL Phys_Collider_Capsule*	CreateCapsule(float Radius, float Height);

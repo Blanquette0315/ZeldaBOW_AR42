@@ -50,6 +50,7 @@ void CRigidBody::begin()
 	m_pPhysData->BOWObj = GetOwner();
 	if (nullptr != LandScape())
 	{
+		//LandScape()->LandStreamOut();
 		LandScape()->CreateActor();
 	}
 	UpdateTransformData(m_eRigidColliderType, m_pPhysData->isKinematic, m_pPhysData->isDinamic);
@@ -315,7 +316,12 @@ void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)
 	m_pPhysData->Rotation = (Vec4)Q_Rot;
 }
 
-void CRigidBody::SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList)
+void CRigidBody::SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList, Vector3 _Size)
 {
-	m_pPhysData->mCollider->CreateTriangle(_iIdxSize, _iVertexSize, IdxArray, _vecVertexList);
+	Vec3 PxSize = _Size;
+	PxSize.x /= 100.f;
+	PxSize.y /= 100.f;
+	PxSize.z /= 100.f;
+
+	m_pPhysData->mCollider->CreateTriangle(_iIdxSize, _iVertexSize, IdxArray, _vecVertexList, PxSize);
 }

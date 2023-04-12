@@ -25,7 +25,7 @@ StructuredBuffer<float4> WEIGHT_MAP : register(t17); // 가중치 버퍼
 struct VS_IN
 {
     float3 vPos : POSITION;
-    float3 vUV : TEXCOORD;
+    float2 vUV : TEXCOORD;
     
     float3 vTangent : TANGENT;
     float3 vNormal : NORMAL;
@@ -180,9 +180,6 @@ DS_OUT DS_LandScape(PatchTess _tessFactor
     return output;
 };
 
-
-
-
 struct PS_OUT
 {
     float4 vColor : SV_Target0;
@@ -253,6 +250,5 @@ PS_OUT PS_LandScape(DS_OUT _in)
             
     return output;
 }
-
 
 #endif

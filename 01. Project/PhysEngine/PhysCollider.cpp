@@ -56,8 +56,10 @@ void PhysCollider::SetTrigger(bool Trigger)
 	isTrigger = Trigger;
 }
 
-Phys_Collider_Triangle* PhysCollider::CreateTriangle(int indexSize, int VertexSize, UINT* IndexArray, Vector3* VertexList)
+Phys_Collider_Triangle* PhysCollider::CreateTriangle(int indexSize, int VertexSize, UINT* IndexArray, Vector3* VertexList, Vector3 _Size)
 {
+	Size = _Size;
+
 	//콜라이더 생성
 	Collider_Triangle	= new Phys_Collider_Triangle();
 	Collider_Triangle->SetCreateOption(VertexSize,indexSize);

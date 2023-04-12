@@ -12,6 +12,7 @@ CGraphicsShader::CGraphicsShader()
 	, m_eBSType(BS_TYPE::DEFAULT)
 	, m_eDSType(DS_TYPE::LESS)
 	, m_eDomain(SHADER_DOMAIN::NONE)
+	, m_bGWSOShader(false)
 {
 }
 
@@ -104,10 +105,10 @@ void CGraphicsShader::CreateGeometryShader(const wstring& _strRelativePath, cons
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
-
+	
 	HRESULT hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 		, _strFuncName.c_str(), "gs_5_0", 0, 0, m_GSBlob.GetAddressOf(), m_ErrBlob.GetAddressOf());
-
+	
 	if (FAILED(hr))
 	{
 		const char* pErr = (const char*)m_ErrBlob->GetBufferPointer();
@@ -118,6 +119,35 @@ void CGraphicsShader::CreateGeometryShader(const wstring& _strRelativePath, cons
 	hr = DEVICE->CreateGeometryShader(m_GSBlob->GetBufferPointer(), m_GSBlob->GetBufferSize(), nullptr, m_GS.GetAddressOf());
 
 	assert(!FAILED(hr));
+}
+
+void CGraphicsShader::CreateGeometryWithStreamOut(const wstring& _strRelativePath, const string& _strFuncName, D3D11_SO_DECLARATION_ENTRY* _pDecl, int _count)
+{
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	HRESULT hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+		, _strFuncName.c_str(), "gs_5_0", 0, 0, m_GWSOBlob.GetAddressOf(), m_ErrBlob.GetAddressOf());
+
+	if (FAILED(hr))
+	{
+		const char* pErr = (const char*)m_ErrBlob->GetBufferPointer();
+		MessageBoxA(nullptr, pErr, "Shader Compile Failed!!", MB_OK);
+		assert(nullptr);
+	}
+
+	hr = DEVICE->CreateGeometryShaderWithStreamOutput(m_GWSOBlob->GetBufferPointer(), m_GWSOBlob->GetBufferSize(), _pDecl, _count, nullptr, 0, 0, nullptr, m_GWSO.GetAddressOf());
+
+	if (FAILED(hr))
+	{
+		const char* pErr = (const char*)m_ErrBlob->GetBufferPointer();
+		MessageBoxA(nullptr, pErr, "Shader Compile Failed!!", MB_OK);
+		assert(nullptr);
+	}
+
+	assert(!FAILED(hr));
+
+	m_bGWSOShader = true;
 }
 
 void CGraphicsShader::CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName)
@@ -147,7 +177,14 @@ void CGraphicsShader::UpdateData()
 	CONTEXT->VSSetShader(m_VS.Get(), 0, 0);
 	CONTEXT->HSSetShader(m_HS.Get(), 0, 0);
 	CONTEXT->DSSetShader(m_DS.Get(), 0, 0);
-	CONTEXT->GSSetShader(m_GS.Get(), 0, 0);
+	if (m_bGWSOShader)
+	{
+		CONTEXT->GSSetShader(m_GWSO.Get(), 0, 0);
+	}
+	else
+	{
+		CONTEXT->GSSetShader(m_GS.Get(), 0, 0);
+	}
 	CONTEXT->PSSetShader(m_PS.Get(), 0, 0);
 
 	// 레스터라이즈 스테이트 설정

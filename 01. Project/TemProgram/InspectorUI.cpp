@@ -24,6 +24,7 @@
 #include "DecalUI.h"
 #include "RigidBodyUI.h"
 #include "ScriptUI.h"
+#include "LandScapeUI.h"
 
 #include "MeshUI.h"
 #include "RTextureUI.h"
@@ -90,6 +91,10 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY] = new RigidBodyUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]->SetSize(ImVec2(0.f, 450.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::LANDSCAPE] = new LandScapeUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::LANDSCAPE]->SetSize(ImVec2(0.f, 450.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::LANDSCAPE]);
 
 	// ResourceUI
 	m_arrResUI[(UINT)RES_TYPE::MESH] = new MeshUI;
