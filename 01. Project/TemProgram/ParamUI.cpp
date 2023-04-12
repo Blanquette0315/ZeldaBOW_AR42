@@ -114,6 +114,7 @@ bool ParamUI::Param_Tex(const string& _ParamName, Ptr<CTexture>& _Tex, UI* _Inst
 	// 해당 키값으로 찾아 이미지를 띄워준다.
 	if (nullptr != _Tex)
 	{
+		ImGui::Text(string(_Tex->GetRelativePath().begin(), _Tex->GetRelativePath().end()).c_str());
 		ImGui::Image(_Tex->GetSRV().Get(), ImVec2(100.f, 100.f));
 	}
 	else
