@@ -198,6 +198,7 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 		}
 
 		ComPtr<ID3D11Buffer> pVB = NULL;
+		tSub.pSysMem = pSys;
 		if (FAILED(DEVICE->CreateBuffer(&tVtxDesc, &tSub, pVB.GetAddressOf())))
 		{
 			return NULL;

@@ -60,6 +60,7 @@ struct PS_OUT
     float4 vNormal      : SV_Target1;
     float4 vPosition    : SV_Target2;
     float4 vData        : SV_Target3;
+    float4 vEmissiv     : SV_Target4;
 };
 
 PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
@@ -90,9 +91,17 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
         vNormal = normalize(mul(vNormal, matTBN));
     }
     
+    // if Binding EmissiveTex
+    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
+    if(g_btex_2)
+    {
+        vEmissiveColor = g_tex_2.Sample(g_sam_0, _in.vUV);
+    }
+    
     output.vColor = vObjColor * g_vDiff;
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
+    output.vEmissiv = vEmissiveColor;
     float4 vSpecCoeff = float4(fSpecCoefficent, fSpecCoefficent, fSpecCoefficent, 1.f);
        
     // Spec ∏ ¿Ã ¿÷¿∏∏È

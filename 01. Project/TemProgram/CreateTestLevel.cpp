@@ -221,12 +221,13 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\bass_test.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
 		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\bass_test.mdat");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
 		pObj = pMeshData->Instantiate();
-		pObj->SetName(L"Monster");
+		pObj->SetFrustumCul(false);
+		pObj->SetName(L"Map");
 		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 		pLevel->AddGameObject(pObj, 0);
 		//pObj->Animator3D()->Play(L"Take 001", true);

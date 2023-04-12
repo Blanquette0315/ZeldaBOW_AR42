@@ -149,8 +149,8 @@ void CFBXLoader::LoadMesh(FbxMesh* _pFbxMesh)
 	for (int i = 0; i < iVtxCnt; ++i)
 	{
 		Container.vecPos[i].x = (float)pFbxPos[i].mData[0];
-		Container.vecPos[i].y = (float)pFbxPos[i].mData[1];
-		Container.vecPos[i].z = (float)pFbxPos[i].mData[2];
+		Container.vecPos[i].y = (float)pFbxPos[i].mData[2];
+		Container.vecPos[i].z = (float)pFbxPos[i].mData[1];
 	}
 
 	// Æú¸®°ï °³¼ö
@@ -188,8 +188,8 @@ void CFBXLoader::LoadMesh(FbxMesh* _pFbxMesh)
 		}
 		UINT iSubsetIdx = pMtrl->GetIndexArray().GetAt(i);
 		Container.vecIdx[iSubsetIdx].push_back(arrIdx[0]);
-		Container.vecIdx[iSubsetIdx].push_back(arrIdx[1]);
 		Container.vecIdx[iSubsetIdx].push_back(arrIdx[2]);
+		Container.vecIdx[iSubsetIdx].push_back(arrIdx[1]);
 	}
 
 	LoadAnimationData(_pFbxMesh, &Container);
@@ -263,8 +263,8 @@ void CFBXLoader::GetTangent(FbxMesh* _pMesh
 	FbxVector4 vTangent = pTangent->GetDirectArray().GetAt(iTangentIdx);
 
 	_pContainer->vecTangent[_iIdx].x = (float)vTangent.mData[0];
-	_pContainer->vecTangent[_iIdx].y = (float)vTangent.mData[1];
-	_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[2];
+	_pContainer->vecTangent[_iIdx].y = (float)vTangent.mData[2];
+	_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[1];
 }
 
 void CFBXLoader::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
@@ -295,8 +295,8 @@ void CFBXLoader::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx
 	FbxVector4 vBinormal = pBinormal->GetDirectArray().GetAt(iBinormalIdx);
 
 	_pContainer->vecBinormal[_iIdx].x = (float)vBinormal.mData[0];
-	_pContainer->vecBinormal[_iIdx].y = (float)vBinormal.mData[1];
-	_pContainer->vecBinormal[_iIdx].z = (float)vBinormal.mData[2];
+	_pContainer->vecBinormal[_iIdx].y = (float)vBinormal.mData[2];
+	_pContainer->vecBinormal[_iIdx].z = (float)vBinormal.mData[1];
 }
 
 void CFBXLoader::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
@@ -327,8 +327,8 @@ void CFBXLoader::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, 
 	FbxVector4 vNormal = pNormal->GetDirectArray().GetAt(iNormalIdx);
 
 	_pContainer->vecNormal[_iIdx].x = (float)vNormal.mData[0];
-	_pContainer->vecNormal[_iIdx].y = (float)vNormal.mData[1];
-	_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[2];
+	_pContainer->vecNormal[_iIdx].y = (float)vNormal.mData[2];
+	_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[1];
 }
 
 void CFBXLoader::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
@@ -706,8 +706,8 @@ void CFBXLoader::LoadKeyframeTransform(FbxNode* _pNode, FbxCluster* _pCluster
 		return;
 
 	FbxVector4	v1 = { 1, 0, 0, 0 };
-	FbxVector4	v2 = { 0, 1, 0, 0 };
-	FbxVector4	v3 = { 0, 0, 1, 0 };
+	FbxVector4	v2 = { 0, 0, 1, 0 };
+	FbxVector4	v3 = { 0, 1, 0, 0 };
 	FbxVector4	v4 = { 0, 0, 0, 1 };
 	FbxAMatrix	matReflect;
 	matReflect.mData[0] = v1;
@@ -752,8 +752,8 @@ void CFBXLoader::LoadOffsetMatrix(FbxCluster* _pCluster
 
 	// Reflect Matrix
 	FbxVector4 V0 = { 1, 0, 0, 0 };
-	FbxVector4 V1 = { 0, 1, 0, 0 };
-	FbxVector4 V2 = { 0, 0, 1, 0 };
+	FbxVector4 V1 = { 0, 0, 1, 0 };
+	FbxVector4 V2 = { 0, 1, 0, 0 };
 	FbxVector4 V3 = { 0, 0, 0, 1 };
 
 	FbxAMatrix matReflect;

@@ -93,6 +93,7 @@ void CLight3D::render()
 		Matrix matLightVP = m_pLightCam->Camera()->GetViewMat() * m_pLightCam->Camera()->GetProjMat();
 		m_pLightMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &matLightVP);
 		m_pLightMtrl->SetTexParam(TEX_PARAM::TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"DepthMapTex"));
+		m_pLightMtrl->SetTexParam(TEX_PARAM::TEX_5, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
 	}
 
 	// ·£´õ¸µ
