@@ -142,13 +142,11 @@ void CLandScape::CreateMaterial()
 	AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
 
 	//// 재질
-	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(pShader);
-	pMtrl->SetKey(L"MaxTessMtrl");
+	m_pMaxTessMtrl = new CMaterial(true);
+	m_pMaxTessMtrl->SetShader(pShader);
+	m_pMaxTessMtrl->SetKey(L"MaxTessMtrl");
 
-	// 추가
-	m_pMaxTessMtrl = pMtrl;
-	AddRes(pMtrl.Get(), RES_TYPE::MATERIAL);
+	AddRes(m_pMaxTessMtrl.Get(), RES_TYPE::MATERIAL);
 
 	// =====================
 	// 지형 피킹 컴퓨트 쉐이더
