@@ -308,30 +308,9 @@ void CFBXLoader::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, 
 	if (1 != iNormalCnt)
 		assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
 
-					  // 종법선 data 의 시작 주소
-	FbxGeometryElementNormal* pNormal = _pMesh->GetElementNormal();
-	UINT iNormalIdx = 0;
-
-	if (pNormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-	{
-		if (pNormal->GetReferenceMode() == FbxGeometryElement::eDirect)
-			iNormalIdx = _iVtxOrder;
-		else
-			iNormalIdx = pNormal->GetIndexArray().GetAt(_iVtxOrder);
-	}
-	else if (pNormal->GetMappingMode() == FbxGeometryElement::eByControlPoint)
-	{
-		if (pNormal->GetReferenceMode() == FbxGeometryElement::eDirect)
-			iNormalIdx = _iIdx;
-		else
-			iNormalIdx = pNormal->GetIndexArray().GetAt(_iIdx);
-	}
-
-	FbxVector4 vNormal = pNormal->GetDirectArray().GetAt(iNormalIdx);
-
-	_pContainer->vecNormal[_iIdx].x = (float)vNormal.mData[0];
-	_pContainer->vecNormal[_iIdx].y = (float)vNormal.mData[2];
-	_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[1];
+	Vec3 normal = XMVector3Cross(_pContainer->vecBinormal[_iIdx], _pContainer->vecTangent[_iIdx]);
+	normal.Normalize();
+	_pContainer->vecNormal[_iIdx] = normal;
 }
 
 void CFBXLoader::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)

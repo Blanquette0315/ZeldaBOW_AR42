@@ -67,11 +67,12 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
 {
     PS_OUT output = (PS_OUT) 0.f;
     
+    // if MaskTexture Binding discard
     if (g_btex_4)
     {
         float4 vMasking = float4(0.f, 0.f, 0.f, 1.f);
         vMasking = g_tex_4.Sample(g_sam_0, _in.vUV);
-        if (vMasking.a == 0.f)
+        if (vMasking.a <= 0.549f)
         {
             discard;
         }
@@ -186,7 +187,7 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
         float4 vMasking = float4(0.f, 0.f, 0.f, 1.f);
         vMasking = g_tex_4.Sample(g_sam_0, _in.vUV);
         
-        if (vMasking.a == 0.f)
+        if (vMasking.a <= 0.f)
         {
             discard;
         }
