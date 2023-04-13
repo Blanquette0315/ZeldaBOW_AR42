@@ -67,6 +67,17 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
 {
     PS_OUT output = (PS_OUT) 0.f;
     
+    // if MaskTexture Binding discard
+    if (g_btex_4)
+    {
+        float4 vMasking = float4(0.f, 0.f, 0.f, 1.f);
+        vMasking = g_tex_4.Sample(g_sam_0, _in.vUV);
+        if (vMasking.a <= 0.549f)
+        {
+            discard;
+        }
+    }
+    
     float4 vObjColor = float4(1.f, 0.f, 1.f, 1.f);
     
     if (g_btex_0)
@@ -96,6 +107,92 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     if(g_btex_3)
     {
         vEmissiveColor = g_tex_3.Sample(g_sam_0, _in.vUV);
+    }
+    
+    output.vColor = vObjColor * g_vDiff;
+    output.vNormal = float4(vNormal, 1.f);
+    output.vPosition = float4(_in.vViewPos, 1.f);
+    output.vEmissiv = vEmissiveColor;
+    float4 vSpecCoeff = float4(fSpecCoefficent, fSpecCoefficent, fSpecCoefficent, 1.f);
+       
+    // Spec ¸ÊÀÌ ÀÖÀ¸¸é
+    if (g_btex_2)
+    {
+        vSpecCoeff *= g_tex_2.Sample(g_sam_0, _in.vUV);
+    }
+    else
+    {
+        vSpecCoeff *= g_vSpec;
+    }
+    
+    output.vData.x = encode(vSpecCoeff);
+    
+    return output;
+}
+
+
+// =====================================
+// AlphaBlend Defferd Shader
+// =====================================
+
+#define Is_MaskTex g_btex_4
+
+struct PSALPHA_OUT
+{
+    float4 vColor : SV_Target0;
+    float4 vNormal : SV_Target1;
+    float4 vPosition : SV_Target2;
+    float4 vData : SV_Target3;
+    float4 vEmissiv : SV_Target4;
+};
+
+PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
+{
+    PSALPHA_OUT output = (PSALPHA_OUT) 0.f;
+    
+    float4 vObjColor = float4(1.f, 0.f, 1.f, 1.f);
+    
+    if (g_btex_0)
+    {
+        vObjColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    }
+
+    float3 vNormal = _in.vViewNormal;
+    
+    if (g_btex_1)
+    {
+        vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
+        vNormal = (vNormal * 2.f) - 1.f;
+        
+        float3x3 matTBN =
+        {
+            _in.vViewTangent,
+            _in.vViewBinormal,
+            _in.vViewNormal,
+        };
+        
+        vNormal = normalize(mul(vNormal, matTBN));
+    }
+    
+    // if Binding EmissiveTex
+    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
+    if (g_btex_3)
+    {
+        vEmissiveColor = g_tex_3.Sample(g_sam_0, _in.vUV);
+    }
+    
+    // Sampling Masking Texture
+    if (Is_MaskTex)
+    {
+        float4 vMasking = float4(0.f, 0.f, 0.f, 1.f);
+        vMasking = g_tex_4.Sample(g_sam_0, _in.vUV);
+        
+        if (vMasking.a <= 0.f)
+        {
+            discard;
+        }
+        
+        vObjColor.a = vMasking.a;
     }
     
     output.vColor = vObjColor * g_vDiff;

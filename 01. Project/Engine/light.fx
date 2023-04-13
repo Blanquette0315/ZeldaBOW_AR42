@@ -349,7 +349,7 @@ VS_DEPTH_OUT VS_DepthMap(VS_DEPTH_IN _in)
     
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vProjPos = output.vPosition;
-
+    
     return output;
 }
 
