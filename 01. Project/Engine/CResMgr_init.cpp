@@ -181,29 +181,29 @@ void CResMgr::CreateDefaultMesh()
 
 	arrCube[1].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[1].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[1].vUV = Vec2(0.f, 0.f);
+	arrCube[1].vUV = Vec2(1.f, 0.f);
 	arrCube[1].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[2].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[2].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[2].vUV = Vec2(0.f, 0.f);
+	arrCube[2].vUV = Vec2(1.f, 1.f);
 	arrCube[2].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[3].vPos = Vec3(-0.5f, 0.5f, -0.5f);
 	arrCube[3].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[3].vUV = Vec2(0.f, 0.f);
+	arrCube[3].vUV = Vec2(0.f, 1.f);
 	arrCube[3].vNormal = Vec3(0.f, 1.f, 0.f);
 
 
 	// ¾Æ·§ ¸é	
 	arrCube[4].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[4].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[4].vUV = Vec2(0.f, 0.f);
+	arrCube[4].vUV = Vec2(1.f, 1.f);
 	arrCube[4].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[5].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[5].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[5].vUV = Vec2(0.f, 0.f);
+	arrCube[5].vUV = Vec2(1.f, 0.f);
 	arrCube[5].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[6].vPos = Vec3(0.5f, -0.5f, 0.5f);
@@ -213,7 +213,7 @@ void CResMgr::CreateDefaultMesh()
 
 	arrCube[7].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[7].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[7].vUV = Vec2(0.f, 0.f);
+	arrCube[7].vUV = Vec2(0.f, 1.f);
 	arrCube[7].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	// ¿ÞÂÊ ¸é
@@ -224,28 +224,28 @@ void CResMgr::CreateDefaultMesh()
 
 	arrCube[9].vPos = Vec3(-0.5f, 0.5f, -0.5f);
 	arrCube[9].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[9].vUV = Vec2(0.f, 0.f);
+	arrCube[9].vUV = Vec2(0.f, 1.f);
 	arrCube[9].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[10].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[10].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[10].vUV = Vec2(0.f, 0.f);
+	arrCube[10].vUV = Vec2(1.f, 1.f);
 	arrCube[10].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[11].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[11].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[11].vUV = Vec2(0.f, 0.f);
+	arrCube[11].vUV = Vec2(1.f, 0.f);
 	arrCube[11].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	// ¿À¸¥ÂÊ ¸é
 	arrCube[12].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[12].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[12].vUV = Vec2(0.f, 0.f);
+	arrCube[12].vUV = Vec2(1.f, 1.f);
 	arrCube[12].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[13].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[13].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[13].vUV = Vec2(0.f, 0.f);
+	arrCube[13].vUV = Vec2(1.f, 0.f);
 	arrCube[13].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[14].vPos = Vec3(0.5f, -0.5f, 0.5f);
@@ -255,13 +255,13 @@ void CResMgr::CreateDefaultMesh()
 
 	arrCube[15].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[15].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[15].vUV = Vec2(0.f, 0.f);
+	arrCube[15].vUV = Vec2(0.f, 1.f);
 	arrCube[15].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	// µÞ ¸é
 	arrCube[16].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[16].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[16].vUV = Vec2(0.f, 0.f);
+	arrCube[16].vUV = Vec2(1.f, 0.f);
 	arrCube[16].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[17].vPos = Vec3(-0.5f, 0.5f, 0.5f);
@@ -271,28 +271,28 @@ void CResMgr::CreateDefaultMesh()
 
 	arrCube[18].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[18].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[18].vUV = Vec2(0.f, 0.f);
+	arrCube[18].vUV = Vec2(0.f, 1.f);
 	arrCube[18].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[19].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[19].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[19].vUV = Vec2(0.f, 0.f);
+	arrCube[19].vUV = Vec2(1.f, 1.f);
 	arrCube[19].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	// ¾Õ ¸é
 	arrCube[20].vPos = Vec3(-0.5f, 0.5f, -0.5f);;
 	arrCube[20].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[20].vUV = Vec2(0.f, 0.f);
+	arrCube[20].vUV = Vec2(0.f, 1.f);
 	arrCube[20].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[21].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[21].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[21].vUV = Vec2(0.f, 0.f);
+	arrCube[21].vUV = Vec2(1.f, 1.f);
 	arrCube[21].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[22].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[22].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[22].vUV = Vec2(0.f, 0.f);
+	arrCube[22].vUV = Vec2(1.f, 0.f);
 	arrCube[22].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[23].vPos = Vec3(-0.5f, -0.5f, -0.5f);

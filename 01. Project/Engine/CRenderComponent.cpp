@@ -37,6 +37,9 @@ CRenderComponent::~CRenderComponent()
 
 void CRenderComponent::render_depthmap()
 {
+	if (m_pMesh == nullptr)
+		return;
+
 	Transform()->UpdateData();
 
 	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DepthMapMtrl");
@@ -88,6 +91,11 @@ void CRenderComponent::SetSharedMaterial(Ptr<CMaterial> _pMtrl, UINT _iIdx)
 
 Ptr<CMaterial> CRenderComponent::GetCurMaterial(UINT _iIdx)
 {
+	if (m_vecMtrls.size() == 0)
+	{
+		return nullptr;
+	}
+
 	if (nullptr == m_vecMtrls[_iIdx].pCurMtrl)
 	{
 		m_vecMtrls[_iIdx].pCurMtrl = m_vecMtrls[_iIdx].pSharedMtrl;

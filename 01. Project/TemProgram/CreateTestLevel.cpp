@@ -172,14 +172,14 @@ void CreateTestLevel()
 	// LandScape 추가
 	//CGameObject* pLandScape = new CGameObject;
 	//pLandScape->SetName(L"LandScape");
-
+	//
 	//pLandScape->AddComponent(new CTransform);
 	//pLandScape->AddComponent(new CLandScape);
-
+	//
 	//pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
 	//pLandScape->LandScape()->SetFaceCount(16, 16);
 	//pLandScape->SetFrustumCul(false);
-
+	//
 	//pLevel->AddGameObject(pLandScape, 0);
 
 	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
@@ -221,7 +221,7 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Bokoblin_Red.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
 		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\bass_test.mdat");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
@@ -231,6 +231,17 @@ void CreateTestLevel()
 		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 		pLevel->AddGameObject(pObj, 0);
 		//pObj->Animator3D()->Play(L"Take 001", true);
+
+		pMeshData = nullptr;
+		pObj = nullptr;
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link.fbx");
+		pMeshData->Save(pMeshData->GetRelativePath());
+
+		pObj = pMeshData->Instantiate();
+		//pObj->SetFrustumCul(false);
+		pObj->SetName(L"Ling");
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		pLevel->AddGameObject(pObj, 0);
 	}
 
 	// 데칼 생성

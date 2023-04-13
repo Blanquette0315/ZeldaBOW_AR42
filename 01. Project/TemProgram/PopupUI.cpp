@@ -175,12 +175,13 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 			_pMtrl->Save(strRelativePath);
 
 			// ��ΰ� ���� �ӽ� ������ ������ �־�� �Ѵ�.
-			tEvent DelMtrl = {};
+			DeleteRes(_pMtrl.Get(), RES_TYPE::MATERIAL);
+			/*tEvent DelMtrl = {};
 			DelMtrl.eType = EVENT_TYPE::DELETE_RES;
 			DelMtrl.wParam = (DWORD_PTR)_pMtrl->GetResType();
 			DelMtrl.lParam = (DWORD_PTR)_pMtrl.Get();
 
-			CEventMgr::GetInst()->AddEvent(DelMtrl);
+			CEventMgr::GetInst()->AddEvent(DelMtrl);*/
 
 		}
 		else
