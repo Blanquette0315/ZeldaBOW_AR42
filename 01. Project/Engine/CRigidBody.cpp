@@ -5,6 +5,7 @@
 #include "CPhysMgr.h"
 #include "CTransform.h"
 #include "CMeshRender.h"
+#include "CLandScape.h"
 
 CRigidBody::CRigidBody()
 	: CComponent(COMPONENT_TYPE::RIGIDBODY)
@@ -47,6 +48,11 @@ CRigidBody::~CRigidBody()
 void CRigidBody::begin()
 {
 	m_pPhysData->BOWObj = GetOwner();
+	if (nullptr != LandScape())
+	{
+		//LandScape()->LandStreamOut();
+		LandScape()->CreateActor();
+	}
 	UpdateTransformData(m_eRigidColliderType, m_pPhysData->isKinematic, m_pPhysData->isDinamic);
 	CreateActor();
 }
@@ -247,7 +253,6 @@ void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinema
 	
 	case COLLIDER_TYPE::COLLIDER_TRI:
 	{
-
 	}
 	break;
 	}
@@ -311,7 +316,12 @@ void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)
 	m_pPhysData->Rotation = (Vec4)Q_Rot;
 }
 
-void CRigidBody::SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList)
+void CRigidBody::SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList, Vector3 _Size)
 {
+	Vec3 PxSize = _Size;
+	PxSize.x /= 100.f;
+	PxSize.y /= 100.f;
+	PxSize.z /= 100.f;
 
+	m_pPhysData->mCollider->CreateTriangle(_iIdxSize, _iVertexSize, IdxArray, _vecVertexList, PxSize);
 }

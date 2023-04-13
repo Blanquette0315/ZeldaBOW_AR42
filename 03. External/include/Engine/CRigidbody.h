@@ -144,7 +144,7 @@ public:
     void SetCapsuleSize(Vec2 _vSize) { m_vCapsuleSize = _vSize; }
     Vec2 GetCapsuleSize() { return m_vCapsuleSize; }
 
-    void SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList);
+    void SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList, Vector3 _Size);
 
 public:
     virtual void begin() override;

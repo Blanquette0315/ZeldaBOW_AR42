@@ -1,32 +1,33 @@
 #pragma once
 #include "CComputeShader.h"
 
-class CStructuredBuffer;
-
-class CHeightMapShader :
+class CRaymapShader :
     public CComputeShader
 {
 private:
-    Ptr<CTexture>       m_pHeightMap;
+    Ptr<CTexture>       m_pRayMap;
     Ptr<CTexture>       m_pBrushTex;
-    Vec2                m_vScale; // ï¿½ï¿½ï¿½ï¿½ Brush Å©ï¿½ï¿½
+    Vec2                m_vScale; // ³ôÀÌ Brush Å©±â
     int                 m_iBrushIdx;
-    CStructuredBuffer*  m_pInput; // Ray ï¿½æµ¹ ï¿½ï¿½Ä¡
-    bool                m_bDecrease;    // tureï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    CStructuredBuffer*  m_pInput; // Ray Ãæµ¹ À§Ä¡
+    bool                m_bBrushShow;
+
 
 public:
-    void SetHeightMap(Ptr<CTexture> _pTex) { m_pHeightMap = _pTex; }
+    void SetRayMap(Ptr<CTexture> _pTex) { m_pRayMap = _pTex; }
     void SetBrushTex(Ptr<CTexture> _pTex) { m_pBrushTex = _pTex; }
     void SetBrushScale(Vec2 _vScale) { m_vScale = _vScale; }
     void SetBrushIndex(int _iIdx) { m_iBrushIdx = _iIdx; }
     void SetInputBuffer(CStructuredBuffer* _pInput) { m_pInput = _pInput; }
-    void IsDecrease(bool _bool) { m_bDecrease = _bool; }
+    void SetBrushShow(bool _Show) { m_bBrushShow = _Show; }
+
 
 public:
     virtual void UpdateData();
     virtual void Clear();
 
+
 public:
-    CHeightMapShader();
-    ~CHeightMapShader();
+    CRaymapShader();
+    ~CRaymapShader();
 };

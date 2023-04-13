@@ -4,48 +4,93 @@
 #include "CRaycastShader.h"
 #include "CHeightMapShader.h"
 #include "CWeightMapShader.h"
+#include "CRaymapShader.h"
 
 class CLandScape :
     public CRenderComponent
 {
 private:
-    UINT                    m_iXFaceCount;      // ÁöÇü ¸é °³¼ö
-    UINT                    m_iZFaceCount;      // ÁöÇü ¸é °³¼ö
+    UINT                    m_iXFaceCount;      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    UINT                    m_iZFaceCount;      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    Vec2                    m_vBrushScale;      // ºê·¯½¬ Å©±â(ÀüÃ¼ ÁöÇü´ëºñ Å©±â ºñÀ²°ª)
-    Ptr<CTexture>           m_pBrushTex;        // ºê·¯½¬¿ë ÅØ½ºÃÄ
+    Vec2                    m_vBrushScale;      // ï¿½ê·¯ï¿½ï¿½ Å©ï¿½ï¿½(ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+    Ptr<CTexture>           m_pBrushTex;        // ï¿½ê·¯ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½ï¿½ï¿½
 
-    Ptr<CTexture>           m_pTileArrTex;      // Å¸ÀÏ ¹è¿­ ÅØ½ºÃÄ
+    Ptr<CTexture>           m_pTileArrTex;      // Å¸ï¿½ï¿½ ï¿½è¿­ ï¿½Ø½ï¿½ï¿½ï¿½
 
-    Ptr<CRaycastShader>     m_pCSRaycast;       // ÇÈÅ· ½¦ÀÌ´õ
-    CStructuredBuffer*      m_pCrossBuffer;	    // ¸¶¿ì½º ÇÇÅ·µÇ´Â ÁöÁ¡ Á¤º¸ ¹Þ´Â ¹öÆÛ
+    Ptr<CRaycastShader>     m_pCSRaycast;       // ï¿½ï¿½Å· ï¿½ï¿½ï¿½Ì´ï¿½
+    CStructuredBuffer*      m_pCrossBuffer;	    // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Å·ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    Ptr<CHeightMapShader>   m_pCSHeightMap;     // ³ôÀÌ¸Ê ½¦ÀÌ´õ
-    Ptr<CTexture>           m_pHeightMap;       // ³ôÀÌ¸Ê ÅØ½ºÃÄ
+    Ptr<CHeightMapShader>   m_pCSHeightMap;     // ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½
+    Ptr<CTexture>           m_pHeightMap;       // ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ø½ï¿½ï¿½ï¿½
+
+    Ptr<CRaymapShader>      m_pCSRayMap;
+    Ptr<CTexture>           m_pRayMap;
 
 
-    Ptr<CWeightMapShader>   m_pCSWeightMap;     // °¡ÁßÄ¡ ½¦ÀÌ´õ
-    CStructuredBuffer*      m_pWeightMapBuffer; // °¡ÁßÄ¡ ÀúÀå ¹öÆÛ
-    UINT					m_iWeightWidth;		// °¡ÁßÄ¡ ¹öÆÛ °¡·Î¼¼·Î Çà·Ä ¼ö
-    UINT					m_iWeightHeight;	// °¡ÁßÄ¡ ¹öÆÛ °¡·Î¼¼·Î Çà·Ä ¼ö
-    UINT                    m_iWeightIdx;		// Áõ°¡ ½ÃÅ³ °¡ÁßÄ¡ ºÎÀ§
+    Ptr<CWeightMapShader>   m_pCSWeightMap;     // ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½Ì´ï¿½
+    CStructuredBuffer*      m_pWeightMapBuffer; // ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    UINT					m_iWeightWidth;		// ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½
+    UINT					m_iWeightHeight;	// ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½
+    UINT                    m_iWeightIdx;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
 
-    LANDSCAPE_MOD           m_eMod; 	        // ÁöÇü Åø¸ðµå¿¡¼­ »óÅÂ°ª
+    LANDSCAPE_MOD           m_eMod; 	        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½
 
     Ptr<CMaterial>          m_LandScapeMtrl;
+    ComPtr<ID3D11Buffer>    m_pSOBuffer;        // Stream Out Buffer
+
+    ComPtr<ID3D11Buffer>    m_pCopyBuffer;      // CopyBuffer
+    D3D11_BUFFER_DESC       m_CopyBufferDesc;
+    D3D11_MAPPED_SUBRESOURCE    m_MappedResource;
+    Vector3*                    m_arrVertexPos;
+    UINT*                       m_arrIndice;
+    Ptr<CMaterial>              m_pMaxTessMtrl;
+    int                         m_iMaxVtxCount;
+    UINT                        m_inumVertices;
+    bool                        m_bCurDataCooking;
+
 
 public:
+    virtual void begin() override;
     virtual void finaltick() override;
     virtual void render() override;
 
 public:
     void SetFaceCount(UINT _X, UINT _Z);
+    void SetLandMod(LANDSCAPE_MOD _eMod);
+    void SetBrushScale(Vec2 _Scale) { m_vBrushScale = _Scale; }
+    void SetBrushTexture(Ptr<CTexture> _BrushTex) { m_pBrushTex = _BrushTex; }
+
+    UINT GetFaceCountX() { return m_iXFaceCount; }
+    UINT GetFaceCountZ() { return m_iZFaceCount; }
+    LANDSCAPE_MOD GetLandMod() { return m_eMod; }
+    Vec2 GetBrushScale() { return m_vBrushScale; }
+    Ptr<CTexture> GetBrushTex() { return m_pBrushTex; }
+    bool IsCurDataCooking() { return m_bCurDataCooking; }
+
+    void SaveHightImage();
+
+    void SaveWightData();
+    void LoadWightData();
+
+    void SaveCookingData();
+    void LoadCookingData();
+
+    void Cooking();
+    void CreateActor();
+
+    void LandStreamOut();
 
 private:
     void CreateMesh();
     void CreateMaterial();
     void CreateTexture();
     void Raycasting();
+
+    void BrushAreaShow(bool _Show);
+
+    void CreateCpBuffer(UINT _byteWidth);
+    void CreateSOBuffer();
 
     CLONE(CLandScape);
 public:

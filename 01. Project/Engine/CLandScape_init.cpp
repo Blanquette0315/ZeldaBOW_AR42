@@ -100,8 +100,6 @@ void CLandScape::CreateMaterial()
 	pShader->AddScalarParam(FLOAT_0, "Specular");
 	pShader->AddTexureParam(TEX_0, "HeightMap");
 
-	tEvent evn = {};
-
 	// 추가
 	AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
 
@@ -114,6 +112,44 @@ void CLandScape::CreateMaterial()
 	// 추가
 	AddRes(m_LandScapeMtrl.Get(), RES_TYPE::MATERIAL);
 
+	// ================
+	// MaxTessMtrl
+	// ================
+	D3D11_SO_DECLARATION_ENTRY pDecl[] =
+	{
+		// semantic name, semantic index, start component, component count, output slot
+		{0, "POSITION", 0, 0, 3, 0 },
+	};
+	pShader = new CGraphicsShader;
+
+	pShader->SetKey(L"MaxTessShader");
+	pShader->CreateVertexShader(L"shader\\maxlandscape.fx", "VS_MaxLandScape");
+	pShader->CreateHullShader(L"shader\\maxlandscape.fx", "HS_MaxLandScape");
+	pShader->CreateDomainShader(L"shader\\maxlandscape.fx", "DS_MaxLandScape");
+	pShader->CreateGeometryWithStreamOut(L"shader\\maxlandscape.fx", "GS_StreamOut", pDecl, _countof(pDecl));
+
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+
+	pShader->AddScalarParam(INT_0, "Tess");
+	pShader->AddScalarParam(FLOAT_0, "Specular");
+	pShader->AddTexureParam(TEX_0, "HeightMap");
+
+	// 추가
+	AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
+
+	//// 재질
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(pShader);
+	pMtrl->SetKey(L"MaxTessMtrl");
+
+	// 추가
+	m_pMaxTessMtrl = pMtrl;
+	AddRes(pMtrl.Get(), RES_TYPE::MATERIAL);
+
 	// =====================
 	// 지형 피킹 컴퓨트 쉐이더
 	// =====================
@@ -124,6 +160,15 @@ void CLandScape::CreateMaterial()
 		m_pCSRaycast->CreateComputeShader(L"shader\\raycast.fx", "CS_Raycast");
 		m_pCSRaycast->SetKey(L"RaycastShader");
 		AddRes(m_pCSRaycast.Get(), RES_TYPE::COMPUTE_SHADER);
+	}
+
+	m_pCSRayMap = (CRaymapShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"RayMapShader").Get();
+	if (nullptr == m_pCSRayMap)
+	{
+		m_pCSRayMap = new CRaymapShader();
+		m_pCSRayMap->CreateComputeShader(L"shader\\raymap.fx", "CS_RayMap");
+		m_pCSRayMap->SetKey(L"RayMapShader");
+		AddRes(m_pCSRayMap.Get(), RES_TYPE::COMPUTE_SHADER);
 	}
 
 	// ======================
@@ -159,6 +204,12 @@ void CLandScape::CreateTexture()
 		, DXGI_FORMAT_R32_FLOAT
 		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
 
+	m_pRayMap = CResMgr::GetInst()->CreateTexture(L"LandRayTexture"
+		, 2048, 2048
+		, DXGI_FORMAT_R32_FLOAT
+		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
+
 	Ptr<CMaterial> pMtrl = GetSharedMaterial();
 	pMtrl->SetScalarParam(SCALAR_PARAM::INT_0, &m_iXFaceCount);
 	pMtrl->SetScalarParam(SCALAR_PARAM::INT_1, &m_iZFaceCount);
@@ -175,5 +226,6 @@ void CLandScape::CreateTexture()
 	m_iWeightHeight = 1024;
 
 	m_pWeightMapBuffer = new CStructuredBuffer;
-	m_pWeightMapBuffer->Create(sizeof(tWeight_4), m_iWeightWidth * m_iWeightHeight, SB_TYPE::UAV_INC, nullptr, false);
+	//m_pWeightMapBuffer->Create(sizeof(tWeight_4), m_iWeightWidth * m_iWeightHeight, SB_TYPE::UAV_INC, nullptr, false);
+	m_pWeightMapBuffer->Create(sizeof(tWeight_4), m_iWeightWidth * m_iWeightHeight, SB_TYPE::UAV_INC, nullptr, true);
 }

@@ -9,9 +9,10 @@ class CHeightMapShader :
 private:
     Ptr<CTexture>       m_pHeightMap;
     Ptr<CTexture>       m_pBrushTex;
-    Vec2                m_vScale; // ³ôÀÌ Brush Å©±â
+    Vec2                m_vScale; // ï¿½ï¿½ï¿½ï¿½ Brush Å©ï¿½ï¿½
     int                 m_iBrushIdx;
-    CStructuredBuffer*  m_pInput; // Ray Ãæµ¹ À§Ä¡    
+    CStructuredBuffer*  m_pInput; // Ray ï¿½æµ¹ ï¿½ï¿½Ä¡
+    bool                m_bDecrease;    // tureï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
 public:
     void SetHeightMap(Ptr<CTexture> _pTex) { m_pHeightMap = _pTex; }
@@ -19,6 +20,7 @@ public:
     void SetBrushScale(Vec2 _vScale) { m_vScale = _vScale; }
     void SetBrushIndex(int _iIdx) { m_iBrushIdx = _iIdx; }
     void SetInputBuffer(CStructuredBuffer* _pInput) { m_pInput = _pInput; }
+    void IsDecrease(bool _bool) { m_bDecrease = _bool; }
 
 public:
     virtual void UpdateData();

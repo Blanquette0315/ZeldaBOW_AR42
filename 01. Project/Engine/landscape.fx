@@ -25,7 +25,7 @@ StructuredBuffer<float4> WEIGHT_MAP : register(t17); // 가중치 버퍼
 struct VS_IN
 {
     float3 vPos : POSITION;
-    float3 vUV : TEXCOORD;
+    float2 vUV : TEXCOORD;
     
     float3 vTangent : TANGENT;
     float3 vNormal : NORMAL;
@@ -180,9 +180,6 @@ DS_OUT DS_LandScape(PatchTess _tessFactor
     return output;
 };
 
-
-
-
 struct PS_OUT
 {
     float4 vColor : SV_Target0;
@@ -225,7 +222,15 @@ PS_OUT PS_LandScape(DS_OUT _in)
                 iMaxWeightIdx = i;
             }
         }
+        
         output.vColor = float4(vColor.rgb, 1.f);
+        
+        float RayColor = g_tex_4.Sample(g_sam_0, _in.vFullUV).x;
+        if (RayColor != 0.f)
+        {
+            output.vColor.y += 1.f;
+        }
+        
 
         // 타일 노말
         if (-1 != iMaxWeightIdx)
@@ -245,6 +250,5 @@ PS_OUT PS_LandScape(DS_OUT _in)
             
     return output;
 }
-
 
 #endif
