@@ -930,8 +930,27 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
 	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
 	pShader->AddTexureParam(TEX_3, "Emissive Texture    ");
+	pShader->AddTexureParam(TEX_4, "Masking Texture     ");
 
 	AddRes<CGraphicsShader>(L"Std3D_DeferredShader", pShader);
+
+	// Std3DAlpha_Deferred Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std3d_deferred.fx", "VS_Std3D_Deferred");
+	pShader->CreatePixelShader(L"shader\\std3d_deferred.fx", "PS_Std3DAlpha_Deferred");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT);
+
+	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
+	pShader->AddTexureParam(TEX_0, "Output Texture      ");
+	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
+	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
+	pShader->AddTexureParam(TEX_3, "Emissive Texture    ");
+	pShader->AddTexureParam(TEX_4, "Masking Texture     ");
+
+	AddRes<CGraphicsShader>(L"Std3DAlpha_DeferredShader", pShader);
 
 	// DirLight Shader
 	pShader = new CGraphicsShader;
@@ -1098,6 +1117,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std3D_DeferredShader"));
 	AddRes<CMaterial>(L"Std3D_DeferredMtrl", pMtrl);
+	
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std3DAlpha_DeferredShader"));
+	AddRes<CMaterial>(L"Std3DAlpha_DeferredMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Deferred_MergeShader"));

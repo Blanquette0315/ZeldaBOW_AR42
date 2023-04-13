@@ -162,6 +162,8 @@ void CCamera::render()
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet();
 	render_deferred();
 
+	render_deferred_transparent();
+
 	// Deferred Decal Ã³¸®
 	render_deferreddecal();
 
@@ -227,6 +229,7 @@ void CCamera::SetLayerInvisible(int _iLayerIdx)
 void CCamera::SortObject()
 {
 	m_vecDeferred.clear();
+	m_vecDeferredTransparent.clear();
 	m_vecDeferredDecal.clear();
 	m_vecQpaque.clear();
 	m_vecMask.clear();
@@ -280,6 +283,9 @@ void CCamera::SortObject()
 				case SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE:
 				case SHADER_DOMAIN::DOMAIN_DEFERRED_MASK:
 					m_vecDeferred.push_back(vecObj[j]);
+					break;
+				case SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT:
+					m_vecDeferredTransparent.push_back(vecObj[j]);
 					break;
 				case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
 					m_vecDeferredDecal.push_back(vecObj[j]);
@@ -345,6 +351,14 @@ void CCamera::render_deferred()
 	for (size_t i = 0; i < m_vecDeferred.size(); ++i)
 	{
 		m_vecDeferred[i]->render();
+	}
+}
+
+void CCamera::render_deferred_transparent()
+{
+	for (size_t i = 0; i < m_vecDeferredTransparent.size(); ++i)
+	{
+		m_vecDeferredTransparent[i]->render();
 	}
 }
 
