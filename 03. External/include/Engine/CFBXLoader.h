@@ -27,13 +27,14 @@ struct tContainer
 	vector<Vec3>						vecTangent;
 	vector<Vec3>						vecBinormal;
 	vector<Vec3>						vecNormal;
-	vector<Vec2>						vecUV;
+	vector<vector<Vec2>>				vecUVs;
 
 	vector<Vec4>						vecIndices;
 	vector<Vec4>						vecWeights;
 
 	vector<vector<UINT>>				vecIdx;
 	vector<tFbxMaterial>				vecMtrl;
+	UINT								iUVCount; // using in CreateMaterial 
 
 	// Animation 관련 정보
 	bool								bAnimation;
@@ -45,7 +46,11 @@ struct tContainer
 		vecTangent.resize(_iSize);
 		vecBinormal.resize(_iSize);
 		vecNormal.resize(_iSize);
-		vecUV.resize(_iSize);
+		vecUVs.resize(3);
+		for (int i = 0; i < 3; ++i)
+		{
+			vecUVs[i].resize(_iSize);
+		}
 		vecIndices.resize(_iSize);
 		vecWeights.resize(_iSize);
 		vecWI.resize(_iSize);
@@ -99,6 +104,10 @@ private:
 public:
 	void init();
 	void LoadFbx(const wstring& _strPath);
+
+	void LoadOnlyAnimationInfo(const wstring& _strPath);
+	// use only in LoadOnlyAnimationInfo method
+	void LoadOnlyAnimToContainer(FbxNode* _pNode);
 
 public:
 	int GetContainerCount() { return (int)m_vecContainer.size(); }

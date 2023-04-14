@@ -33,6 +33,8 @@ public:
     void SetAnim3D(bool _bTrue) { m_tConst.arrAnimData[0] = (int)_bTrue; }
     void SetBoneCount(int _iBoneCount) { m_tConst.arrAnimData[1] = _iBoneCount; }
 
+    void SetUVCount(int _iUVCount) { m_tConst.iUVCount = _iUVCount; }
+
     void UpdateData();
     static void Clear();
 

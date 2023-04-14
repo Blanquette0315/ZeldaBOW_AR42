@@ -206,12 +206,20 @@ void CMaterial::Save(const wstring& _strRelativePath)
 		}
 		emitter << YAML::EndSeq;
 
+		emitter << YAML::Key << "ConstUVCount";
+		emitter << YAML::Value << m_tConst.iUVCount;
 		for (UINT i = 0; i < TEX_PARAM::TEX_END; ++i)
 		{
 			// 텍스처 파라미터는 참조중인 Texture를 SaveResourceRef를 이용해 저장한다.
 			emitter << YAML::Key << "MaterialShaderTexture" + std::to_string(i);
 			emitter << YAML::Value << YAML::BeginMap;
 			SaveResourceRef(m_arrTex[i], emitter);
+			// arr size -> 7
+			if (i < 7)
+			{
+				emitter << YAML::Key << "ConstTexUVIndex";
+				emitter << YAML::Value << m_tConst.iTexUVIndex[i];
+			}
 			emitter << YAML::EndMap;
 		}
 	}
@@ -257,12 +265,16 @@ int CMaterial::Load(const wstring& _strFilePath)
 			m_tConst.HasTex[i] = rootNode["ConstHasTex"][i].as<int>();
 		}
 		
+		SAFE_LOAD_FROM_YAML(int, m_tConst.iUVCount, rootNode["ConstUVCount"]);
 		for (UINT i = 0; i < TEX_PARAM::TEX_END; ++i)
 		{
 			node = rootNode["MaterialShaderTexture" + std::to_string(i)];
 			LoadResourceRef(m_arrTex[i], node);
+
+			if(i < 7)
+				m_tConst.iTexUVIndex[i] = node["ConstTexUVIndex"].as<int>();
 		}
 	}
-
+		
 	return S_OK; 
 }

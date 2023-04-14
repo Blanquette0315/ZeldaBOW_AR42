@@ -30,6 +30,8 @@ public:
 
 public:
     void SetCurIdx(int _idx) { m_iCurItemIdx = _idx; }
+    int GetCurIdx() { return m_iCurItemIdx; }
+    const string& GetItemKey(int _idx) { return m_vecItemKey[_idx]; }
 
 public:
     void SetPreviewIdx(int _PreviewIdx) { m_iCurItemIdx = _PreviewIdx; }

@@ -76,6 +76,7 @@ CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
 		wstring strMeshKey = L"mesh\\" + path(_strPath).stem().wstring() + L"\\";
 		strMeshKey += path(strFullPath).stem();
 		strMeshKey += L".mesh";
+		pMesh->SetName(strMeshKey);
 		CResMgr::GetInst()->AddRes<CMesh>(strMeshKey, pMesh);
 
 		// 메시를 실제 파일로 저장

@@ -10,7 +10,9 @@
 struct VS_IN
 {
     float3 vPos : POSITION;
-    float2 vUV : TEXCOORD;
+    float2 vUV0 : TEXCOORD0;
+    float2 vUV1 : TEXCOORD1;
+    float2 vUV2 : TEXCOORD2;
     
     float3 vTangent : TANGENT;
     float3 vNormal : NORMAL;
@@ -23,7 +25,9 @@ struct VS_IN
 struct VS_OUT
 {
     float4 vPosition : SV_Position;
-    float2 vUV : TEXCOORD;
+    float2 vUV0 : TEXCOORD0;
+    float2 vUV1 : TEXCOORD1;
+    float2 vUV2 : TEXCOORD2;
     
     float3 vViewPos : POSITION;
     
@@ -42,7 +46,9 @@ VS_OUT VS_Std3D_Deferred(VS_IN _in)
     }
     
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
-    output.vUV = _in.vUV;
+    output.vUV0 = _in.vUV0;
+    output.vUV1 = _in.vUV1;
+
     
     output.vViewPos = mul(float4(_in.vPos, 1.f), g_matWV).xyz;
     output.vViewTangent = normalize(mul(float4(_in.vTangent, 0.f), g_matWV).xyz);
@@ -63,6 +69,18 @@ struct PS_OUT
     float4 vEmissiv     : SV_Target4;
 };
 
+float2 SelectUV(int _iUVIdx ,in VS_OUT _in)
+{
+    if(_iUVIdx == 0)
+        return _in.vUV0;
+    else if (_iUVIdx == 1)
+        return _in.vUV1;
+    else if (_iUVIdx == 2)
+        return _in.vUV2;
+    else 
+        return _in.vUV0;
+}
+
 PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
 {
     PS_OUT output = (PS_OUT) 0.f;
@@ -82,14 +100,15 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     
     if (g_btex_0)
     {
-        vObjColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        vObjColor = g_tex_0.Sample(g_sam_0, SelectUV(g_iTex0UV, _in));
     }
 
     float3 vNormal = _in.vViewNormal;
     
     if (g_btex_1)
     {
-        vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
+        vNormal = g_tex_1.Sample(g_sam_0, SelectUV(g_iTex1UV, _in)).xyz;
+        
         vNormal = (vNormal * 2.f) - 1.f;
         
         float3x3 matTBN =
@@ -101,29 +120,30 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
         
         vNormal = normalize(mul(vNormal, matTBN));
     }
-    
+
+    float4 vSpecCoeff = float4(fSpecCoefficent, fSpecCoefficent, fSpecCoefficent, 1.f);     
+    // Spec ∏ ¿Ã ¿÷¿∏∏È
+    if (g_btex_2)
+    {
+        vSpecCoeff *= g_tex_2.Sample(g_sam_0, SelectUV(g_iTex2UV, _in));
+    }
+    else
+    {
+        vSpecCoeff *= g_vSpec;
+    }
+
     // if Binding EmissiveTex
     float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
     if(g_btex_3)
     {
-        vEmissiveColor = g_tex_3.Sample(g_sam_0, _in.vUV);
+        vEmissiveColor = g_tex_3.Sample(g_sam_0, SelectUV(g_iTex3UV, _in));
     }
     
     output.vColor = vObjColor * g_vDiff;
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vEmissiv = vEmissiveColor;
-    float4 vSpecCoeff = float4(fSpecCoefficent, fSpecCoefficent, fSpecCoefficent, 1.f);
-       
-    // Spec ∏ ¿Ã ¿÷¿∏∏È
-    if (g_btex_2)
-    {
-        vSpecCoeff *= g_tex_2.Sample(g_sam_0, _in.vUV);
-    }
-    else
-    {
-        vSpecCoeff *= g_vSpec;
-    }
+
     
     output.vData.x = encode(vSpecCoeff);
     

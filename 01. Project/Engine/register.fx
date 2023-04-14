@@ -68,6 +68,15 @@ cbuffer MATERIAL : register(b1)
     int g_iAnim;
     int g_iBoneCount;
     int2 padding;
+    
+    int g_iUVCount;
+    int g_iTex0UV;
+    int g_iTex1UV;
+    int g_iTex2UV;
+    int g_iTex3UV;
+    int g_iTex4UV;
+    int g_iTex5UV;
+    int g_iTex6UV;
 };
 
 cbuffer GLOBAL : register(b2)

@@ -29,7 +29,7 @@ void CLandScape::CreateMesh()
 		for (UINT col = 0; col < m_iXFaceCount + 1; ++col)
 		{
 			v.vPos = Vec3((float)col, 0.f, (float)row);
-			v.vUV = Vec2(col, m_iZFaceCount - row);
+			v.vUV0 = Vec2(col, m_iZFaceCount - row);
 
 			v.vNormal = Vec3(0.f, 1.f, 0.f);
 			v.vTangent = Vec3(1.f, 0.f, 0.f);

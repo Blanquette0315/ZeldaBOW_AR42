@@ -182,6 +182,12 @@ void MenuUI::render()
             {
                 CImGuiMgr::GetInst()->FindUI("ExportTool")->Open();
             }
+
+            if (ImGui::MenuItem("AddAnimation"))
+            {
+                CImGuiMgr::GetInst()->FindUI("AddAnimationTool")->Open();
+            }
+
             ImGui::EndMenu();
         }
 

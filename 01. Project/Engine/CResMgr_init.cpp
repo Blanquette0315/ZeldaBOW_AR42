@@ -27,7 +27,7 @@ void CResMgr::InitSound()
 		assert(nullptr);
 	}
 
-	// 32°³ Ã¤³Î »ý¼º
+	// 32ï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	CSound::g_pFMOD->init(32, FMOD_DEFAULT, nullptr);
 	// 3D setting
 	CSound::g_pFMOD->set3DSettings(1.f, 100.f, 1.f);
@@ -43,7 +43,7 @@ void CResMgr::CreateDefaultMesh()
 	// Point Mesh
 	v.vPos = Vec3(0.f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	v.vUV = Vec2(0.f, 0.f);
+	v.vUV0 = Vec2(0.f, 0.f);
 
 	UINT idx = 0;
 	
@@ -51,21 +51,21 @@ void CResMgr::CreateDefaultMesh()
 	pMesh->Create(&v, 1, &idx, 1);
 	AddRes<CMesh>(L"PointMesh", pMesh);
 
-	// »ç°¢Çü ¸Þ½¬ ¸¸µé±â
+	// ï¿½ç°¢ï¿½ï¿½ ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	// Áö±Ý BinoramlÀÌ 1ÀÎµ¥, »ç½Ç DXÁÂÇ¥°è¿¡ ¾Ë¸Â°Ô ¾²·Á¸é -1ÀÌ ¿Ç´Ù.
-	// ÇÏÁö¸¸ Áö±Ý ¿ì¸® ¿¹Á¦°¡ PSP°ÔÀÓÀÇ ¸®¼Ò½º¶ó OpenGLÀÇ ÁÂÇ¥°è¸¦ ±âÁØÀ¸·Î ¸¸µé¾îÁ®ÀÖ´Ù.
-	// »ç½Ç DX °ÔÀÓ ¸®¼Ò½º¸¦ »ç¿ëÇØµµ ¹®Á¦´Â ¾ÈµÇ´Â°Ô, ¸Å½¬¸¦ ÀÓÆ÷Æ®ÇØ¼­ »ç¿ëÇÏ¸é ÇØ´ç ¸Å½¬¿¡´Â DX±âÁØ¿¡ ¸Â°Ô Æò¸éÁÂÇ¥°è°¡ ¼³Á¤µÇ¾î ÀÖÀ» °ÍÀÌ°í,
-	// ±× ¸Å½¬¿¡ Àû¿ëµÉ ³ë¸»¸Ê ÅØ½ºÃ³µµ µ¿ÀÏÇÑ Æò¸éÁÂÇ¥°è¸¦ ±âÁØÀ¸·Î ¸¸µé¾î Á³±â ¶§¹®¿¡ ¹®Á¦°¡ ¹ß»ýÇÏÁö ¾Ê´Â´Ù.
-	// ÇÏÁö¸¸ Áö±Ý ¿ì¸®ÀÇ ±âº» ±âÀú µµÇüÀÌ OpenGLÆò¸é ÁÂÇ¥°è¸¦ ±âÁØÀ¸·Î Normal, Tangent, BinormalÀ» Àâ¾Ò±â ¶§¹®¿¡
-	// ÅëÀÏ¼ºÀÌ ¾ø¾î ¸ðÈ£¼ºÀÌ ¹ß»ýÇÑ´Ù. µû¶ó¼­ ÇØ´ç Binormal°ªÀ» -1·Î º¯°æÇØ DX±âÁØ¿¡ ¾Ë¸Â´Â Ç¥¸é ÁÂÇ¥°è¸¦ ¼³Á¤ÇØ ÁÖ¾î¾ß ÇÑ´Ù.
-	// Ç¥¸é ÁÂÇ¥°è¸¦ ¼³Á¤ÇÏ´Â °ÍÀº ¾î¶² ¹æ¹ýÀ» »ç¿ëÇØµµ °ü°è ¾øÁö¸¸, ¾Ï¹¬ÀûÀÎ ·êÀÌ ÀÖ±â ¶§¹®¿¡ DX·Î ¸ÂÃçÁÖ´Â°Ô ¸®¼Ò½º¸¦ »ç¿ëÇÒ¶§ ¸ðÈ£¼ºÀÌ »ç¶óÁø´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ Binoramlï¿½ï¿½ 1ï¿½Îµï¿½, ï¿½ï¿½ï¿½ DXï¿½ï¿½Ç¥ï¿½è¿¡ ï¿½Ë¸Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -1ï¿½ï¿½ ï¿½Ç´ï¿½.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ PSPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ OpenGLï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½è¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½.
+	// ï¿½ï¿½ï¿½ DX ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Øµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ´Â°ï¿½, ï¿½Å½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ø´ï¿½ ï¿½Å½ï¿½ï¿½ï¿½ï¿½ï¿½ DXï¿½ï¿½ï¿½Ø¿ï¿½ ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½è°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½,
+	// ï¿½ï¿½ ï¿½Å½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ë¸»ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½è¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´ï¿½.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OpenGLï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½è¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Normal, Tangent, Binormalï¿½ï¿½ ï¿½ï¿½Ò±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ñ´ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ Binormalï¿½ï¿½ï¿½ï¿½ -1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DXï¿½ï¿½ï¿½Ø¿ï¿½ ï¿½Ë¸Â´ï¿½ Ç¥ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½è¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+	// Ç¥ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½è¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Øµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DXï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´Â°ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 	v.vPos = Vec3(-0.5f, 0.5f, 0.f);
 	v.vNormal = Vec3(0.f, 0.f, -1.f);
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 0.f);
+	v.vUV0 = Vec2(0.f, 0.f);
 	vecVtx.push_back(v);
 
 	v.vPos = Vec3(0.5f, 0.5f, 0.f);
@@ -73,7 +73,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(1.f, 0.f);
+	v.vUV0 = Vec2(1.f, 0.f);
 	vecVtx.push_back(v);
 
 	v.vPos = Vec3(0.5f, -0.5f, 0.f);
@@ -81,7 +81,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(1.f, 1.f);
+	v.vUV0 = Vec2(1.f, 1.f);
 	vecVtx.push_back(v);
 
 	v.vPos = Vec3(-0.5f, -0.5f, 0.f);
@@ -89,7 +89,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(0.f, 1.f);
+	v.vUV0 = Vec2(0.f, 1.f);
 	vecVtx.push_back(v);
 
 	vecIdx.push_back(0);
@@ -119,11 +119,11 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	//¿øÇü ¸Þ½¬ ¸¸µé±â
-	// Áß½ÉÁ¡
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ß½ï¿½ï¿½ï¿½
 	v.vPos = Vec3(0.f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	v.vUV = Vec2(0.5f, 0.5f);
+	v.vUV0 = Vec2(0.5f, 0.5f);
 
 	vecVtx.push_back(v);
 
@@ -135,7 +135,7 @@ void CResMgr::CreateDefaultMesh()
 	{
 		v.vPos = Vec3(fRadius * cosf(fTheta * (float)i), fRadius * sinf(fTheta * (float)i), 1.f);
 		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-		v.vUV = Vec2(v.vPos.x + 0.5f, 1.f - (v.vPos.y + 0.5f));
+		v.vUV0 = Vec2(v.vPos.x + 0.5f, 1.f - (v.vPos.y + 0.5f));
 		vecVtx.push_back(v);
 	}
 
@@ -173,134 +173,134 @@ void CResMgr::CreateDefaultMesh()
 
 	// Cube Mesh
 	Vtx arrCube[24] = {};
-	// À­¸é
+	// ï¿½ï¿½ï¿½ï¿½
 	arrCube[0].vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	arrCube[0].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[0].vUV = Vec2(0.f, 0.f);
+	arrCube[0].vUV0 = Vec2(0.f, 0.f);
 	arrCube[0].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[1].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[1].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[1].vUV = Vec2(1.f, 0.f);
+	arrCube[1].vUV0 = Vec2(1.f, 0.f);
 	arrCube[1].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[2].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[2].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[2].vUV = Vec2(1.f, 1.f);
+	arrCube[2].vUV0 = Vec2(1.f, 1.f);
 	arrCube[2].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[3].vPos = Vec3(-0.5f, 0.5f, -0.5f);
 	arrCube[3].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[3].vUV = Vec2(0.f, 1.f);
+	arrCube[3].vUV0 = Vec2(0.f, 1.f);
 	arrCube[3].vNormal = Vec3(0.f, 1.f, 0.f);
 
 
-	// ¾Æ·§ ¸é	
+	// ï¿½Æ·ï¿½ ï¿½ï¿½	
 	arrCube[4].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[4].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[4].vUV = Vec2(1.f, 1.f);
+	arrCube[4].vUV0 = Vec2(1.f, 1.f);
 	arrCube[4].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[5].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[5].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[5].vUV = Vec2(1.f, 0.f);
+	arrCube[5].vUV0 = Vec2(1.f, 0.f);
 	arrCube[5].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[6].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[6].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[6].vUV = Vec2(0.f, 0.f);
+	arrCube[6].vUV0 = Vec2(0.f, 0.f);
 	arrCube[6].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[7].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[7].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[7].vUV = Vec2(0.f, 1.f);
+	arrCube[7].vUV0 = Vec2(0.f, 1.f);
 	arrCube[7].vNormal = Vec3(0.f, -1.f, 0.f);
 
-	// ¿ÞÂÊ ¸é
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	arrCube[8].vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	arrCube[8].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[8].vUV = Vec2(0.f, 0.f);
+	arrCube[8].vUV0 = Vec2(0.f, 0.f);
 	arrCube[8].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[9].vPos = Vec3(-0.5f, 0.5f, -0.5f);
 	arrCube[9].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[9].vUV = Vec2(0.f, 1.f);
+	arrCube[9].vUV0 = Vec2(0.f, 1.f);
 	arrCube[9].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[10].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[10].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[10].vUV = Vec2(1.f, 1.f);
+	arrCube[10].vUV0 = Vec2(1.f, 1.f);
 	arrCube[10].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[11].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[11].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[11].vUV = Vec2(1.f, 0.f);
+	arrCube[11].vUV0 = Vec2(1.f, 0.f);
 	arrCube[11].vNormal = Vec3(-1.f, 0.f, 0.f);
 
-	// ¿À¸¥ÂÊ ¸é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	arrCube[12].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[12].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[12].vUV = Vec2(1.f, 1.f);
+	arrCube[12].vUV0 = Vec2(1.f, 1.f);
 	arrCube[12].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[13].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[13].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[13].vUV = Vec2(1.f, 0.f);
+	arrCube[13].vUV0 = Vec2(1.f, 0.f);
 	arrCube[13].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[14].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[14].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[14].vUV = Vec2(0.f, 0.f);
+	arrCube[14].vUV0 = Vec2(0.f, 0.f);
 	arrCube[14].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[15].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[15].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[15].vUV = Vec2(0.f, 1.f);
+	arrCube[15].vUV0 = Vec2(0.f, 1.f);
 	arrCube[15].vNormal = Vec3(1.f, 0.f, 0.f);
 
-	// µÞ ¸é
+	// ï¿½ï¿½ ï¿½ï¿½
 	arrCube[16].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[16].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[16].vUV = Vec2(1.f, 0.f);
+	arrCube[16].vUV0 = Vec2(1.f, 0.f);
 	arrCube[16].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[17].vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	arrCube[17].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[17].vUV = Vec2(0.f, 0.f);
+	arrCube[17].vUV0 = Vec2(0.f, 0.f);
 	arrCube[17].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[18].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[18].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[18].vUV = Vec2(0.f, 1.f);
+	arrCube[18].vUV0 = Vec2(0.f, 1.f);
 	arrCube[18].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[19].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[19].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[19].vUV = Vec2(1.f, 1.f);
+	arrCube[19].vUV0 = Vec2(1.f, 1.f);
 	arrCube[19].vNormal = Vec3(0.f, 0.f, 1.f);
 
-	// ¾Õ ¸é
+	// ï¿½ï¿½ ï¿½ï¿½
 	arrCube[20].vPos = Vec3(-0.5f, 0.5f, -0.5f);;
 	arrCube[20].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[20].vUV = Vec2(0.f, 1.f);
+	arrCube[20].vUV0 = Vec2(0.f, 1.f);
 	arrCube[20].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[21].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[21].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[21].vUV = Vec2(1.f, 1.f);
+	arrCube[21].vUV0 = Vec2(1.f, 1.f);
 	arrCube[21].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[22].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[22].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[22].vUV = Vec2(1.f, 0.f);
+	arrCube[22].vUV0 = Vec2(1.f, 0.f);
 	arrCube[22].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[23].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[23].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[23].vUV = Vec2(0.f, 0.f);
+	arrCube[23].vUV0 = Vec2(0.f, 0.f);
 	arrCube[23].vNormal = Vec3(0.f, 0.f, -1.f);
 
-	// ÀÎµ¦½º
+	// ï¿½Îµï¿½ï¿½ï¿½
 	for (int i = 0; i < 12; i += 2)
 	{
 		vecIdx.push_back(i * 2);
@@ -324,7 +324,7 @@ void CResMgr::CreateDefaultMesh()
 
 	// Top
 	v.vPos = Vec3(0.f, fRadius, 0.f);
-	v.vUV = Vec2(0.5f, 0.f);
+	v.vUV0 = Vec2(0.5f, 0.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 	v.vNormal = v.vPos;
 	v.vNormal.Normalize();
@@ -333,8 +333,8 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.push_back(v);
 
 	// Body
-	UINT iStackCount = 40; // °¡·Î ºÐÇÒ °³¼ö
-	UINT iSliceCount = 40; // ¼¼·Î ºÐÇÒ °³¼ö
+	UINT iStackCount = 40; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	UINT iSliceCount = 40; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	float fStackAngle = XM_PI / iStackCount;
 	float fSliceAngle = XM_2PI / iSliceCount;
@@ -353,7 +353,7 @@ void CResMgr::CreateDefaultMesh()
 			v.vPos = Vec3(fRadius * sinf(i * fStackAngle) * cosf(j * fSliceAngle)
 				, fRadius * cosf(i * fStackAngle)
 				, fRadius * sinf(i * fStackAngle) * sinf(j * fSliceAngle));
-			v.vUV = Vec2(fUVXStep * j, fUVYStep * i);
+			v.vUV0 = Vec2(fUVXStep * j, fUVYStep * i);
 			v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 			v.vNormal = v.vPos;
 			v.vNormal.Normalize();
@@ -372,7 +372,7 @@ void CResMgr::CreateDefaultMesh()
 
 	// Bottom
 	v.vPos = Vec3(0.f, -fRadius, 0.f);
-	v.vUV = Vec2(0.5f, 1.f);
+	v.vUV0 = Vec2(0.5f, 1.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 	v.vNormal = v.vPos;
 	v.vNormal.Normalize();
@@ -381,8 +381,8 @@ void CResMgr::CreateDefaultMesh()
 	v.vBinormal = Vec3(0.f, 0.f, -1.f);
 	vecVtx.push_back(v);
 
-	// ÀÎµ¦½º
-	// ºÏ±ØÁ¡
+	// ï¿½Îµï¿½ï¿½ï¿½
+	// ï¿½Ï±ï¿½ï¿½ï¿½
 	for (UINT i = 0; i < iSliceCount; ++i)
 	{
 		vecIdx.push_back(0);
@@ -390,7 +390,7 @@ void CResMgr::CreateDefaultMesh()
 		vecIdx.push_back(i + 1);
 	}
 
-	// ¸öÅë
+	// ï¿½ï¿½ï¿½ï¿½
 	for (UINT i = 0; i < iStackCount - 2; ++i)
 	{
 		for (UINT j = 0; j < iSliceCount; ++j)
@@ -411,7 +411,7 @@ void CResMgr::CreateDefaultMesh()
 		}
 	}
 
-	// ³²±ØÁ¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UINT iBottomIdx = (UINT)vecVtx.size() - 1;
 	for (UINT i = 0; i < iSliceCount; ++i)
 	{
@@ -492,7 +492,7 @@ void CResMgr::CreateConeMesh(float radius, float height, size_t tessellation)
 	}
 
 
-	// Ãß°¡
+	// ï¿½ß°ï¿½
 	CMesh* pMesh = new CMesh(true);
 	pMesh->Create(vertices.data(), vertices.size(), indices.data(), indices.size());
 	AddRes<CMesh>(L"ConeMesh", pMesh);
@@ -531,8 +531,8 @@ void CResMgr::CreateCylinder(float bottomRadius, float topRadius, float height, 
 
 			vertex.vPos = XMFLOAT3(r * c, y, r * s);
 
-			vertex.vUV.x = (float)j / sliceCount;
-			vertex.vUV.y = 1.0f - (float)i / stackCount;
+			vertex.vUV0.x = (float)j / sliceCount;
+			vertex.vUV0.y = 1.0f - (float)i / stackCount;
 
 			// Cylinder can be parameterized as follows, where we introduce v
 			// parameter that goes in the same direction as the v tex-coord
@@ -623,13 +623,13 @@ void CResMgr::BuildCylinderTopCap(float bottomRadius, float topRadius, float hei
 			Vec3 vNormal;
 		*/
 		_vtx.vPos = Vec3(x, y, z);
-		_vtx.vUV = Vec2(u, v);
+		_vtx.vUV0 = Vec2(u, v);
 		Vertices.push_back(_vtx);
 	}
 
 	// Cap center vertex.
 	_vtx.vPos = Vec3(0.0f, y, 0.0f);
-	_vtx.vUV = Vec2(0.5f, 0.5f);
+	_vtx.vUV0 = Vec2(0.5f, 0.5f);
 	Vertices.push_back(_vtx);
 
 	// Index of center vertex.
@@ -669,13 +669,13 @@ void CResMgr::BuildCylinderBottomCap(float bottomRadius, float topRadius, float 
 		float v = z / height + 0.5f;
 
 		_vtx.vPos = Vec3(x, y, z);
-		_vtx.vUV = Vec2(u, v);
+		_vtx.vUV0 = Vec2(u, v);
 		Vertices.push_back(_vtx);
 	}
 
 	// Cap center vertex.
 	_vtx.vPos = Vec3(0.0f, y, 0.0f);
-	_vtx.vUV = Vec2(0.5f, 0.5f);
+	_vtx.vUV0 = Vec2(0.5f, 0.5f);
 	Vertices.push_back(_vtx);
 
 	// Cache the index of center vertex.
@@ -691,8 +691,8 @@ void CResMgr::BuildCylinderBottomCap(float bottomRadius, float topRadius, float 
 
 void CResMgr::CreateDefaultTexture()
 {
-	// ·Îµù
-	// Texture ·Îµù 
+	// ï¿½Îµï¿½
+	// Texture ï¿½Îµï¿½ 
 	//CResMgr::GetInst()->Load<CTexture>(L"Player", L"texture\\CharmanderUI.png");
 	//CResMgr::GetInst()->Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
 	//
@@ -703,24 +703,24 @@ void CResMgr::CreateDefaultTexture()
 	//Load<CTexture>(L"TerrainTiles", L"texture\\terrainTiles_default.png");
 	//Load<CTexture>(L"Alina_Bandit", L"texture\\Alina_Bandit.png");
 	//
-	//// ¾Ö´Ï¸ÞÀÌ¼Ç ·Îµù 
+	//// ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Îµï¿½ 
 	//CResMgr::GetInst()->Load<CTexture>(L"link", L"texture\\link.png");
 	//Load<CTexture>(L"CardUpgradeEffAtlas", L"texture\\CardUpgradeEffAtlas.png"); // 36, 3, 12 size 164 178
 	//Load<CTexture>(L"MonsterAtlas", L"texture\\MonsterAtlas.png");
 	//Load<CTexture>(L"KillBossAnim", L"texture\\KillBossAnim.png"); // 130 13 10 size 198 90 
 	//
 	// NoiseTexture
-	// Noise_01Àº »ý¼º Å¸ÀÔÀÌ ¿øÀÏ ½Ã °í¸£°Ô ºÐÆ÷ÇÏÁö ¾Ê´Â ¹®Á¦°¡ ÀÖ´Ù.
+	// Noise_01ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½.
 	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
 	Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
 	Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
 	
 	Load<CTexture>(L"texture\\noise\\TestNoise.png", L"texture\\noise\\TestNoise.png");
 
-	// »ý¼º
-	// Texture »ý¼º
-	// D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS ·Î ÇÑ ÀÌÀ¯
-	// : ÅØ½ºÃÄ¸¦ ÇÏ³ª ¸¸µé¾î¼­ ÃÖÃÊ °ËÀº»öÀ¸·Î Ãâ·ÂÇÏ´Ù°¡ ComputeShader¸¦ ÀÌ¿ëÇØ »öÀ» ¹Ù²ã Ãâ·ÂÇØº¸±â À§ÇÔÀÌ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½
+	// Texture ï¿½ï¿½ï¿½ï¿½
+	// D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// : ï¿½Ø½ï¿½ï¿½Ä¸ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½î¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´Ù°ï¿½ ComputeShaderï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½.
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM
 		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
 }
@@ -729,7 +729,11 @@ void CResMgr::CreateDefaultGrapicsShader()
 {
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "POSITION");
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "COLOR");
-	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD");
+
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD", 0);
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD", 1);
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD", 2);
+
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "TANGENT");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "BINORMAL");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "NORMAL");
@@ -822,7 +826,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateGeometryShader(L"shader\\particlerender.fx", "GS_ParticleRender");
 	pShader->CreatePixelShader(L"shader\\particlerender.fx", "PS_ParticleRender");
 
-	// ÀÌÁ¦ Á¡ Mesh¸¦ »ç¿ëÇÏ±â ¶§¹®¿¡ Topology¸¦ POINTLIST·Î Àü´ÞÇØÁØ´Ù. 
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Meshï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Topologyï¿½ï¿½ POINTLISTï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½. 
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
@@ -872,9 +876,9 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateVertexShader(L"shader\\Decal.fx", "VS_Decal");
 	pShader->CreatePixelShader(L"shader\\Decal.fx", "PS_Decal");
 
-	pShader->SetRSType(RS_TYPE::CULL_FRONT);		// º¼·ý ¸Å½Ã ¾È¿¡ ÆÄ°íµé¾îµµ µ¥Ä®ÀÌ »ç¶óÁö¸é ¾ÈµÇ¹Ç·Î CULL_FRONT¸¦ ³Ö¾îÁÖ¾î¾ß ÇÑ´Ù.
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);		// »öÀ» ³²°Ü ¾ËÆÄ ºí·£µùÀ» ÇØÁÖ¾î¾ß ÇÑ´Ù.
-	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);	// ±íÀÌ¸¦ ³²±â¸é ¾ÈµÇ°í, Å×½ºÆ®µµ ÇÏ¸é ¾ÈµÈ´Ù.
+	pShader->SetRSType(RS_TYPE::CULL_FRONT);		// ï¿½ï¿½ï¿½ï¿½ ï¿½Å½ï¿½ ï¿½È¿ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½îµµ ï¿½ï¿½Ä®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ¹Ç·ï¿½ CULL_FRONTï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);	// ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ°ï¿½, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÈ´ï¿½.
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DECAL);
 
 	pShader->AddTexureParam(TEX_1, "Decal Texture");
@@ -886,10 +890,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateVertexShader(L"shader\\SkyBox.fx", "VS_SkyBox");
 	pShader->CreatePixelShader(L"shader\\SkyBox.fx", "PS_SkyBox");
 
-	pShader->SetRSType(RS_TYPE::CULL_FRONT);			// ½ºÄ«ÀÌ ¹Ú½º ³»ºÎ¿¡¼­ º¸´Â °Å±â ‹š¹®¿¡ CULL_BACKÀ» ÇÏ¸é ¾ÈµÈ´Ù.
+	pShader->SetRSType(RS_TYPE::CULL_FRONT);			// ï¿½ï¿½Ä«ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CULL_BACKï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÈ´ï¿½.
 	pShader->SetBSType(BS_TYPE::DEFAULT);
-	pShader->SetDSType(DS_TYPE::LESS_EQUAL);			// ½ºÄ«ÀÌ ¹Ú½º°¡ Ä«¸Þ¶óÀÇ far³¡¿¡ À§Ä¡ÇÏ±â ¶§¹®¿¡ LESS·Î ÇÏ¸é Â©¸°´Ù. ÀÚ»õÈ÷ ¼³¸íÇÏ¸é, TargetClear½Ã ±íÀÌ¸¦ 1·Î ¼ÂÆÃÇØÁÖ´Âµ¥, ¸Å½ÃÀÇ Ç¥¸éÀÌ 1·Î °É¸®±â ¶§¹®¿¡ ÇØ´ç ºÎºÐÀÌ Depth Test¸¦ Åë°úÇÏÁö ¸øÇØ ·£´õ¸µÀÌ µÇÁö ¾Ê°Ô µÈ´Ù.
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);	// Áö±Ý ½ºÄ«ÀÌ ¹Ú½º´Â Forward ·£´õ¸µ ¹æ½ÄÀ¸·Î ÇÏ±â ¶§¹®¿¡ DOMAIN_OPAQUE¸¦ ³Ö¾îÁØ´Ù.
+	pShader->SetDSType(DS_TYPE::LESS_EQUAL);			// ï¿½ï¿½Ä«ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ farï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ LESSï¿½ï¿½ ï¿½Ï¸ï¿½ Â©ï¿½ï¿½ï¿½ï¿½. ï¿½Ú»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½, TargetClearï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´Âµï¿½, ï¿½Å½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½Îºï¿½ï¿½ï¿½ Depth Testï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½È´ï¿½.
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä«ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ Forward ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DOMAIN_OPAQUEï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ø´ï¿½.
 
 	AddRes<CGraphicsShader>(L"SkyBoxShader", pShader);
 
@@ -916,7 +920,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 
 
-	// ====== Áö¿¬ ·»´õ¸µ ¼ÎÀÌ´õ ======
+	// ====== ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ ======
 	// Std3D_Deferred Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std3d_deferred.fx", "VS_Std3D_Deferred");
@@ -958,9 +962,9 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreatePixelShader(L"shader\\light.fx", "PS_DirLightShader");
 
 	pShader->SetRSType(RS_TYPE::CULL_BACK);
-	// ºûÀº °è¼ÓÇØ¼­ ´©ÀûµÇ¾î¾ß ÇÏ±â ¶§¹®¿¡ OneOneºí·£µå¸¦ »ç¿ëÇØ °¡»êÈ¥ÇÕ½ÄÀ» »ç¿ëÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OneOneï¿½ï¿½ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È¥ï¿½Õ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	pShader->SetBSType(BS_TYPE::ONE_ONE);
-	// ºûÀº ±íÀÌ °ªÀ» ³²±â¸é ¾ÈµÇ°í, Å×½ºÆ®µµ ÇÏ¸é ¾ÈµÇ±â ¶§¹®¿¡ NTNW¸¦ »ç¿ëÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ°ï¿½, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÇ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NTNWï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
@@ -975,11 +979,11 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateVertexShader(L"shader\\light.fx", "VS_PointLightShader");
 	pShader->CreatePixelShader(L"shader\\light.fx", "PS_PointLightShader");
 
-	// º¼·ý ¸Å½Ã ¾È¿¡ Ä«¸Þ¶ó°¡ ÆÄ°íµé¾îµµ ºûÀÌ »ç¶óÁö¸é ¾ÈµÇ±â ¶§¹®¿¡
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Å½ï¿½ ï¿½È¿ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½îµµ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	pShader->SetRSType(RS_TYPE::CULL_FRONT);
-	// ºûÀº °è¼ÓÇØ¼­ ´©ÀûµÇ¾î¾ß ÇÏ±â ¶§¹®¿¡ OneOneºí·£µå¸¦ »ç¿ëÇØ °¡»êÈ¥ÇÕ½ÄÀ» »ç¿ëÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OneOneï¿½ï¿½ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È¥ï¿½Õ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	pShader->SetBSType(BS_TYPE::ONE_ONE);
-	// ºûÀº ±íÀÌ °ªÀ» ³²±â¸é ¾ÈµÇ°í, Å×½ºÆ®µµ ÇÏ¸é ¾ÈµÇ±â ¶§¹®¿¡ NTNW¸¦ »ç¿ëÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ°ï¿½, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÇ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NTNWï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
@@ -991,11 +995,11 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateVertexShader(L"shader\\light.fx", "VS_SpotLightShader");
 	pShader->CreatePixelShader(L"shader\\light.fx", "PS_SpotLightShader");
 
-	// º¼·ý ¸Å½Ã ¾È¿¡ Ä«¸Þ¶ó°¡ ÆÄ°íµé¾îµµ ºûÀÌ »ç¶óÁö¸é ¾ÈµÇ±â ¶§¹®¿¡
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Å½ï¿½ ï¿½È¿ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½îµµ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	pShader->SetRSType(RS_TYPE::CULL_FRONT);
-	// ºûÀº °è¼ÓÇØ¼­ ´©ÀûµÇ¾î¾ß ÇÏ±â ¶§¹®¿¡ OneOneºí·£µå¸¦ »ç¿ëÇØ °¡»êÈ¥ÇÕ½ÄÀ» »ç¿ëÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OneOneï¿½ï¿½ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È¥ï¿½Õ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	pShader->SetBSType(BS_TYPE::ONE_ONE);
-	// ºûÀº ±íÀÌ °ªÀ» ³²±â¸é ¾ÈµÇ°í, Å×½ºÆ®µµ ÇÏ¸é ¾ÈµÇ±â ¶§¹®¿¡ NTNW¸¦ »ç¿ëÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ°ï¿½, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÇ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NTNWï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
@@ -1008,17 +1012,17 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreatePixelShader(L"shader\\deferred_merge.fx", "PS_Merge");
 
 	pShader->SetRSType(RS_TYPE::CULL_BACK);
-	// ±íÀÌ¸¦ ³²±âÁö ¾Ê´Â ÀÌÀ¯´Â Deferred·£´õ¸µ ÀÌÈÄ Æ÷¿öµå ·£´õ¸µ¹æ½ÄÀÇ ¹°Ã¼¸¦ ·£´õ¸µÇÏ´Âµ¥,
-	// ¿ì¸®°¡ Merge.fxÀÇ ShaderÄÚµå¿¡¼­ Á¤Á¡ÀÇ z¸¦ 0À¸·Î µÎ¾ú±â ¶§¹®¿¡ ±íÀÌ°¡ 0ÀÌ ³²°ÜÁú °ÍÀÌ´Ù.
-	// ÀÌ¶§, ±íÀÌ°¡ 0ÀÎ°ÍÀÌ Á¦ÀÏ °¡±î¿î ¹°Ã¼ÀÌ¹Ç·Î º´ÇÕÀÌÈÄ ¹°Ã¼°¡ ·£´õ¸µµÉ ¶§, ±íÀÌ Å×½ºÆ®¸¦ Åë°úÇÏÁö ¸øÇØ¼­ Ãâ·ÂµÇÁö ¾ÊÀ» °ÍÀÌ´Ù.
-	// ¶Ç Å×½ºÆ®¸¦ ¾ÈÇÏ´Â ÀÌÀ¯´Â ¿ì¿¬Âú°Ô ±íÀÌ°¡ 0À¸·Î ±×·ÁÁø ¹°Ã¼°¡ ÀÖ´Ù¸é, ÀÇµµÄ¡ ¾ÊÀº »óÈ²ÀÌ ¹ß»ýÇÒ ¼ö ÀÖ±â ¶§¹®¿¡ È®½ÇÈ÷ ÇØÁÖ±â À§ÇÔÀÌ´Ù.
+	// ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Deferredï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Âµï¿½,
+	// ï¿½ì¸®ï¿½ï¿½ Merge.fxï¿½ï¿½ Shaderï¿½Úµå¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ zï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Î¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ 0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
+	// ï¿½Ì¶ï¿½, ï¿½ï¿½ï¿½Ì°ï¿½ 0ï¿½Î°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½Âµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
+	// ï¿½ï¿½ ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¿¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½, ï¿½Çµï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È²ï¿½ï¿½ ï¿½ß»ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½.
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 
-	// ÇØ´ç ¼ÎÀÌ´õ´Â ¹°Ã¼¸¦ ±×¸± ¼ÎÀÌ´õ°¡ ¾Æ´Ï¹Ç·Î µµ¸ÞÀÎÀº NONEÀÌ´Ù.
+	// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ ï¿½Æ´Ï¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NONEï¿½Ì´ï¿½.
 	pShader->SetDomain(SHADER_DOMAIN::NONE);
 
-	// ÇØ´ç ¼ÎÀÌ´õ´Â ¹°Ã¼¸¦ ±×¸± ¼ÎÀÌ´õ°¡ ¾Æ´Ñ MRTÀÇ ·£´õ Å¸°Ù º´ÇÕ ¸ñÀûÀÌ¹Ç·Î
-	// ÆÄ¶ó¹ÌÅÍ¸¦ °ø°³ÇÒ ÇÊ¿ä°¡ ¾ø´Ù.
+	// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ MRTï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½
+	// ï¿½Ä¶ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ä°¡ ï¿½ï¿½ï¿½ï¿½.
 	pShader->AddScalarParam(INT_3, "int");
 
 	AddRes<CGraphicsShader>(L"Deferred_MergeShader", pShader);
@@ -1028,9 +1032,9 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateVertexShader(L"shader\\Decal.fx", "VS_DeferredDecal");
 	pShader->CreatePixelShader(L"shader\\Decal.fx", "PS_DeferredDecal");
 
-	pShader->SetRSType(RS_TYPE::CULL_FRONT);		// º¼·ý ¸Å½Ã ¾È¿¡ ÆÄ°íµé¾îµµ µ¥Ä®ÀÌ »ç¶óÁö¸é ¾ÈµÇ¹Ç·Î CULL_FRONT¸¦ ³Ö¾îÁÖ¾î¾ß ÇÑ´Ù.
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);		// »öÀ» ³²°Ü ¾ËÆÄ ºí·£µùÀ» ÇØÁÖ¾î¾ß ÇÑ´Ù.
-	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);	// ±íÀÌ¸¦ ³²±â¸é ¾ÈµÇ°í, Å×½ºÆ®µµ ÇÏ¸é ¾ÈµÈ´Ù.
+	pShader->SetRSType(RS_TYPE::CULL_FRONT);		// ï¿½ï¿½ï¿½ï¿½ ï¿½Å½ï¿½ ï¿½È¿ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½îµµ ï¿½ï¿½Ä®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ¹Ç·ï¿½ CULL_FRONTï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);	// ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ°ï¿½, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÈ´ï¿½.
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL);
 
 	pShader->AddTexureParam(TEX_1, "Decal Texture");
@@ -1159,7 +1163,7 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes<CMaterial>(L"DepthMapMtrl", pMtrl);
 }
 
-void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)
+void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName, UINT _iSemanticIndex)
 {
 	D3D11_INPUT_ELEMENT_DESC LayoutDesc = {};
 	LayoutDesc.AlignedByteOffset = m_iLayoutOffset;
@@ -1167,7 +1171,7 @@ void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)
 	LayoutDesc.InputSlot = 0;
 	LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	LayoutDesc.SemanticName = _strSemanticName;
-	LayoutDesc.SemanticIndex = 0;
+	LayoutDesc.SemanticIndex = _iSemanticIndex;
 	m_vecLayoutInfo.push_back(LayoutDesc);
 
 	m_iLayoutOffset += GetSizeofFormat(_eFormat);
