@@ -43,7 +43,7 @@ void CResMgr::CreateDefaultMesh()
 	// Point Mesh
 	v.vPos = Vec3(0.f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	v.vUV = Vec2(0.f, 0.f);
+	v.vUV0 = Vec2(0.f, 0.f);
 
 	UINT idx = 0;
 	
@@ -65,7 +65,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 0.f);
+	v.vUV0 = Vec2(0.f, 0.f);
 	vecVtx.push_back(v);
 
 	v.vPos = Vec3(0.5f, 0.5f, 0.f);
@@ -73,7 +73,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(1.f, 0.f);
+	v.vUV0 = Vec2(1.f, 0.f);
 	vecVtx.push_back(v);
 
 	v.vPos = Vec3(0.5f, -0.5f, 0.f);
@@ -81,7 +81,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(1.f, 1.f);
+	v.vUV0 = Vec2(1.f, 1.f);
 	vecVtx.push_back(v);
 
 	v.vPos = Vec3(-0.5f, -0.5f, 0.f);
@@ -89,7 +89,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vTangent = Vec3(1.f, 0.f, 0.f);
 	v.vBinormal = Vec3(0.f, 1.f, 0.f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(0.f, 1.f);
+	v.vUV0 = Vec2(0.f, 1.f);
 	vecVtx.push_back(v);
 
 	vecIdx.push_back(0);
@@ -123,7 +123,7 @@ void CResMgr::CreateDefaultMesh()
 	// Áß½ÉÁ¡
 	v.vPos = Vec3(0.f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	v.vUV = Vec2(0.5f, 0.5f);
+	v.vUV0 = Vec2(0.5f, 0.5f);
 
 	vecVtx.push_back(v);
 
@@ -135,7 +135,7 @@ void CResMgr::CreateDefaultMesh()
 	{
 		v.vPos = Vec3(fRadius * cosf(fTheta * (float)i), fRadius * sinf(fTheta * (float)i), 1.f);
 		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-		v.vUV = Vec2(v.vPos.x + 0.5f, 1.f - (v.vPos.y + 0.5f));
+		v.vUV0 = Vec2(v.vPos.x + 0.5f, 1.f - (v.vPos.y + 0.5f));
 		vecVtx.push_back(v);
 	}
 
@@ -176,128 +176,128 @@ void CResMgr::CreateDefaultMesh()
 	// À­¸é
 	arrCube[0].vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	arrCube[0].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[0].vUV = Vec2(0.f, 0.f);
+	arrCube[0].vUV0 = Vec2(0.f, 0.f);
 	arrCube[0].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[1].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[1].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[1].vUV = Vec2(0.f, 0.f);
+	arrCube[1].vUV0 = Vec2(0.f, 0.f);
 	arrCube[1].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[2].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[2].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[2].vUV = Vec2(0.f, 0.f);
+	arrCube[2].vUV0 = Vec2(0.f, 0.f);
 	arrCube[2].vNormal = Vec3(0.f, 1.f, 0.f);
 
 	arrCube[3].vPos = Vec3(-0.5f, 0.5f, -0.5f);
 	arrCube[3].vColor = Vec4(1.f, 1.f, 1.f, 1.f);
-	arrCube[3].vUV = Vec2(0.f, 0.f);
+	arrCube[3].vUV0 = Vec2(0.f, 0.f);
 	arrCube[3].vNormal = Vec3(0.f, 1.f, 0.f);
 
 
 	// ¾Æ·§ ¸é	
 	arrCube[4].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[4].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[4].vUV = Vec2(0.f, 0.f);
+	arrCube[4].vUV0 = Vec2(0.f, 0.f);
 	arrCube[4].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[5].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[5].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[5].vUV = Vec2(0.f, 0.f);
+	arrCube[5].vUV0 = Vec2(0.f, 0.f);
 	arrCube[5].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[6].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[6].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[6].vUV = Vec2(0.f, 0.f);
+	arrCube[6].vUV0 = Vec2(0.f, 0.f);
 	arrCube[6].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	arrCube[7].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[7].vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	arrCube[7].vUV = Vec2(0.f, 0.f);
+	arrCube[7].vUV0 = Vec2(0.f, 0.f);
 	arrCube[7].vNormal = Vec3(0.f, -1.f, 0.f);
 
 	// ¿ÞÂÊ ¸é
 	arrCube[8].vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	arrCube[8].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[8].vUV = Vec2(0.f, 0.f);
+	arrCube[8].vUV0 = Vec2(0.f, 0.f);
 	arrCube[8].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[9].vPos = Vec3(-0.5f, 0.5f, -0.5f);
 	arrCube[9].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[9].vUV = Vec2(0.f, 0.f);
+	arrCube[9].vUV0 = Vec2(0.f, 0.f);
 	arrCube[9].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[10].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[10].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[10].vUV = Vec2(0.f, 0.f);
+	arrCube[10].vUV0 = Vec2(0.f, 0.f);
 	arrCube[10].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	arrCube[11].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[11].vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	arrCube[11].vUV = Vec2(0.f, 0.f);
+	arrCube[11].vUV0 = Vec2(0.f, 0.f);
 	arrCube[11].vNormal = Vec3(-1.f, 0.f, 0.f);
 
 	// ¿À¸¥ÂÊ ¸é
 	arrCube[12].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[12].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[12].vUV = Vec2(0.f, 0.f);
+	arrCube[12].vUV0 = Vec2(0.f, 0.f);
 	arrCube[12].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[13].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[13].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[13].vUV = Vec2(0.f, 0.f);
+	arrCube[13].vUV0 = Vec2(0.f, 0.f);
 	arrCube[13].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[14].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[14].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[14].vUV = Vec2(0.f, 0.f);
+	arrCube[14].vUV0 = Vec2(0.f, 0.f);
 	arrCube[14].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	arrCube[15].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[15].vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	arrCube[15].vUV = Vec2(0.f, 0.f);
+	arrCube[15].vUV0 = Vec2(0.f, 0.f);
 	arrCube[15].vNormal = Vec3(1.f, 0.f, 0.f);
 
 	// µÞ ¸é
 	arrCube[16].vPos = Vec3(0.5f, 0.5f, 0.5f);
 	arrCube[16].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[16].vUV = Vec2(0.f, 0.f);
+	arrCube[16].vUV0 = Vec2(0.f, 0.f);
 	arrCube[16].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[17].vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	arrCube[17].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[17].vUV = Vec2(0.f, 0.f);
+	arrCube[17].vUV0 = Vec2(0.f, 0.f);
 	arrCube[17].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[18].vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	arrCube[18].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[18].vUV = Vec2(0.f, 0.f);
+	arrCube[18].vUV0 = Vec2(0.f, 0.f);
 	arrCube[18].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	arrCube[19].vPos = Vec3(0.5f, -0.5f, 0.5f);
 	arrCube[19].vColor = Vec4(1.f, 1.f, 0.f, 1.f);
-	arrCube[19].vUV = Vec2(0.f, 0.f);
+	arrCube[19].vUV0 = Vec2(0.f, 0.f);
 	arrCube[19].vNormal = Vec3(0.f, 0.f, 1.f);
 
 	// ¾Õ ¸é
 	arrCube[20].vPos = Vec3(-0.5f, 0.5f, -0.5f);;
 	arrCube[20].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[20].vUV = Vec2(0.f, 0.f);
+	arrCube[20].vUV0 = Vec2(0.f, 0.f);
 	arrCube[20].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[21].vPos = Vec3(0.5f, 0.5f, -0.5f);
 	arrCube[21].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[21].vUV = Vec2(0.f, 0.f);
+	arrCube[21].vUV0 = Vec2(0.f, 0.f);
 	arrCube[21].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[22].vPos = Vec3(0.5f, -0.5f, -0.5f);
 	arrCube[22].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[22].vUV = Vec2(0.f, 0.f);
+	arrCube[22].vUV0 = Vec2(0.f, 0.f);
 	arrCube[22].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	arrCube[23].vPos = Vec3(-0.5f, -0.5f, -0.5f);
 	arrCube[23].vColor = Vec4(1.f, 0.f, 1.f, 1.f);
-	arrCube[23].vUV = Vec2(0.f, 0.f);
+	arrCube[23].vUV0 = Vec2(0.f, 0.f);
 	arrCube[23].vNormal = Vec3(0.f, 0.f, -1.f);
 
 	// ÀÎµ¦½º
@@ -324,7 +324,7 @@ void CResMgr::CreateDefaultMesh()
 
 	// Top
 	v.vPos = Vec3(0.f, fRadius, 0.f);
-	v.vUV = Vec2(0.5f, 0.f);
+	v.vUV0 = Vec2(0.5f, 0.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 	v.vNormal = v.vPos;
 	v.vNormal.Normalize();
@@ -353,7 +353,7 @@ void CResMgr::CreateDefaultMesh()
 			v.vPos = Vec3(fRadius * sinf(i * fStackAngle) * cosf(j * fSliceAngle)
 				, fRadius * cosf(i * fStackAngle)
 				, fRadius * sinf(i * fStackAngle) * sinf(j * fSliceAngle));
-			v.vUV = Vec2(fUVXStep * j, fUVYStep * i);
+			v.vUV0 = Vec2(fUVXStep * j, fUVYStep * i);
 			v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 			v.vNormal = v.vPos;
 			v.vNormal.Normalize();
@@ -372,7 +372,7 @@ void CResMgr::CreateDefaultMesh()
 
 	// Bottom
 	v.vPos = Vec3(0.f, -fRadius, 0.f);
-	v.vUV = Vec2(0.5f, 1.f);
+	v.vUV0 = Vec2(0.5f, 1.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 	v.vNormal = v.vPos;
 	v.vNormal.Normalize();
@@ -531,8 +531,8 @@ void CResMgr::CreateCylinder(float bottomRadius, float topRadius, float height, 
 
 			vertex.vPos = XMFLOAT3(r * c, y, r * s);
 
-			vertex.vUV.x = (float)j / sliceCount;
-			vertex.vUV.y = 1.0f - (float)i / stackCount;
+			vertex.vUV0.x = (float)j / sliceCount;
+			vertex.vUV0.y = 1.0f - (float)i / stackCount;
 
 			// Cylinder can be parameterized as follows, where we introduce v
 			// parameter that goes in the same direction as the v tex-coord
@@ -623,13 +623,13 @@ void CResMgr::BuildCylinderTopCap(float bottomRadius, float topRadius, float hei
 			Vec3 vNormal;
 		*/
 		_vtx.vPos = Vec3(x, y, z);
-		_vtx.vUV = Vec2(u, v);
+		_vtx.vUV0 = Vec2(u, v);
 		Vertices.push_back(_vtx);
 	}
 
 	// Cap center vertex.
 	_vtx.vPos = Vec3(0.0f, y, 0.0f);
-	_vtx.vUV = Vec2(0.5f, 0.5f);
+	_vtx.vUV0 = Vec2(0.5f, 0.5f);
 	Vertices.push_back(_vtx);
 
 	// Index of center vertex.
@@ -669,13 +669,13 @@ void CResMgr::BuildCylinderBottomCap(float bottomRadius, float topRadius, float 
 		float v = z / height + 0.5f;
 
 		_vtx.vPos = Vec3(x, y, z);
-		_vtx.vUV = Vec2(u, v);
+		_vtx.vUV0 = Vec2(u, v);
 		Vertices.push_back(_vtx);
 	}
 
 	// Cap center vertex.
 	_vtx.vPos = Vec3(0.0f, y, 0.0f);
-	_vtx.vUV = Vec2(0.5f, 0.5f);
+	_vtx.vUV0 = Vec2(0.5f, 0.5f);
 	Vertices.push_back(_vtx);
 
 	// Cache the index of center vertex.
@@ -729,7 +729,11 @@ void CResMgr::CreateDefaultGrapicsShader()
 {
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "POSITION");
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "COLOR");
-	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD");
+
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD", 0);
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD", 1);
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD", 2);
+
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "TANGENT");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "BINORMAL");
 	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "NORMAL");
@@ -1136,7 +1140,7 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes<CMaterial>(L"DepthMapMtrl", pMtrl);
 }
 
-void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)
+void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName, UINT _iSemanticIndex)
 {
 	D3D11_INPUT_ELEMENT_DESC LayoutDesc = {};
 	LayoutDesc.AlignedByteOffset = m_iLayoutOffset;
@@ -1144,7 +1148,7 @@ void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)
 	LayoutDesc.InputSlot = 0;
 	LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	LayoutDesc.SemanticName = _strSemanticName;
-	LayoutDesc.SemanticIndex = 0;
+	LayoutDesc.SemanticIndex = _iSemanticIndex;
 	m_vecLayoutInfo.push_back(LayoutDesc);
 
 	m_iLayoutOffset += GetSizeofFormat(_eFormat);

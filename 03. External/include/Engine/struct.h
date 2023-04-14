@@ -14,7 +14,12 @@ struct Vtx
 {
 	Vec3 vPos;
 	Vec4 vColor;
-	Vec2 vUV;
+
+	// if manage UV with vector -> struct that has Vtx can has different size. 
+	// max uv -> 3
+	Vec2 vUV0;
+	Vec2 vUV1;
+	Vec2 vUV2;
 
 	Vec3 vTangent;
 	Vec3 vBinormal;
@@ -232,6 +237,8 @@ struct tMtrlConst
 
 	int HasTex[(UINT)TEX_PARAM::TEX_END]; // 해당 멤버는 해당 텍스처 배열에 바인딩이 걸린게 있는지 확인하기 위한 멤버이다.
 	int	arrAnimData[4];	// 3D Animation 정보
+	int iUVCount;
+	int iTexUVIndex[7]; // UV index that Tex uses 
 };
 
 struct tGlobalData

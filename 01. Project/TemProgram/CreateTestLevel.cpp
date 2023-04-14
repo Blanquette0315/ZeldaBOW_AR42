@@ -236,14 +236,17 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
-		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\bass_test.mdat");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link_Maya.fbx");
 		pMeshData->Save(pMeshData->GetRelativePath());
+		
+		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Link_Maya.mdat");
+		//Ptr<CMesh> pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"mesh\\Link_Maya\\Link_Maya.mesh");
+		//pMesh->AddAnimationFromContainer(L"fbx\\Link.fbx");
 
 		pObj = pMeshData->Instantiate();
 		pObj->SetFrustumCul(false);
-		pObj->SetName(L"Map");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		pObj->SetName(L"Link");
+		pObj->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
 		pLevel->AddGameObject(pObj, 0);
 		//pObj->Animator3D()->Play(L"Take 001", true);
 	}

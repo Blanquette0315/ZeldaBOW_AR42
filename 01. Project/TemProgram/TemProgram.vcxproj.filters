@@ -365,6 +365,9 @@
     <ClInclude Include="LandScapeUI.h">
       <Filter>03. UI\01. Inspector\ComponentUI\LandScapeUI</Filter>
     </ClInclude>
+    <ClInclude Include="AddAnimationToolUI.h">
+      <Filter>03. UI\05. Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -550,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="LandScapeUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\LandScapeUI</Filter>
+    </ClCompile>
+    <ClCompile Include="AddAnimationToolUI.cpp">
+      <Filter>03. UI\05. Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -432,4 +432,5 @@ void Skinning(inout float3 _vPos, inout float4 _vWeight, inout float4 _vIndices,
 
     _vPos = info.vPos;
 }
+
 #endif

@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AddAnimationToolUI.h" />
     <ClInclude Include="Animator2DUI.h" />
     <ClInclude Include="Animator3DUI.h" />
     <ClInclude Include="CameraUI.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="UIFunc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddAnimationToolUI.cpp" />
     <ClCompile Include="Animator2DUI.cpp" />
     <ClCompile Include="Animator3DUI.cpp" />
     <ClCompile Include="CameraUI.cpp" />

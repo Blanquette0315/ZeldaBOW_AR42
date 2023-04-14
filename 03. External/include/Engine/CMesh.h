@@ -43,6 +43,7 @@ public:
     CStructuredBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset; }	   // °¢ »ÀÀÇ offset Çà·Ä	    
 
     static CMesh* CreateFromContainer(CFBXLoader& _loader);
+    void AddAnimationFromContainer(const wstring _strFBXPath);
 
 public:
     int Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount);

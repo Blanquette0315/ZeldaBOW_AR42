@@ -68,7 +68,7 @@ private:
 	void CreateDefaultGrapicsShader();
 	void CreateDefaultComputeShader();
 	void CreateDefaultMaterial();
-	void AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName);
+	void AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName, UINT _iSemanticIndex = 0);
 
 	bool DeleteRes(RES_TYPE _Type, const wstring& _strKey);
 

@@ -101,6 +101,75 @@ void CFBXLoader::LoadFbx(const wstring& _strPath)
 	CreateMaterial(wstrFileName);
 }
 
+void CFBXLoader::LoadOnlyAnimationInfo(const wstring& _strPath)
+{
+	m_vecContainer.clear();
+
+	wstring wstrFileName = path(_strPath).stem();
+	string strFileName(wstrFileName.begin(), wstrFileName.end());
+
+	m_pImporter = FbxImporter::Create(m_pManager, "");
+
+	//wstring str = wstring_convert<codecvt_utf8<wchar_t>>().from_bytes(strName.c_str());
+	string strPath(_strPath.begin(), _strPath.end());
+
+	if (!m_pImporter->Initialize(strPath.c_str(), -1, m_pManager->GetIOSettings()))
+		assert(nullptr);
+
+	m_pImporter->Import(m_pScene);
+
+	/*FbxAxisSystem originAxis = FbxAxisSystem::eMax;
+	originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
+	FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
+	DesireAxis.ConvertScene(m_pScene);
+	originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();*/
+
+	m_pScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
+
+	// Bone 정보 읽기
+	LoadSkeleton(m_pScene->GetRootNode());
+
+	// Animation 이름정보 
+	m_pScene->FillAnimStackNameArray(m_arrAnimName);
+
+	// Animation Clip 정보
+	LoadAnimationClip();
+
+	Triangulate(m_pScene->GetRootNode());
+
+
+	FbxNode* pNode = m_pScene->GetRootNode();
+	LoadOnlyAnimToContainer(pNode);
+	
+
+	int iChildCnt = pNode->GetChildCount();
+	for (int i = 0; i < iChildCnt; ++i)
+	{
+		LoadOnlyAnimToContainer(pNode->GetChild(i));
+	}
+
+	m_pImporter->Destroy();
+}
+
+void CFBXLoader::LoadOnlyAnimToContainer(FbxNode* _pNode)
+{
+	FbxMesh* pMesh = _pNode->GetMesh();
+
+	if (NULL != pMesh)
+	{
+		m_vecContainer.push_back(tContainer{});
+		tContainer& Container = m_vecContainer[m_vecContainer.size() - 1];
+
+		string strName = pMesh->GetName();
+		Container.strName = wstring(strName.begin(), strName.end());
+
+		int iVtxCnt = pMesh->GetControlPointsCount();
+		Container.Resize(iVtxCnt);
+
+		LoadAnimationData(pMesh, &Container);
+	}
+}
+
 void CFBXLoader::LoadMeshDataFromNode(FbxNode* _pNode)
 {
 	// 노드의 메쉬정보 읽기
@@ -308,25 +377,62 @@ void CFBXLoader::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, 
 	if (1 != iNormalCnt)
 		assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
 
-	Vec3 normal = XMVector3Cross(_pContainer->vecBinormal[_iIdx], _pContainer->vecTangent[_iIdx]);
-	normal.Normalize();
-	_pContainer->vecNormal[_iIdx] = normal;
+	FbxGeometryElementNormal* pNormal = _pMesh->GetElementNormal();
+	UINT iNormalIdx = 0;
+
+	if (pNormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+	{
+		if (pNormal->GetReferenceMode() == FbxGeometryElement::eDirect)
+			iNormalIdx = _iVtxOrder;
+		else
+			iNormalIdx = pNormal->GetIndexArray().GetAt(_iVtxOrder);
+	}
+	else if (pNormal->GetMappingMode() == FbxGeometryElement::eByControlPoint)
+	{
+		if (pNormal->GetReferenceMode() == FbxGeometryElement::eDirect)
+			iNormalIdx = _iIdx;
+		else
+			iNormalIdx = pNormal->GetIndexArray().GetAt(_iIdx);
+	}
+
+	FbxVector4 vNormal = pNormal->GetDirectArray().GetAt(iNormalIdx);
+
+	_pContainer->vecNormal[_iIdx].x = (float)vNormal.mData[0];
+	_pContainer->vecNormal[_iIdx].y = (float)vNormal.mData[2];
+	_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[1];
+
+	//Vec3 normal = XMVector3Cross(_pContainer->vecBinormal[_iIdx], _pContainer->vecTangent[_iIdx]);
+	//normal.Normalize();
+	//_pContainer->vecNormal[_iIdx] = normal;
 }
 
 void CFBXLoader::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
 {
-	FbxGeometryElementUV* pUV = _pMesh->GetElementUV();
 
-	UINT iUVIdx = 0;
-	if (pUV->GetReferenceMode() == FbxGeometryElement::eDirect)
-		iUVIdx = _iIdx;
-	else
-		iUVIdx = pUV->GetIndexArray().GetAt(_iIdx);
+	UINT iUVCount  = _pMesh->GetElementUVCount();
+	// max -> 3
+	if (iUVCount > 3)
+	{
+		assert(nullptr);
+	}
 
-	iUVIdx = _iUVIndex;
-	FbxVector2 vUV = pUV->GetDirectArray().GetAt(iUVIdx);
-	_pContainer->vecUV[_iIdx].x = (float)vUV.mData[0];
-	_pContainer->vecUV[_iIdx].y = 1.f - (float)vUV.mData[1]; // fbx uv 좌표계는 좌하단이 0,0
+	for (int i = 0; i < iUVCount; ++i)
+	{
+		FbxGeometryElementUV* pUV = _pMesh->GetElementUV(i);
+
+		UINT iUVIdx = 0;
+		//if (pUV->GetReferenceMode() == FbxGeometryElement::eDirect)
+		//	iUVIdx = _iIdx;
+		//else
+		//	iUVIdx = pUV->GetIndexArray().GetAt(_iIdx);
+
+		iUVIdx = _iUVIndex;
+		FbxVector2 vUV = pUV->GetDirectArray().GetAt(iUVIdx);
+
+		_pContainer->vecUVs[i][_iIdx].x = (float)vUV.mData[0];
+		_pContainer->vecUVs[i][_iIdx].y = 1.f - (float)vUV.mData[1]; // fbx uv 좌표계는 좌하단이 0,0
+	}
+	_pContainer->iUVCount = iUVCount;
 }
 
 Vec4 CFBXLoader::GetMtrlData(FbxSurfaceMaterial* _pSurface
@@ -492,6 +598,9 @@ void CFBXLoader::CreateMaterial(const wstring& _strFileName)
 				, m_vecContainer[i].vecMtrl[j].tMtrl.vEmv);
 
 			CResMgr::GetInst()->AddRes<CMaterial>(pMaterial->GetKey(), pMaterial.Get());
+
+			pMaterial->SetUVCount(m_vecContainer[i].iUVCount);
+
 			pMaterial->Save(strPath);
 		}
 	}
