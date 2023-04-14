@@ -272,7 +272,7 @@ int CMaterial::Load(const wstring& _strFilePath)
 			LoadResourceRef(m_arrTex[i], node);
 
 			if(i < 7)
-				m_tConst.iTexUVIndex[i] = node["ConstTexUVIndex"].as<int>();
+				SAFE_LOAD_FROM_YAML(int, m_tConst.iTexUVIndex[i], node["ConstTexUVIndex"]);
 		}
 	}
 		
