@@ -250,16 +250,16 @@ void CreateTestLevel()
 		pLevel->AddGameObject(pObj, 0);
 		//pObj->Animator3D()->Play(L"Take 001", true);
 
-		pMeshData = nullptr;
-		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
+		//pMeshData = nullptr;
+		//pObj = nullptr;
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link.fbx");
+		//pMeshData->Save(pMeshData->GetRelativePath());
 
-		pObj = pMeshData->Instantiate();
-		//pObj->SetFrustumCul(false);
-		pObj->SetName(L"Ling");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-		pLevel->AddGameObject(pObj, 0);
+		//pObj = pMeshData->Instantiate();
+		////pObj->SetFrustumCul(false);
+		//pObj->SetName(L"Ling");
+		//pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		//pLevel->AddGameObject(pObj, 0);
 	}
 
 	// 데칼 생성

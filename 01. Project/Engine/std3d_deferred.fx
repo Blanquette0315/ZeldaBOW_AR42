@@ -89,7 +89,7 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     if (g_btex_4)
     {
         float4 vMasking = float4(0.f, 0.f, 0.f, 1.f);
-        vMasking = g_tex_4.Sample(g_sam_0, _in.vUV);
+        vMasking = g_tex_4.Sample(g_sam_0, SelectUV(g_iTex4UV, _in));
         if (vMasking.a <= 0.549f)
         {
             discard;
@@ -174,14 +174,14 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
     
     if (g_btex_0)
     {
-        vObjColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        vObjColor = g_tex_0.Sample(g_sam_0, SelectUV(g_iTex0UV, _in));
     }
 
     float3 vNormal = _in.vViewNormal;
     
     if (g_btex_1)
     {
-        vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
+        vNormal = g_tex_1.Sample(g_sam_0, SelectUV(g_iTex1UV, _in)).xyz;
         vNormal = (vNormal * 2.f) - 1.f;
         
         float3x3 matTBN =
@@ -198,14 +198,14 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
     float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
     if (g_btex_3)
     {
-        vEmissiveColor = g_tex_3.Sample(g_sam_0, _in.vUV);
+        vEmissiveColor = g_tex_3.Sample(g_sam_0, SelectUV(g_iTex3UV, _in));
     }
     
     // Sampling Masking Texture
     if (Is_MaskTex)
     {
         float4 vMasking = float4(0.f, 0.f, 0.f, 1.f);
-        vMasking = g_tex_4.Sample(g_sam_0, _in.vUV);
+        vMasking = g_tex_4.Sample(g_sam_0, SelectUV(g_iTex4UV, _in));
         
         if (vMasking.a <= 0.f)
         {
@@ -224,7 +224,7 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
     // Spec ¸ÊÀÌ ÀÖÀ¸¸é
     if (g_btex_2)
     {
-        vSpecCoeff *= g_tex_2.Sample(g_sam_0, _in.vUV);
+        vSpecCoeff *= g_tex_2.Sample(g_sam_0, SelectUV(g_iTex2UV, _in));
     }
     else
     {
