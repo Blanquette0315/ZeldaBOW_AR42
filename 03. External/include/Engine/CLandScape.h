@@ -68,10 +68,10 @@ public:
     Ptr<CTexture> GetBrushTex() { return m_pBrushTex; }
     bool IsCurDataCooking() { return m_bCurDataCooking; }
 
-    void SaveHightImage();
+    void SaveHeightImage();
 
-    void SaveWightData();
-    void LoadWightData();
+    void SaveWeightData();
+    void LoadWeightData();
 
     void SaveCookingData();
     void LoadCookingData();

@@ -69,7 +69,7 @@ void CLandScape::finaltick()
 	
 	if (KEY_TAP(KEY::NUM_5))
 	{
-		LoadWightData();
+		LoadWeightData();
 	}
 
 	if (LANDSCAPE_MOD::NONE == m_eMod)
@@ -308,7 +308,7 @@ void CLandScape::LoadCookingData()
 	fclose(pFile);
 }
 
-void CLandScape::SaveHightImage()
+void CLandScape::SaveHeightImage()
 {
 	// 높이 맵을 파일로 세이브
 	HRESULT hr = S_OK;
@@ -319,7 +319,7 @@ void CLandScape::SaveHightImage()
 	hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
 }
 
-void CLandScape::SaveWightData()
+void CLandScape::SaveWeightData()
 {
 	// 가중치 맵을 파일로 세이브
 	// 가중치 구조화 버퍼 데이터 가져오기
@@ -346,7 +346,7 @@ void CLandScape::SaveWightData()
 	delete[] vecWeight_4;
 }
 
-void CLandScape::LoadWightData()
+void CLandScape::LoadWeightData()
 {
 	// 가중치 맵 데이터 로딩
 	int iWeightCount = 0;
