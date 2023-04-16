@@ -67,14 +67,14 @@ void LandScapeUI::render_update()
 
 	if (ImGui::Button("Save HightTex##HightMap", ImVec2(130.f, 36.f)))
 	{
-		GetTarget()->LandScape()->SaveHightImage();
+		GetTarget()->LandScape()->SaveHeightImage();
 	}
 	
 	ImGui::SameLine();
 
 	if (ImGui::Button("Save WeightData##WeightMap", ImVec2(130.f, 36.f)))
 	{
-		GetTarget()->LandScape()->SaveWightData();
+		GetTarget()->LandScape()->SaveWeightData();
 	}
 
 	// Setting

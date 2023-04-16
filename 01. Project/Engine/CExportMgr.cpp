@@ -102,7 +102,7 @@ void CExportMgr::SaveForNavMesh(CGameObject* _pObj, std::ofstream& _file)
 wstring CExportMgr::GetProperName()
 {
 	wstring strPath = CPathMgr::GetInst()->GetContentPath();
-	strPath += L"mesh\\";
+	strPath += L"navmesh\\";
 	strPath += L"nav_";
 	strPath += std::to_wstring(m_iExportID);
 	strPath += wstring(L".obj");
