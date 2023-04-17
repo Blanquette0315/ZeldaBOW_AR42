@@ -11,6 +11,7 @@ TransformUI::TransformUI()
 	, m_bIgnorScale(false)
 	, m_eOperation(ImGuizmo::OPERATION::TRANSLATE)
 	, m_eMode(ImGuizmo::MODE::LOCAL)
+	, m_bUseGizmo(true)
 {
 }
 
@@ -60,7 +61,10 @@ void TransformUI::render_update()
 		GetTarget()->Transform()->SetIgnoreParentScale(m_bIgnorScale);
 	}
 
-	OperateGizmo3D();
+	ImGui::Checkbox("Use-Gizmo", &m_bUseGizmo);
+
+	if(m_bUseGizmo)
+		OperateGizmo3D();
 }
 
 void TransformUI::OperateGizmo3D()
@@ -104,7 +108,7 @@ void TransformUI::OperateGizmo3D()
 	ImGuizmo::BeginFrame();
 	ImGuizmo::SetDrawlist();
 	ImGuizmo::AllowAxisFlip(false);
-	ImGuizmo::SetGizmoSizeClipSpace(100.f / fDistCamObj);
+	ImGuizmo::SetGizmoSizeClipSpace(10.f / fDistCamObj);
 	ImGuiIO& io = ImGui::GetIO();
 	ImVec2 vRectStart = ImGui::GetMainViewport()->Pos;
 	ImGuizmo::SetRect(vRectStart.x, vRectStart.y, io.DisplaySize.x, io.DisplaySize.y);
@@ -143,7 +147,7 @@ void TransformUI::OperateGizmo3D()
 	Vec3 vMatRot;
 	QuaternionToEuler(matRot, vMatRot);
 
-	if (GetTarget() && ImGuizmo::IsOver())
+	if (GetTarget() && ImGuizmo::IsUsing())
 	{
 		// Matrix calc error exception handling
 		Vec3 vPrevScale = GetTarget()->Transform()->GetRelativeScale();

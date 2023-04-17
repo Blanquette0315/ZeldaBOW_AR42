@@ -14,8 +14,9 @@ private:
 
     bool                m_bIgnorScale;
     ImGuizmo::OPERATION m_eOperation;
-    ImGuizmo::MODE      m_eMode;
+    ImGuizmo::MODE      m_eMode;             
     
+    bool                m_bUseGizmo;
 
 private:
     virtual void update() override;
