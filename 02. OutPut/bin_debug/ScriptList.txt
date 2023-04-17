@@ -1,3 +1,6 @@
+CCamScript
+CLinkCamScript
+CLinkScript
 CMissileScript
 CMonsterScript
 CNavTestSCR

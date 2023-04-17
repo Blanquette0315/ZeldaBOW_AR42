@@ -3,3 +3,5 @@ CScriptMgr.cpp
 Scriptdefine.h
 Scriptstruct.h
 ScriptFunc.h
+CCameraMgr.h
+CCameraMgr.cpp

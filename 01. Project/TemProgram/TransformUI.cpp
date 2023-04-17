@@ -32,7 +32,6 @@ void TransformUI::update()
 }
 
 
-
 #include <Engine/CCamera.h>
 #include <Engine/CRenderMgr.h>
 void TransformUI::render_update()

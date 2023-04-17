@@ -29,6 +29,9 @@ inline int GetMapIdx(const map<T1, T2>& _map, T1 _key)
 
 	return 0;
 }
+
+CGameObject* FindObjectByName(const wstring& _name);
+
 // ================================================================
 
 // ===== Phys Engine To Engine Function =====

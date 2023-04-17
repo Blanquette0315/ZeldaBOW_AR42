@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "CScriptMgr.h"
 
+#include "CCamScript.h"
+#include "CLinkCamScript.h"
+#include "CLinkScript.h"
 #include "CMissileScript.h"
 #include "CMonsterScript.h"
 #include "CNavTestSCR.h"
@@ -9,6 +12,9 @@
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
+	_vec.push_back(L"CCamScript");
+	_vec.push_back(L"CLinkCamScript");
+	_vec.push_back(L"CLinkScript");
 	_vec.push_back(L"CMissileScript");
 	_vec.push_back(L"CMonsterScript");
 	_vec.push_back(L"CNavTestSCR");
@@ -18,6 +24,12 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
+	if (L"CCamScript" == _strScriptName)
+		return new CCamScript;
+	if (L"CLinkCamScript" == _strScriptName)
+		return new CLinkCamScript;
+	if (L"CLinkScript" == _strScriptName)
+		return new CLinkScript;
 	if (L"CMissileScript" == _strScriptName)
 		return new CMissileScript;
 	if (L"CMonsterScript" == _strScriptName)
@@ -35,6 +47,15 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 {
 	switch (_iScriptType)
 	{
+	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
+		return new CCamScript;
+		break;
+	case (UINT)SCRIPT_TYPE::LINKCAMSCRIPT:
+		return new CLinkCamScript;
+		break;
+	case (UINT)SCRIPT_TYPE::LINKSCRIPT:
+		return new CLinkScript;
+		break;
 	case (UINT)SCRIPT_TYPE::MISSILESCRIPT:
 		return new CMissileScript;
 		break;
@@ -58,6 +79,18 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 {
 	switch ((SCRIPT_TYPE)_pScript->GetScriptType())
 	{
+	case SCRIPT_TYPE::CAMSCRIPT:
+		return L"CCamScript";
+		break;
+
+	case SCRIPT_TYPE::LINKCAMSCRIPT:
+		return L"CLinkCamScript";
+		break;
+
+	case SCRIPT_TYPE::LINKSCRIPT:
+		return L"CLinkScript";
+		break;
+
 	case SCRIPT_TYPE::MISSILESCRIPT:
 		return L"CMissileScript";
 		break;

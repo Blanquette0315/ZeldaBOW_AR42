@@ -170,6 +170,10 @@ call ScriptCopy.bat</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CCameraMgr.h" />
+    <ClInclude Include="CCamScript.h" />
+    <ClInclude Include="CLinkCamScript.h" />
+    <ClInclude Include="CLinkScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CPlayerScript.h" />
@@ -183,6 +187,10 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="Scriptstruct.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCameraMgr.cpp" />
+    <ClCompile Include="CCamScript.cpp" />
+    <ClCompile Include="CLinkCamScript.cpp" />
+    <ClCompile Include="CLinkScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />

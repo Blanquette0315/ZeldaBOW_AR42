@@ -13,6 +13,21 @@
     <Filter Include="Header">
       <UniqueIdentifier>{e95e5319-d12b-4352-ab82-ccf7e5eef93b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Player">
+      <UniqueIdentifier>{e1c113c9-9efb-401a-82b0-f7b655cbb2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Test">
+      <UniqueIdentifier>{5e2efb2c-c4b3-487a-967a-d61d47bab0d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{e12b7e76-223e-4bbd-9206-4c6a89f4e255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Cam">
+      <UniqueIdentifier>{17aca13f-d652-4282-b5dc-03e787792513}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Cam\PlayerCam">
+      <UniqueIdentifier>{72119c0f-9c66-4d59-8984-12d2617d4567}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -33,11 +48,31 @@
     <ClInclude Include="ScriptFunc.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayerScript.h" />
-    <ClInclude Include="CMonsterScript.h" />
-    <ClInclude Include="CMissileScript.h" />
-    <ClInclude Include="CNavTestSCR.h" />
-    <ClInclude Include="CTestSCR.h" />
+    <ClInclude Include="CMissileScript.h">
+      <Filter>Scripts\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterScript.h">
+      <Filter>Scripts\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="CNavTestSCR.h">
+      <Filter>Scripts\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerScript.h">
+      <Filter>Scripts\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="CTestSCR.h">
+      <Filter>Scripts\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkScript.h">
+      <Filter>Scripts\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamScript.h">
+      <Filter>Scripts\Cam</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkCamScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -52,10 +87,30 @@
     <ClCompile Include="ScriptFunc.cpp">
       <Filter>Header</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayerScript.cpp" />
-    <ClCompile Include="CMonsterScript.cpp" />
-    <ClCompile Include="CMissileScript.cpp" />
-    <ClCompile Include="CNavTestSCR.cpp" />
-    <ClCompile Include="CTestSCR.cpp" />
+    <ClCompile Include="CMissileScript.cpp">
+      <Filter>Scripts\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterScript.cpp">
+      <Filter>Scripts\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CNavTestSCR.cpp">
+      <Filter>Scripts\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerScript.cpp">
+      <Filter>Scripts\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CTestSCR.cpp">
+      <Filter>Scripts\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkScript.cpp">
+      <Filter>Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamScript.cpp">
+      <Filter>Scripts\Cam</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkCamScript.cpp" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "CLevelMgr.h"
+
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath)
 {
 	// find함수로 Path경로(전체경로) 내에 Base경로가 들어있지 않는다면 -1을 반환한다.
@@ -393,6 +395,12 @@ bool PickingObj(CGameObject*& _pObjOut)
 		return true;
 	else
 		return false;
+}
+
+
+CGameObject* FindObjectByName(const wstring& _name)
+{
+	return CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(_name);
 }
 
 void QuaternionToEuler(Vec4 _vQRot, Vec3& _vERot)
