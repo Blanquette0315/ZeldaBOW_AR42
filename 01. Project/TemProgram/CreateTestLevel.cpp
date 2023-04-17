@@ -13,6 +13,8 @@
 #include <Engine/CPaintShader.h>
 
 #include <Script/CPlayerScript.h>
+#include <Script/CMonsterAIScript.h>
+#include <Script/CBokoblinScript.h>
 
 #include "CCameraScript.h"
 
@@ -52,6 +54,9 @@ void CreateTestLevel()
 
 	pCamObj->Camera()->SetLayerMaskAll();
 	pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+
+	pCamObj->Transform()->SetRelativePos(0.f, 0.f, -770.f);
+	pCamObj->Transform()->SetRelativeRotation(XM_PI / 4.f, 0.f, 0.f);
 
 	pLevel->AddGameObject(pCamObj, 0);
 
@@ -144,27 +149,27 @@ void CreateTestLevel()
 	pObject->AddComponent(new CCollider);
 	pObject->AddComponent(new CPlayerScript);
 	//Sphere
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 500.f, 400.f));
-	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 256.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 50.f, -595.f));
+	pObject->Transform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 
 	pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
-	pObject->RigidBody()->SetCapsuleSize(64.f, 128.f);
+	pObject->RigidBody()->SetCapsuleSize(6.4f, 12.8f);
 	//pObject->RigidBody()->SetSphereSize(128.f);
 	pObject->RigidBody()->SetMass(10.f);
 	pObject->RigidBody()->SetRestitution(0.f);
 	pObject->RigidBody()->SetStaticFriction(0.6f);
 	pObject->RigidBody()->SetDynamicFriction(0.6f);
-	pObject->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 10.f));
+	pObject->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
 	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
 	pObject->RigidBody()->SetGravityOption(true);
 
 	pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_CUBE);
-	pObject->Collider()->SetScale(Vec3(50.f, 20.f, 50.f));
-	pObject->Collider()->SetOffsetPos(Vec3(0.f, -128.f, 0.f));
+	pObject->Collider()->SetScale(Vec3(5.f, 2.f, 5.f));
+	pObject->Collider()->SetOffsetPos(Vec3(0.f, -12.8f, 0.f));
 	//pObject->Collider()->SetCapsuleSize(65.f, 130.f);
 
 	pLevel->AddGameObject(pObject, 0);
@@ -236,7 +241,7 @@ void CreateTestLevel()
 	{
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link_Maya.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Bokoblin_Red.fbx");
 		pMeshData->Save(pMeshData->GetRelativePath());
 		
 		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Link_Maya.mdat");
@@ -244,26 +249,36 @@ void CreateTestLevel()
 		//pMesh->AddAnimationFromContainer(L"fbx\\Link.fbx");
 
 		pObj = pMeshData->Instantiate();
+		pObj->AddComponent(new CRigidBody);
+		pObj->AddComponent(new CBokoblinScript);
 		pObj->SetFrustumCul(false);
-		pObj->SetName(L"Link");
-		pObj->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
+		pObj->SetName(L"Bokoblin_Red");
+		pObj->Transform()->SetRelativeScale(25.f, 25.f, 25.f);
+		pObj->Transform()->SetRelativePos(0.f, 0.f, -200.f);
+		pObj->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
+		pObj->RigidBody()->SetCapsuleSize(4.f, 8.f);
+		pObj->RigidBody()->SetMass(10.f);
+		pObj->RigidBody()->SetRestitution(0.f);
+		pObj->RigidBody()->SetStaticFriction(0.6f);
+		pObj->RigidBody()->SetDynamicFriction(0.6f);
+		pObj->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
+		pObj->RigidBody()->SetLockAxis_Rot(true, true, true);
+		pObj->RigidBody()->SetGravityOption(true);
 		pLevel->AddGameObject(pObj, 0);
 		//pObj->Animator3D()->Play(L"Take 001", true);
 
-		//pMeshData = nullptr;
-		//pObj = nullptr;
-		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link.fbx");
-		//pMeshData->Save(pMeshData->GetRelativePath());
-
-		//pObj = pMeshData->Instantiate();
-		////pObj->SetFrustumCul(false);
-		//pObj->SetName(L"Ling");
-		//pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-		//pLevel->AddGameObject(pObj, 0);
+		CGameObject* pChild = new CGameObject;
+		pChild->SetName(L"MonsterAI");
+		pChild->AddComponent(new CTransform);
+		pChild->AddComponent(new CCollider);
+		pChild->AddComponent(new CMonsterAIScript);
+		pChild->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+		pChild->Collider()->SetRadius(300.f);
+		pObj->AddChild(pChild);
 	}
 
 	// 데칼 생성
-	CGameObject* pDecal = new CGameObject;
+	/*CGameObject* pDecal = new CGameObject;
 	pDecal->SetName(L"Decal");
 
 	pDecal->AddComponent(new CTransform);
@@ -275,7 +290,7 @@ void CreateTestLevel()
 	pDecal->Decal()->SetRenderType(true);
 	pDecal->Decal()->SetDecalTexture(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\MagicCircle.png"));
 
-	pLevel->AddGameObject(pDecal, 0);
+	pLevel->AddGameObject(pDecal, 0);*/
 
 	// 벽 생성
 	//pObject = new CGameObject;
@@ -314,8 +329,6 @@ void CreateTestLevel()
 	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
-
-	////Instantiate(pObject, Vec3(0.f, 500.f, 400.f), 0);
 	//pLevel->AddGameObject(pObject, 0);
 
 	//pObject = new CGameObject;
@@ -372,28 +385,28 @@ void CreateTestLevel()
 	////Instantiate(pObject, Vec3(-500.f, 0.f, 400.f), 0);
 	//pLevel->AddGameObject(pObject, 0);
 
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Plane_5");
+	pObject = new CGameObject;
+	pObject->SetName(L"Plane_5");
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
-	//pObject->AddComponent(new CRigidBody);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CRigidBody);
 
-	//pObject->Transform()->SetRelativePos(Vec3(0.f, -240.f, -500.f));
-	//pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
-	//pObject->Transform()->SetRelativeRotation(Vec3(XM_PI / 2.f, 0.f, 0.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, -240.f, -500.f));
+	pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
+	pObject->Transform()->SetRelativeRotation(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 
-	//pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CUBE, true, true);
-	//pObject->RigidBody()->SetColldierScaleSize(true);
-	//pObject->RigidBody()->SetStaticFriction(0.f);
-	//pObject->RigidBody()->SetDynamicFriction(0.f);
-	//pObject->RigidBody()->SetRestitution(0.f);
-	//pObject->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
+	pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CUBE, true, true);
+	pObject->RigidBody()->SetColldierScaleSize(true);
+	pObject->RigidBody()->SetStaticFriction(0.f);
+	pObject->RigidBody()->SetDynamicFriction(0.f);
+	pObject->RigidBody()->SetRestitution(0.f);
+	pObject->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
 
-	//pLevel->AddGameObject(pObject, 0);
+	pLevel->AddGameObject(pObject, 0);
 
 	//// Particle Object
 	//CGameObject* pParticle = new CGameObject;

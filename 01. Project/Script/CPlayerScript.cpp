@@ -73,143 +73,142 @@ void CPlayerScript::tick()
 	//	RigidBody()->SetGravityOption(true);
 	//}
 
-	//if (KEY_RELEASE(KEY::LEFT))
-	//{
-	//	m_bKeyRelease = true;
-	//	//RigidBody()->SetKeyRelease(true);
-	//}
+	if (KEY_RELEASE(KEY::LEFT))
+	{
+		m_bKeyRelease = true;
+		//RigidBody()->SetKeyRelease(true);
+	}
 
-	//if (KEY_RELEASE(KEY::RIGHT))
-	//{
-	//	m_bKeyRelease = true;
-	//	//RigidBody()->SetKeyRelease(true);
-	//}
+	if (KEY_RELEASE(KEY::RIGHT))
+	{
+		m_bKeyRelease = true;
+		//RigidBody()->SetKeyRelease(true);
+	}
 
-	//if (KEY_RELEASE(KEY::UP))
-	//{
-	//	m_bKeyRelease = true;
-	//	//RigidBody()->SetKeyRelease(true);
-	//}
+	if (KEY_RELEASE(KEY::UP))
+	{
+		m_bKeyRelease = true;
+		//RigidBody()->SetKeyRelease(true);
+	}
 
-	//if (KEY_RELEASE(KEY::DOWN))
-	//{
-	//	m_bKeyRelease = true;
-	//	//RigidBody()->SetKeyRelease(true);
-	//}
+	if (KEY_RELEASE(KEY::DOWN))
+	{
+		m_bKeyRelease = true;
+		//RigidBody()->SetKeyRelease(true);
+	}
 
-	//if (m_bGround && !m_bWall)//(RigidBody()->IsGround())
-	//{
-	//	if (m_bKeyRelease)
-	//	{
-	//		RigidBody()->SetKeyRelease(true);
-	//		m_bKeyRelease = false;
-	//	}
+	if (m_bGround && !m_bWall)//(RigidBody()->IsGround())
+	{
+		if (m_bKeyRelease)
+		{
+			RigidBody()->SetKeyRelease(true);
+			m_bKeyRelease = false;
+		}
 
-	//	if (!m_bJump)
-	//	{
-	//		if (KEY_PRESSED(KEY::LEFT))
-	//		{
-	//			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
-	//			Vec3 vMove = Vec3(-1.f, 0.f, 0.f).Normalize();
+		if (!m_bJump)
+		{
+			if (KEY_PRESSED(KEY::LEFT))
+			{
+				Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+				Vec3 vMove = Vec3(-1.f, 0.f, 0.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
 
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
+				RigidBody()->AddVelocity(vRealMove);
+				//RigidBody()->AddVelocity(Vec3(-1.f,0.f,0.f));
+			}
 
-	//		if (KEY_PRESSED(KEY::RIGHT))
-	//		{
-	//			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
-	//			Vec3 vMove = Vec3(1.f, 0.f, 0.f).Normalize();
+			if (KEY_PRESSED(KEY::RIGHT))
+			{
+				Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+				Vec3 vMove = Vec3(1.f, 0.f, 0.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
 
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
+				RigidBody()->AddVelocity(vRealMove);
+			}
 
-	//		if (KEY_PRESSED(KEY::UP))
-	//		{
-	//			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
-	//			Vec3 vMove = Vec3(0.f, 0.f, 1.f).Normalize();
+			if (KEY_PRESSED(KEY::UP))
+			{
+				Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+				Vec3 vMove = Vec3(0.f, 0.f, 1.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
+				RigidBody()->AddVelocity(vRealMove);
+			}
 
-	//		if (KEY_PRESSED(KEY::DOWN))
-	//		{
-	//			Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
-	//			Vec3 vMove = Vec3(0.f, 0.f, -1.f).Normalize();
+			if (KEY_PRESSED(KEY::DOWN))
+			{
+				Vec3 HitNormal = RigidBody()->GetHitNormal().Normalize();
+				Vec3 vMove = Vec3(0.f, 0.f, -1.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
-	//	}
-	//	
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
+				RigidBody()->AddVelocity(vRealMove);
+			}
+		}
+		
 
-	//	if (KEY_TAP(KEY::SPACE))
-	//	{
-	//		RigidBody()->AddForce(Vec3(0.f, 20000.f, 0.f));
-	//		m_bJump = true;
-	//	}
-	//}
-	//else if (m_bWall)
-	//{
-	//	if (m_bKeyRelease)
-	//	{
-	//		RigidBody()->SetKeyRelease(true);
-	//		m_bKeyRelease = false;
-	//	}
+		if (KEY_TAP(KEY::SPACE))
+		{
+			RigidBody()->AddForce(Vec3(0.f, 20000.f, 0.f));
+			m_bJump = true;
+		}
+	}
+	/*else if (m_bWall)
+	{
+		if (m_bKeyRelease)
+		{
+			RigidBody()->SetKeyRelease(true);
+			m_bKeyRelease = false;
+		}
 
-	//	if (!m_bJump)
-	//	{
-	//		if (KEY_PRESSED(KEY::LEFT))
-	//		{
-	//			Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
-	//			Vec3 vMove = Vec3(-1.f, 0.f, 0.f).Normalize();
+		if (!m_bJump)
+		{
+			if (KEY_PRESSED(KEY::LEFT))
+			{
+				Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
+				Vec3 vMove = Vec3(-1.f, 0.f, 0.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
 
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
+				RigidBody()->AddVelocity(vRealMove);
+			}
 
-	//		if (KEY_PRESSED(KEY::RIGHT))
-	//		{
-	//			Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
-	//			Vec3 vMove = Vec3(1.f, 0.f, 0.f).Normalize();
+			if (KEY_PRESSED(KEY::RIGHT))
+			{
+				Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
+				Vec3 vMove = Vec3(1.f, 0.f, 0.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
 
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
+				RigidBody()->AddVelocity(vRealMove);
+			}
 
-	//		if (KEY_PRESSED(KEY::UP))
-	//		{
-	//			Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
-	//			Vec3 vMove = Vec3(0.f, 1.f, 0.f).Normalize();
+			if (KEY_PRESSED(KEY::UP))
+			{
+				Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
+				Vec3 vMove = Vec3(0.f, 1.f, 0.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
+				RigidBody()->AddVelocity(vRealMove);
+			}
 
-	//		if (KEY_PRESSED(KEY::DOWN))
-	//		{
-	//			Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
-	//			Vec3 vMove = Vec3(0.f, -1.f, 0.f).Normalize();
+			if (KEY_PRESSED(KEY::DOWN))
+			{
+				Vec3 HitNormal = m_pWallRay->Hit.HitNormal.Normalize();
+				Vec3 vMove = Vec3(0.f, -1.f, 0.f).Normalize();
 
-	//			Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
-	//			vRealMove *= 2.f;
-	//			RigidBody()->AddVelocity(vRealMove);
-	//		}
-	//	}
-
+				Vec3 vRealMove = vMove + (HitNormal * ((-vMove).Dot(HitNormal)));
+				vRealMove *= 2.f;
+				RigidBody()->AddVelocity(vRealMove);
+			}*/
 
 	//	if (KEY_TAP(KEY::SPACE))
 	//	{
@@ -221,20 +220,20 @@ void CPlayerScript::tick()
 	//}
 }
 
-void CPlayerScript::BeginOverlap(CCollider* _pOther)
+void CPlayerScript::BeginOverlap(CGameObject* _pOther)
 {
 	m_bJump = false;
 	RigidBody()->SetGravityOption(false);
 }
 
-void CPlayerScript::Overlap(CCollider* _pOther)
+void CPlayerScript::Overlap(CGameObject* _pOther)
 {
 	m_bGround = true;
 	RigidBody()->SetGround(m_bGround);
 	RigidBody()->SetGravityOption(false);
 }
 
-void CPlayerScript::EndOverlap(CCollider* _pOther)
+void CPlayerScript::EndOverlap(CGameObject* _pOther)
 {
 	m_bGround = false;
 	RigidBody()->SetGravityOption(true);

@@ -4,8 +4,8 @@
 #include "CExportMgr.h"
 
 #define CHECK_SUCCESS if (dtCheck != DT_SUCCESS)\
-_vDir = Vec3::Zero;\
-return false
+{_vDir = Vec3::Zero;\
+return false;}
 
 CNavMgr::CNavMgr()
 	: m_pNavMesh(nullptr)

@@ -60,7 +60,7 @@ void CCollisionMgr::tick()
 							pPhysData->Exit_Count--;
 							continue;
 						}
-						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther->Collider());
+						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther);
 
 						pPhysData->TriggerExit_List[i] = nullptr;
 						pPhysData->Exit_Count--;
@@ -100,13 +100,13 @@ void CCollisionMgr::tick()
 						// Dead check
 						if (pOther->IsDead())
 						{
-							vecObjects[iObjectNum]->Collider()->EndOverlap(pOther->Collider());
+							vecObjects[iObjectNum]->Collider()->EndOverlap(pOther);
 							pPhysData->TriggerStay_List[i] = nullptr;
 							pPhysData->Stay_Count--;
 						}
 						else
 						{
-							vecObjects[iObjectNum]->Collider()->Overlap(pOther->Collider());
+							vecObjects[iObjectNum]->Collider()->Overlap(pOther);
 						}
 					}
 				}
@@ -142,7 +142,7 @@ void CCollisionMgr::tick()
 						}
 						else
 						{
-							vecObjects[iObjectNum]->Collider()->BeginOverlap(pOther->Collider());
+							vecObjects[iObjectNum]->Collider()->BeginOverlap(pOther);
 							pPhysData->TriggerEnter_List[i] = nullptr;
 							pPhysData->Enter_Count--;
 
@@ -195,7 +195,7 @@ void CCollisionMgr::tick()
 							continue;
 						}
 
-						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther->Collider());
+						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther);
 
 						pPhysData->TriggerExit_List[i] = nullptr;
 						pPhysData->Exit_Count--;
@@ -232,7 +232,7 @@ void CCollisionMgr::tick()
 						}
 
 						CGameObject* pOther = reinterpret_cast<CGameObject*>(TargetData->BOWObj);
-						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther->Collider());
+						vecObjects[iObjectNum]->Collider()->EndOverlap(pOther);
 					}
 				}
 			}

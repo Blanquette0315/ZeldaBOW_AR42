@@ -13,6 +13,15 @@
     <Filter Include="Header">
       <UniqueIdentifier>{e95e5319-d12b-4352-ab82-ccf7e5eef93b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Monster">
+      <UniqueIdentifier>{89bdac44-c4c8-4e01-9a2d-b3cccd8a6471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Monster\Bokoblin">
+      <UniqueIdentifier>{f60a7553-c40f-4681-bedf-e80ae78ca393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\MonsterAI">
+      <UniqueIdentifier>{3c841489-4051-4823-a8fd-a8c1190449c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -34,10 +43,18 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="CPlayerScript.h" />
-    <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CNavTestSCR.h" />
     <ClInclude Include="CTestSCR.h" />
+    <ClInclude Include="CBokoblinScript.h">
+      <Filter>Scripts\Monster\Bokoblin</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterAIScript.h">
+      <Filter>Scripts\MonsterAI</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterScript.h">
+      <Filter>Scripts\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -53,9 +70,17 @@
       <Filter>Header</Filter>
     </ClCompile>
     <ClCompile Include="CPlayerScript.cpp" />
-    <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CNavTestSCR.cpp" />
     <ClCompile Include="CTestSCR.cpp" />
+    <ClCompile Include="CBokoblinScript.cpp">
+      <Filter>Scripts\Monster\Bokoblin</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterAIScript.cpp">
+      <Filter>Scripts\MonsterAI</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterScript.cpp">
+      <Filter>Scripts\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

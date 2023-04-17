@@ -49,9 +49,9 @@ public:
     virtual void finaltick() override;
 
 public:
-    void BeginOverlap(CCollider* _pOther);
-    void Overlap(CCollider* _pOther);
-    void EndOverlap(CCollider* _pOther);
+    void BeginOverlap(CGameObject* _pOther);
+    void Overlap(CGameObject* _pOther);
+    void EndOverlap(CGameObject* _pOther);
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

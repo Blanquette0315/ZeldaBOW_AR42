@@ -170,7 +170,9 @@ call ScriptCopy.bat</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CBokoblinScript.h" />
     <ClInclude Include="CMissileScript.h" />
+    <ClInclude Include="CMonsterAIScript.h" />
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CScriptMgr.h" />
@@ -183,7 +185,9 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="Scriptstruct.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBokoblinScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
+    <ClCompile Include="CMonsterAIScript.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
