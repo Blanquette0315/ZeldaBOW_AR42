@@ -33,7 +33,7 @@ CGameObject::CGameObject(const CGameObject& _origin)
 	, m_iLayerIdx(-1)
 	, m_bDead(false)
 	, m_bRender(true)
-	, m_bFrustumCul(true)
+	, m_bFrustumCul(_origin.m_bFrustumCul)
 	, m_OwnerPrefab(nullptr)
 {
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)

@@ -24,6 +24,7 @@ private:
     Vec3            m_vBoxSize;
     float           m_fSphereSize;
     Vec2            m_vCapsuleSize;
+    Vec3            m_vColOffSet;
 
     Vec3            m_vVelocity;
     Vec3            m_vSaveVelocity;

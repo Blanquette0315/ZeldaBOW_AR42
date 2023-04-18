@@ -170,31 +170,31 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pObject, 0);
 
 	// LandScape 추가
-	//CGameObject* pLandScape = new CGameObject;
-	//pLandScape->SetName(L"LandScape");
-	//
-	//pLandScape->AddComponent(new CTransform);
-	//pLandScape->AddComponent(new CLandScape);
-	//pLandScape->AddComponent(new CRigidBody);
-	//
-	//pLandScape->Transform()->SetRelativePos(1.f, 1.f, 1.f);
-	//pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
-	//pLandScape->LandScape()->SetFaceCount(16, 16);
-	//pLandScape->SetFrustumCul(true);
-	//
-	////pLandScape->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_TRI, true, true);
-	//pLandScape->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
-	//pLandScape->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_TRI);
-	//pLandScape->RigidBody()->SetColldierScaleSize(false);
-	//pLandScape->RigidBody()->SetKinematicOption(true);
-	//pLandScape->RigidBody()->SetDinamicOption(false);
-	//pLandScape->RigidBody()->SetGravityOption(false);
-	//pLandScape->RigidBody()->SetStaticFriction(0.f);
-	//pLandScape->RigidBody()->SetDynamicFriction(0.f);
-	//pLandScape->RigidBody()->SetRestitution(0.f);
-	//pLandScape->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
-	//
-	//pLevel->AddGameObject(pLandScape, 0);
+	CGameObject* pLandScape = new CGameObject;
+	pLandScape->SetName(L"LandScape");
+	
+	pLandScape->AddComponent(new CTransform);
+	pLandScape->AddComponent(new CLandScape);
+	pLandScape->AddComponent(new CRigidBody);
+	
+	pLandScape->Transform()->SetRelativePos(1.f, 1.f, 1.f);
+	pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
+	pLandScape->LandScape()->SetFaceCount(16, 16);
+	pLandScape->SetFrustumCul(true);
+	
+	//pLandScape->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_TRI, true, true);
+	pLandScape->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
+	pLandScape->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_TRI);
+	pLandScape->RigidBody()->SetColldierScaleSize(false);
+	pLandScape->RigidBody()->SetKinematicOption(true);
+	pLandScape->RigidBody()->SetDinamicOption(false);
+	pLandScape->RigidBody()->SetGravityOption(false);
+	pLandScape->RigidBody()->SetStaticFriction(0.f);
+	pLandScape->RigidBody()->SetDynamicFriction(0.f);
+	pLandScape->RigidBody()->SetRestitution(0.f);
+	pLandScape->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
+	
+	pLevel->AddGameObject(pLandScape, 0);
 
 
 	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
@@ -244,6 +244,21 @@ void CreateTestLevel()
 		pObj->SetFrustumCul(false);
 		pObj->SetName(L"Map");
 		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+
+		pObj->AddComponent(new CRigidBody);
+		pObj->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
+		pObj->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
+		pObj->RigidBody()->SetColldierScaleSize(false);
+		pObj->RigidBody()->SetKinematicOption(true);
+		pObj->RigidBody()->SetDinamicOption(false);
+		pObj->RigidBody()->SetGravityOption(false);
+		pObj->RigidBody()->SetStaticFriction(0.f);
+		pObj->RigidBody()->SetDynamicFriction(0.f);
+		pObj->RigidBody()->SetRestitution(0.f);
+		pObj->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
+
+		//pObj->RigidBody()->SetMeshCollider();
+
 		pLevel->AddGameObject(pObj, 0);
 		//pObj->Animator3D()->Play(L"Take 001", true);
 

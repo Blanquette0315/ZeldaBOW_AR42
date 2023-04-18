@@ -75,12 +75,20 @@ void RigidBodyUI::update()
 			m_iCurItem = 3;
 		}
 			break;
+
+		case COLLIDER_TYPE::COLLIDER_MESH:
+		{
+			m_iCurItem = 4;
+		}
+		break;
 		}
 
 		m_bColScaleSize = GetTarget()->RigidBody()->GetColliderScaleSize();
 		m_vBoxSize = GetTarget()->RigidBody()->GetBoxSize();
 		m_fSphereSize = GetTarget()->RigidBody()->GetSphereSize();
 		m_vCapsuleSize = GetTarget()->RigidBody()->GetCapsuleSize();
+
+		m_vColOffSet = GetTarget()->RigidBody()->GetColOffSet();
 
 		m_vVelocity = GetTarget()->RigidBody()->GetVelocity();
 		m_vSaveVelocity = GetTarget()->RigidBody()->GetSaveVelocity();
@@ -125,10 +133,11 @@ void RigidBodyUI::render_update()
 
 	// Collider Setting
 	ImGui::Text("== Collider Setting ==");
-	static const char* m_arrRigidColType[] = { "CUBE", "SPHERE", "CAPSULE", "TRIANGLE" };
+	static const char* m_arrRigidColType[] = { "CUBE", "SPHERE", "CAPSULE", "TRIANGLE", "MESH"};
 	ImGui::Text("Collider Type  "); ImGui::SameLine(); ImGui::Combo("##Light3D_Type", &m_iCurItem, m_arrRigidColType, IM_ARRAYSIZE(m_arrRigidColType));
 
 	ImGui::Text("Size = Scale   "); ImGui::SameLine(); ImGui::Checkbox("##RB_ColScaleSize", &m_bColScaleSize);
+	ImGui::Text("Collider OffSet"); ImGui::SameLine(); ImGui::InputFloat3("##RB_ColOffSet", m_vColOffSet);
 
 	switch (m_eColliderType)
 	{
@@ -155,6 +164,12 @@ void RigidBodyUI::render_update()
 
 	}
 		break;
+
+	case COLLIDER_TYPE::COLLIDER_MESH:
+	{
+
+	}
+	break;
 	}
 	ImGui::Text("");
 
@@ -205,12 +220,18 @@ void RigidBodyUI::render_update()
 
 		case (UINT)COLLIDER_TYPE::COLLIDER_TRI:
 		{
-
+			
 		}
 			break;
+
+		case (UINT)COLLIDER_TYPE::COLLIDER_MESH:
+		{
+			GetTarget()->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
+		}
+		break;
 		}
 
 		GetTarget()->RigidBody()->SetColldierScaleSize(m_bColScaleSize);
-
+		GetTarget()->RigidBody()->SetColOffSet(m_vColOffSet);
 	}
 }
