@@ -75,6 +75,7 @@ void CGameObject::begin()
 	// Script
 	for (size_t i = 0; i < m_vecScripts.size(); ++i)
 	{
+		m_vecScripts[i]->init();
 		m_vecScripts[i]->begin();
 	}
 

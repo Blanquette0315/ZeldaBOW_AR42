@@ -31,6 +31,8 @@ private:
 
     bool    m_bIgnParentScale;
 
+    bool    m_bTurnY180;
+
 public:
     void SetRelativePos(Vec3 _vPos) { m_vRelativePos = _vPos; }
     void SetRelativeScale(Vec3 _vScale) { m_vRelativeScale = _vScale; }
@@ -49,20 +51,25 @@ public:
     void SetWorldRotation(Vec3 _vRot);
 
     Vec3 GetRelativePos() { return m_vRelativePos; }
-    Vec3 GetWorldPos() { return m_matWorld.Translation(); }
-
     Vec3 GetRelativeScale() { return m_vRelativeScale; }
+    Vec3 GetRelativeRotation() { return m_vRelativeRotation; }
+
+    Vec3 GetWorldPos() { return m_matWorld.Translation(); }
     Vec3 GetWorldScale();
+    Vec3 GetWorldRotation();
+
+    void AddRelativeRotation(Vec3 _vRot) { m_vRelativeRotation += _vRot; }
 
     RECT GetRectCoord();
 
-    Vec3 GetRelativeRotation() { return m_vRelativeRotation; }
-    Vec3 GetWorldRotation();
     Vec3 GetRelativeDir(DIR _eType) { return m_vRelativeDir[(UINT)_eType]; }
     Vec3 GetWorldDir(DIR _eType) { return m_vWorldDir[(UINT)_eType]; }
 
     void SetIgnoreParentScale(bool _bIgn) { m_bIgnParentScale = _bIgn; }
     bool GetIgnoreParentScale() { return m_bIgnParentScale; }
+
+    void SetTurnY180(bool _bTurn) { m_bTurnY180 = _bTurn; }
+    bool GetTurnY180() { return m_bTurnY180; }
 
     const Matrix& GetLocalMat() { return m_matLocal; }
     const Matrix& GetWorldMat() { return m_matWorld; }

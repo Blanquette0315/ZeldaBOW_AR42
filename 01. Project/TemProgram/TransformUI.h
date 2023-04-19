@@ -13,6 +13,8 @@ private:
     Vec3                m_vRot;
 
     bool                m_bIgnorScale;
+    bool                m_bTurnY180;
+
     ImGuizmo::OPERATION m_eOperation;
     ImGuizmo::MODE      m_eMode;             
     

@@ -11,7 +11,7 @@ private:
 
 public:
 	static bool Param_Int(const string& _ParamName, int* _pInOut);
-	static void Param_Float(const string& _ParamName, float* _pInOut);
+	static void Param_Float(const string& _ParamName, float* _pInOut, float _fMin = 0.f, float _fMax = 1.f, float _fStep = 0.01f);
 	static void Param_Vec2(const string& _ParamName, Vec2* _pInOut);
 	static void Param_Vec3(const string& _ParamName, Vec3* _pInOut);
 	static void Param_Vec4(const string& _ParamName, Vec4* _pInOut);

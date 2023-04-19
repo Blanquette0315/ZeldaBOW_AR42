@@ -8,6 +8,7 @@ CTransform::CTransform()
 	: CComponent(COMPONENT_TYPE::TRANSFORM)
 	, m_vRelativeScale(Vec3(1.f,1.f,1.f))
 	, m_bIgnParentScale(false)
+	, m_bTurnY180(false)
 {
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3(1.f, 0.f, 0.f);
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3(0.f, 1.f, 0.f);
@@ -36,8 +37,6 @@ void CTransform::tick()
 
 void CTransform::finaltick()
 {
-	// m_vRelativePos, m_vRelativeScale, m_vRelativeRotation
-	// ��=> ���� ����� ����� ��
 	m_matWorld = XMMatrixIdentity();
 
 	m_matScale = XMMatrixScaling(m_vRelativeScale.x, m_vRelativeScale.y, m_vRelativeScale.z);
@@ -48,21 +47,26 @@ void CTransform::finaltick()
 	m_matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
 	m_matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
 
-	// ȸ�� ����� �̿��ؼ� ���� ��ü�� ��, ��, �� ������ ���س��´�.
-	m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matRot);
-	m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
-	m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matRot);
+	if (m_bTurnY180)
+	{
+		m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(-1.f, 0.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, -1.f), m_matRot);
+	}
+	else
+	{
+		m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matRot);
+	}
 
 	m_matWorld = m_matScale * m_matRot * m_matTrans;
 	m_matLocal = m_matWorld;
 
-	// ���� �θ� ������Ʈ�� �ִٸ�
 	if (GetOwner()->GetParent())
 	{
-		// �θ� ������Ʈ�� ũ�⸦ �����ϱ�� �� ���
 		if (m_bIgnParentScale)
 		{
-			// �������� ��� �θ��� ũ�� ���� �����ؼ� ������� ����� �д�.
 			CGameObject* pParent = GetOwner()->GetParent();
 
 			while (pParent)
@@ -91,18 +95,24 @@ void CTransform::finaltick()
 			}
 		}
 
-		// �θ� ������Ʈ�� ũ�⸦ �������� �ʱ�� �� ���
 		else
 		{
 			m_matWorld *= GetOwner()->GetParent()->Transform()->m_matWorld;
 		}
 	}
-	// WorldDir ���ϱ�
-	m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matWorld);
-	m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matWorld);
-	m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matWorld);
+	if (m_bTurnY180)
+	{
+		m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(-1.f, 0.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, -1.f), m_matWorld);
+	}
+	else
+	{
+		m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matWorld);
+	}
 
-	// ȸ��, ũ�� ��ȯ�� �̷������ ������ ����� ũ�⸦ �ʱ�ȭ �ϱ� ���� Normalize ���ش�.����
 	m_vWorldDir[(UINT)DIR::RIGHT].Normalize();
 	m_vWorldDir[(UINT)DIR::UP].Normalize();
 	m_vWorldDir[(UINT)DIR::FRONT].Normalize();
@@ -257,6 +267,8 @@ void CTransform::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_vRelativeRotation;
 	_emitter << YAML::Key << "IgnParentScale";
 	_emitter << YAML::Value << m_bIgnParentScale;
+	_emitter << YAML::Key << "TurnY180";
+	_emitter << YAML::Value << m_bTurnY180;
 
 	_emitter << YAML::EndMap;
 }
@@ -267,4 +279,5 @@ void CTransform::LoadFromYAML(YAML::Node& _node)
 	m_vRelativeScale = _node["TRANSFORM"]["RelativeScale"].as<Vec3>();
 	m_vRelativeRotation = _node["TRANSFORM"]["RelativeRotation"].as<Vec3>();
 	m_bIgnParentScale = _node["TRANSFORM"]["IgnParentScale"].as<bool>();
+	SAFE_LOAD_FROM_YAML(bool, m_bTurnY180, _node["TRANSFORM"]["TurnY180"]);
 }

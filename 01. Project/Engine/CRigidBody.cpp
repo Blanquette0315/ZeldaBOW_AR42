@@ -72,11 +72,12 @@ void CRigidBody::tick()
 		Vec4 vQRot = GetWorldRoation();
 		Vec3 vRot = {};
 
-		QuaternionToEuler(vQRot, vRot);
-		if (m_eRigidColliderType != COLLIDER_TYPE::COLLIDER_CAPSULE)
-			Transform()->SetRelativeRotation(vRot);
-		else
-			Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
+		// Test
+		//QuaternionToEuler(vQRot, vRot);
+		//if (m_eRigidColliderType != COLLIDER_TYPE::COLLIDER_CAPSULE)
+		//	Transform()->SetRelativeRotation(vRot);
+		//else
+		//	Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
 
 		// ToGroundRay Refresh
 		vPos = Transform()->GetRelativePos();

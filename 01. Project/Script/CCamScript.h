@@ -3,10 +3,21 @@
 class CCamScript :
     public CScript
 {
-private:
-    
+protected:
+    CAMERA_SELECTION m_eCameraType;
 
 public:
+    CAMERA_SELECTION GetCamType() { return m_eCameraType; }
+
+protected:
+    void RegisterCamera();
+
+public:
+    // i wanted to make this function to pure virtual function.
+    // but pure virtual function is not available because of codegen.exe...
+    // allocate m_eCameraType before RegisterCamera();
+    virtual void init() { assert(nullptr); }; 
+
     virtual void begin() override;
     virtual void tick() override;
 

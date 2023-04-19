@@ -477,3 +477,54 @@ Vec3 DecomposeRotMat(const Matrix& _matRot)
 	}
 	return vNewRot;
 }
+
+bool CalBit(UINT _originBit, UINT _cmpBits, BIT_FUNC_OPT _opt, UINT _CompareBit)
+{
+	switch (_opt)
+	{
+	case BIT_LEAST_ONE:
+	{
+		if (_originBit & _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+
+	case BIT_EQUAL:
+	{
+		if (_originBit == _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+
+	case BIT_INCLUDE:
+	{
+		if ((_originBit & _cmpBits) == _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+
+	case BIT_EQUAL_SELECTED_BIT:
+	{
+		RemoveBit(_cmpBits, ~_CompareBit);
+		RemoveBit(_originBit, ~_CompareBit);
+
+		if (_originBit == _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+	}
+}
+
+void AddBit(UINT& _src, UINT _add)
+{
+	_src |= _add;
+}
+
+void RemoveBit(UINT& _src, UINT _remove)
+{
+	_src &= ~_remove;
+}

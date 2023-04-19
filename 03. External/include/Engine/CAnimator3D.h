@@ -35,6 +35,8 @@ public:
 
     CStructuredBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
     UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
+    const tMTBone& GetBoneByName(const wstring& _strBoneName);
+
     void ClearData();
 
     void CreateAnimation(const wstring& _strKey, int _iStartFrame, int _iEndFrame, int _iFrameCount);

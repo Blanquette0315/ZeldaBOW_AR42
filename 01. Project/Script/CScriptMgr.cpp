@@ -2,6 +2,7 @@
 #include "CScriptMgr.h"
 
 #include "CCamScript.h"
+#include "CLinkAnimScript.h"
 #include "CLinkCamScript.h"
 #include "CLinkScript.h"
 #include "CMissileScript.h"
@@ -13,6 +14,7 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CCamScript");
+	_vec.push_back(L"CLinkAnimScript");
 	_vec.push_back(L"CLinkCamScript");
 	_vec.push_back(L"CLinkScript");
 	_vec.push_back(L"CMissileScript");
@@ -26,6 +28,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CCamScript" == _strScriptName)
 		return new CCamScript;
+	if (L"CLinkAnimScript" == _strScriptName)
+		return new CLinkAnimScript;
 	if (L"CLinkCamScript" == _strScriptName)
 		return new CLinkCamScript;
 	if (L"CLinkScript" == _strScriptName)
@@ -49,6 +53,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
 		return new CCamScript;
+		break;
+	case (UINT)SCRIPT_TYPE::LINKANIMSCRIPT:
+		return new CLinkAnimScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LINKCAMSCRIPT:
 		return new CLinkCamScript;
@@ -81,6 +88,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::CAMSCRIPT:
 		return L"CCamScript";
+		break;
+
+	case SCRIPT_TYPE::LINKANIMSCRIPT:
+		return L"CLinkAnimScript";
 		break;
 
 	case SCRIPT_TYPE::LINKCAMSCRIPT:

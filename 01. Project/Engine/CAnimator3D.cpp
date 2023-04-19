@@ -142,6 +142,15 @@ void CAnimator3D::UpdateData()
 	m_pBoneFinalMatBuffer->UpdateData(30, PIPELINE_STAGE::VS);
 }
 
+const tMTBone& CAnimator3D::GetBoneByName(const wstring& _strBoneName)
+{
+	for (size_t i = 0; i < m_pVecBones->size(); ++i)
+	{
+		if ((*m_pVecBones)[i].strBoneName == _strBoneName)
+			return (*m_pVecBones)[i];
+	}
+}
+
 void CAnimator3D::ClearData()
 {
 	m_pBoneFinalMatBuffer->Clear();

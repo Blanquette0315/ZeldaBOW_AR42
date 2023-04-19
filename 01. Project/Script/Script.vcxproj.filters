@@ -25,8 +25,14 @@
     <Filter Include="Scripts\Cam">
       <UniqueIdentifier>{17aca13f-d652-4282-b5dc-03e787792513}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\Cam\PlayerCam">
+    <Filter Include="Scripts\Cam\LinkCam">
       <UniqueIdentifier>{72119c0f-9c66-4d59-8984-12d2617d4567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Player\FSM">
+      <UniqueIdentifier>{14854a18-3121-4163-96dc-c49f783ee4c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Player\FSM\Node">
+      <UniqueIdentifier>{65ba4764-7584-4517-bf98-7ed2183686bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +78,18 @@
     <ClInclude Include="CCamScript.h">
       <Filter>Scripts\Cam</Filter>
     </ClInclude>
-    <ClInclude Include="CLinkCamScript.h" />
+    <ClInclude Include="CLinkCamScript.h">
+      <Filter>Scripts\Cam\LinkCam</Filter>
+    </ClInclude>
+    <ClInclude Include="Scriptglobal.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkAnimScript.h">
+      <Filter>Scripts\Player\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMNode.h">
+      <Filter>Scripts\Player\FSM\Node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -111,6 +128,23 @@
     <ClCompile Include="CCamScript.cpp">
       <Filter>Scripts\Cam</Filter>
     </ClCompile>
-    <ClCompile Include="CLinkCamScript.cpp" />
+    <ClCompile Include="CLinkCamScript.cpp">
+      <Filter>Scripts\Cam\LinkCam</Filter>
+    </ClCompile>
+    <ClCompile Include="Scriptextern.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkAnimScript.cpp">
+      <Filter>Scripts\Player\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMNode.cpp">
+      <Filter>Scripts\Player\FSM\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkAnimFSMInit.cpp">
+      <Filter>Scripts\Player\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkAnimFunc.cpp">
+      <Filter>Scripts\Player\FSM\Node</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

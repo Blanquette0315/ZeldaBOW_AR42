@@ -1,10 +1,44 @@
 #pragma once
 #include <Engine/CScript.h>
+
+enum class LINK_FRONT_TOE
+{
+    LEFT,
+    RIGHT,
+    END,
+};
+
+enum class LINK_DIRECTION
+{
+    FRONT,
+    BACK,
+    LEFT,
+    RIGHT,
+    NONE,
+    END,
+};
+
+class CAnimation3D;
+class CGameObject;
+
 class CLinkScript :
     public CScript
 {
 private:
+    CGameObject*    m_pLinkCamObj;
+    Vec3            m_vDir[(UINT)LINK_DIRECTION::END];
+
+private:
     float m_fSpeed;
+
+public:
+    const Vec3& GetMoveDir(LINK_DIRECTION _eDir) { return m_vDir[(UINT)_eDir]; }
+
+private:
+    LINK_FRONT_TOE GetFrontToe(CAnimation3D* _pCurAnim);
+    int FindClosestIdx(const vector<tMTKeyFrame>& _vec, float _fTime, int _iIdx, int _iStart, int _iEnd);
+
+    void CalcMoveDirection();
 
 public:
     virtual void begin() override;

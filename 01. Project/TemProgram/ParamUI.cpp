@@ -28,7 +28,7 @@ bool ParamUI::Param_Int(const string& _ParamName, int* _pInOut)
 	return false;
 }
 
-void ParamUI::Param_Float(const string& _ParamName, float* _pInOut)
+void ParamUI::Param_Float(const string& _ParamName, float* _pInOut, float _fMin, float _fMax, float _fStep)
 {
 	char szName[50] = "";
 	sprintf_s(szName, 50, "##Float%d", ParamCount++);
@@ -36,7 +36,7 @@ void ParamUI::Param_Float(const string& _ParamName, float* _pInOut)
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
 
-	if (ImGui::DragFloat(szName, _pInOut, 0.01f, 0.f, 1.f, "%6.3f"))
+	if (ImGui::DragFloat(szName, _pInOut, _fStep, _fMin, _fMax, "%6.3f"))
 	{
 		if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left))
 		{

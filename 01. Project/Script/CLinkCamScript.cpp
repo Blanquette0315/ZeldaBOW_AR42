@@ -9,14 +9,14 @@ CLinkCamScript::CLinkCamScript()
 	: CCamScript(SCRIPT_TYPE::LINKCAMSCRIPT)
 	, m_fDistFromLink(200.f)
 {
-	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fDistFromLink);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fDistFromLink, 0.f, 200.f, 0.5f);
 }
 
 CLinkCamScript::CLinkCamScript(const CLinkCamScript& _origin)
 	: CCamScript(_origin)
 	, m_fDistFromLink(_origin.m_fDistFromLink)
 {
-	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fDistFromLink);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fDistFromLink, 0.f, 200.f, 0.5f);
 }
 
 CLinkCamScript::~CLinkCamScript()
@@ -34,38 +34,38 @@ void CLinkCamScript::Move()
 		vRot.x -= vMouseDir.y * FDT * XM_PI;
 
 		if (vRot.x > XM_PI / 2.f)
-			vRot.x = XM_PI / 2.f;
+			vRot.x = XM_PI / 9.f * 4.f;
 		else if (vRot.x < 0.f)
 			vRot.x = 0.f;
 
 		Transform()->SetRelativeRotation(vRot);
-
-
-		Transform()->finaltick();
-		// should recalculate world-dir
-		Vec3 vDirToCamFromObj = -Transform()->GetWorldDir(DIR::FRONT);
-		Vec3 vCamPos = m_pLinkObj->Transform()->GetWorldPos() + vDirToCamFromObj * m_fDistFromLink;
-
-		Transform()->SetRelativePos(vCamPos);
 	}
+
+	Transform()->finaltick(); // should recalculate world-dir
+
+	Vec3 vDirToCamFromObj = -Transform()->GetWorldDir(DIR::FRONT);
+	Vec3 vCamPos = m_pLinkObj->Transform()->GetRelativePos() + vDirToCamFromObj * m_fDistFromLink;
+
+	Transform()->SetRelativePos(vCamPos);
 }
 
-void CLinkCamScript::begin()
+void CLinkCamScript::init()
 {
-	CCamScript::begin();
+	m_eCameraType = CAMERA_SELECTION::LINK;
+	CCamScript::RegisterCamera();
 	m_pLinkObj = FindObjectByName(L"Link");
 
 	// start : yz 30 degree
 	Transform()->SetRelativeRotation(Vec3(XM_PI / 6.f, 0.f, 0.f));
 }
 
+void CLinkCamScript::begin()
+{
+
+}
+
 void CLinkCamScript::tick()
 {
-	// use for Link's movement 
-	Vec3 vDirCamToLink = m_pLinkObj->Transform()->GetRelativePos() - Transform()->GetRelativePos();
-	m_vDirXZ = Vec2(vDirCamToLink.x, vDirCamToLink.z);
-	m_vDirXZ.Normalize();
-
 	Move();
 }
 
@@ -84,11 +84,16 @@ void CLinkCamScript::EndOverlap(CCollider* _pOther)
 void CLinkCamScript::SaveToYAML(YAML::Emitter& _emitter)
 {
 	CCamScript::SaveToYAML(_emitter);
+
+	_emitter << YAML::Key << "DistFromLink";
+	_emitter << YAML::Value << m_fDistFromLink;
 }
 
 void CLinkCamScript::LoadFromYAML(YAML::Node& _node)
 {
 	CCamScript::LoadFromYAML(_node);
+
+	SAFE_LOAD_FROM_YAML(float, m_fDistFromLink, _node["DistFromLink"]);
 }
 
 

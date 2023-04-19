@@ -9,15 +9,13 @@ class CLinkCamScript :
 private:
     CGameObject*    m_pLinkObj;
 
-    Vec2            m_vDirXZ;
     float           m_fDistFromLink;
 
 public:
     void Move();
 
-    const Vec2& GetLinkDir() { return m_vDirXZ; }
-
 public:
+    virtual void init() override;
     virtual void begin() override;
     virtual void tick() override;
 

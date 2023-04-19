@@ -172,6 +172,7 @@ call ScriptCopy.bat</Command>
   <ItemGroup>
     <ClInclude Include="CCameraMgr.h" />
     <ClInclude Include="CCamScript.h" />
+    <ClInclude Include="CLinkAnimScript.h" />
     <ClInclude Include="CLinkCamScript.h" />
     <ClInclude Include="CLinkScript.h" />
     <ClInclude Include="CMissileScript.h" />
@@ -181,14 +182,19 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CTestSCR.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="CNavTestSCR.h" />
+    <ClInclude Include="FSMNode.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scriptdefine.h" />
     <ClInclude Include="ScriptFunc.h" />
+    <ClInclude Include="Scriptglobal.h" />
     <ClInclude Include="Scriptstruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraMgr.cpp" />
     <ClCompile Include="CCamScript.cpp" />
+    <ClCompile Include="CLinkAnimFSMInit.cpp" />
+    <ClCompile Include="CLinkAnimFunc.cpp" />
+    <ClCompile Include="CLinkAnimScript.cpp" />
     <ClCompile Include="CLinkCamScript.cpp" />
     <ClCompile Include="CLinkScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
@@ -197,6 +203,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CScriptMgr.cpp" />
     <ClCompile Include="CNavTestSCR.cpp" />
     <ClCompile Include="CTestSCR.cpp" />
+    <ClCompile Include="FSMNode.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -204,6 +211,7 @@ call ScriptCopy.bat</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="Scriptextern.cpp" />
     <ClCompile Include="ScriptFunc.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

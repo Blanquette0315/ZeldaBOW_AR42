@@ -64,7 +64,7 @@ void ScriptUI::render_scriptparam()
             ParamUI::Param_Int(vecParam[i].strParamName, (int*)vecParam[i].pParam);
             break;
         case SCRIPT_PARAM::FLOAT:
-            ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam);
+            ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam, vecParam[i].fMin, vecParam[i].fMax, vecParam[i].fStep);
             break;
         case SCRIPT_PARAM::VEC2:
             ParamUI::Param_Vec2(vecParam[i].strParamName, (Vec2*)vecParam[i].pParam);
