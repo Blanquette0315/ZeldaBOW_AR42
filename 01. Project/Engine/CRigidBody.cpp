@@ -441,7 +441,8 @@ void CRigidBody::SetMeshCollider()
 	UINT* IdxArray = new UINT[iAllIdxCount];
 	UINT IdxCount = 0;
 
-	Vec3 PxSize = Vec3(10.f, 10.f, 10.f);
+	// Vec3 PxSize = Vec3(10.f, 10.f, 10.f);
+	Vec3 PxSize = Transform()->GetRelativeScale();
 	PxSize.x /= 100.f;
 	PxSize.y /= 100.f;
 	PxSize.z /= 100.f;
@@ -497,6 +498,53 @@ void CRigidBody::SetMeshCollider()
 
 	delete[] IdxArray;
 	delete[] vecVertexList;
+}
+
+void CRigidBody::SetTerrainCollider(int _iVertexSize, Vector3* _vecVertexList, Vector3 _Size)
+{
+	Vec3 PxSize = _Size;
+	PxSize.x /= 100.f;
+	PxSize.y /= 100.f;
+	PxSize.z /= 100.f;
+
+	// 230400 is FaceCount(100) VertexCount
+	int iFacePerCount = 230400;
+	int iforCount = (int)ceil((float)_iVertexSize / iFacePerCount);
+
+	UINT* arrIndex = new UINT[iFacePerCount];
+
+	for (int i = 0; i < iforCount; ++i)
+	{
+		if (0 != i)
+		{
+			m_vecPhysData.push_back(new PhysData);
+		}
+
+		if (i == (iforCount - 1))
+		{
+			int iRemainCount = _iVertexSize - (iFacePerCount * i);
+			if (iRemainCount == 0)
+				iRemainCount = iFacePerCount;
+
+			for (int j = 0; j < iRemainCount; ++j)
+			{
+				arrIndex[j] = (UINT)(j + (i * iFacePerCount));
+			}
+
+			m_vecPhysData[i]->mCollider->CreateTriangle(iRemainCount, _iVertexSize, arrIndex, _vecVertexList, PxSize);
+		}
+		else
+		{
+			for (int j = 0; j < iFacePerCount; ++j)
+			{
+				arrIndex[j] = (UINT)(j + (i * iFacePerCount));
+			}
+
+			m_vecPhysData[i]->mCollider->CreateTriangle(iFacePerCount, _iVertexSize, arrIndex, _vecVertexList, PxSize);
+		}
+	}
+
+	delete[] arrIndex;
 }
 
 void CRigidBody::CallDebugDraw()

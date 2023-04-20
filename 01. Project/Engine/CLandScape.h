@@ -6,6 +6,13 @@
 #include "CWeightMapShader.h"
 #include "CRaymapShader.h"
 
+struct TessVtx
+{
+    Vec3 v1;
+    Vec3 v2;
+    Vec3 v3;
+};
+
 class CLandScape :
     public CRenderComponent
 {

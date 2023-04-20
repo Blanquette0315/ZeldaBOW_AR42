@@ -155,6 +155,7 @@ public:
     void SetTriangleCollider(int _iIdxSize, int _iVertexSize, UINT* IdxArray, Vector3* _vecVertexList, Vector3 _Size);
     
     void SetMeshCollider();
+    void SetTerrainCollider(int _iVertexSize, Vector3* _vecVertexList, Vector3 _Size);
 
 private:
     void CallDebugDraw();
