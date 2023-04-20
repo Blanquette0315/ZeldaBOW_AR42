@@ -6,6 +6,13 @@
 #include "CWeightMapShader.h"
 #include "CRaymapShader.h"
 
+struct TessVtx
+{
+    Vec3 v1;
+    Vec3 v2;
+    Vec3 v3;
+};
+
 class CLandScape :
     public CRenderComponent
 {
@@ -43,7 +50,6 @@ private:
     D3D11_BUFFER_DESC       m_CopyBufferDesc;
     D3D11_MAPPED_SUBRESOURCE    m_MappedResource;
     Vector3*                    m_arrVertexPos;
-    UINT*                       m_arrIndice;
     Ptr<CMaterial>              m_pMaxTessMtrl;
     int                         m_iMaxVtxCount;
     UINT                        m_inumVertices;

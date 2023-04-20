@@ -34,6 +34,8 @@ private:
     const wstring*          m_TargetLevelPath;
     LevelUI*                m_pLevelUI;
 
+    bool                    m_bFrustumCul;
+
 public:
     CGameObject* GetTargetObject() { return m_TargetObj; }
 

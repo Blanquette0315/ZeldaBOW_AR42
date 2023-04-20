@@ -353,6 +353,7 @@ VS_DEPTH_OUT VS_DepthMap(VS_DEPTH_IN _in)
     return output;
 }
 
+
 float4 PS_DepthMap(VS_DEPTH_OUT _in) : SV_Target
 {
     float fOut = 0.f;

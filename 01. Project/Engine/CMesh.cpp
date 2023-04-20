@@ -8,6 +8,7 @@ CMesh::CMesh(bool _bEngineRes)
 	: CRes(RES_TYPE::MESH, _bEngineRes)
 	, m_tVBDesc{}
 	, m_iVtxCount(0)
+	, m_iAllVtxCount(0)
 	, m_pVtxSys(nullptr)
 {
 }
@@ -59,6 +60,7 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 		const tContainer* container = &_loader.GetContainer(1);
 
 		UINT iVtxCount = (UINT)container->vecPos.size();
+		pMesh->m_iAllVtxCount = (UINT)container->vecPos.size();
 
 		D3D11_BUFFER_DESC tVtxDesc = {};
 
@@ -140,8 +142,11 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 
 			iAllVtxCount += (UINT)container->vecPos.size();
 		}
-		D3D11_BUFFER_DESC tVtxDesc = {};
 
+		pMesh->m_iAllVtxCount = iAllVtxCount;
+
+		D3D11_BUFFER_DESC tVtxDesc = {};
+	
 		tVtxDesc.ByteWidth = sizeof(Vtx) * iAllVtxCount;
 		tVtxDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -525,6 +530,7 @@ void CMesh::Save(const wstring& _strRelativePath)
 	int iByteSize = m_tVBDesc.ByteWidth;
 	fwrite(&iByteSize, sizeof(int), 1, pFile);
 	fwrite(m_pVtxSys, iByteSize, 1, pFile);
+	fwrite(&m_iAllVtxCount, sizeof(UINT), 1, pFile);
 
 	// ¿Œµ¶Ω∫ ¡§∫∏
 	UINT iMtrlCount = (UINT)m_vecIdxInfo.size();
@@ -600,6 +606,8 @@ int CMesh::Load(const wstring& _strFilePath)
 
 	m_pVtxSys = (Vtx*)malloc(iByteSize);
 	fread(m_pVtxSys, 1, iByteSize, pFile);
+
+	fread(&m_iAllVtxCount, 1, sizeof(UINT), pFile);
 
 
 	D3D11_BUFFER_DESC tDesc = {};

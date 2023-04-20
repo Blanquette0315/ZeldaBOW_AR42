@@ -54,8 +54,10 @@ CLandScape::~CLandScape()
 	if (nullptr != m_pWeightMapBuffer)
 		delete m_pWeightMapBuffer;
 
-	delete[] m_arrVertexPos;
-	delete[] m_arrIndice;
+	if (m_arrVertexPos != nullptr)
+	{
+		delete[] m_arrVertexPos;
+	}
 }
 
 void CLandScape::begin()
@@ -65,8 +67,6 @@ void CLandScape::begin()
 
 void CLandScape::finaltick()
 {
-	m_iMaxVtxCount = m_iXFaceCount * m_iZFaceCount * 1048576 * 3;
-	
 	if (KEY_TAP(KEY::NUM_5))
 	{
 		LoadWeightData();
@@ -196,11 +196,6 @@ void CLandScape::Cooking()
 		delete[] m_arrVertexPos;
 		m_arrVertexPos = nullptr;
 	}
-	if (m_arrIndice != nullptr)
-	{
-		delete[] m_arrIndice;
-		m_arrIndice = nullptr;
-	}
 
 	LandStreamOut();
 
@@ -210,27 +205,33 @@ void CLandScape::Cooking()
 	// vertex pos
 	D3D11_BUFFER_DESC vbDesc;
 	pVB->GetDesc(&vbDesc);
-	m_inumVertices = vbDesc.ByteWidth / sizeof(Vec3);
+	UINT inumTessVtx = vbDesc.ByteWidth / sizeof(TessVtx);
 
 	CreateCpBuffer(vbDesc.ByteWidth);
 
 	CONTEXT->CopyResource(m_pCopyBuffer.Get(), pVB.Get());
 
-	m_arrVertexPos = new Vec3[m_inumVertices];
+	TessVtx* arrTessVtx = new TessVtx[inumTessVtx];
 
 	CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
-	memcpy(m_arrVertexPos, m_MappedResource.pData, sizeof(Vec3) * m_inumVertices);
+	memcpy(arrTessVtx, m_MappedResource.pData, sizeof(TessVtx) * inumTessVtx);
 	CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
 
-	// vertex index
-	m_arrIndice = new UINT[m_inumVertices];
+	m_inumVertices = ((inumTessVtx * 3));
+	m_arrVertexPos = new Vec3[m_inumVertices];
 
-	for (int i = 0; i < m_inumVertices; ++i)
+	int idx = 0;
+	for (size_t i = 0; i < inumTessVtx; ++i)
 	{
-		m_arrIndice[i] = i;
+		m_arrVertexPos[idx] = arrTessVtx[i].v1;
+		idx++;
+		m_arrVertexPos[idx] = arrTessVtx[i].v2;
+		idx++;
+		m_arrVertexPos[idx] = arrTessVtx[i].v3;
+		idx++;
 	}
 
-	//SaveCookingData();
+	delete[] arrTessVtx;
 	m_bCurDataCooking = true;
 }
 
@@ -241,18 +242,7 @@ void CLandScape::CreateActor()
 		Cooking();
 	}
 
-	//ComPtr<ID3D11Buffer> pVB = m_pSOBuffer;
-
-	//// vertex pos
-	//D3D11_BUFFER_DESC vbDesc;
-	//pVB->GetDesc(&vbDesc);
-	//UINT numVertices = vbDesc.ByteWidth / sizeof(Vec3);
-
-	//LoadCookingData();
-
-	RigidBody()->SetTriangleCollider(m_inumVertices, m_inumVertices
-		, m_arrIndice
-		, m_arrVertexPos, Transform()->GetRelativeScale());
+	RigidBody()->SetTerrainCollider(m_inumVertices, m_arrVertexPos, Transform()->GetRelativeScale());
 }
 
 void CLandScape::SaveCookingData()
@@ -272,11 +262,6 @@ void CLandScape::SaveCookingData()
 		fwrite(&m_arrVertexPos[i], sizeof(Vec3), 1, pFile);
 	}
 
-	for (int i = 0; i < m_inumVertices; ++i)
-	{
-		fwrite(&m_arrIndice[i], sizeof(UINT), 1, pFile);
-	}
-
 	fclose(pFile);
 }
 
@@ -292,17 +277,9 @@ void CLandScape::LoadCookingData()
 
 	fread(&m_inumVertices, sizeof(UINT), 1, pFile);
 
-	m_arrVertexPos = new Vec3[m_inumVertices];
-	m_arrIndice = new UINT[m_inumVertices];
-
 	for (int i = 0; i < m_inumVertices; ++i)
 	{
 		fread(&m_arrVertexPos[i], sizeof(Vec3), 1, pFile);
-	}
-
-	for (int i = 0; i < m_inumVertices; ++i)
-	{
-		fread(&m_arrIndice[i], sizeof(UINT), 1, pFile);
 	}
 
 	fclose(pFile);
@@ -433,11 +410,13 @@ void CLandScape::CreateSOBuffer()
 	if (m_pSOBuffer.Get())
 		m_pSOBuffer = nullptr;
 
+	m_iMaxVtxCount = m_iXFaceCount * m_iZFaceCount * 768;
+
 	D3D11_BUFFER_DESC Desc = {};
 	Desc.Usage = D3D11_USAGE_DEFAULT;
 	Desc.CPUAccessFlags = 0;
 	Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_STREAM_OUTPUT | D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
-	Desc.ByteWidth = sizeof(Vec3) * m_iMaxVtxCount;
+	Desc.ByteWidth = sizeof(TessVtx) * m_iMaxVtxCount;
 	Desc.MiscFlags = 0;
 
 	HRESULT hr = DEVICE->CreateBuffer(&Desc, nullptr, m_pSOBuffer.GetAddressOf());

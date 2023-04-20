@@ -14,6 +14,7 @@ RigidBodyUI::RigidBodyUI()
 	, m_bDynamic(false)
 	, m_arrLockAxisPos{false, false, false}
 	, m_arrLockAxisRot{false, false, false}
+	, m_bUsePhysRot(true)
 	, m_eColliderType(COLLIDER_TYPE::COLLIDER_CUBE)
 	, m_iCurItem(0)
 	, m_bColScaleSize(false)
@@ -49,6 +50,8 @@ void RigidBodyUI::update()
 		m_arrLockAxisRot[1] = (bool)LockAxisRot.y;
 		m_arrLockAxisRot[2] = (bool)LockAxisRot.z;
 
+		m_bUsePhysRot = GetTarget()->RigidBody()->IsUsePhysRot();
+
 		m_eColliderType = GetTarget()->RigidBody()->GetRigidColliderType();
 		switch (m_eColliderType)
 		{
@@ -75,12 +78,20 @@ void RigidBodyUI::update()
 			m_iCurItem = 3;
 		}
 			break;
+
+		case COLLIDER_TYPE::COLLIDER_MESH:
+		{
+			m_iCurItem = 4;
+		}
+		break;
 		}
 
 		m_bColScaleSize = GetTarget()->RigidBody()->GetColliderScaleSize();
 		m_vBoxSize = GetTarget()->RigidBody()->GetBoxSize();
 		m_fSphereSize = GetTarget()->RigidBody()->GetSphereSize();
 		m_vCapsuleSize = GetTarget()->RigidBody()->GetCapsuleSize();
+
+		m_vColOffSet = GetTarget()->RigidBody()->GetColOffSet();
 
 		m_vVelocity = GetTarget()->RigidBody()->GetVelocity();
 		m_vSaveVelocity = GetTarget()->RigidBody()->GetSaveVelocity();
@@ -121,14 +132,17 @@ void RigidBodyUI::render_update()
 	ImGui::Text("Lock Axis Rot  "); ImGui::SameLine(); ImGui::Checkbox("_X##RB_LAR", &m_arrLockAxisRot[0]);
 	ImGui::SameLine(); ImGui::Checkbox("_Y##RB_LAR", &m_arrLockAxisRot[1]);
 	ImGui::SameLine(); ImGui::Checkbox("_Z##RB_LAR", &m_arrLockAxisRot[2]);
+
+	ImGui::Text("Use Phys Rot   "); ImGui::SameLine(); ImGui::Checkbox("##RB_UsePhysRot", &m_bUsePhysRot);
 	ImGui::Text("");
 
 	// Collider Setting
 	ImGui::Text("== Collider Setting ==");
-	static const char* m_arrRigidColType[] = { "CUBE", "SPHERE", "CAPSULE", "TRIANGLE" };
+	static const char* m_arrRigidColType[] = { "CUBE", "SPHERE", "CAPSULE", "TRIANGLE", "MESH"};
 	ImGui::Text("Collider Type  "); ImGui::SameLine(); ImGui::Combo("##Light3D_Type", &m_iCurItem, m_arrRigidColType, IM_ARRAYSIZE(m_arrRigidColType));
 
 	ImGui::Text("Size = Scale   "); ImGui::SameLine(); ImGui::Checkbox("##RB_ColScaleSize", &m_bColScaleSize);
+	ImGui::Text("Collider OffSet"); ImGui::SameLine(); ImGui::InputFloat3("##RB_ColOffSet", m_vColOffSet);
 
 	switch (m_eColliderType)
 	{
@@ -155,6 +169,12 @@ void RigidBodyUI::render_update()
 
 	}
 		break;
+
+	case COLLIDER_TYPE::COLLIDER_MESH:
+	{
+
+	}
+	break;
 	}
 	ImGui::Text("");
 
@@ -179,6 +199,7 @@ void RigidBodyUI::render_update()
 
 		GetTarget()->RigidBody()->SetLockAxis_Pos(m_arrLockAxisPos[0], m_arrLockAxisPos[1], m_arrLockAxisPos[2]);
 		GetTarget()->RigidBody()->SetLockAxis_Rot(m_arrLockAxisRot[0], m_arrLockAxisRot[1], m_arrLockAxisRot[2]);
+		GetTarget()->RigidBody()->SetUsePhysRot(m_bUsePhysRot);
 
 		switch (m_iCurItem)
 		{
@@ -205,12 +226,18 @@ void RigidBodyUI::render_update()
 
 		case (UINT)COLLIDER_TYPE::COLLIDER_TRI:
 		{
-
+			
 		}
 			break;
+
+		case (UINT)COLLIDER_TYPE::COLLIDER_MESH:
+		{
+			GetTarget()->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
+		}
+		break;
 		}
 
 		GetTarget()->RigidBody()->SetColldierScaleSize(m_bColScaleSize);
-
+		GetTarget()->RigidBody()->SetColOffSet(m_vColOffSet);
 	}
 }

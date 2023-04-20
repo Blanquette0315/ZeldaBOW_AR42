@@ -54,10 +54,10 @@ PatchMaxTess PatchMaxConstFunc(InputPatch<VSMAX_OUT, 3> _patch, uint _patchId : 
 {
     PatchMaxTess factor = (PatchMaxTess) 0.f;
     
-    factor.EdgeFactor[0] = 8;
-    factor.EdgeFactor[1] = 8;
-    factor.EdgeFactor[2] = 8;
-    factor.InsideFactor = 8;
+    factor.EdgeFactor[0] = 16;
+    factor.EdgeFactor[1] = 16;
+    factor.EdgeFactor[2] = 16;
+    factor.InsideFactor = 16;
     
     return factor;
 }
