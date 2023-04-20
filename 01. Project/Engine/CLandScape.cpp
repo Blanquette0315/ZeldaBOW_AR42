@@ -196,11 +196,6 @@ void CLandScape::Cooking()
 		delete[] m_arrVertexPos;
 		m_arrVertexPos = nullptr;
 	}
-	if (m_arrIndice != nullptr)
-	{
-		delete[] m_arrIndice;
-		m_arrIndice = nullptr;
-	}
 
 	LandStreamOut();
 
@@ -267,11 +262,6 @@ void CLandScape::SaveCookingData()
 		fwrite(&m_arrVertexPos[i], sizeof(Vec3), 1, pFile);
 	}
 
-	for (int i = 0; i < m_inumVertices; ++i)
-	{
-		fwrite(&m_arrIndice[i], sizeof(UINT), 1, pFile);
-	}
-
 	fclose(pFile);
 }
 
@@ -287,17 +277,9 @@ void CLandScape::LoadCookingData()
 
 	fread(&m_inumVertices, sizeof(UINT), 1, pFile);
 
-	//m_arrVertexPos = new Vec3[m_inumVertices];
-	m_arrIndice = new UINT[m_inumVertices];
-
 	for (int i = 0; i < m_inumVertices; ++i)
 	{
 		fread(&m_arrVertexPos[i], sizeof(Vec3), 1, pFile);
-	}
-
-	for (int i = 0; i < m_inumVertices; ++i)
-	{
-		fread(&m_arrIndice[i], sizeof(UINT), 1, pFile);
 	}
 
 	fclose(pFile);

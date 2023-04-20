@@ -22,6 +22,7 @@ private:
     bool m_bColScaleSize;
     bool m_bMeshCollider;
     bool m_bCreateActor;
+    bool m_bUsePhysRot;
 
 public:
     vector<PhysData*> GetRigidData() { return m_vecPhysData; }
@@ -31,6 +32,7 @@ public:
     COLLIDER_TYPE GetRigidColliderType() { return m_eRigidColliderType; }
     void CreateActor();
     void UpdateActor();
+    void UpdatePhysResult();
     void UpdatePhysDataVec();
     void SetKeyRelease(bool _b) { m_bKeyRelease = _b; }
     void SetGround(bool _bGround) { m_bGround = _bGround; }
@@ -38,6 +40,9 @@ public:
 
     void SetColOffSet(Vec3 _vColOffSet) { m_vColOffSet = _vColOffSet; }
     Vec3 GetColOffSet() { return m_vColOffSet; }
+
+    void SetUsePhysRot(bool _bUsePhysRot) { m_bUsePhysRot = _bUsePhysRot; }
+    bool IsUsePhysRot() { return m_bUsePhysRot; }
 
     // Hypothalamic Normal Vector Check
     Vec3 GetHitNormal();

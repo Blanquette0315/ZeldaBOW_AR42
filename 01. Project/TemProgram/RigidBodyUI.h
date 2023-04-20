@@ -17,6 +17,7 @@ private:
 
     bool            m_arrLockAxisPos[3];
     bool            m_arrLockAxisRot[3];
+    bool            m_bUsePhysRot;
 
     COLLIDER_TYPE   m_eColliderType;
     int             m_iCurItem;

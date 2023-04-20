@@ -50,7 +50,6 @@ private:
     D3D11_BUFFER_DESC       m_CopyBufferDesc;
     D3D11_MAPPED_SUBRESOURCE    m_MappedResource;
     Vector3*                    m_arrVertexPos;
-    UINT*                       m_arrIndice;
     Ptr<CMaterial>              m_pMaxTessMtrl;
     int                         m_iMaxVtxCount;
     UINT                        m_inumVertices;

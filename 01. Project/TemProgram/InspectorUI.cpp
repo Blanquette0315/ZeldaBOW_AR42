@@ -45,6 +45,7 @@ InspectorUI::InspectorUI()
 	, m_iCurItem(0)
 	, m_bMouseCheck(false)
 	, m_TargetLevelPath(nullptr)
+	, m_bFrustumCul(true)
 {
 	// ComponentUI
 	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM] = new TransformUI;
@@ -285,6 +286,10 @@ void InspectorUI::render_update()
 			if (ImGui::Button("Cancel##ObjLayer", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::EndPopup();
 		}
+
+		m_bFrustumCul = m_TargetObj->IS_FrustumCul();
+		ImGui::Text("IS FrustumCul"); ImGui::SameLine(); ImGui::Checkbox("##ObjFrustumCul", &m_bFrustumCul);
+		m_TargetObj->SetFrustumCul(m_bFrustumCul);
 	}
 }
 

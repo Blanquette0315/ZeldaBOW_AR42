@@ -18,6 +18,7 @@ CRigidBody::CRigidBody()
 	, m_bColScaleSize(false)
 	, m_bMeshCollider(false)
 	, m_bCreateActor(false)
+	, m_bUsePhysRot(true)
 {
 	// base is m_vecPhysData[0]
 	m_vecPhysData.push_back(new PhysData);
@@ -35,6 +36,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_bColScaleSize(false)
 	, m_bMeshCollider(_origin.m_bMeshCollider)
 	, m_bCreateActor(false)
+	, m_bUsePhysRot(_origin.m_bUsePhysRot)
 {
 	// base is m_vecPhysData[0]
 	m_vecPhysData.push_back(new PhysData);
@@ -98,24 +100,8 @@ void CRigidBody::tick()
 {
 	if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 	{
-		UpdateActor();
-
-		// Reflect simulation results to Transform
-		Vec3 vPos = GetWorldPosition();
-		vPos -= m_vColOffSet;
-		Transform()->SetRelativePos(vPos);
-
-		Vec4 vQRot = GetWorldRoation();
-		Vec3 vRot = {};
-
-		QuaternionToEuler(vQRot, vRot);
-		if (m_eRigidColliderType != COLLIDER_TYPE::COLLIDER_CAPSULE)
-			Transform()->SetRelativeRotation(vRot);
-		else
-			Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
-
 		// ToGroundRay Refresh
-		vPos = Transform()->GetRelativePos();
+		Vec3 vPos = Transform()->GetRelativePos();
 		vPos.y -= Transform()->GetRelativeScale().y * 0.5f;
 		vPos /= 100.f;
 		m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
@@ -220,6 +206,8 @@ void CRigidBody::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_bMeshCollider;
 	_emitter << YAML::Key << "ColOffSet";
 	_emitter << YAML::Value << m_vColOffSet;
+	_emitter << YAML::Key << "UsePhysRot";
+	_emitter << YAML::Value << m_bUsePhysRot;
 
 	_emitter << YAML::EndMap;
 }
@@ -246,6 +234,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	m_bColScaleSize = _node["RIGIDBODY"]["ColScaleSize"].as<bool>();
 	m_bMeshCollider = _node["RIGIDBODY"]["MeshColllider"].as<bool>();
 	m_vColOffSet = _node["RIGIDBODY"]["ColOffSet"].as<Vec3>();
+	m_bUsePhysRot = _node["RIGIDBODY"]["UsePhysRot"].as<bool>();
 
 	SetColliderFilter(Filter);
 }
@@ -346,6 +335,28 @@ void CRigidBody::UpdateActor()
 		{
 			PhysX_Update_Actor(m_vecPhysData[i]);
 		}
+	}
+}
+
+void CRigidBody::UpdatePhysResult()
+{
+	UpdateActor();
+
+	// Reflect simulation results to Transform
+	Vec3 vPos = GetWorldPosition();
+	vPos -= m_vColOffSet;
+	Transform()->SetRelativePos(vPos);
+
+	if (m_bUsePhysRot)
+	{
+		Vec4 vQRot = GetWorldRoation();
+		Vec3 vRot = {};
+
+		QuaternionToEuler(vQRot, vRot);
+		if (m_eRigidColliderType != COLLIDER_TYPE::COLLIDER_CAPSULE)
+			Transform()->SetRelativeRotation(vRot);
+		else
+			Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
 	}
 }
 

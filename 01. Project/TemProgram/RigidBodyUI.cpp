@@ -14,6 +14,7 @@ RigidBodyUI::RigidBodyUI()
 	, m_bDynamic(false)
 	, m_arrLockAxisPos{false, false, false}
 	, m_arrLockAxisRot{false, false, false}
+	, m_bUsePhysRot(true)
 	, m_eColliderType(COLLIDER_TYPE::COLLIDER_CUBE)
 	, m_iCurItem(0)
 	, m_bColScaleSize(false)
@@ -48,6 +49,8 @@ void RigidBodyUI::update()
 		m_arrLockAxisRot[0] = (bool)LockAxisRot.x;
 		m_arrLockAxisRot[1] = (bool)LockAxisRot.y;
 		m_arrLockAxisRot[2] = (bool)LockAxisRot.z;
+
+		m_bUsePhysRot = GetTarget()->RigidBody()->IsUsePhysRot();
 
 		m_eColliderType = GetTarget()->RigidBody()->GetRigidColliderType();
 		switch (m_eColliderType)
@@ -129,6 +132,8 @@ void RigidBodyUI::render_update()
 	ImGui::Text("Lock Axis Rot  "); ImGui::SameLine(); ImGui::Checkbox("_X##RB_LAR", &m_arrLockAxisRot[0]);
 	ImGui::SameLine(); ImGui::Checkbox("_Y##RB_LAR", &m_arrLockAxisRot[1]);
 	ImGui::SameLine(); ImGui::Checkbox("_Z##RB_LAR", &m_arrLockAxisRot[2]);
+
+	ImGui::Text("Use Phys Rot   "); ImGui::SameLine(); ImGui::Checkbox("##RB_UsePhysRot", &m_bUsePhysRot);
 	ImGui::Text("");
 
 	// Collider Setting
@@ -194,6 +199,7 @@ void RigidBodyUI::render_update()
 
 		GetTarget()->RigidBody()->SetLockAxis_Pos(m_arrLockAxisPos[0], m_arrLockAxisPos[1], m_arrLockAxisPos[2]);
 		GetTarget()->RigidBody()->SetLockAxis_Rot(m_arrLockAxisRot[0], m_arrLockAxisRot[1], m_arrLockAxisRot[2]);
+		GetTarget()->RigidBody()->SetUsePhysRot(m_bUsePhysRot);
 
 		switch (m_iCurItem)
 		{
