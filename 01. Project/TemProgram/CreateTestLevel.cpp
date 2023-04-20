@@ -234,22 +234,50 @@ void CreateTestLevel()
 	// FBX Loading
 	// ============	
 	{
+
+		// ==========
+		//  Link LJM
+		// ==========
+		//Ptr<CMeshData> pMeshData = nullptr;
+		//CGameObject* pObj = nullptr;
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link_Maya.fbx");
+		//pMeshData->Save(pMeshData->GetRelativePath());
+		//
+		////pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Link_Maya.mdat");
+		////Ptr<CMesh> pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"mesh\\Link_Maya\\Link_Maya.mesh");
+		////pMesh->AddAnimationFromContainer(L"fbx\\Link.fbx");
+
+		//pObj = pMeshData->Instantiate();
+		//pObj->SetFrustumCul(false);
+		//pObj->SetName(L"Link");
+		//pObj->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
+		//pLevel->AddGameObject(pObj, 0);
+		////pObj->Animator3D()->Play(L"Take 001", true);
+
+
+		// =========
+		//  Map JSH
+		// =========
+
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link_Maya.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
 		pMeshData->Save(pMeshData->GetRelativePath());
-		
-		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Link_Maya.mdat");
-		//Ptr<CMesh> pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"mesh\\Link_Maya\\Link_Maya.mesh");
-		//pMesh->AddAnimationFromContainer(L"fbx\\Link.fbx");
 
 		pObj = pMeshData->Instantiate();
 		pObj->SetFrustumCul(false);
-		pObj->SetName(L"Link");
-		pObj->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
-		pLevel->AddGameObject(pObj, 0);
-		//pObj->Animator3D()->Play(L"Take 001", true);
+		pObj->SetName(L"Map");
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 
+		pObj->AddComponent(new CRigidBody);
+		pObj->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
+
+		pLevel->AddGameObject(pObj, 0);
+
+		// =========
+		//  Link JSH
+		// =========
+		
 		//pMeshData = nullptr;
 		//pObj = nullptr;
 		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link.fbx");

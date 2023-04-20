@@ -46,8 +46,8 @@ struct tContainer
 		vecTangent.resize(_iSize);
 		vecBinormal.resize(_iSize);
 		vecNormal.resize(_iSize);
-		vecUVs.resize(3);
-		for (int i = 0; i < 3; ++i)
+		vecUVs.resize(4);
+		for (int i = 0; i < 4; ++i)
 		{
 			vecUVs[i].resize(_iSize);
 		}
