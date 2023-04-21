@@ -232,9 +232,8 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	m_vBoxSize = _node["RIGIDBODY"]["BoxSize"].as<Vec3>();
 	m_fShpereSize = _node["RIGIDBODY"]["SphereSize"].as<float>();
 	m_bColScaleSize = _node["RIGIDBODY"]["ColScaleSize"].as<bool>();
-	m_bMeshCollider = _node["RIGIDBODY"]["MeshColllider"].as<bool>();
-	m_vColOffSet = _node["RIGIDBODY"]["ColOffSet"].as<Vec3>();
-	m_bUsePhysRot = _node["RIGIDBODY"]["UsePhysRot"].as<bool>();
+	SAFE_LOAD_FROM_YAML(bool, m_bMeshCollider, _node["RIGIDBODY"]["MeshColllider"]);
+	SAFE_LOAD_FROM_YAML(bool, m_bUsePhysRot, _node["RIGIDBODY"]["UsePhysRot"]);
 
 	SetColliderFilter(Filter);
 }

@@ -19,7 +19,7 @@ private:
     ComPtr<ID3D11Buffer>    m_VB;
     D3D11_BUFFER_DESC       m_tVBDesc;
     UINT                    m_iVtxCount;
-    UINT                    m_iAllVtxCount;
+    // UINT                    m_iAllVtxCount;
     void*                   m_pVtxSys;
 
     vector<tIndexInfo>		m_vecIdxInfo;
@@ -34,7 +34,7 @@ private:
 
 public:
     Vtx* GetVtxSysMem() { return (Vtx*)m_pVtxSys; }
-    UINT GetAllVtxCount() { return  m_iAllVtxCount; }
+    UINT GetAllVtxCount() { return  m_iVtxCount; }
     D3D11_BUFFER_DESC* GetVBDesc() { return &m_tVBDesc; }
     UINT GetSubsetCount() { return (UINT)m_vecIdxInfo.size(); }
     const vector<tIndexInfo>& GetvecIndexInfo() { return m_vecIdxInfo; }

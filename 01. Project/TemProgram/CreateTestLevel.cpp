@@ -258,29 +258,29 @@ void CreateTestLevel()
 		// =========
 		//  Map JSH
 		// =========
-		Ptr<CMeshData> pMeshData = nullptr;
-		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
+		//Ptr<CMeshData> pMeshData = nullptr;
+		//CGameObject* pObj = nullptr;
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
+		//pMeshData->Save(pMeshData->GetRelativePath());
 
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"Map");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		//pObj = pMeshData->Instantiate();
+		//pObj->SetFrustumCul(false);
+		//pObj->SetName(L"Map");
+		//pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 
-		pObj->AddComponent(new CRigidBody);
-		pObj->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
-		pObj->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
-		pObj->RigidBody()->SetColldierScaleSize(false);
-		pObj->RigidBody()->SetKinematicOption(true);
-		pObj->RigidBody()->SetDinamicOption(false);
-		pObj->RigidBody()->SetGravityOption(false);
-		pObj->RigidBody()->SetStaticFriction(0.f);
-		pObj->RigidBody()->SetDynamicFriction(0.f);
-		pObj->RigidBody()->SetRestitution(0.f);
-		pObj->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
+		//pObj->AddComponent(new CRigidBody);
+		//pObj->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
+		//pObj->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
+		//pObj->RigidBody()->SetColldierScaleSize(false);
+		//pObj->RigidBody()->SetKinematicOption(true);
+		//pObj->RigidBody()->SetDinamicOption(false);
+		//pObj->RigidBody()->SetGravityOption(false);
+		//pObj->RigidBody()->SetStaticFriction(0.f);
+		//pObj->RigidBody()->SetDynamicFriction(0.f);
+		//pObj->RigidBody()->SetRestitution(0.f);
+		//pObj->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
 
-		pLevel->AddGameObject(pObj, 0);
+		//pLevel->AddGameObject(pObj, 0);
 
 		// =========
 		//  Link JSH
