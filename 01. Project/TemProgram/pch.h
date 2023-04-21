@@ -13,6 +13,8 @@
 #pragma comment(lib, "Engine\\Engine.lib")
 #endif
 
+#include <Script/Scriptglobal.h>
+
 #ifdef _DEBUG
 #pragma comment(lib, "Script\\Script_debug.lib")
 #else

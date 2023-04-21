@@ -3,3 +3,10 @@ CScriptMgr.cpp
 Scriptdefine.h
 Scriptstruct.h
 ScriptFunc.h
+Scriptglobal.h
+CCameraMgr.h
+CCameraMgr.cpp
+FSMNode.h
+FSMNode.cpp
+CLinkAnimFSMInit.cpp
+CLinkAnimFunc.cpp

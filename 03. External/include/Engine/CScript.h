@@ -29,6 +29,10 @@ struct tScriptParam
     SCRIPT_PARAM    Type;
     string          strParamName;
     void*           pParam;
+
+    float           fMin;
+    float           fMax;
+    float           fStep;
 };
 
 class CScript :
@@ -41,7 +45,9 @@ private:
 
 public:
     int GetScriptType() { return m_iScriptType; }
-    void AddScriptParam(SCRIPT_PARAM _eParam, const string& _Name, void* _pParam) { m_vecParam.push_back(tScriptParam{_eParam, _Name, _pParam }); }
+    void AddScriptParam(SCRIPT_PARAM _eParam, const string& _Name, void* _pParam, float _fMin = 0.f, float _fMax = 1.f, float _fStep = 0.01f) 
+    { m_vecParam.push_back(tScriptParam{_eParam, _Name, _pParam, _fMin, _fMax, _fStep }); }
+
     const vector<tScriptParam>& GetScriptParam() { return m_vecParam; }
 
 public:

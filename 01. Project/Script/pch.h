@@ -11,9 +11,6 @@
 #include "framework.h"
 
 #include <Engine/global.h>
-#include "CScriptMgr.h"
-#include "Scriptdefine.h"
-#include "Scriptstruct.h"
-#include "ScriptFunc.h"
+#include "Scriptglobal.h"
 
 #endif //PCH_H

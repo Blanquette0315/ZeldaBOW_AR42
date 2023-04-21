@@ -10,6 +10,8 @@
 #include "CreateTestLevel.h"
 #include "CSaveLoadMgr.h"
 
+#include <Script\CLinkAnimScript.h>
+
 #define MAX_LOADSTRING 100
 
 HINSTANCE g_hInst = nullptr;
@@ -111,6 +113,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
     }
+    CLinkAnimScript::ClearAnimNode();
+
 
     return (int) msg.wParam;
 }

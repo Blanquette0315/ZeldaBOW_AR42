@@ -16,6 +16,7 @@ private:
     bool                    m_bShowDebugDraw;   // Show DebugDraw : true is draw, false is nondraw Defulat is false
 
 public:
+    virtual void init() {}
     virtual void begin() {}
     virtual void tick() {}
     virtual void finaltick() = 0;

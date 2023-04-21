@@ -29,6 +29,22 @@ inline int GetMapIdx(const map<T1, T2>& _map, T1 _key)
 
 	return 0;
 }
+
+CGameObject* FindObjectByName(const wstring& _name);
+
+enum BIT_FUNC_OPT
+{
+	BIT_LEAST_ONE,
+	BIT_EQUAL,
+	BIT_INCLUDE,
+	BIT_EQUAL_SELECTED_BIT,
+};
+
+bool CalBit(UINT _originBit, UINT _cmpBits, BIT_FUNC_OPT _opt, UINT _CompareBit = 0);
+
+void AddBit(UINT& _src, UINT _add);
+void RemoveBit(UINT& _src, UINT _remove);
+
 // ================================================================
 
 // ===== Phys Engine To Engine Function =====

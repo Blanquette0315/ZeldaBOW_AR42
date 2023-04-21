@@ -30,6 +30,10 @@ public:
     void SetStartFrame(int _iStartFrame) { m_sClip.iStartFrame = _iStartFrame; ResetClip(); }
     int GetEndFrame() { return m_sClip.iEndFrame; }
     void SetEndFrame(int _iEndFrame) { m_sClip.iEndFrame = _iEndFrame; ResetClip(); }
+    const wstring& GetAnimName() { return m_sClip.strAnimName; }
+    
+
+    int GetCurFrame() { return m_iFrameIdx; }
 
 private:
     void ResetClip();

@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "CLevelMgr.h"
+
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath)
 {
 	// find함수로 Path경로(전체경로) 내에 Base경로가 들어있지 않는다면 -1을 반환한다.
@@ -395,6 +397,12 @@ bool PickingObj(CGameObject*& _pObjOut)
 		return false;
 }
 
+
+CGameObject* FindObjectByName(const wstring& _name)
+{
+	return CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(_name);
+}
+
 void QuaternionToEuler(Vec4 _vQRot, Vec3& _vERot)
 {
 	// roll (x-axis rotation)
@@ -468,4 +476,55 @@ Vec3 DecomposeRotMat(const Matrix& _matRot)
 		}
 	}
 	return vNewRot;
+}
+
+bool CalBit(UINT _originBit, UINT _cmpBits, BIT_FUNC_OPT _opt, UINT _CompareBit)
+{
+	switch (_opt)
+	{
+	case BIT_LEAST_ONE:
+	{
+		if (_originBit & _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+
+	case BIT_EQUAL:
+	{
+		if (_originBit == _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+
+	case BIT_INCLUDE:
+	{
+		if ((_originBit & _cmpBits) == _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+
+	case BIT_EQUAL_SELECTED_BIT:
+	{
+		RemoveBit(_cmpBits, ~_CompareBit);
+		RemoveBit(_originBit, ~_CompareBit);
+
+		if (_originBit == _cmpBits)
+			return true;
+		return false;
+	}
+	break;
+	}
+}
+
+void AddBit(UINT& _src, UINT _add)
+{
+	_src |= _add;
+}
+
+void RemoveBit(UINT& _src, UINT _remove)
+{
+	_src &= ~_remove;
 }

@@ -123,18 +123,18 @@ CGameObject* CLevel::FindObjectByName(const wstring& _name)
 		}
 	}
 
-	for (UINT i = 0; i < MAX_LAYER; ++i)
-	{
-		const vector<CGameObject*>& vecObjects = m_arrLayer[i].GetParentObject();
+	//for (UINT i = 0; i < MAX_LAYER; ++i)
+	//{
+	//	const vector<CGameObject*>& vecObjects = m_arrLayer[i].GetParentObject();
 
-		for (size_t j = 0; j < vecObjects.size(); ++j)
-		{
-			if (_name == vecObjects[j]->GetName())
-			{
-				return vecObjects[j];
-			}
-		}
-	}
+	//	for (size_t j = 0; j < vecObjects.size(); ++j)
+	//	{
+	//		if (_name == vecObjects[j]->GetName())
+	//		{
+	//			return vecObjects[j];
+	//		}
+	//	}
+	//}
 
 	return nullptr;
 }
