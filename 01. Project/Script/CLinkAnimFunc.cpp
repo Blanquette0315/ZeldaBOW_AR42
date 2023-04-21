@@ -5,6 +5,7 @@
 #include <Engine/CRigidbody.h>
 
 #include "CLinkScript.h"
+#include "FSMNode.h"
 
 
 
@@ -23,28 +24,9 @@ void CLinkAnimScript::SetRotation()
 	Transform()->SetRelativeRotation(Vec3(0.f, fRad, 0.f));
 }
 
-void CLinkAnimScript::Func_Walk()
+void CLinkAnimScript::Func_WalkRunDash()
 {
-	CLinkScript* pLinkScript = GetOwner()->GetScript<CLinkScript>();
-
-	LINK_DIRECTION eDirX;
-	LINK_DIRECTION eDirZ;
-	
-	if (KEY_PRESSED(KEY::W))
-		eDirZ = LINK_DIRECTION::FRONT;
-	else if (KEY_PRESSED(KEY::S))
-		eDirZ = LINK_DIRECTION::BACK;
-	else
-		eDirZ = LINK_DIRECTION::NONE;
-
-	if (KEY_PRESSED(KEY::A))
-		eDirX = LINK_DIRECTION::LEFT;
-	else if (KEY_PRESSED(KEY::D))
-		eDirX = LINK_DIRECTION::RIGHT;
-	else
-		eDirX = LINK_DIRECTION::NONE;
-
-	Vec3 vDir = (pLinkScript->GetMoveDir(eDirX) + pLinkScript->GetMoveDir(eDirZ)).Normalize();
+	Vec3 vDir = GetCombinedDir();
 	
 
 	Vec3 vCross = Vec3(0.f, 0.f, -1.f).Cross(vDir);
@@ -76,8 +58,19 @@ void CLinkAnimScript::Func_Walk()
 	//else
 	//{
 		Transform()->AddRelativeRotation(Vec3(0.f, fAngleSpeedPerFrame, 0.f));
-		vDir = Vec3(sinf(vRot.y + fAngleSpeedPerFrame + XM_PI), 0.f, cosf(vRot.y + fAngleSpeedPerFrame + XM_PI));
-		RigidBody()->SetVelocity(vDir);
+		//vDir = Vec3(sinf(vRot.y + fAngleSpeedPerFrame + XM_PI), 0.f, cosf(vRot.y + fAngleSpeedPerFrame + XM_PI));
+		vDir = Transform()->GetRelativeDir(DIR::FRONT);
+		if(IsCurAnim(LAT_DASH))
+			RigidBody()->SetVelocity(vDir * m_fDashSpeed);
+		else if(m_iMode == (UINT)LINK_MODE::WALK)
+			RigidBody()->SetVelocity(vDir * m_fWalkSpeed);
+		else if(m_iMode == (UINT)LINK_MODE::RUN)
+			RigidBody()->SetVelocity(vDir * m_fRunSpeed);
 	//}
 
+}
+
+void CLinkAnimScript::Func_TurnBack()
+{
+	Transform()->AddRelativeRotation(Vec3(0.f, XM_PI, 0.f));
 }

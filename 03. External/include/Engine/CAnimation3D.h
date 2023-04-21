@@ -32,6 +32,7 @@ public:
     void SetEndFrame(int _iEndFrame) { m_sClip.iEndFrame = _iEndFrame; ResetClip(); }
     const wstring& GetAnimName() { return m_sClip.strAnimName; }
     
+    bool IsFinished() { return m_bFinish; }
 
     int GetCurFrame() { return m_iFrameIdx; }
 
