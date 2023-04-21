@@ -262,12 +262,12 @@ void CreateTestLevel()
 		//CGameObject* pObj = nullptr;
 		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
 		//pMeshData->Save(pMeshData->GetRelativePath());
-
+		//
 		//pObj = pMeshData->Instantiate();
 		//pObj->SetFrustumCul(false);
 		//pObj->SetName(L"Map");
 		//pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
+		//
 		//pObj->AddComponent(new CRigidBody);
 		//pObj->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
 		//pObj->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
@@ -279,7 +279,7 @@ void CreateTestLevel()
 		//pObj->RigidBody()->SetDynamicFriction(0.f);
 		//pObj->RigidBody()->SetRestitution(0.f);
 		//pObj->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
-
+		//
 		//pLevel->AddGameObject(pObj, 0);
 
 		// =========

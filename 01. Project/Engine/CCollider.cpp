@@ -93,9 +93,9 @@ void CCollider::finaltick()
 		return;
 
 	// Physx update
-	PhysX_Update_Actor(m_pPhysData);
 	m_pPhysData->SetWorldPosition(m_vFinalPos.x / 100.f, m_vFinalPos.y / 100.f, m_vFinalPos.z / 100.f);
 	m_pPhysData->Rotation = Vec4(Q_Rot.x, Q_Rot.y, Q_Rot.z, Q_Rot.w);
+	PhysX_Update_Actor(m_pPhysData);
 }
 
 void CCollider::CreateColliderActor()
@@ -130,6 +130,9 @@ void CCollider::CreateColliderActor()
 	m_pPhysData = PhysX_Create_Data();
 	m_pPhysData->BOWObj = GetOwner();
 	m_pPhysData->isKinematic = true;
+	m_pPhysData->isDinamic = true;
+	m_pPhysData->SetLockAxis_Position(true, true, true);
+	m_pPhysData->SetLockAxis_Rotation(true, true, true);
 	m_pPhysData->SetTrigger(true);
 	if (m_eType == COLLIDER_TYPE::COLLIDER_CUBE)
 	{

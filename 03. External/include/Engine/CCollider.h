@@ -42,6 +42,8 @@ public:
 
     PhysData* GetPhysData() { return m_pPhysData; }
 
+    void UpdatePhys();
+
     void CreateColliderActor();
     void DeleteColliderActor();
 public:

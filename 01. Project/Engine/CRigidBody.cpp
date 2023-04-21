@@ -595,7 +595,7 @@ void CRigidBody::CallDebugDraw()
 
 	if (COLLIDER_TYPE::COLLIDER_CUBE == m_eRigidColliderType)
 	{
-		DebugDrawCube(vColor, vFinalPos, m_vBoxSize, vFinalRot);
+		DebugDrawCube(vColor, vFinalPos, m_vBoxSize * 2.f, vFinalRot);
 	}
 	else if (COLLIDER_TYPE::COLLIDER_SPHERE == m_eRigidColliderType)
 	{
