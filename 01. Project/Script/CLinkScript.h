@@ -1,22 +1,7 @@
 #pragma once
 #include <Engine/CScript.h>
 
-enum class LINK_FRONT_TOE
-{
-    LEFT,
-    RIGHT,
-    END,
-};
 
-enum class LINK_DIRECTION
-{
-    FRONT,
-    BACK,
-    LEFT,
-    RIGHT,
-    NONE,
-    END,
-};
 
 class CAnimation3D;
 class CGameObject;

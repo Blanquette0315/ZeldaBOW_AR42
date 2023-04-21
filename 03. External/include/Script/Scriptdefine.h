@@ -6,6 +6,22 @@ enum class CAMERA_SELECTION
     END,
 };
 
+enum class LINK_FRONT_TOE
+{
+    LEFT,
+    RIGHT,
+    END,
+};
+
+enum class LINK_DIRECTION
+{
+    FRONT,
+    BACK,
+    LEFT,
+    RIGHT,
+    NONE,
+    END,
+};
 
 enum LINK_ANIM_TYPE
 {
@@ -32,8 +48,21 @@ extern const wchar_t* LINK_ANIM_WCHAR[(UINT)LINK_ANIM_TYPE::LAT_END];
 
 enum LINK_ANIM_CONDITION
 {
-    LAC_KEY_WSAD = 0x00000001,
-    //KEY_SPACE = 0x00000010,
+    LAC_KEY_WSAD        = 0x00000001,
+    LAC_KEY_SPACE       = 0x00000002,
+    LAC_KEY_SHIFT       = 0x00000004,
+
+    LAC_MODE_WALK       = 0x00000008,
+    LAC_MODE_RUN        = 0x00000010,
+
+    LAC_ANIM_FINISHED   = 0x00000020,
+
+    LAC_TOE_L_FRONT     = 0x00000040,
+
+    LAC_TURN_BACK       = 0x00000080,
+
+    LAC_GROUND          = 0x00000100,
+
     //GROUND_TO_AERIAL = 0x00000020,
     //AERIAL_TO_GROUND = 0x00000040,
     //SPEED_Y_POSITIVE = 0x00000080,
@@ -53,8 +82,12 @@ enum LINK_ANIM_CONDITION
 
 enum LINK_ANIM_PREFERENCE
 {
-    LAP_REPEAT = 0x00000001,
+    LAP_REPEAT          = 0x00000001,
 };
 
-
-
+enum class LINK_MODE
+{
+    WALK,
+    RUN,
+    END
+};
