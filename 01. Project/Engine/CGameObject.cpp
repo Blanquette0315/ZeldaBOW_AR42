@@ -327,6 +327,15 @@ void CGameObject::AddChild(CGameObject* _pChild)
 }
 
 
+CGameObject* CGameObject::GetChildObjByName(const wstring& _strName)
+{
+	for (size_t i = 0; i < m_vecChild.size(); ++i)
+	{
+		if (m_vecChild[i]->GetName() == _strName)
+			return m_vecChild[i];
+	}
+}
+
 CGameObject* CGameObject::GetChildObject(const wstring& _strName)
 {
 	for (size_t i = 0; i < m_vecChild.size(); ++i)

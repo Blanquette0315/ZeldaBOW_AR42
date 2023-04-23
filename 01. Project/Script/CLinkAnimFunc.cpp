@@ -37,7 +37,7 @@ void CLinkAnimScript::Func_WalkRunDash()
 	{
 		fRad *= -1.f;
 	}
-	float fAngleSpeedPerFrame = m_fAnglePerSec / (1.f / FDT);
+	float fAngleSpeedPerFrame = m_fAnglePerSec * FDT;
 
 	Vec3 vRot = Transform()->GetRelativeRotation();
 	Vec3 vRotDir = Vec3(sinf(vRot.y + XM_PI), 0.f, cosf(vRot.y + XM_PI));
@@ -73,4 +73,9 @@ void CLinkAnimScript::Func_WalkRunDash()
 void CLinkAnimScript::Func_TurnBack()
 {
 	Transform()->AddRelativeRotation(Vec3(0.f, XM_PI, 0.f));
+}
+
+void CLinkAnimScript::Func_Jump()
+{
+	RigidBody()->AddVelocity(Vec3(0.f, m_fJumpSpeed, 0.f));
 }

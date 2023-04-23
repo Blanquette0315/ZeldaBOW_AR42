@@ -105,9 +105,8 @@ void CRigidBody::tick()
 		vPos.y -= Transform()->GetRelativeScale().y * 0.5f;
 		vPos /= 100.f;
 		m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
-
-		PhysX_RayCast(m_pToGroundRay);
-		//m_bGround = PhysX_RayCast(m_pToGroundRay);
+		// PhysX_RayCast(m_pToGroundRay);
+		// m_bGround = PhysX_RayCast(m_pToGroundRay);
 	}
 }
 
@@ -117,36 +116,38 @@ void CRigidBody::finaltick()
 	{
 		// Velocity gathering update : Engine -> PhysX		
 
-		if (m_bGround)
-		{
-			if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
-			{
-				m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
-				m_vSaveVelocity = m_vVelocity;
-				m_vVelocity = Vec3(0.f, 0.f, 0.f);
-			}
-			else
-			{
-				if (m_bKeyRelease)
-				{
-					m_vecPhysData[0]->SetVelocity(0.f, 0.f, 0.f);
-					m_vVelocity = Vec3(0.f, 0.f, 0.f);
-					m_vSaveVelocity = m_vVelocity;
-					m_bKeyRelease = false;
-				}
-			}
-		}
-		else
-		{
-			if (m_vecPhysData[0]->m_vPxLinearVelocity.y != 0.f)
-			{
-				if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
-				{
-					m_vecPhysData[0]->SetVelocity(m_vSaveVelocity.x, m_vecPhysData[0]->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
-					m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
-				}
-			}
-		}
+		//if (m_bGround)
+		//{
+		//	if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
+		//	{
+		//		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+		//		m_vSaveVelocity = m_vVelocity;
+		//		m_vVelocity = Vec3(0.f, 0.f, 0.f);
+		//	}
+		//	else
+		//	{
+		//		if (m_bKeyRelease)
+		//		{
+		//			m_vecPhysData[0]->SetVelocity(0.f, 0.f, 0.f);
+		//			m_vVelocity = Vec3(0.f, 0.f, 0.f);
+		//			m_vSaveVelocity = m_vVelocity;
+		//			m_bKeyRelease = false;
+		//		}
+		//	}
+		//}
+		//else
+		//{
+		//	if (m_vecPhysData[0]->m_vPxLinearVelocity.y != 0.f)
+		//	{
+		//		if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
+		//		{
+		//			m_vecPhysData[0]->SetVelocity(m_vSaveVelocity.x, m_vecPhysData[0]->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
+		//			m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
+		//		}
+		//	}
+		//}
+
+		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
 
 		// ...
 		// will be added Force
@@ -234,6 +235,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	m_bColScaleSize = _node["RIGIDBODY"]["ColScaleSize"].as<bool>();
 	SAFE_LOAD_FROM_YAML(bool, m_bMeshCollider, _node["RIGIDBODY"]["MeshColllider"]);
 	SAFE_LOAD_FROM_YAML(bool, m_bUsePhysRot, _node["RIGIDBODY"]["UsePhysRot"]);
+	SAFE_LOAD_FROM_YAML(Vec3, m_vColOffSet, _node["RIGIDBODY"]["ColOffSet"]);
 
 	SetColliderFilter(Filter);
 }
@@ -344,7 +346,7 @@ void CRigidBody::UpdatePhysResult()
 	// Reflect simulation results to Transform
 	Vec3 vPos = GetWorldPosition();
 	vPos -= m_vColOffSet;
-	Transform()->SetRelativePos(vPos);
+	Transform()->SetWorldPos(vPos);
 
 	if (m_bUsePhysRot)
 	{
@@ -353,10 +355,12 @@ void CRigidBody::UpdatePhysResult()
 
 		QuaternionToEuler(vQRot, vRot);
 		if (m_eRigidColliderType != COLLIDER_TYPE::COLLIDER_CAPSULE)
-			Transform()->SetRelativeRotation(vRot);
+			Transform()->SetWorldRotation(vRot);
 		else
-			Transform()->SetRelativeRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
+			Transform()->SetWorldRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
 	}
+
+	m_vVelocity = m_vecPhysData[0]->m_vPxLinearVelocity;
 }
 
 void CRigidBody::UpdatePhysDataVec()

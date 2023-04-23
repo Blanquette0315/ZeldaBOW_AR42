@@ -2,6 +2,7 @@
 #include "CScriptMgr.h"
 
 #include "CCamScript.h"
+#include "CGroundCheckScript.h"
 #include "CLinkAnimScript.h"
 #include "CLinkCamScript.h"
 #include "CLinkScript.h"
@@ -14,6 +15,7 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CCamScript");
+	_vec.push_back(L"CGroundCheckScript");
 	_vec.push_back(L"CLinkAnimScript");
 	_vec.push_back(L"CLinkCamScript");
 	_vec.push_back(L"CLinkScript");
@@ -28,6 +30,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CCamScript" == _strScriptName)
 		return new CCamScript;
+	if (L"CGroundCheckScript" == _strScriptName)
+		return new CGroundCheckScript;
 	if (L"CLinkAnimScript" == _strScriptName)
 		return new CLinkAnimScript;
 	if (L"CLinkCamScript" == _strScriptName)
@@ -53,6 +57,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
 		return new CCamScript;
+		break;
+	case (UINT)SCRIPT_TYPE::GROUNDCHECKSCRIPT:
+		return new CGroundCheckScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LINKANIMSCRIPT:
 		return new CLinkAnimScript;
@@ -88,6 +95,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::CAMSCRIPT:
 		return L"CCamScript";
+		break;
+
+	case SCRIPT_TYPE::GROUNDCHECKSCRIPT:
+		return L"CGroundCheckScript";
 		break;
 
 	case SCRIPT_TYPE::LINKANIMSCRIPT:

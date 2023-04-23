@@ -124,6 +124,95 @@ void CTransform::finaltick()
 	m_matTransInv = XMMatrixInverse(nullptr, m_matTrans);
 }
 
+void CTransform::UpdateWorldTrans()
+{
+	m_matWorld = XMMatrixIdentity();
+
+	m_matScale = XMMatrixScaling(m_vRelativeScale.x, m_vRelativeScale.y, m_vRelativeScale.z);
+
+	m_matTrans = XMMatrixTranslation(m_vRelativePos.x, m_vRelativePos.y, m_vRelativePos.z);
+
+	m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
+	m_matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
+	m_matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
+
+	if (m_bTurnY180)
+	{
+		m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(-1.f, 0.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, -1.f), m_matRot);
+	}
+	else
+	{
+		m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matRot);
+		m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matRot);
+	}
+
+	m_matWorld = m_matScale * m_matRot * m_matTrans;
+	m_matLocal = m_matWorld;
+
+	if (GetOwner()->GetParent())
+	{
+		if (m_bIgnParentScale)
+		{
+			CGameObject* pParent = GetOwner()->GetParent();
+
+			while (pParent)
+			{
+				Vec3 vParentScale = pParent->Transform()->m_vRelativeScale;
+				Vec3 vParentRot = pParent->Transform()->m_vRelativeRotation;
+				Vec3 vParentPos = pParent->Transform()->m_vRelativePos;
+
+				if (0.f == vParentScale.x)
+					vParentScale.x = 1.f;
+				if (0.f == vParentScale.y)
+					vParentScale.y = 1.f;
+				if (0.f == vParentScale.z)
+					vParentScale.z = 1.f;
+
+				if (pParent->Transform()->m_bIgnParentScale)
+				{
+					m_matWorld = m_matWorld * pParent->Transform()->m_matScaleInv * pParent->Transform()->m_matWorld;
+					pParent = nullptr;
+				}
+				else
+				{
+					m_matWorld = m_matWorld * pParent->Transform()->m_matRot * pParent->Transform()->m_matTrans;
+					pParent = pParent->GetParent();
+				}
+			}
+		}
+
+		else
+		{
+			m_matWorld *= GetOwner()->GetParent()->Transform()->m_matWorld;
+		}
+	}
+	if (m_bTurnY180)
+	{
+		m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(-1.f, 0.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, -1.f), m_matWorld);
+	}
+	else
+	{
+		m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matWorld);
+	}
+
+	m_vWorldDir[(UINT)DIR::RIGHT].Normalize();
+	m_vWorldDir[(UINT)DIR::UP].Normalize();
+	m_vWorldDir[(UINT)DIR::FRONT].Normalize();
+
+	m_matWorldInv = XMMatrixInverse(nullptr, m_matWorld);
+
+	m_matScaleInv = XMMatrixInverse(nullptr, m_matScale);
+	m_matRotInv = XMMatrixInverse(nullptr, m_matRot);
+	m_matTransInv = XMMatrixInverse(nullptr, m_matTrans);
+}
+
 void CTransform::UpdateData()
 {
 	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);

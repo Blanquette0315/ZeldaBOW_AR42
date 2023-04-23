@@ -8,7 +8,11 @@
 #include "CLevelMgr.h"
 
 #include "CLevel.h"
+
+#include "CTransform.h"
 #include "CRigidBody.h"
+#include "CCollider.h"
+
 
 CPhysMgr::CPhysMgr()
 	: m_pPhys(nullptr)
@@ -27,14 +31,23 @@ void CPhysMgr::init()
 void CPhysMgr::tick()
 {
 	PhysX_Update(FDT);
+	vector<CGameObject*> vecGameObj = CLevelMgr::GetInst()->GetCurLevel()->GetGameObjects();
 
-	if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+	for (size_t i = 0; i < vecGameObj.size(); ++i)
 	{
-		vector<CGameObject*> vecGameObj = CLevelMgr::GetInst()->GetCurLevel()->GetGameObjects();
-		for (size_t i = 0; i < vecGameObj.size(); ++i)
+		if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 		{
 			if (nullptr != vecGameObj[i]->RigidBody())
 				vecGameObj[i]->RigidBody()->UpdatePhysResult();
 		}
+
+		//vecGameObj[i]->Transform()->UpdateWorldTrans();
+
+		//if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+		//{
+		//	if (nullptr != vecGameObj[i]->Collider())
+		//		vecGameObj[i]->Collider()->UpdateCollider();
+		//}
 	}
+
 }
