@@ -172,6 +172,7 @@ call ScriptCopy.bat</Command>
   <ItemGroup>
     <ClInclude Include="CCameraMgr.h" />
     <ClInclude Include="CCamScript.h" />
+    <ClInclude Include="CGroundCheckScript.h" />
     <ClInclude Include="CLinkAnimScript.h" />
     <ClInclude Include="CLinkCamScript.h" />
     <ClInclude Include="CLinkScript.h" />
@@ -192,6 +193,7 @@ call ScriptCopy.bat</Command>
   <ItemGroup>
     <ClCompile Include="CCameraMgr.cpp" />
     <ClCompile Include="CCamScript.cpp" />
+    <ClCompile Include="CGroundCheckScript.cpp" />
     <ClCompile Include="CLinkAnimFSMInit.cpp" />
     <ClCompile Include="CLinkAnimFunc.cpp" />
     <ClCompile Include="CLinkAnimScript.cpp" />

@@ -61,7 +61,7 @@ enum LINK_ANIM_CONDITION
 
     LAC_TURN_BACK       = 0x00000080,
 
-    LAC_GROUND          = 0x00000100,
+    LAC_GROUNDED        = 0x00000100,
 
     //GROUND_TO_AERIAL = 0x00000020,
     //AERIAL_TO_GROUND = 0x00000040,
@@ -91,3 +91,11 @@ enum class LINK_MODE
     RUN,
     END
 };
+
+enum class LINK_STRING
+{
+    LINK_STRING_GROUND_CHECKER,
+    END
+};
+
+extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::END];

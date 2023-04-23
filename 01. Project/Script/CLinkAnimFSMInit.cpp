@@ -21,6 +21,15 @@ void CLinkAnimScript::CreateAnimNode()
 	}
 }
 
+void CLinkAnimScript::ReplaceNodeAnim()
+{
+	map<wstring, tAnimNode*>::iterator iter = m_mapAnimNode.begin();
+	for (; iter != m_mapAnimNode.end(); ++iter)
+	{
+		iter->second->pAnim = m_mapAnim.find(iter->second->pAnimKey)->second;
+	}
+}
+
 void CLinkAnimScript::SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim)
 {
 	_pAnimNode = m_mapAnimNode.find(LINK_ANIM_WCHAR[_eAnim])->second;
@@ -48,6 +57,8 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_WALK, LAC_KEY_WSAD | LAC_MODE_WALK, LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_KEY_WSAD | LAC_MODE_RUN, LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
+	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 
 	// Walk
 	SetAnimNode(pAnimNode, LAT_WALK, LAP_REPEAT);
@@ -55,6 +66,8 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_WALK_ED_L, LAC_TOE_L_FRONT, LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_WALK_ED_R, 0, LAC_KEY_WSAD | LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 
 	SetAnimNode(pAnimNode, LAT_WALK_ED_L);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
@@ -77,6 +90,8 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_RUN_BRAKE_R, LAC_TURN_BACK, LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_RUN_ED_L, LAC_TOE_L_FRONT, LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_RUN_ED_R, 0, LAC_TOE_L_FRONT | LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 
 	SetAnimNode(pAnimNode, LAT_RUN_BRAKE_L);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_ANIM_FINISHED);
@@ -103,10 +118,27 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_KEY_WSAD | LAC_MODE_RUN, LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_DASH_BRAKE_L, LAC_TURN_BACK | LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_DASH_BRAKE_R, LAC_TURN_BACK, LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 
 	SetAnimNode(pAnimNode, LAT_DASH_BRAKE_L);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_DASH_BRAKE_R);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_ANIM_FINISHED);
+
+	// Jump
+	SetAnimNode(pAnimNode, LAT_JUMP_L);
+	SetAnimTran(pAnimNode, LAT_LAND_L, LAC_ANIM_FINISHED | LAC_GROUNDED);
+
+	SetAnimNode(pAnimNode, LAT_LAND_L);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_JUMP_R);
+	SetAnimTran(pAnimNode, LAT_LAND_R, LAC_ANIM_FINISHED | LAC_GROUNDED);
+
+	SetAnimNode(pAnimNode, LAT_LAND_R);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
+
+
 }

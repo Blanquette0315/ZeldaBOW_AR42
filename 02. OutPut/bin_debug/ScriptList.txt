@@ -1,4 +1,5 @@
 CCamScript
+CGroundCheckScript
 CLinkAnimScript
 CLinkCamScript
 CLinkScript

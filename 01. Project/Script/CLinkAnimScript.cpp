@@ -4,9 +4,11 @@
 
 #include <Engine/CAnimator3D.h>
 #include <Engine/CAnimation3D.h>
+#include <Engine/CGameObject.h>
 
 #include "CCameraMgr.h"
 #include "FSMNode.h"
+#include "CGroundCheckScript.h"
 
 
 map<wstring, CAnimation3D*> CLinkAnimScript::m_mapAnim = {};
@@ -24,7 +26,10 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_fWalkSpeed(1.f)
 	, m_fRunSpeed(1.5f)
 	, m_fDashSpeed(2.f)
+	, m_fJumpSpeed(4.f)
+	, m_bOnceAtAnimStart(true)
 {
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -37,7 +42,10 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_iMode(_origin.m_iMode)
 	, m_fWalkSpeed(_origin.m_fWalkSpeed)
 	, m_fRunSpeed(_origin.m_fRunSpeed)
+	, m_fJumpSpeed(_origin.m_fJumpSpeed)
+	, m_bOnceAtAnimStart(_origin.m_bOnceAtAnimStart)
 {
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -145,6 +153,11 @@ Vec3 CLinkAnimScript::GetCombinedDir()
 	return (GetMoveDir(eDirX) + GetMoveDir(eDirZ)).Normalize();
 }
 
+bool CLinkAnimScript::IsGround()
+{
+	return m_pGroundChecker->IsGround();
+}
+
 void CLinkAnimScript::ClearAnimNode()
 {
 	m_mapAnim.clear();
@@ -154,22 +167,27 @@ void CLinkAnimScript::ClearAnimNode()
 void CLinkAnimScript::init()
 {
 	m_pAnimator = Animator3D();
+	m_mapAnim = m_pAnimator->GetMapAnimation();
+	
 	if (m_bIsAnimNodeLoaded == false)
-	{
-		m_mapAnim = m_pAnimator->GetMapAnimation();
+	{	
 		CreateAnimNode();
 		MakeFSM();
 
 		m_bIsAnimNodeLoaded = true;
+	}
+	else
+	{
+		ReplaceNodeAnim();
 	}
 }
 
 void CLinkAnimScript::begin()
 {
 	SetAnimNode(m_pCurAnimNode, LAT_WAIT);
-	RigidBody()->SetGround(true);
-
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
+	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_GROUND_CHECKER]);
+	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
 }
 
 void CLinkAnimScript::tick()
@@ -203,6 +221,17 @@ void CLinkAnimScript::OperateAnimFunc()
 	{
 		Func_WalkRunDash();
 	}
+
+	if (m_bOnceAtAnimStart)
+	{
+		if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
+		{
+			Func_Jump();
+		}
+
+
+		m_bOnceAtAnimStart = false;
+	}
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -210,11 +239,15 @@ void CLinkAnimScript::SetLinkCond()
 	m_iCond = 0;
 
 	// key check
-	if (KEY_PRESSED(KEY::W) || KEY_PRESSED(KEY::S) || KEY_PRESSED(KEY::A) || KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::W) || KEY_PRESSED(KEY::S) || KEY_PRESSED(KEY::A) || KEY_PRESSED(KEY::D) ||
+		KEY_TAP(KEY::W) || KEY_TAP(KEY::S) || KEY_TAP(KEY::A) || KEY_TAP(KEY::D))
 		AddBit(m_iCond, LAC_KEY_WSAD);
 
-	if (KEY_PRESSED(KEY::LSHIFT))
+	if (KEY_PRESSED(KEY::LSHIFT) || KEY_TAP(KEY::LSHIFT))
 		AddBit(m_iCond, LAC_KEY_SHIFT);
+
+	if (KEY_PRESSED(KEY::SPACE) || KEY_TAP(KEY::SPACE))
+		AddBit(m_iCond, LAC_KEY_SPACE);
 
 	// mode ckeck
 	if (KEY_TAP(KEY::R))
@@ -233,9 +266,16 @@ void CLinkAnimScript::SetLinkCond()
 	if (LINK_FRONT_TOE::LEFT == GetFrontToe(m_pCurAnimNode->pAnim))
 		AddBit(m_iCond, LAC_TOE_L_FRONT);
 
+	// check angle between next dir and cur dir is over 135 degree
 	if (ShouldTurnBack())
 		AddBit(m_iCond, LAC_TURN_BACK);
-	
+
+	// check ground
+	if (IsGround())
+	{
+		AddBit(m_iCond, LAC_GROUNDED);
+	}
+	RigidBody()->SetGround(IsGround());
 }
 
 void CLinkAnimScript::OperateAnimFuncAfter()
@@ -267,11 +307,15 @@ void CLinkAnimScript::PlayNextAnim()
 			if (CalBit(m_pCurAnimNode->iPreferences, LAP_REPEAT, BIT_FUNC_OPT::BIT_LEAST_ONE))
 			{
 				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, true);
+
+				m_bOnceAtAnimStart = true;
 				return;
 			}
 			else
 			{
 				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, false);
+
+  				m_bOnceAtAnimStart = true;
 				return;
 			}
 		}
@@ -303,6 +347,9 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Key << "Link Dash Speed";
 	_emitter << YAML::Value << m_fDashSpeed;
 
+	_emitter << YAML::Key << "Link Jump Speed";
+	_emitter << YAML::Value << m_fJumpSpeed;
+
 	_emitter << YAML::Key << "Link Angle Per Sec";
 	_emitter << YAML::Value << m_fAnglePerSec;
 
@@ -317,6 +364,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fWalkSpeed, _node["Link Walk Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fRunSpeed, _node["Link Run Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fDashSpeed, _node["Link Dash Speed"]);
+	SAFE_LOAD_FROM_YAML(float, m_fJumpSpeed, _node["Link Jump Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fAnglePerSec, _node["Link Angle Per Sec"]);
 	SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);
 }

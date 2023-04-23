@@ -92,6 +92,7 @@ public:
 
     CGameObject* GetParent() { return m_pParent; }
     const vector<CGameObject*>& GetChildObject()const { return m_vecChild; }
+    CGameObject* GetChildObjByName(const wstring& _strName);
 
     // 자식 이름으로 자식을 찾아주는 기능 : 봐서 지워줘야 할듯.
     CGameObject* GetChildObject(const wstring& _strName);

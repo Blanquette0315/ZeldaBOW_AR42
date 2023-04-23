@@ -42,13 +42,13 @@ public:
 
     PhysData* GetPhysData() { return m_pPhysData; }
 
-    void UpdatePhys();
-
     void CreateColliderActor();
     void DeleteColliderActor();
+
 public:
     virtual void begin() override;
     virtual void finaltick() override;
+    void UpdateCollider();
 
 public:
     void BeginOverlap(CCollider* _pOther);

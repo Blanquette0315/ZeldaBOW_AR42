@@ -13,9 +13,6 @@
     <Filter Include="Header">
       <UniqueIdentifier>{e95e5319-d12b-4352-ab82-ccf7e5eef93b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\Player">
-      <UniqueIdentifier>{e1c113c9-9efb-401a-82b0-f7b655cbb2f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scripts\Test">
       <UniqueIdentifier>{5e2efb2c-c4b3-487a-967a-d61d47bab0d1}</UniqueIdentifier>
     </Filter>
@@ -28,11 +25,17 @@
     <Filter Include="Scripts\Cam\LinkCam">
       <UniqueIdentifier>{72119c0f-9c66-4d59-8984-12d2617d4567}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\Player\FSM">
+    <Filter Include="Scripts\Link">
+      <UniqueIdentifier>{e1c113c9-9efb-401a-82b0-f7b655cbb2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Link\FSM">
       <UniqueIdentifier>{14854a18-3121-4163-96dc-c49f783ee4c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\Player\FSM\Node">
+    <Filter Include="Scripts\Link\FSM\Node">
       <UniqueIdentifier>{65ba4764-7584-4517-bf98-7ed2183686bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Link\GroundChecker">
+      <UniqueIdentifier>{be9f8d6b-300f-4f84-b444-a2bb5f8dba6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,7 +73,7 @@
       <Filter>Scripts\Test</Filter>
     </ClInclude>
     <ClInclude Include="CLinkScript.h">
-      <Filter>Scripts\Player</Filter>
+      <Filter>Scripts\Link</Filter>
     </ClInclude>
     <ClInclude Include="CCameraMgr.h">
       <Filter>Manager</Filter>
@@ -85,10 +88,13 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="CLinkAnimScript.h">
-      <Filter>Scripts\Player\FSM</Filter>
+      <Filter>Scripts\Link\FSM</Filter>
     </ClInclude>
     <ClInclude Include="FSMNode.h">
-      <Filter>Scripts\Player\FSM\Node</Filter>
+      <Filter>Scripts\Link\FSM\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroundCheckScript.h">
+      <Filter>Scripts\Link\GroundChecker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +126,7 @@
       <Filter>Scripts\Test</Filter>
     </ClCompile>
     <ClCompile Include="CLinkScript.cpp">
-      <Filter>Scripts\Player</Filter>
+      <Filter>Scripts\Link</Filter>
     </ClCompile>
     <ClCompile Include="CCameraMgr.cpp">
       <Filter>Manager</Filter>
@@ -135,16 +141,19 @@
       <Filter>Header</Filter>
     </ClCompile>
     <ClCompile Include="CLinkAnimScript.cpp">
-      <Filter>Scripts\Player\FSM</Filter>
+      <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
     <ClCompile Include="FSMNode.cpp">
-      <Filter>Scripts\Player\FSM\Node</Filter>
+      <Filter>Scripts\Link\FSM\Node</Filter>
     </ClCompile>
     <ClCompile Include="CLinkAnimFSMInit.cpp">
-      <Filter>Scripts\Player\FSM</Filter>
+      <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
     <ClCompile Include="CLinkAnimFunc.cpp">
-      <Filter>Scripts\Player\FSM\Node</Filter>
+      <Filter>Scripts\Link\FSM\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="CGroundCheckScript.cpp">
+      <Filter>Scripts\Link\GroundChecker</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

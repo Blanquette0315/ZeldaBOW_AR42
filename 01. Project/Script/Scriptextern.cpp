@@ -19,3 +19,8 @@ extern const wchar_t* LINK_ANIM_WCHAR[(UINT)LINK_ANIM_TYPE::LAT_END] =
     L"Land_L",
     L"Land_R"
 };
+
+extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::END] =
+{
+    L"Link_GroundChecker"
+};

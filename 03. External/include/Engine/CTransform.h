@@ -16,7 +16,7 @@ private:
     Matrix m_matLocal;
 
     Matrix  m_matWorld;
-    Matrix  m_matWorldInv; // ������ �����
+    Matrix  m_matWorldInv; 
 
     Matrix  m_matScale;
     Matrix  m_matScaleInv;
@@ -95,6 +95,8 @@ public:
     virtual void begin() override;
     virtual void tick() override;
     virtual void finaltick() override;
+
+    void UpdateWorldTrans();
 
     void UpdateData();
 

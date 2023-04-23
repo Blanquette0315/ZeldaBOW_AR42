@@ -4,6 +4,7 @@
 class CAnimator3D;
 class CAnimation3D;
 class tAnimNode;
+class CGroundCheckScript;
 
 
 
@@ -22,8 +23,12 @@ private:
     // tAnimNode*      m_pNextAnimNode;
     UINT            m_iCond;
 
-    CGameObject*    m_pLinkCamObj;
-    Vec3            m_vDir[(UINT)LINK_DIRECTION::END];
+    CGameObject*            m_pLinkCamObj;
+    CGroundCheckScript*     m_pGroundChecker;
+    Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
+
+    // use for function that should operate once
+    bool                    m_bOnceAtAnimStart;
 
     // save
 private:
@@ -32,12 +37,14 @@ private:
     float           m_fWalkSpeed;
     float           m_fRunSpeed;
     float           m_fDashSpeed;
+    float           m_fJumpSpeed;
     
     UINT            m_iMode;
 
     // FSM function
 private:
     void CreateAnimNode();
+    void ReplaceNodeAnim();
     void MakeFSM();
     void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim);
     void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _ePref);
@@ -60,6 +67,7 @@ private:
 
     void Func_WalkRunDash();
     void Func_TurnBack();
+    void Func_Jump();
 
     // convenience function
 private:
@@ -80,6 +88,9 @@ private:
 
     // Get eight kind of dir from key combination ( camera is standard)
     Vec3 GetCombinedDir();
+
+    // get ground from child ground checker
+    bool IsGround();
 
 public:
     static void ClearAnimNode();

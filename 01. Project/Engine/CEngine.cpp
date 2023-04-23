@@ -76,12 +76,13 @@ void CEngine::tick()
 	CSound::g_pFMOD->update();
 	CKeyMgr::GetInst()->tick();
 	CPhysMgr::GetInst()->tick();
+	CCollisionMgr::GetInst()->tick();
 	CRenderMgr::GetInst()->tick();
 
 	CLevelMgr::GetInst()->progress();
 
 	CSoundMgr::GetInst()->tick();
-	CCollisionMgr::GetInst()->tick();
+
 }
 
 void CEngine::render()
