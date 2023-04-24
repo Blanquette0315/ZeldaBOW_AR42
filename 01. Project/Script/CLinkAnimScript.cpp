@@ -246,12 +246,22 @@ void CLinkAnimScript::OperateAnimFunc()
 		Func_WalkRunDash();
 	}
 
+	if (IsCurAnim(LAT_SWORD_MOVE_RUN))
+	{
+		Func_SwordRun();
+	}
+
 	// Func that only operate at anim start
 	if (m_bOnceAtAnimStart)
 	{
 		if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
 		{
 			Func_Jump();
+		}
+
+		if (IsCurAnim(LAT_SWORD_ATTACK_S1) || IsCurAnim(LAT_SWORD_ATTACK_S2) || IsCurAnim(LAT_SWORD_ATTACK_S3) || IsCurAnim(LAT_SWORD_ATTACK_SF))
+		{
+			Func_SwordAttackMove();
 		}
 
 		m_bOnceAtAnimStart = false;

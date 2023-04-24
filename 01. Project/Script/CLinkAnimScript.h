@@ -73,6 +73,8 @@ private:
     void Func_TurnBack();
     void Func_Jump();
     void Func_LowerBodyBlend();
+    void Func_SwordRun();
+    void Func_SwordAttackMove();
 
     // convenience function
 private:
