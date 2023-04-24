@@ -15,14 +15,17 @@ class CAnimator3D :
 private:
     const vector<tMTBone>*      m_pVecBones;
     CStructuredBuffer*          m_pBoneFinalMatBuffer;  // 특정 프레임의 최종 행렬
-    bool						m_bFinalMatUpdate; // 최종행렬 연산 수행여부
+    bool						m_bFinalMatUpdate;      // 최종행렬 연산 수행여부
 
     int                         m_iFrmlimit;
 
     map<wstring, CAnimation3D*> m_mapAnim;
+
     CAnimation3D*               m_pCurAnim;
+    CAnimation3D*               m_pCurAnimLower;
 
     bool                        m_bRepeat;
+    bool                        m_bRepeatLower;
 
 public:
     virtual void finaltick() override;
@@ -32,6 +35,7 @@ public:
     void SetBones(const vector<tMTBone>* _vecBones) { m_pVecBones = _vecBones; }
     void SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip);
     void SetFinalMatUpdate(bool _bool) { m_bFinalMatUpdate = _bool; }
+    void SetFrameLimit(UINT _iFrameLimit) { m_iFrmlimit = _iFrameLimit; }
 
     CStructuredBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
     UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
@@ -47,9 +51,14 @@ public:
     void Play(const wstring& _strKey, bool _bRepeat);
     void Stop() { m_pCurAnim = nullptr; }
 
+    // LowerAnim
+    void PlayLowerAnim(const wstring& _strKey, bool _bRepeat);
+    void StopLowerAnim() { m_pCurAnimLower = nullptr; }
+
 public:
     const map<wstring, CAnimation3D*>& GetMapAnimation() { return m_mapAnim; }
     CAnimation3D* GetCurAnimation() { return m_pCurAnim; }
+    CAnimation3D* GetCurAnimationLower() { return m_pCurAnimLower; }
     void ChangeAnimName(const wstring& _strOrignKey, const wstring& _strNewKey);
     void EraseAnimation(const wstring& _strKey);
     void CreateDefaultAnimation();

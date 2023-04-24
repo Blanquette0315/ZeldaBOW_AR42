@@ -17,7 +17,15 @@ extern const wchar_t* LINK_ANIM_WCHAR[(UINT)LINK_ANIM_TYPE::LAT_END] =
     L"Jump_L",
     L"Jump_R",
     L"Land_L",
-    L"Land_R"
+    L"Land_R",
+    L"Sword_Equip_On",
+    L"Sword_Equip_Off",
+    L"Sword_Lockon_Wait",
+    L"Sword_Attack_S1",
+    L"Sword_Attack_S2",
+    L"Sword_Attack_S3",
+    L"Sword_Attack_SF",
+    L"Sword_Move_Run",
 };
 
 extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::END] =

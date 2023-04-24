@@ -20,6 +20,7 @@ private:
 private:
     CAnimator3D*    m_pAnimator;
     tAnimNode*      m_pCurAnimNode;
+    tAnimNode*      m_pCurAnimNodeLower;
     // tAnimNode*      m_pNextAnimNode;
     UINT            m_iCond;
 
@@ -29,6 +30,10 @@ private:
 
     // use for function that should operate once
     bool                    m_bOnceAtAnimStart;
+
+    bool                    m_bComboProgress;
+    float                   m_fComboAccTime;
+    float                   m_fComboMaxTime;
 
     // save
 private:
@@ -46,10 +51,9 @@ private:
     void CreateAnimNode();
     void ReplaceNodeAnim();
     void MakeFSM();
-    void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim);
-    void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _ePref);
+    void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _ePref = 0);
     void SetAnimTran(tAnimNode* _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _eIncludeAs1Bit, UINT _eIncludeAs0Bit = (LINK_ANIM_CONDITION)0);
-    
+
     // tick structure
 private:
     /*void PlayNextAnim();*/
@@ -68,11 +72,13 @@ private:
     void Func_WalkRunDash();
     void Func_TurnBack();
     void Func_Jump();
+    void Func_LowerBodyBlend();
 
     // convenience function
 private:
     // check current anim's member finish
     bool IsCurAnim(LINK_ANIM_TYPE _eLAT); 
+    bool IsCurAnimLower(LINK_ANIM_TYPE _eLAT);
     
     // Find which Link's toe is front 
     LINK_FRONT_TOE GetFrontToe(CAnimation3D* _pCurAnim);

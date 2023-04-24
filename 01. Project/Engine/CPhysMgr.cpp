@@ -41,13 +41,14 @@ void CPhysMgr::tick()
 				vecGameObj[i]->RigidBody()->UpdatePhysResult();
 		}
 
-		//vecGameObj[i]->Transform()->UpdateWorldTrans();
+		// == finaltick
+		vecGameObj[i]->Transform()->UpdateWorldTrans();
 
-		//if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
-		//{
-		//	if (nullptr != vecGameObj[i]->Collider())
-		//		vecGameObj[i]->Collider()->UpdateCollider();
-		//}
+		if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+		{
+			if (nullptr != vecGameObj[i]->Collider())
+				vecGameObj[i]->Collider()->UpdateCollider();
+		}
 	}
 
 }

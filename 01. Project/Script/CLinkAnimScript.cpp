@@ -22,14 +22,16 @@ CLinkAnimScript::CLinkAnimScript()
 	//, m_pNextAnimNode(nullptr)
 	, m_iCond(0)
 	, m_fAnglePerSec(XM_2PI)
-	, m_iMode((UINT)LINK_MODE::WALK)
+	, m_iMode((UINT)LINK_MODE::LINK_MODE_WALK)
 	, m_fWalkSpeed(1.f)
 	, m_fRunSpeed(1.5f)
 	, m_fDashSpeed(2.f)
 	, m_fJumpSpeed(4.f)
 	, m_bOnceAtAnimStart(true)
+	, m_bComboProgress(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -44,8 +46,12 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_fRunSpeed(_origin.m_fRunSpeed)
 	, m_fJumpSpeed(_origin.m_fJumpSpeed)
 	, m_bOnceAtAnimStart(_origin.m_bOnceAtAnimStart)
+	, m_fComboAccTime(0.f)
+	, m_fComboMaxTime(_origin.m_fComboMaxTime)
+	, m_bComboProgress(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -58,13 +64,31 @@ bool CLinkAnimScript::IsCurAnim(LINK_ANIM_TYPE _eLAT)
 	return m_pCurAnimNode->pAnimKey == LINK_ANIM_WCHAR[_eLAT]; 
 }
 
+bool CLinkAnimScript::IsCurAnimLower(LINK_ANIM_TYPE _eLAT)
+{
+	if (m_pCurAnimNodeLower)
+	{
+		return m_pCurAnimNodeLower->pAnimKey == LINK_ANIM_WCHAR[_eLAT];
+	}
+	else
+	{
+		return false;
+	}
+}
+
 LINK_FRONT_TOE CLinkAnimScript::GetFrontToe(CAnimation3D* _pCurAnim)
 {
 	CAnimator3D* pAnimator = Animator3D();
 	CAnimation3D* pAnim = nullptr;
 
-	if (pAnimator)
-		pAnim = pAnimator->GetCurAnimation();
+	if (pAnimator) 
+	{
+		if (m_pCurAnimNodeLower)
+			pAnim = pAnimator->GetCurAnimationLower();
+		else
+			pAnim = pAnimator->GetCurAnimation();
+	}
+		
 
 	if (pAnim)
 	{
@@ -222,6 +246,7 @@ void CLinkAnimScript::OperateAnimFunc()
 		Func_WalkRunDash();
 	}
 
+	// Func that only operate at anim start
 	if (m_bOnceAtAnimStart)
 	{
 		if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
@@ -229,8 +254,18 @@ void CLinkAnimScript::OperateAnimFunc()
 			Func_Jump();
 		}
 
-
 		m_bOnceAtAnimStart = false;
+	}
+
+	// Lower Body Blend 
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_BLEND, BIT_LEAST_ONE))
+	{
+		Func_LowerBodyBlend();
+	}
+	else
+	{
+		m_pCurAnimNodeLower = nullptr;
+		m_pAnimator->StopLowerAnim();
 	}
 }
 
@@ -249,13 +284,54 @@ void CLinkAnimScript::SetLinkCond()
 	if (KEY_PRESSED(KEY::SPACE) || KEY_TAP(KEY::SPACE))
 		AddBit(m_iCond, LAC_KEY_SPACE);
 
+	if (KEY_PRESSED(KEY::E) || KEY_TAP(KEY::E))
+		AddBit(m_iCond, LAC_KEY_E);
+
+	if (KEY_PRESSED(KEY::LBTN) || KEY_TAP(KEY::LBTN))
+	{
+		if (CalBit(m_pCurAnimNode->iPreferences, LAP_COMBO, BIT_LEAST_ONE))
+		{
+			m_bComboProgress = true;
+			m_fComboAccTime = 0.f;
+		}
+			
+		AddBit(m_iCond, LAC_KEY_LBTN);
+	}
+
+	// check combo progress with expanded time
+	if (m_bComboProgress)
+		AddBit(m_iCond, LAC_KEY_LBTN_COMBO);
+
+	// combo
+	if (m_bComboProgress)
+	{
+		m_fComboAccTime += FDT;
+		if (m_fComboMaxTime <= m_fComboAccTime)
+		{
+			m_fComboAccTime = 0.f;
+			m_bComboProgress = false;
+		}
+	}
+
+
 	// mode ckeck
 	if (KEY_TAP(KEY::R))
-		m_iMode = ( m_iMode == (UINT)LINK_MODE::WALK ) ? (UINT)LINK_MODE::RUN : (UINT)LINK_MODE::WALK;
+	{
+		if (CalBit(m_iMode, LINK_MODE_WALK, BIT_INCLUDE))
+		{
+			RemoveBit(m_iMode, LINK_MODE_WALK);
+			AddBit(m_iMode, LINK_MODE_RUN);
+		}
+		else
+		{
+			RemoveBit(m_iMode, LINK_MODE_RUN);
+			AddBit(m_iMode, LINK_MODE_WALK);
+		}
+	}
 
-	if(m_iMode == (UINT)LINK_MODE::RUN)
+	if(m_iMode == (UINT)LINK_MODE::LINK_MODE_RUN)
 		AddBit(m_iCond, LAC_MODE_RUN);
-	else if (m_iMode == (UINT)LINK_MODE::WALK)
+	else if (m_iMode == (UINT)LINK_MODE::LINK_MODE_WALK)
 		AddBit(m_iCond, LAC_MODE_WALK);
 
 	// anim check
@@ -355,6 +431,9 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "Link Mode";
 	_emitter << YAML::Value << m_iMode;
+
+	_emitter << YAML::Key << "Link Combo Max Time";
+	_emitter << YAML::Value << m_fComboMaxTime;
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -367,6 +446,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fJumpSpeed, _node["Link Jump Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fAnglePerSec, _node["Link Angle Per Sec"]);
 	SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);
+	SAFE_LOAD_FROM_YAML(float, m_fComboMaxTime, _node["Link Combo Max Time"]);
 }
 
 

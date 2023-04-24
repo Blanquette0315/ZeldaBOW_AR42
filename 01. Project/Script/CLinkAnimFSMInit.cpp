@@ -30,11 +30,6 @@ void CLinkAnimScript::ReplaceNodeAnim()
 	}
 }
 
-void CLinkAnimScript::SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim)
-{
-	_pAnimNode = m_mapAnimNode.find(LINK_ANIM_WCHAR[_eAnim])->second;
-}
-
 void CLinkAnimScript::SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _ePref)
 {
 	_pAnimNode = m_mapAnimNode.find(LINK_ANIM_WCHAR[_eAnim])->second;
@@ -48,6 +43,8 @@ void CLinkAnimScript::SetAnimTran(tAnimNode* _pAnimNode, LINK_ANIM_TYPE _eAnim, 
 	_pAnimNode->vecTranAnim.push_back(pAnimTran);
 }
 
+
+
 void CLinkAnimScript::MakeFSM()
 {
 	tAnimNode* pAnimNode = nullptr;
@@ -59,6 +56,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
+	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_ON, LAC_KEY_E);
 
 	// Walk
 	SetAnimNode(pAnimNode, LAT_WALK, LAP_REPEAT);
@@ -139,6 +137,37 @@ void CLinkAnimScript::MakeFSM()
 
 	SetAnimNode(pAnimNode, LAT_LAND_R);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
+
+	// Sword
+	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_ON, LAP_BLEND);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT);
+	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_OFF, LAC_KEY_E);
+	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN | LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S1, LAP_COMBO);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
+	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S2, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S2, LAP_COMBO);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
+	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S3, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S3, LAP_COMBO);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
+	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_SF, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 
 }

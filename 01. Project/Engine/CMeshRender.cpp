@@ -99,6 +99,12 @@ void CMeshRender::LoadFromYAML(YAML::Node& _node)
 {
 	YAML::Node node = _node["MESHRENDER"];
 	CRenderComponent::LoadFromYAML(node);
+
+	if (Animator3D())
+	{
+		UINT i = GetMesh()->GetAnimClip()->at(0).iEndFrame;
+		Animator3D()->SetFrameLimit(GetMesh()->GetAnimClip()->at(0).iEndFrame);
+	}
 }
 
 

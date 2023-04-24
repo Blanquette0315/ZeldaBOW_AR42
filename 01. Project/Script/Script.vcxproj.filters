@@ -149,11 +149,11 @@
     <ClCompile Include="CLinkAnimFSMInit.cpp">
       <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
-    <ClCompile Include="CLinkAnimFunc.cpp">
-      <Filter>Scripts\Link\FSM\Node</Filter>
-    </ClCompile>
     <ClCompile Include="CGroundCheckScript.cpp">
       <Filter>Scripts\Link\GroundChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkAnimFunc.cpp">
+      <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,271 @@
+ResourceKey: ""
+ResourceRelativePath: prefab\Link.pref
+name: Link
+FrustumCulling: true
+Rendering: true
+Component:
+  TRANSFORM:
+    RelativePos: [0, 80, 990]
+    RelativeScale: [100, 100, 100]
+    RelativeRotation: [0, 0, 0]
+    IgnParentScale: false
+    TurnY180: true
+  ANIMATOR3D:
+    Frmlimit: 491
+    AnimationCount: 25
+    Animation3D_0:
+      name: Dash
+      StartFrame: 184
+      EndFrame: 207
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_1:
+      name: Dash_Brake_L
+      StartFrame: 208
+      EndFrame: 225
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_2:
+      name: Dash_Brake_R
+      StartFrame: 226
+      EndFrame: 243
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_3:
+      name: Jump_L
+      StartFrame: 244
+      EndFrame: 253
+      FrameCount: 12
+      Frmlimit: 491
+    Animation3D_4:
+      name: Jump_R
+      StartFrame: 254
+      EndFrame: 263
+      FrameCount: 12
+      Frmlimit: 491
+    Animation3D_5:
+      name: Land_L
+      StartFrame: 264
+      EndFrame: 272
+      FrameCount: 12
+      Frmlimit: 491
+    Animation3D_6:
+      name: Land_R
+      StartFrame: 273
+      EndFrame: 281
+      FrameCount: 12
+      Frmlimit: 491
+    Animation3D_7:
+      name: Run
+      StartFrame: 108
+      EndFrame: 131
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_8:
+      name: Run_Brake_L
+      StartFrame: 132
+      EndFrame: 137
+      FrameCount: 15
+      Frmlimit: 491
+    Animation3D_9:
+      name: Run_Brake_R
+      StartFrame: 140
+      EndFrame: 145
+      FrameCount: 15
+      Frmlimit: 491
+    Animation3D_10:
+      name: Run_ED_L
+      StartFrame: 148
+      EndFrame: 165
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_11:
+      name: Run_ED_R
+      StartFrame: 166
+      EndFrame: 183
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_12:
+      name: Sword_Attack_S1
+      StartFrame: 374
+      EndFrame: 393
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_13:
+      name: Sword_Attack_S2
+      StartFrame: 395
+      EndFrame: 414
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_14:
+      name: Sword_Attack_S3
+      StartFrame: 415
+      EndFrame: 434
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_15:
+      name: Sword_Attack_SF
+      StartFrame: 435
+      EndFrame: 467
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_16:
+      name: Sword_Equip_Off
+      StartFrame: 314
+      EndFrame: 337
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_17:
+      name: Sword_Equip_On
+      StartFrame: 282
+      EndFrame: 313
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_18:
+      name: Sword_Lockon_Wait
+      StartFrame: 338
+      EndFrame: 373
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_19:
+      name: Sword_Move_Run
+      StartFrame: 468
+      EndFrame: 491
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_20:
+      name: Take 001
+      StartFrame: 0
+      EndFrame: 287
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_21:
+      name: Wait
+      StartFrame: 0
+      EndFrame: 47
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_22:
+      name: Walk
+      StartFrame: 48
+      EndFrame: 71
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_23:
+      name: Walk_ED_L
+      StartFrame: 72
+      EndFrame: 89
+      FrameCount: 30
+      Frmlimit: 491
+    Animation3D_24:
+      name: Walk_ED_R
+      StartFrame: 90
+      EndFrame: 107
+      FrameCount: 30
+      Frmlimit: 491
+  RIGIDBODY:
+    PhysDataMass: 1
+    PhysDataStaticFriction: 1
+    PhysDataDynamicFriction: 1
+    PhysDataRestitution: 0
+    PhysDataGravity: true
+    PhysDataKinematic: false
+    PhysDataDynamic: true
+    PhysDataLockAxis_Position: [0, 0, 0]
+    PhysDataLockAxis_Rotation: [0, 0, 0]
+    PhysDataColliderFilter: 0
+    PhysDataColliderType: 2
+    CapsuleSize: [10, 30]
+    BoxSize: [0, 0, 0]
+    SphereSize: 1
+    ColScaleSize: false
+    MeshColllider: false
+    ColOffSet: [0, 25, 0]
+    UsePhysRot: false
+  MESHRENDER:
+    RenderComponentMesh:
+      Exist: 1
+      ResKey: mesh\Link_Maya\Link_Maya.mesh
+      ResRelativePath: mesh\Link_Maya\Link_Maya.mesh
+    RenderComponentMaterialCount: 11
+    RenderComponentMaterial0:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Belt_A.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Belt_A.mtrl
+    RenderComponentMaterial1:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Belt_C.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Belt_C.mtrl
+    RenderComponentMaterial2:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Earring.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Earring.mtrl
+    RenderComponentMaterial3:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Eyeball_L.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Eyeball_L.mtrl
+    RenderComponentMaterial4:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Eyeball_R.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Eyeball_R.mtrl
+    RenderComponentMaterial5:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Eyelashes.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Eyelashes.mtrl
+    RenderComponentMaterial6:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Face.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Face.mtrl
+    RenderComponentMaterial7:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Head.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Head.mtrl
+    RenderComponentMaterial8:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Lower_Skin.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Lower_Skin.mtrl
+    RenderComponentMaterial9:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Underwear.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Underwear.mtrl
+    RenderComponentMaterial10:
+      Exist: 1
+      ResKey: material\Link_Maya\Mt_Upper_Skin.mtrl
+      ResRelativePath: material\Link_Maya\Mt_Upper_Skin.mtrl
+    RenderComponent_IsDynamicShadow: true
+Script:
+  ScriptCount: 1
+  Script0:
+    ScriptName: CLinkAnimScript
+    name: ""
+    Link Walk Speed: 1
+    Link Run Speed: 1.5
+    Link Dash Speed: 0
+    Link Jump Speed: 4
+    Link Angle Per Sec: 6.283185
+    Link Mode: 0
+ChildObj:
+  ChildCount: 1
+  ChildObj0:
+    name: Link_GroundChecker
+    FrustumCulling: true
+    Rendering: true
+    Component:
+      TRANSFORM:
+        RelativePos: [0, 1.449, 0]
+        RelativeScale: [1, 1, 1]
+        RelativeRotation: [0, 0, 0]
+        IgnParentScale: true
+        TurnY180: false
+      COLLIDER:
+        ColliderType: 0
+        OffsetPos: [0, 0, 0]
+        Scale: [7, 2, 7]
+        Rotation: [0, 0, 0]
+    Script:
+      ScriptCount: 1
+      Script0:
+        ScriptName: CGroundCheckScript
+        name: ""
+    ChildObj:
+      ChildCount: 0
