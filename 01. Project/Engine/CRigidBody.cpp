@@ -9,7 +9,6 @@
 
 CRigidBody::CRigidBody()
 	: CComponent(COMPONENT_TYPE::RIGIDBODY)
-	, m_pToGroundRay(new PhysRayCast)
 	, m_eRigidColliderType(COLLIDER_TYPE::COLLIDER_CUBE)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(Vec2(1.f, 2.f))
@@ -26,7 +25,6 @@ CRigidBody::CRigidBody()
 
 CRigidBody::CRigidBody(const CRigidBody& _origin)
 	: CComponent(COMPONENT_TYPE::RIGIDBODY)
-	, m_pToGroundRay(new PhysRayCast)
 	, m_eRigidColliderType(_origin.m_eRigidColliderType)
 	, m_bKeyRelease(false)
 	, m_vCapsuleSize(_origin.m_vCapsuleSize)
@@ -66,16 +64,10 @@ CRigidBody::~CRigidBody()
 				PhysX_Delete_Actor(m_vecPhysData[i]);
 			}
 		}
-		//Safe_Del_Vec<PhysData>(m_vecPhysData);
 	}
 	else
 	{
 		Safe_Del_Vec<PhysData>(m_vecPhysData);
-	}
-	
-	if (nullptr != m_pToGroundRay)
-	{
-		delete m_pToGroundRay;
 	}
 }
 
@@ -98,16 +90,6 @@ void CRigidBody::begin()
 
 void CRigidBody::tick()
 {
-	if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
-	{
-		// ToGroundRay Refresh
-		Vec3 vPos = Transform()->GetRelativePos();
-		vPos.y -= Transform()->GetRelativeScale().y * 0.5f;
-		vPos /= 100.f;
-		m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
-		// PhysX_RayCast(m_pToGroundRay);
-		// m_bGround = PhysX_RayCast(m_pToGroundRay);
-	}
 }
 
 void CRigidBody::finaltick()
@@ -303,16 +285,6 @@ void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinema
 	{
 		SetDinamicOption(true);
 	}
-
-	// ToGroundRay Setting
-	Vec3 vPos = Transform()->GetRelativePos();
-	vPos.y -= Transform()->GetRelativeScale().y * 0.5f;
-	vPos /= 100.f;
-	m_pToGroundRay->SetStartOrigin(vPos.x, vPos.y, vPos.z);
-	Vec3 vDir = Vec3(0.f, -1.f, 0.f).Normalize();
-	m_pToGroundRay->SetDirection(vDir.x, vDir.y, vDir.z);
-	m_pToGroundRay->SetMaxDistance(25.f / 100.f);
-	m_pToGroundRay->SetQueryFilterData0(FILTER_GROUP::eGround);
 }
 
 void CRigidBody::CreateActor()
@@ -390,11 +362,6 @@ bool CRigidBody::IsGround()
 	return m_bGround;
 }
 
-Vec3 CRigidBody::GetHitNormal()
-{
-	return m_pToGroundRay->Hit.HitNormal;
-}
-
 void CRigidBody::SetWorldRotation(Vec3 _vWorldRot)
 {
 	DirectX::XMMATRIX _P;
@@ -438,7 +405,7 @@ void CRigidBody::SetMeshCollider()
 
 	for (int i = 0; i < iAllVertexCount; ++i)
 	{
-		vecVertexList[i].x = pVtx[i].vPos.x; // *(-1.f);
+		vecVertexList[i].x = pVtx[i].vPos.x;
 		vecVertexList[i].y = pVtx[i].vPos.z;
 		vecVertexList[i].z = pVtx[i].vPos.y * (-1.f);
 	}

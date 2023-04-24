@@ -8,7 +8,6 @@ class CRigidBody :
 {
 private:
     vector<PhysData*> m_vecPhysData;
-    PhysRayCast* const m_pToGroundRay;
     COLLIDER_TYPE m_eRigidColliderType;
     Vec3 m_vColOffSet;
     Vec3 m_vVelocity;
@@ -43,9 +42,6 @@ public:
 
     void SetUsePhysRot(bool _bUsePhysRot) { m_bUsePhysRot = _bUsePhysRot; }
     bool IsUsePhysRot() { return m_bUsePhysRot; }
-
-    // Hypothalamic Normal Vector Check
-    Vec3 GetHitNormal();
 
     // ===== Collider Filter Setting =====
     void SetColliderFilter(FILTER_GROUP _eGroup) { m_vecPhysData[0]->SetFilterData0(_eGroup); }

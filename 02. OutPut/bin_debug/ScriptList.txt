@@ -1,5 +1,6 @@
 CCamScript
 CGroundCheckScript
+CLayCastScript
 CLinkAnimScript
 CLinkCamScript
 CLinkScript
@@ -7,4 +8,5 @@ CMissileScript
 CMonsterScript
 CNavTestSCR
 CPlayerScript
+CRayCastScript
 CTestSCR

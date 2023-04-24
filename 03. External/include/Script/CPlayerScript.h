@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Engine/CScript.h>
+
+class CRayCastScript;
+
 class CPlayerScript :
     public CScript
 {
@@ -18,7 +21,7 @@ private:
     Ptr<CPrefab> m_Prefab;
     Ptr<CPrefab> m_Prefab1;
 
-    //PhysRayCast* m_pWallRay;
+    CRayCastScript* m_pRayScript;
 
     bool    m_bGround;
     bool    m_bJump;
