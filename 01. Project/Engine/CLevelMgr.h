@@ -22,6 +22,7 @@ private:
 
 public:
 	void init();
+	void refresh();	// Clear CurLevel All Layer's Vector & Register Object into Layer's Vector
 	void progress();
 
 public:

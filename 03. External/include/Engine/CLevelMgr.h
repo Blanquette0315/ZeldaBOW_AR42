@@ -22,6 +22,7 @@ private:
 
 public:
 	void init();
+	void refresh();
 	void progress();
 
 public:
