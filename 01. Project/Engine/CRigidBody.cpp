@@ -98,38 +98,38 @@ void CRigidBody::finaltick()
 	{
 		// Velocity gathering update : Engine -> PhysX		
 
-		/*if (m_bGround)
-		{
-			if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
-			{
-				m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
-				m_vSaveVelocity = m_vVelocity;
-				m_vVelocity = Vec3(0.f, 0.f, 0.f);
-			}
-			else
-			{
-				if (m_bKeyRelease)
-				{
-					m_vecPhysData[0]->SetVelocity(0.f, 0.f, 0.f);
-					m_vVelocity = Vec3(0.f, 0.f, 0.f);
-					m_vSaveVelocity = m_vVelocity;
-					m_bKeyRelease = false;
-				}
-			}
-		}
-		else
-		{
-			if (m_vecPhysData[0]->m_vPxLinearVelocity.y != 0.f)
-			{
-				if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
-				{
-					m_vecPhysData[0]->SetVelocity(m_vSaveVelocity.x, m_vecPhysData[0]->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
-					m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
-				}
-			}
-		}*/
+		//if (m_bGround)
+		//{
+		//	if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
+		//	{
+		//		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+		//		m_vSaveVelocity = m_vVelocity;
+		//		m_vVelocity = Vec3(0.f, 0.f, 0.f);
+		//	}
+		//	else
+		//	{
+		//		if (m_bKeyRelease)
+		//		{
+		//			m_vecPhysData[0]->SetVelocity(0.f, 0.f, 0.f);
+		//			m_vVelocity = Vec3(0.f, 0.f, 0.f);
+		//			m_vSaveVelocity = m_vVelocity;
+		//			m_bKeyRelease = false;
+		//		}
+		//	}
+		//}
+		//else
+		//{
+		//	if (m_vecPhysData[0]->m_vPxLinearVelocity.y != 0.f)
+		//	{
+		//		if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
+		//		{
+		//			m_vecPhysData[0]->SetVelocity(m_vSaveVelocity.x, m_vecPhysData[0]->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
+		//			m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
+		//		}
+		//	}
+		//}
 
-		//m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
 
 		// ...
 		// will be added Force

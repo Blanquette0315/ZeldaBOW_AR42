@@ -44,16 +44,18 @@ void CPlayerScript::begin()
 	m_pRayScript = (CRayCastScript*)GetOwner()->GetScript(RAYCASTSCRIPT);
 	m_pRayScript->CreateRay(L"GroundRay");
 	Vec3 vStartPos = Transform()->GetWorldPos();
-	Vec3 vScale = Transform()->GetRelativeScale();
-	vStartPos.y -= (vScale.y / 2.f);
 	m_pRayScript->SetRayStartPoint(L"GroundRay", vStartPos);
 	m_pRayScript->SetRayDir(L"GroundRay", Vec3(0.f, -1.f, 0.f).Normalize());
-	m_pRayScript->SetMaxDistance(L"GroundRay", 5.f / 100.f);
+	m_pRayScript->SetMaxDistance(L"GroundRay", 50.f / 100.f);
 	m_pRayScript->SetRayFilter(L"GroundRay", FILTER_GROUP::eGround);
 }
 
 void CPlayerScript::tick()
 {
+	m_pRayScript->SetRayStartPoint(L"GroundRay", Transform()->GetWorldPos());
+	m_pRayScript->RayCast(L"GroundRay");
+	PhysRayCast* pRay = m_pRayScript->FindRay(L"GroundRay");
+
 	if (KEY_RELEASE(KEY::LEFT))
 	{
 		m_bKeyRelease = true;
