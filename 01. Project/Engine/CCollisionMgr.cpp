@@ -21,12 +21,13 @@ void CCollisionMgr::tick()
 {
 	CollisionLayerCheck(0, 0);
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
-
+	
 	for (int iLayer = 0; iLayer < MAX_LAYER; ++iLayer)
 	{
 		const vector<CGameObject*>& vecObjects = pCurLevel->GetLayer(iLayer)->GetObjects();
 		for (size_t iObjectNum = 0; iObjectNum < vecObjects.size(); ++iObjectNum)
 		{
+
 			if (nullptr == vecObjects[iObjectNum]->Collider())
 				continue;
 

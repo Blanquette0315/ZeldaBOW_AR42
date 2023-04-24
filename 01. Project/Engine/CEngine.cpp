@@ -76,6 +76,7 @@ void CEngine::tick()
 	CSound::g_pFMOD->update();
 	CKeyMgr::GetInst()->tick();
 	CPhysMgr::GetInst()->tick();
+	CLevelMgr::GetInst()->refresh();
 	CCollisionMgr::GetInst()->tick();
 	CRenderMgr::GetInst()->tick();
 
