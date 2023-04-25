@@ -16,20 +16,27 @@ class CLinkCamScript :
     // save
 private:
     float           m_fDistFromLink;
+    float           m_fDistFromLinkMin;
     float           m_fFrontDistFromLink;
     float           m_fSpeedLockOnZoomIn;
+    // speed of camera rotation back to the Link
+    float           m_fSpeedLockOnRad;
 
+    float           m_fMaxDistLockOn;
 
     // not save
 private:
-    CGameObject* m_pLinkObj;
-    CGameObject* m_pLockOnObj;
+    CGameObject*    m_pLinkObj;
+    CGameObject*    m_pLockOnObj;
 
     LINK_CAM_MODE   m_eMode;
+    float           m_fDistLockonFromLink;
+
+    bool            m_bLockOn;
+    bool            m_bLockOnStart;
 
 public:
     void GeneralMove();
-    void LockOnMove();
 
 public:
     void SetLockOnObj(CGameObject* _pLockOnObj) { m_pLockOnObj = _pLockOnObj; }

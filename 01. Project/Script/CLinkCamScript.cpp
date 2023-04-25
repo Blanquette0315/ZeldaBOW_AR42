@@ -12,6 +12,8 @@ CLinkCamScript::CLinkCamScript()
 	, m_eMode(LINK_CAM_MODE::GENERAL)
 	, m_pLockOnObj(nullptr)
 	, m_fSpeedLockOnZoomIn(10.f)
+	, m_bLockOn(false)
+	, m_bLockOnStart(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fDistFromLink, 0.f, 1000.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance Min", &m_fDistFromLinkMin, 0.f, 1000.f, 0.5f);
@@ -26,6 +28,8 @@ CLinkCamScript::CLinkCamScript(const CLinkCamScript& _origin)
 	, m_fFrontDistFromLink(_origin.m_fFrontDistFromLink)
 	, m_eMode(LINK_CAM_MODE::GENERAL)
 	, m_pLockOnObj(nullptr)
+	, m_bLockOn(false)
+	, m_bLockOnStart(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fDistFromLink, 0.f, 200.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance Min", &m_fDistFromLinkMin, 0.f, 1000.f, 0.5f);
@@ -56,29 +60,39 @@ void CLinkCamScript::GeneralMove()
 		Transform()->SetRelativeRotation(vRot);
 	}
 
-	Transform()->finaltick(); // should recalculate world-dir
+	if (m_bLockOn && m_pLockOnObj)
+	{		
+		// operate once -> when key tapped 
+		if (m_bLockOnStart)
+		{
+			// camera move -> back to the link
+
+			m_bLockOnStart = false;
+		}
+
+		// zoom in 
+		float fDist = (m_pLinkObj->Transform()->GetRelativePos() - m_pLockOnObj->Transform()->GetRelativePos()).Length();
+		float vDistFromLink = (m_fDistFromLink - m_fDistFromLinkMin) * (fDist / m_fMaxDistLockOn);
+
+		m_fDistLockonFromLink = vDistFromLink;
+
+		if (m_fDistFromLink != m_fDistLockonFromLink)
+		{
+			static float fInterpolation = 10.f;
+			m_fDistFromLink += (m_fDistLockonFromLink - m_fDistFromLink) / fInterpolation;
+		}
+	}
+
+	Transform()->finaltick(); // should recalculate dir
 
 	Vec3 vDirToCamFromObj = -Transform()->GetRelativeDir(DIR::FRONT);
 	Vec3 vDirToCamFromObjXZ = Vec3(-vDirToCamFromObj.x, 0.f, -vDirToCamFromObj.z).Normalize();
+	
 	Vec3 vCamPos = m_pLinkObj->Transform()->GetRelativePos() + vDirToCamFromObjXZ * m_fFrontDistFromLink + vDirToCamFromObj * m_fDistFromLink;
-
 
 	Transform()->SetRelativePos(vCamPos);
 }
 
-void CLinkCamScript::LockOnMove()
-{
-	if (m_pLockOnObj)
-		return;
-
-	// Move back to the link
-
-	// Zoom in ( interpolate between distance of Link & LockOnObj )
-	float fDist = (m_pLinkObj->Transform()->GetRelativePos() - m_pLockOnObj->Transform()->GetRelativePos()).Length();
-	float vDistFromLink = (m_fDistFromLink - m_fDistFromLinkMin) * (fDist / m_fMaxDistLockOn);
-
-	m_fDistLockonFromLink = vDistFromLink;
-}
 
 void CLinkCamScript::init()
 {
@@ -104,13 +118,6 @@ void CLinkCamScript::tick()
 		GeneralMove();
 	}
 		break;
-
-	case LINK_CAM_MODE::LOCKON:
-	{
-		LockOnMove();
-	}
-		break;
-
 	}
 }
 

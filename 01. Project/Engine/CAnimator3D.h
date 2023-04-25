@@ -27,6 +27,9 @@ private:
     bool                        m_bRepeat;
     bool                        m_bRepeatLower;
 
+    // if anim divided to upper - lower, upper anim's end frame.
+    int                         m_iBoneDivPoint;
+
 public:
     virtual void finaltick() override;
     void UpdateData();
@@ -36,6 +39,7 @@ public:
     void SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip);
     void SetFinalMatUpdate(bool _bool) { m_bFinalMatUpdate = _bool; }
     void SetFrameLimit(UINT _iFrameLimit) { m_iFrmlimit = _iFrameLimit; }
+    void SetBoneDivPoint(int _iDivPoint) { m_iBoneDivPoint = _iDivPoint; }
 
     CStructuredBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
     UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }

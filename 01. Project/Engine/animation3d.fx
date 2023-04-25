@@ -213,10 +213,11 @@ RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);
 // ===========================
 // Animation3D Compute Shader
 #define BoneCount           g_int_0
-#define CurFrame            g_int_1
-#define Ratio               g_float_0
-#define IsExtraAnimExist    g_int_2
-#define IsUpperAnim         g_int_3
+#define CurFrame            (int)g_vec2_0.x
+#define Ratio               g_vec2_0.y
+#define CurFrameLower       (int)g_vec2_1.x
+#define RatioLower          g_vec2_1.y
+#define BoneDivPoint       g_int_1
 // ===========================
 [numthreads(256, 1, 1)]
 void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
@@ -234,32 +235,24 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
     uint iFrameDataIndex = BoneCount * CurFrame + _iThreadIdx.x;
     uint iNextFrameDataIdx = BoneCount * (CurFrame + 1) + _iThreadIdx.x;
     
-    if (IsExtraAnimExist)
+    uint iFrameDataIndexLower = BoneCount * CurFrameLower + _iThreadIdx.x;
+    uint iNextFrameDataIdxLower = BoneCount * (CurFrameLower + 1) + _iThreadIdx.x;
+    
+
+    if (BoneDivPoint)
     {
-        // Only Bone Upper
-        if (IsUpperAnim)
+        if (_iThreadIdx.x <= BoneDivPoint)
         {
-            if(_iThreadIdx.x <= 91)
-            {   
-                vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
-                vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
-                qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
-            }
-            else
-                return;
+            vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
+            vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+            qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
         }
 
-        // Only Bone Lower
-        if(!IsUpperAnim)
+        if (_iThreadIdx.x > BoneDivPoint)
         {
-            if (_iThreadIdx.x > 91)
-            {
-                vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
-                vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
-                qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
-            }
-            else
-                return;
+            vScale = lerp(g_arrFrameTrans[iFrameDataIndexLower].vScale, g_arrFrameTrans[iNextFrameDataIdxLower].vScale, RatioLower);
+            vTrans = lerp(g_arrFrameTrans[iFrameDataIndexLower].vTranslate, g_arrFrameTrans[iNextFrameDataIdxLower].vTranslate, RatioLower);
+            qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndexLower].qRot, g_arrFrameTrans[iNextFrameDataIdxLower].qRot, RatioLower);
         }
     }
     else

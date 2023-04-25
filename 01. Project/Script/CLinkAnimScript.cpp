@@ -324,7 +324,6 @@ void CLinkAnimScript::SetLinkCond()
 		}
 	}
 
-
 	// mode ckeck
 	if (KEY_TAP(KEY::R))
 	{

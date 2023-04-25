@@ -155,33 +155,19 @@ void CAnimator3D::UpdateData()
 
 		UINT iBoneCount = (UINT)m_pVecBones->size();
 		pUpdateShader->SetBoneCount(iBoneCount);
-		pUpdateShader->SetFrameIndex(m_pCurAnim->m_iFrameIdx);
-
-		if(m_pCurAnimLower)
-			pUpdateShader->SetExtraAnimBool(1);
-		else
-			pUpdateShader->SetExtraAnimBool(0);
-
-		pUpdateShader->SetUpperAnimBool(1);
-		
-		//pUpdateShader->SetNextFrameIdx(m_pCurAnim->m_iNextFrameIdx);
-		pUpdateShader->SetFrameRatio(m_pCurAnim->m_fRatio);
-
-		// 업데이트 쉐이더 실행
-		pUpdateShader->Execute();
+		pUpdateShader->SetFrameIdxRatio(m_pCurAnim->m_iFrameIdx, m_pCurAnim->m_fRatio);
 
 		if (m_pCurAnimLower)
 		{
-			pUpdateShader->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
-			pUpdateShader->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
-			pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer);
-
-			pUpdateShader->SetFrameIndex(m_pCurAnimLower->m_iFrameIdx);
-			pUpdateShader->SetUpperAnimBool(0);
-			pUpdateShader->SetFrameRatio(m_pCurAnimLower->m_fRatio);
-			pUpdateShader->Execute();
+			pUpdateShader->SetFrameIdxRatioLower(m_pCurAnimLower->m_iFrameIdx, m_pCurAnimLower->m_fRatio);
+			pUpdateShader->SetBoneDividedPoint(m_iBoneDivPoint);
 		}
-
+		else
+		{
+			pUpdateShader->SetBoneDividedPoint(0);
+		}
+		// 업데이트 쉐이더 실행
+		pUpdateShader->Execute();
 		m_bFinalMatUpdate = true;
 	}
 

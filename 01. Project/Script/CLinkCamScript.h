@@ -32,9 +32,11 @@ private:
     LINK_CAM_MODE   m_eMode;
     float           m_fDistLockonFromLink;
 
+    bool            m_bLockOn;
+    bool            m_bLockOnStart;
+
 public:
     void GeneralMove();
-    void LockOnMove();
 
 public:
     void SetLockOnObj(CGameObject* _pLockOnObj) { m_pLockOnObj = _pLockOnObj; }
