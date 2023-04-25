@@ -176,6 +176,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CLinkAnimScript.h" />
     <ClInclude Include="CLinkCamScript.h" />
     <ClInclude Include="CLinkScript.h" />
+    <ClInclude Include="CLockOnScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CPlayerScript.h" />
@@ -199,6 +200,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CLinkAnimScript.cpp" />
     <ClCompile Include="CLinkCamScript.cpp" />
     <ClCompile Include="CLinkScript.cpp" />
+    <ClCompile Include="CLockOnScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />

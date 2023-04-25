@@ -5,7 +5,7 @@ class CAnimator3D;
 class CAnimation3D;
 class tAnimNode;
 class CGroundCheckScript;
-
+class CLockOnScript;
 
 
 class CLinkAnimScript :
@@ -26,6 +26,8 @@ private:
 
     CGameObject*            m_pLinkCamObj;
     CGroundCheckScript*     m_pGroundChecker;
+    CLockOnScript*          m_pLockOnRadar;
+
     Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
 
     UINT                    m_iMode;
@@ -37,6 +39,7 @@ private:
     float                   m_fComboAccTime;
     float                   m_fComboMaxTime;
 
+    bool                    m_bLockOn;
 
     // save
 private:
@@ -46,8 +49,7 @@ private:
     float           m_fRunSpeed;
     float           m_fDashSpeed;
     float           m_fJumpSpeed;
-    
-
+    float           m_fSelectedSpeed;
 
     // FSM function
 private:
@@ -62,7 +64,7 @@ private:
     /*void PlayNextAnim();*/
     void SetLinkCond();
 
-    // This can use anim finished member 
+    // This Func can use anim finished member 
     void OperateAnimFuncAfter();
 
     void PlayNextAnim();
@@ -71,6 +73,7 @@ private:
     // anim function
 private:
     void SetRotation();
+    void SelectSpeed();
 
     void Func_WalkRunDash();
     void Func_TurnBack();

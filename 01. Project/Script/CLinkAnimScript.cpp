@@ -9,6 +9,7 @@
 #include "CCameraMgr.h"
 #include "FSMNode.h"
 #include "CGroundCheckScript.h"
+#include "CLockOnScript.h"
 
 
 map<wstring, CAnimation3D*> CLinkAnimScript::m_mapAnim = {};
@@ -212,6 +213,7 @@ void CLinkAnimScript::begin()
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
 	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
 	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
+	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
 
 }
 
@@ -336,6 +338,18 @@ void CLinkAnimScript::SetLinkCond()
 		{
 			RemoveBit(m_iMode, LINK_MODE_RUN);
 			AddBit(m_iMode, LINK_MODE_WALK);
+		}
+	}
+
+	if (KEY_TAP(KEY::Q))
+	{
+		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_INCLUDE))
+		{
+			RemoveBit(m_iMode, LINK_MODE_LOCKON);
+		}
+		else
+		{
+			AddBit(m_iMode, LINK_MODE_LOCKON);
 		}
 	}
 

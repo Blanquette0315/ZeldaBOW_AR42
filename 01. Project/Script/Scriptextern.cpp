@@ -40,6 +40,7 @@ extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_END] =
 {
     L"Link_GroundChecker",
     L"Link",
+	L"Link_LockOnRadar",
 };
 
 extern const wchar_t* LINK_BONE_WCHAR[(UINT)LINK_BONE_STRING::END] =
