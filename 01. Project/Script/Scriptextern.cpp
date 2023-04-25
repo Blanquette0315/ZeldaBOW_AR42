@@ -26,9 +26,18 @@ extern const wchar_t* LINK_ANIM_WCHAR[(UINT)LINK_ANIM_TYPE::LAT_END] =
     L"Sword_Attack_S3",
     L"Sword_Attack_SF",
     L"Sword_Move_Run",
+    L"Lockon_Walk_F",
+    L"Lockon_Walk_B",
+    L"Lockon_Walk_L",
+    L"Lockon_Walk_R",
+    L"Lockon_Run_F",
+    L"Lockon_Run_B",
+    L"Lockon_Run_L",
+    L"Lockon_Run_R",
 };
 
-extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::END] =
+extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_END] =
 {
-    L"Link_GroundChecker"
+    L"Link_GroundChecker",
+    L"Link",
 };

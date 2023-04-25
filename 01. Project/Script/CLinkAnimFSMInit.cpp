@@ -151,7 +151,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT);
-	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN | LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, 0, LAC_KEY_LBTN | LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S1, LAP_COMBO);
@@ -168,4 +168,7 @@ void CLinkAnimScript::MakeFSM()
 
 	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
+
+	// Lockon
+	
 }

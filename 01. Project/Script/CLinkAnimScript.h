@@ -28,12 +28,15 @@ private:
     CGroundCheckScript*     m_pGroundChecker;
     Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
 
+    UINT                    m_iMode;
+
     // use for function that should operate once
     bool                    m_bOnceAtAnimStart;
 
     bool                    m_bComboProgress;
     float                   m_fComboAccTime;
     float                   m_fComboMaxTime;
+
 
     // save
 private:
@@ -44,7 +47,7 @@ private:
     float           m_fDashSpeed;
     float           m_fJumpSpeed;
     
-    UINT            m_iMode;
+
 
     // FSM function
 private:

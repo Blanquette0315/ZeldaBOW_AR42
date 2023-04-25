@@ -210,8 +210,9 @@ void CLinkAnimScript::begin()
 {
 	SetAnimNode(m_pCurAnimNode, LAT_WAIT);
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
-	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_GROUND_CHECKER]);
+	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
 	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
+
 }
 
 void CLinkAnimScript::tick()
@@ -439,8 +440,8 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Key << "Link Angle Per Sec";
 	_emitter << YAML::Value << m_fAnglePerSec;
 
-	_emitter << YAML::Key << "Link Mode";
-	_emitter << YAML::Value << m_iMode;
+	/*_emitter << YAML::Key << "Link Mode";
+	_emitter << YAML::Value << m_iMode;*/
 
 	_emitter << YAML::Key << "Link Combo Max Time";
 	_emitter << YAML::Value << m_fComboMaxTime;
@@ -455,7 +456,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fDashSpeed, _node["Link Dash Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fJumpSpeed, _node["Link Jump Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fAnglePerSec, _node["Link Angle Per Sec"]);
-	SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);
+	/*SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);*/
 	SAFE_LOAD_FROM_YAML(float, m_fComboMaxTime, _node["Link Combo Max Time"]);
 }
 

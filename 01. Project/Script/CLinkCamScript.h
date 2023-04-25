@@ -1,18 +1,44 @@
 #pragma once
 #include "CCamScript.h"
 
+enum class LINK_CAM_MODE
+{
+    GENERAL,
+    LOCKON,
+    END,
+};
+
 class CGameObject;
 
 class CLinkCamScript :
     public CCamScript
 {
+    // save
+private:
+    float           m_fDistFromLink;
+    float           m_fDistFromLinkMin;
+    float           m_fFrontDistFromLink;
+    float           m_fSpeedLockOnZoomIn;
+    // speed of camera rotation back to the Link
+    float           m_fSpeedLockOnRad;
+
+    float           m_fMaxDistLockOn;
+
+    // not save
 private:
     CGameObject*    m_pLinkObj;
+    CGameObject*    m_pLockOnObj;
 
-    float           m_fDistFromLink;
+    LINK_CAM_MODE   m_eMode;
+    float           m_fDistLockonFromLink;
 
 public:
-    void Move();
+    void GeneralMove();
+    void LockOnMove();
+
+public:
+    void SetLockOnObj(CGameObject* _pLockOnObj) { m_pLockOnObj = _pLockOnObj; }
+    void ClearLockOnObj() { m_pLockOnObj = nullptr; }
 
 public:
     virtual void init() override;
