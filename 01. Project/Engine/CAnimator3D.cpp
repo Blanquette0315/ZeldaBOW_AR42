@@ -244,6 +244,9 @@ void CAnimator3D::Play(const wstring& _strKey, bool _bRepeat)
 	// 실행할 애니메이션을 찾기
 	CAnimation3D* pCurAnim = FindAnimation(_strKey);
 
+	if (pCurAnim == m_pCurAnim)
+		return;
+
 	if (IsValid(pCurAnim))
 	{
 		m_pCurAnim = pCurAnim;

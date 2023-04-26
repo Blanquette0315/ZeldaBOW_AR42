@@ -13,6 +13,8 @@
 #include <Engine/CPaintShader.h>
 
 #include <Script/CPlayerScript.h>
+#include <Script/CMonsterAIScript.h>
+#include <Script/CBokoblinScript.h>
 
 #include "CCameraScript.h"
 

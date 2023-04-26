@@ -5,7 +5,9 @@ CLinkAnimScript
 CLinkCamScript
 CLinkScript
 CLockOnScript
+CBokoblinScript
 CMissileScript
+CMonsterAIScript
 CMonsterScript
 CNavTestSCR
 CPlayerScript

@@ -3,10 +3,13 @@
 
 #include <Engine\CGameObject.h>
 
-
-CMonsterScript::CMonsterScript()
-	: CScript(MONSTERSCRIPT)
-	, m_pTargetObject(nullptr)
+CMonsterScript::CMonsterScript(int _iScriptType)
+	: CScript(_iScriptType)
+	, m_iHP(10)
+	, m_eCurrentState(Monster_State::IDLE)
+	, m_fAcctime(0.f)
+	, m_fSpeed(1.f)
+    , m_iMotion(0)
 {
 }
 
@@ -14,10 +17,18 @@ CMonsterScript::~CMonsterScript()
 {
 }
 
-void CMonsterScript::tick()
+void CMonsterScript::SaveToYAML(YAML::Emitter& _emitter)
 {
-	if (!IsValid(m_pTargetObject))
-		return;
+	CScript::SaveToYAML(_emitter);
+	_emitter << YAML::Key << "HP";
+	_emitter << YAML::Value << m_iHP;
+	_emitter << YAML::Key << "Speed";
+	_emitter << YAML::Value << m_fSpeed;
+}
 
-
+void CMonsterScript::LoadFromYAML(YAML::Node& _node)
+{
+	CScript::LoadFromYAML(_node);
+	SAFE_LOAD_FROM_YAML(UINT, m_iHP, _node["HP"]);
+	SAFE_LOAD_FROM_YAML(float, m_fSpeed, _node["Speed"]);
 }

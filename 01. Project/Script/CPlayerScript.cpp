@@ -138,20 +138,20 @@ void CPlayerScript::tick()
 	}
 }
 
-void CPlayerScript::BeginOverlap(CCollider* _pOther)
+void CPlayerScript::BeginOverlap(CGameObject* _pOther)
 {
 	m_bJump = false;
 	RigidBody()->SetGravityOption(false);
 }
 
-void CPlayerScript::Overlap(CCollider* _pOther)
+void CPlayerScript::Overlap(CGameObject* _pOther)
 {
 	m_bGround = true;
 	RigidBody()->SetGround(m_bGround);
 	RigidBody()->SetGravityOption(false);
 }
 
-void CPlayerScript::EndOverlap(CCollider* _pOther)
+void CPlayerScript::EndOverlap(CGameObject* _pOther)
 {
 	m_bGround = false;
 	RigidBody()->SetGravityOption(true);

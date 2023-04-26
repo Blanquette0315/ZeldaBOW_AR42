@@ -229,7 +229,7 @@ void CCollider::DeleteColliderActor()
 	m_pPhysData = nullptr;
 }
 
-void CCollider::BeginOverlap(CCollider* _pOther)
+void CCollider::BeginOverlap(CGameObject* _pOther)
 {
 	++m_iOverlapCount;
 
@@ -240,7 +240,7 @@ void CCollider::BeginOverlap(CCollider* _pOther)
 	}
 }
 
-void CCollider::Overlap(CCollider* _pOther)
+void CCollider::Overlap(CGameObject* _pOther)
 {
 	const vector<CScript*>& vecScripts = GetOwner()->GetScripts();
 	for (size_t i = 0; i < vecScripts.size(); ++i)
@@ -249,7 +249,7 @@ void CCollider::Overlap(CCollider* _pOther)
 	}
 }
 
-void CCollider::EndOverlap(CCollider* _pOther)
+void CCollider::EndOverlap(CGameObject* _pOther)
 {
 	--m_iOverlapCount;
 
