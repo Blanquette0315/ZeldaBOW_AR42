@@ -80,7 +80,13 @@ CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
 		CResMgr::GetInst()->AddRes<CMesh>(strMeshKey, pMesh);
 
 		// 메시를 실제 파일로 저장
+		if (L"" == pMesh->GetKey())
+		{
+			delete pMesh;
+			pMesh = CResMgr::GetInst()->FindRes<CMesh>(strMeshKey).Get();
+		}
 		pMesh->Save(strMeshKey);
+		//pMesh->Save(strMeshKey);
 	}
 
 	vector<Ptr<CMaterial>> vecMtrl;

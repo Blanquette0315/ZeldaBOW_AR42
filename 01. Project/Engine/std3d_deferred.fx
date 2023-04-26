@@ -6,6 +6,7 @@
 #include "func.fx"
 
 #define fSpecCoefficent g_float_0
+#define vAddEmissiveColor g_vec4_3
 
 struct VS_IN
 {
@@ -137,6 +138,10 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     if(g_btex_3)
     {
         vEmissiveColor = g_tex_3.Sample(g_sam_0, SelectUV(g_iTex3UV, _in));
+        
+        vEmissiveColor.x = vEmissiveColor.x * vAddEmissiveColor.x;
+        vEmissiveColor.y = vEmissiveColor.y * vAddEmissiveColor.y;
+        vEmissiveColor.z = vEmissiveColor.z * vAddEmissiveColor.z;
     }
     
     output.vColor = vObjColor * g_vDiff;

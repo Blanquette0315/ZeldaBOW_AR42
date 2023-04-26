@@ -17,7 +17,7 @@ private:
     bool m_bIsCurLevel;
 
 public:
-    void SetTarget(const wstring* _pTargetLevelPath) { m_TargetLevelPath = _pTargetLevelPath; m_bUpdateOnce = false; }
+    void SetTarget(const wstring* _pTargetLevelPath) { m_TargetLevelPath = _pTargetLevelPath; m_bUpdateOnce = false; m_bIsCurLevel = false; m_TargetLevel = nullptr; }
     const wstring* GetTarget() { return m_TargetLevelPath; }
 
     virtual void update() override;

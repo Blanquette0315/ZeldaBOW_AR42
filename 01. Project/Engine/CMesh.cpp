@@ -56,7 +56,7 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 
 	if (_loader.GetContainerCount() == 1)
 	{
-		const tContainer* container = &_loader.GetContainer(1);
+		const tContainer* container = &_loader.GetContainer(0);
 
 		UINT iVtxCount = (UINT)container->vecPos.size();
 		pMesh->m_iVtxCount = (UINT)container->vecPos.size();

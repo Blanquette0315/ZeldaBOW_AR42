@@ -134,6 +134,8 @@ void MenuUI::render()
                 CLevel* pChangeLevel = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\tmpSave.lv");
                 ChangeLevel(pChangeLevel);
                 m_ePrevState = LEVEL_STATE::STOP;
+                InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+                Inspector->SetTargetLevel(nullptr);
             }
 
             ImGui::EndMenu();
