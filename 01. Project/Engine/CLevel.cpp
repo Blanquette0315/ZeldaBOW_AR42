@@ -62,7 +62,7 @@ void CLevel::ClearLayer()
 
 void CLevel::RefreshCollsionSet()
 {
-	CCollisionMgr::GetInst()->clear();
+	CCollisionMgr::GetInst()->Clear();
 	for (size_t i = 0; i < m_vecLayerCollsionSet.size(); ++i)
 	{
 		CCollisionMgr::GetInst()->CollisionLayerCheck(m_vecLayerCollsionSet[i].iLeft, m_vecLayerCollsionSet[i].iRight);

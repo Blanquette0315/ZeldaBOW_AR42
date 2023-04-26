@@ -22,7 +22,7 @@ public:
 
     void ClearLayer();
 
-private:
+public:
     void RefreshCollsionSet();
 
 public:

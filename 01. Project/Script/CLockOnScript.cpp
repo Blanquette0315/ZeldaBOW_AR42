@@ -36,19 +36,23 @@ void CLockOnScript::tick()
 
 void CLockOnScript::BeginOverlap(CCollider* _pOther)
 {
-
+	int i = 0;
 }
 
 void CLockOnScript::Overlap(CCollider* _pOther)
 {
-	if(IsValid(_pOther))
+	if (IsValid(_pOther))
 	{
-		 float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
-		 if (fDistFromTarget < m_fDistFromTarget)
-		 {
-			 m_pLockOnTarget = _pOther->GetOwner();
-			 m_fDistFromTarget = fDistFromTarget;
-		 }
+		float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
+		if (m_pLockOnTarget == nullptr)
+		{
+			m_pLockOnTarget = _pOther->GetOwner();
+		}
+		else if (fDistFromTarget < m_fDistFromTarget)
+		{
+			m_pLockOnTarget = _pOther->GetOwner();
+			m_fDistFromTarget = fDistFromTarget;
+		}
 	}
 }
 

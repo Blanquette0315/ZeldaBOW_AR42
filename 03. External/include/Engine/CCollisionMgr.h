@@ -29,7 +29,7 @@ private:
 	bool IsCollision(CCollider* _pLeft, CCollider* _pRight);
 
 public:
-	void clear()
+	void Clear()
 	{
 		memset(m_matrix, 0, sizeof(WORD) * MAX_LAYER);
 		m_mapColInfo.clear();
