@@ -262,8 +262,6 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
         qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
     }
         
-
-
     // 최종 본행렬 연산
     MatrixAffineTransformation(vScale, vQZero, qRot, vTrans, matBone);
 

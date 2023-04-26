@@ -124,4 +124,3 @@ void CAnimation3D::LoadFromYAML(YAML::Node& _node)
 	m_sClip.eMode = FbxTime::EMode::eFrames30;
 	m_sClip.dStartTime = 0.;
 }
-

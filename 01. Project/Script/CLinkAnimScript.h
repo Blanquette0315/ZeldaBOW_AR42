@@ -72,10 +72,12 @@ private:
 
     // anim function
 private:
-    void SetRotation();
+    void MoveRotation(Vec3 _vDir);
     void SelectSpeed();
+    void MoveToFrontDir();
 
     void Func_WalkRunDash();
+    void Func_LockOnMove();
     void Func_TurnBack();
     void Func_Jump();
     void Func_LowerBodyBlend();

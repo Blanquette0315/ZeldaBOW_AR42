@@ -3,6 +3,7 @@ CGroundCheckScript
 CLinkAnimScript
 CLinkCamScript
 CLinkScript
+CLockOnScript
 CMissileScript
 CMonsterScript
 CNavTestSCR

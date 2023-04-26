@@ -50,5 +50,4 @@ void CPhysMgr::tick()
 				vecGameObj[i]->Collider()->UpdateCollider();
 		}
 	}
-
 }

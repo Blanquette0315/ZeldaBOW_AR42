@@ -116,6 +116,7 @@ void PopupUI::Clear()
 void PopupUI::Func_NewObj()
 {
 	CGameObject* pObj = new CGameObject;
+	pObj->AddComponent(new CTransform);
 	pObj->SetName(L"New Object");
 
 	tEvent CreateObj;
@@ -163,8 +164,6 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 {
 	if (!_pMtrl->IsEngineRes())
 	{
-		// ó�� �����ϴ� �Ŷ��, ��α��� ������ �ؼ� ������ ���־�� �Ѵ�.
-		// ���� ���� �����Ѵٸ�, ��θ� ������ �ϸ� �ȵȴ�.
 		if (L"" == _pMtrl->GetRelativePath())
 		{
 			wstring strRelativePath;
@@ -186,10 +185,6 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 		}
 		else
 		{
-			// �̸��� Ű�� ��ġ���� �ʴ´ٸ� �̸� ������ �������־�� �Ѵ�.
-			// �̸��� ��� ó�� ���� �ϰų� ��θ� �̸� ó�� �����ؼ� ���ؾ��Ѵ�.
-			// �켱�� �̸��� ���ó�� �����ϴ� ������� ������ ���̴�.
-
 			wstring strNamePath = {};
 
 			strNamePath = L"material\\";
@@ -199,11 +194,8 @@ void PopupUI::Func_SaveMaterial(Ptr<CMaterial> _pMtrl)
 			if (strNamePath != _pMtrl->GetKey())
 			{
 				_pMtrl->Save(strNamePath);
-				// ������ �ǰ����� �̸��� �ƿ� ������ ���̱� ������ �ٽ� false�� �־��־�� �Ѵ�.
 				_pMtrl->ChangeName(false);
 			}
-
-			// �̸��� Ű���� ��ġ�ϸ� ���� ��� �״�θ� �־� ������.
 			else
 			{
 				_pMtrl->Save(_pMtrl->GetRelativePath());
@@ -230,11 +222,8 @@ void PopupUI::Create_AddCompoMenu(DWORD_PTR _pTargetObj)
 			toggles[i] = false;
 		}
 
-		// ������ �Ǹ� false true�� Ȯ���ؼ� Add Component�� Delete Component�� �ϸ� �ȴ�.
 		if (ImGui::MenuItem(strName.c_str(), "", &toggles[i]))
 		{
-			// Ÿ�Ժ��� �б�ó���� �˸��� ������Ʈ�� �߰��� �ش�.
-			// ������ true�� �ٲ�� AddComponent, false�� �ٲ�� ReleaseComponent
 			AddReleaseComponent((COMPONENT_TYPE)i, toggles[i], pTargetObj);
 		}
 	}

@@ -59,7 +59,6 @@ CLinkAnimScript::~CLinkAnimScript()
 {
 }
 
-
 bool CLinkAnimScript::IsCurAnim(LINK_ANIM_TYPE _eLAT)
 {
 	return m_pCurAnimNode->pAnimKey == LINK_ANIM_WCHAR[_eLAT]; 
@@ -213,8 +212,8 @@ void CLinkAnimScript::begin()
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
 	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
 	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
-	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
-
+	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
+	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
 }
 
 void CLinkAnimScript::tick()
@@ -243,6 +242,7 @@ void CLinkAnimScript::tick()
 void CLinkAnimScript::OperateAnimFunc()
 {
 	CalcMoveDirection();
+	SelectSpeed();
 
 	if (IsCurAnim(LAT_WALK) || IsCurAnim(LAT_RUN) || IsCurAnim(LAT_DASH))
 	{
@@ -341,21 +341,28 @@ void CLinkAnimScript::SetLinkCond()
 		}
 	}
 
-	if (KEY_TAP(KEY::Q))
+	if (m_pLockOnRadar->GetLockOnTarget())
 	{
-		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_INCLUDE))
+		if (KEY_TAP(KEY::Q))
 		{
-			RemoveBit(m_iMode, LINK_MODE_LOCKON);
-		}
-		else
-		{
-			AddBit(m_iMode, LINK_MODE_LOCKON);
+			if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_INCLUDE))
+			{
+				RemoveBit(m_iMode, LINK_MODE_LOCKON);
+			}
+			else
+			{
+				AddBit(m_iMode, LINK_MODE_LOCKON);
+			}
 		}
 	}
+	else
+	{
+		RemoveBit(m_iMode, LINK_MODE_LOCKON);
+	}
 
-	if(m_iMode == (UINT)LINK_MODE::LINK_MODE_RUN)
+	if(CalBit(m_iMode, (UINT)LINK_MODE::LINK_MODE_RUN, BIT_LEAST_ONE))
 		AddBit(m_iCond, LAC_MODE_RUN);
-	else if (m_iMode == (UINT)LINK_MODE::LINK_MODE_WALK)
+	else if (CalBit(m_iMode, (UINT)LINK_MODE::LINK_MODE_WALK, BIT_LEAST_ONE))
 		AddBit(m_iCond, LAC_MODE_WALK);
 
 	// anim check
