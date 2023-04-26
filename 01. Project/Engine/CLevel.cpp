@@ -104,15 +104,12 @@ void CLevel::AddGameObejct(CGameObject* _pObject, const wstring& _strLayerName)
 
 void CLevel::ChangeObjectLayer(CGameObject* _pObject, int _Idx)
 {
-	if (_pObject->GetParent())
-	{
-		_pObject->SetLayerIdx(_Idx);
-	}
-	else
+	if (_pObject->GetParent() == nullptr)
 	{
 		m_arrLayer[(UINT)_pObject->GetLayerIdx()].DeregisterObject(_pObject);
 		AddGameObject(_pObject, _Idx);
 	}
+	_pObject->SetLayerIdx(_Idx);
 }
 
 CGameObject* CLevel::FindObjectByName(const wstring& _name)

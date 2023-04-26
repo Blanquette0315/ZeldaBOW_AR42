@@ -307,12 +307,12 @@ void CGameObject::AddChild(CGameObject* _pChild)
 		{
 			_pChild->m_iLayerIdx = m_iLayerIdx;
 		}
-		//// 레이어가 있었다면 레이어가 관리하던 부모 vector에서 빼주어야 한다.
-		//else
-		//{
-		//	CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(_pChild->m_iLayerIdx);
-		//	// pLayer->DeregisterObject(_pChild);
-		//}
+		// 레이어가 있었다면 레이어가 관리하던 부모 vector에서 빼주어야 한다.
+		else
+		{
+			CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(_pChild->m_iLayerIdx);
+			pLayer->DeregisterObject(_pChild);
+		}
 	}
 
 	// 자식으로 들어오는 오브젝트가 다른 오브젝트의 자식 오브젝트였다면
