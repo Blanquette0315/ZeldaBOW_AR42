@@ -52,22 +52,22 @@ void CLayer::AddGameObject(CGameObject* _pObject)
 {
 	m_vecParent.push_back(_pObject);
 
-	static list<CGameObject*> queue;
-	queue.push_back(_pObject);
+	//static list<CGameObject*> queue;
+	//queue.push_back(_pObject);
 
-	while (!queue.empty())
-	{
-		CGameObject* pObj = queue.front();
-		queue.pop_front();
+	//while (!queue.empty())
+	//{
+	//	CGameObject* pObj = queue.front();
+	//	queue.pop_front();
 
-		const vector<CGameObject*>& vecChild = pObj->GetChildObject();
-		for (size_t i = 0; i < vecChild.size(); ++i)
-		{
-			queue.push_back(vecChild[i]);
-		}
+	//	const vector<CGameObject*>& vecChild = pObj->GetChildObject();
+	//	for (size_t i = 0; i < vecChild.size(); ++i)
+	//	{
+	//		queue.push_back(vecChild[i]);
+	//	}
 
-		pObj->m_iLayerIdx = m_iLayerIdx;
-	}
+	//	pObj->m_iLayerIdx = m_iLayerIdx;
+	//}
 }
 
 void CLayer::DeregisterObject(CGameObject* _pObj)

@@ -280,7 +280,6 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 			Inspector->SetTargetResource(pRes.Get());
 		}
 	}
-
 }
 
 void ContentUI::FindContentFileName(const wstring& _strFolderPath)
