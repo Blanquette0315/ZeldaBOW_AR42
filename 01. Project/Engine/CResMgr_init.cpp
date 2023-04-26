@@ -930,6 +930,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
 
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
+	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
 	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
