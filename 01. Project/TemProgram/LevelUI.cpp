@@ -110,6 +110,7 @@ void LevelUI::render_update()
             LayerName += ") ";
 
             LayerName += string(m_TargetLevel->GetLayer(i)->GetName().begin(), m_TargetLevel->GetLayer(i)->GetName().end());
+
             ImGui::Text(LayerName.c_str());
 
 

@@ -30,7 +30,7 @@ CGameObject::CGameObject(const CGameObject& _origin)
 	, m_pParent(nullptr)
 	, m_arrCom{}
 	, m_pRenderComponent(nullptr)
-	, m_iLayerIdx(-1)
+	, m_iLayerIdx(_origin.m_iLayerIdx)
 	, m_bDead(false)
 	, m_bRender(true)
 	, m_bFrustumCul(_origin.m_bFrustumCul)
@@ -307,12 +307,12 @@ void CGameObject::AddChild(CGameObject* _pChild)
 		{
 			_pChild->m_iLayerIdx = m_iLayerIdx;
 		}
-		// 레이어가 있었다면 레이어가 관리하던 부모 vector에서 빼주어야 한다.
-		else
-		{
-			CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(_pChild->m_iLayerIdx);
-			pLayer->DeregisterObject(_pChild);
-		}
+		//// 레이어가 있었다면 레이어가 관리하던 부모 vector에서 빼주어야 한다.
+		//else
+		//{
+		//	CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(_pChild->m_iLayerIdx);
+		//	// pLayer->DeregisterObject(_pChild);
+		//}
 	}
 
 	// 자식으로 들어오는 오브젝트가 다른 오브젝트의 자식 오브젝트였다면
@@ -414,6 +414,8 @@ void CGameObject::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_bFrustumCul;
 	_emitter << YAML::Key << "Rendering";
 	_emitter << YAML::Value << m_bRender;
+	_emitter << YAML::Key << "LayerIdx";
+	_emitter << YAML::Value << m_iLayerIdx;
 }
 
 void CGameObject::LoadFromYAML(YAML::Node& _node)
@@ -421,4 +423,5 @@ void CGameObject::LoadFromYAML(YAML::Node& _node)
 	CEntity::LoadFromYAML(_node);
 	SAFE_LOAD_FROM_YAML(bool, m_bFrustumCul, _node["FrustumCulling"]);
 	SAFE_LOAD_FROM_YAML(bool, m_bRender, _node["Rendering"]);
+	SAFE_LOAD_FROM_YAML(int, m_iLayerIdx, _node["LayerIdx"]);
 }

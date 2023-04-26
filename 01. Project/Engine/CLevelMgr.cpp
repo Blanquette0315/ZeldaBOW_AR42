@@ -27,7 +27,6 @@ void CLevelMgr::init()
 
 void CLevelMgr::refresh()
 {
-	// 이제 tick이 안돌기 때문에 정지 상태에서 Layer들을 Clear해주지 않으면 계속 쌓이게 되는 문제가 발생한다.
 	m_pCurLevel->ClearLayer();
 	m_pCurLevel->RegisterObjects();
 }
@@ -39,8 +38,6 @@ void CLevelMgr::progress()
 		m_pCurLevel->tick();
 	}
 
-	// 정지 상태일 때도 finaltick을 돌려주어야 하는 이유는 각 컴포넌트에서 fianltick에서 행렬등을 연산해주어야
-	// 렌더링을 해주기 때문에 finaltick은 돌려주어야 한다.
 	m_pCurLevel->finaltick();
 }
 

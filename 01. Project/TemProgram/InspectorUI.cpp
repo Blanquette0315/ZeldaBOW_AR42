@@ -270,6 +270,7 @@ void InspectorUI::render_update()
 				{
 					// 지금 레이어에게 해당 오브젝트의 Layer 소속을 바꿔달라고 요청함.
 					CLevelMgr::GetInst()->GetCurLevel()->ChangeObjectLayer(m_TargetObj, NewNum);
+					// m_TargetObj->SetLayerIdx(NewNum);
 				}
 				else
 				{

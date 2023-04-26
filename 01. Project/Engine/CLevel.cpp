@@ -81,15 +81,15 @@ CLayer* CLevel::GetLayer(const wstring& _strLayerName)
 	return nullptr;
 }
 
-void CLevel::AddGameObject(CGameObject* _pObjet, UINT _iLayerIdx)
+void CLevel::AddGameObject(CGameObject* _pObject, UINT _iLayerIdx)
 {
 	assert(0 <= _iLayerIdx && _iLayerIdx < MAX_LAYER);
 
-	m_arrLayer[_iLayerIdx].AddGameObject(_pObjet);
+	m_arrLayer[_iLayerIdx].AddGameObject(_pObject);
 	
 	if (m_State != LEVEL_STATE::STOP)
 	{
-		_pObjet->begin();
+		_pObject->begin();
 	}
 }
 
@@ -104,8 +104,15 @@ void CLevel::AddGameObejct(CGameObject* _pObject, const wstring& _strLayerName)
 
 void CLevel::ChangeObjectLayer(CGameObject* _pObject, int _Idx)
 {
-	m_arrLayer[(UINT)_pObject->GetLayerIdx()].DeregisterObject(_pObject);
-	AddGameObject(_pObject, _Idx);
+	if (_pObject->GetParent())
+	{
+		_pObject->SetLayerIdx(_Idx);
+	}
+	else
+	{
+		m_arrLayer[(UINT)_pObject->GetLayerIdx()].DeregisterObject(_pObject);
+		AddGameObject(_pObject, _Idx);
+	}
 }
 
 CGameObject* CLevel::FindObjectByName(const wstring& _name)
@@ -122,19 +129,6 @@ CGameObject* CLevel::FindObjectByName(const wstring& _name)
 			}
 		}
 	}
-
-	//for (UINT i = 0; i < MAX_LAYER; ++i)
-	//{
-	//	const vector<CGameObject*>& vecObjects = m_arrLayer[i].GetParentObject();
-
-	//	for (size_t j = 0; j < vecObjects.size(); ++j)
-	//	{
-	//		if (_name == vecObjects[j]->GetName())
-	//		{
-	//			return vecObjects[j];
-	//		}
-	//	}
-	//}
 
 	return nullptr;
 }

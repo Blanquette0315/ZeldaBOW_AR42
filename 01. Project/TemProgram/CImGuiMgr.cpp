@@ -153,9 +153,6 @@ void CImGuiMgr::clear()
     ImGui::DestroyContext();
 }
 
-
-
-
 void CImGuiMgr::CreateUI()
 {
     UI* pUI = nullptr;
@@ -177,8 +174,8 @@ void CImGuiMgr::CreateUI()
     pUI = new CurAnimEditor;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-    pUI = new TestUI;
-    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+    //pUI = new TestUI;
+    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new ExportToolUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
