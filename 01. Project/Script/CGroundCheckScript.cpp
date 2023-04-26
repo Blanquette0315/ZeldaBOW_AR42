@@ -27,19 +27,19 @@ void CGroundCheckScript::begin()
 	m_bIsGround = false;
 }
 
-void CGroundCheckScript::BeginOverlap(CCollider* _pOther)
+void CGroundCheckScript::BeginOverlap(CGameObject* _pOther)
 {
 	if (IsValid(_pOther))
 		m_bIsGround = true;
 }
 
-void CGroundCheckScript::Overlap(CCollider* _pOther)
+void CGroundCheckScript::Overlap(CGameObject* _pOther)
 {
 	if(IsValid( _pOther))
 		m_bIsGround = true;
 }
 
-void CGroundCheckScript::EndOverlap(CCollider* _pOther)
+void CGroundCheckScript::EndOverlap(CGameObject* _pOther)
 {
 	if (IsValid(_pOther))
 		m_bIsGround = false;

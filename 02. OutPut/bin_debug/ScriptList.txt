@@ -1,11 +1,10 @@
+CBokoblinScript
 CCamScript
 CGroundCheckScript
-CLayCastScript
 CLinkAnimScript
 CLinkCamScript
 CLinkScript
 CLockOnScript
-CBokoblinScript
 CMissileScript
 CMonsterAIScript
 CMonsterScript

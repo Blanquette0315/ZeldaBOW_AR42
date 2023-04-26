@@ -14,9 +14,9 @@ public:
     virtual void begin() override;
 
 public:
-    virtual void BeginOverlap(CCollider* _pOther) override;
-    virtual void Overlap(CCollider* _pOther) override;
-    virtual void EndOverlap(CCollider* _pOther) override;
+    virtual void BeginOverlap(CGameObject* _pOther) override;
+    virtual void Overlap(CGameObject* _pOther) override;
+    virtual void EndOverlap(CGameObject* _pOther) override;
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

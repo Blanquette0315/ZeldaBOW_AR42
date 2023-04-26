@@ -114,15 +114,15 @@ int CLinkScript::FindClosestIdx(const vector<tMTKeyFrame>& _vec, float _fTime, i
 	}
 }
 
-void CLinkScript::BeginOverlap(CCollider* _pOther)
+void CLinkScript::BeginOverlap(CGameObject* _pOther)
 {
 }
 
-void CLinkScript::Overlap(CCollider* _pOther)
+void CLinkScript::Overlap(CGameObject* _pOther)
 {
 }
 
-void CLinkScript::EndOverlap(CCollider* _pOther)
+void CLinkScript::EndOverlap(CGameObject* _pOther)
 {
 	
 }

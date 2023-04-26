@@ -34,29 +34,29 @@ void CLockOnScript::tick()
 {
 }
 
-void CLockOnScript::BeginOverlap(CCollider* _pOther)
+void CLockOnScript::BeginOverlap(CGameObject* _pOther)
 {
 
 }
 
-void CLockOnScript::Overlap(CCollider* _pOther)
+void CLockOnScript::Overlap(CGameObject* _pOther)
 {
 	if(IsValid(_pOther))
 	{
 		 float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
 		 if (fDistFromTarget < m_fDistFromTarget)
 		 {
-			 m_pLockOnTarget = _pOther->GetOwner();
+			 m_pLockOnTarget = _pOther;
 			 m_fDistFromTarget = fDistFromTarget;
 		 }
 	}
 }
 
-void CLockOnScript::EndOverlap(CCollider* _pOther)
+void CLockOnScript::EndOverlap(CGameObject* _pOther)
 {
 	if (IsValid(_pOther))
 	{
-		if (_pOther->GetOwner() == m_pLockOnTarget)
+		if (_pOther == m_pLockOnTarget)
 			ClearTarget();
 	}
 }

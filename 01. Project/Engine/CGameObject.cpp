@@ -17,7 +17,7 @@ CGameObject::CGameObject()
 	: m_pParent(nullptr)
 	, m_arrCom{}
 	, m_pRenderComponent(nullptr)
-	, m_iLayerIdx(-1)
+	, m_iLayerIdx(0)
 	, m_bDead(false)
 	, m_bRender(true)
 	, m_bFrustumCul(true)

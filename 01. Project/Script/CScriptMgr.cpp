@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "CScriptMgr.h"
 
+#include "CBokoblinScript.h"
 #include "CCamScript.h"
 #include "CGroundCheckScript.h"
 #include "CLinkAnimScript.h"
 #include "CLinkCamScript.h"
 #include "CLinkScript.h"
 #include "CLockOnScript.h"
-#include "CBokoblinScript.h"
 #include "CMissileScript.h"
 #include "CMonsterAIScript.h"
 #include "CMonsterScript.h"
@@ -18,13 +18,13 @@
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
+	_vec.push_back(L"CBokoblinScript");
 	_vec.push_back(L"CCamScript");
 	_vec.push_back(L"CGroundCheckScript");
 	_vec.push_back(L"CLinkAnimScript");
 	_vec.push_back(L"CLinkCamScript");
 	_vec.push_back(L"CLinkScript");
 	_vec.push_back(L"CLockOnScript");
-	_vec.push_back(L"CBokoblinScript");
 	_vec.push_back(L"CMissileScript");
 	_vec.push_back(L"CMonsterAIScript");
 	_vec.push_back(L"CMonsterScript");
@@ -36,6 +36,8 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
+	if (L"CBokoblinScript" == _strScriptName)
+		return new CBokoblinScript;
 	if (L"CCamScript" == _strScriptName)
 		return new CCamScript;
 	if (L"CGroundCheckScript" == _strScriptName)
@@ -48,8 +50,6 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CLinkScript;
 	if (L"CLockOnScript" == _strScriptName)
 		return new CLockOnScript;
-	if (L"CBokoblinScript" == _strScriptName)
-		return new CBokoblinScript;
 	if (L"CMissileScript" == _strScriptName)
 		return new CMissileScript;
 	if (L"CMonsterAIScript" == _strScriptName)
@@ -71,6 +71,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 {
 	switch (_iScriptType)
 	{
+	case (UINT)SCRIPT_TYPE::BOKOBLINSCRIPT:
+		return new CBokoblinScript;
+		break;
 	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
 		return new CCamScript;
 		break;
@@ -88,9 +91,6 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::LOCKONSCRIPT:
 		return new CLockOnScript;
-		break;
-	case (UINT)SCRIPT_TYPE::BOKOBLINSCRIPT:
-		return new CBokoblinScript;
 		break;
 	case (UINT)SCRIPT_TYPE::MISSILESCRIPT:
 		return new CMissileScript;
@@ -121,6 +121,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 {
 	switch ((SCRIPT_TYPE)_pScript->GetScriptType())
 	{
+	case SCRIPT_TYPE::BOKOBLINSCRIPT:
+		return L"CBokoblinScript";
+		break;
+
 	case SCRIPT_TYPE::CAMSCRIPT:
 		return L"CCamScript";
 		break;
@@ -143,10 +147,6 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::LOCKONSCRIPT:
 		return L"CLockOnScript";
-		break;
-
-	case SCRIPT_TYPE::BOKOBLINSCRIPT:
-		return L"CBokoblinScript";
 		break;
 
 	case SCRIPT_TYPE::MISSILESCRIPT:

@@ -66,7 +66,7 @@ void CLayer::AddGameObject(CGameObject* _pObject)
 	//		queue.push_back(vecChild[i]);
 	//	}
 
-	//	pObj->m_iLayerIdx = m_iLayerIdx;
+	_pObject->m_iLayerIdx = m_iLayerIdx;
 	//}
 }
 

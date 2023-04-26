@@ -39,15 +39,15 @@ void CCamScript::tick()
 {
 }
 
-void CCamScript::BeginOverlap(CCollider* _pOther)
+void CCamScript::BeginOverlap(CGameObject* _pOther)
 {
 }
 
-void CCamScript::Overlap(CCollider* _pOther)
+void CCamScript::Overlap(CGameObject* _pOther)
 {
 }
 
-void CCamScript::EndOverlap(CCollider* _pOther)
+void CCamScript::EndOverlap(CGameObject* _pOther)
 {
 }
 

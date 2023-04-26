@@ -429,15 +429,15 @@ void CLinkAnimScript::PlayNextAnim()
 	}
 }
 
-void CLinkAnimScript::BeginOverlap(CCollider* _pOther)
+void CLinkAnimScript::BeginOverlap(CGameObject* _pOther)
 {
 }
 
-void CLinkAnimScript::Overlap(CCollider* _pOther)
+void CLinkAnimScript::Overlap(CGameObject* _pOther)
 {
 }
 
-void CLinkAnimScript::EndOverlap(CCollider* _pOther)
+void CLinkAnimScript::EndOverlap(CGameObject* _pOther)
 {
 }
 

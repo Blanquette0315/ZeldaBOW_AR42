@@ -121,15 +121,15 @@ void CLinkCamScript::tick()
 	}
 }
 
-void CLinkCamScript::BeginOverlap(CCollider* _pOther)
+void CLinkCamScript::BeginOverlap(CGameObject* _pOther)
 {
 }
 
-void CLinkCamScript::Overlap(CCollider* _pOther)
+void CLinkCamScript::Overlap(CGameObject* _pOther)
 {
 }
 
-void CLinkCamScript::EndOverlap(CCollider* _pOther)
+void CLinkCamScript::EndOverlap(CGameObject* _pOther)
 {
 }
 
