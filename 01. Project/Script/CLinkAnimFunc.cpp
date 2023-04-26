@@ -39,13 +39,18 @@ void CLinkAnimScript::MoveRotation(Vec3 _vDir)
 	Transform()->AddRelativeRotation(Vec3(0.f, fAngleSpeedPerFrame, 0.f));
 }
 
-void CLinkAnimScript::MoveToFrontDir()
+void CLinkAnimScript::MoveToDir(DIR _eDir, bool _bReverse)
 {
 	Vec3 vDir = GetCombinedDir();
 	if (vDir == Vec3::Zero)
 		return;
 
-	vDir = Transform()->GetRelativeDir(DIR::FRONT);
+	vDir = Transform()->GetRelativeDir(_eDir);
+	if (_bReverse)
+	{
+		vDir *= -1;
+	}
+
 	RigidBody()->SetVelocity(vDir * m_fSelectedSpeed);
 	/*if (IsCurAnim(LAT_DASH))
 		RigidBody()->SetVelocity(vDir * m_fDashSpeed);
@@ -68,7 +73,7 @@ void CLinkAnimScript::SelectSpeed()
 void CLinkAnimScript::Func_WalkRunDash()
 {
 	MoveRotation(GetCombinedDir());
-	MoveToFrontDir();
+	MoveToDir(DIR::FRONT);
 }
 
 void CLinkAnimScript::Func_LockOnMove()
@@ -79,17 +84,17 @@ void CLinkAnimScript::Func_LockOnMove()
 	Vec3 vCoord = pLockOnTarget->Transform()->GetRelativePos() - Transform()->GetRelativePos();
 	float fGradient = -vCoord.x / vCoord.z;
 	Vec3 vDirMove = Vec3::Zero;
-	Vec3 vDirLinkToLockOn = (-(vCoord - Vec3(0.f, vCoord.y, 0.f))).Normalize();
+	Vec3 vDirLinkToLockOn = (vCoord - Vec3(0.f, vCoord.y, 0.f)).Normalize();
 
-	vDirMove = Vec3(vCoord.z, 0.f, -vCoord.x);
+	vDirMove = Vec3(vCoord.z, 0.f, -vCoord.x).Normalize();
 
 	if (KEY_PRESSED(KEY::W))
 	{
-		MoveToFrontDir();
+		MoveToDir(DIR::FRONT);
 	}
 	else if (KEY_PRESSED(KEY::S))
 	{
-		MoveToFrontDir();
+		MoveToDir(DIR::FRONT, true);
 	}
 	else if (KEY_PRESSED(KEY::A))
 	{
@@ -181,6 +186,11 @@ void CLinkAnimScript::Func_LowerBodyBlend()
 				m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_RUN], true);
 			}
 		}
+	}
+	else
+	{
+		m_pCurAnimNodeLower = nullptr;
+		m_pAnimator->StopLowerAnim();
 	}
 
 

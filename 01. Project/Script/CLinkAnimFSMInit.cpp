@@ -145,9 +145,9 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT);
+	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT | LAP_BLEND);
 	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_OFF, LAC_KEY_E);
-	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT);

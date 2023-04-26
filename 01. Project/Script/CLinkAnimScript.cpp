@@ -275,11 +275,6 @@ void CLinkAnimScript::OperateAnimFunc()
 	{
 		Func_LowerBodyBlend();
 	}
-	else
-	{
-		m_pCurAnimNodeLower = nullptr;
-		m_pAnimator->StopLowerAnim();
-	}
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -364,6 +359,9 @@ void CLinkAnimScript::SetLinkCond()
 		AddBit(m_iCond, LAC_MODE_RUN);
 	else if (CalBit(m_iMode, (UINT)LINK_MODE::LINK_MODE_WALK, BIT_LEAST_ONE))
 		AddBit(m_iCond, LAC_MODE_WALK);
+
+	if(CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
+		AddBit(m_iCond, LAC_MODE_LOCKON);
 
 	// anim check
 	if (m_pCurAnimNode->pAnim->IsFinished())

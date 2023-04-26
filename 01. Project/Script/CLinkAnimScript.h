@@ -74,7 +74,7 @@ private:
 private:
     void MoveRotation(Vec3 _vDir);
     void SelectSpeed();
-    void MoveToFrontDir();
+    void MoveToDir(DIR _eDir, bool _bReverse = 0);
 
     void Func_WalkRunDash();
     void Func_LockOnMove();
