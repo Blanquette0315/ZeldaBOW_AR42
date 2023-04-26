@@ -36,12 +36,12 @@ void CLockOnScript::tick()
 
 void CLockOnScript::BeginOverlap(CGameObject* _pOther)
 {
-
+	int i = 0;
 }
 
 void CLockOnScript::Overlap(CGameObject* _pOther)
 {
-	if(IsValid(_pOther))
+	if (IsValid(_pOther))
 	{
 		 float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
 		 if (fDistFromTarget < m_fDistFromTarget)

@@ -75,6 +75,7 @@ void LayerCollisionUI::render_update()
                 }
             }
         }
+        m_TargetLevel->RefreshCollsionSet();
 
 
         //// 충돌 레이어 설정 초기화

@@ -66,8 +66,9 @@ void CLayer::AddGameObject(CGameObject* _pObject)
 	//		queue.push_back(vecChild[i]);
 	//	}
 
-	_pObject->m_iLayerIdx = m_iLayerIdx;
+	//	pObj->m_iLayerIdx = m_iLayerIdx;
 	//}
+	_pObject->m_iLayerIdx = m_iLayerIdx;
 }
 
 void CLayer::DeregisterObject(CGameObject* _pObj)
@@ -82,7 +83,7 @@ void CLayer::DeregisterObject(CGameObject* _pObj)
 			return;
 		}
 
-		// ÃÖ»óÀ§ ºÎ¸ð¿ÀºêÁ§Æ®°¡, ÇØ´ç ·¹ÀÌ¾î ¼Ò¼ÓÀÎµ¥ ParentVector¿¡ ¾ø´Ù¸é
+		// ï¿½Ö»ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½, ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½Ò¼ï¿½ï¿½Îµï¿½ ParentVectorï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½
 		if(iter == m_vecParent.end())
 			assert(nullptr);
 	}
