@@ -1,0 +1,52 @@
+name: meshdata\Link_Maya.mdat
+ResourceKey: meshdata\Link_Maya.mdat
+ResourceRelativePath: meshdata\Link_Maya.mdat
+Mesh:
+  Exist: 1
+  ResKey: mesh\Link_Maya\Link_Maya.mesh
+  ResRelativePath: mesh\Link_Maya\Link_Maya.mesh
+MtrlCount: 11
+Material0:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Belt_A.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Belt_A.mtrl
+Material1:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Belt_C.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Belt_C.mtrl
+Material2:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Earring.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Earring.mtrl
+Material3:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Eyeball_L.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Eyeball_L.mtrl
+Material4:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Eyeball_R.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Eyeball_R.mtrl
+Material5:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Eyelashes.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Eyelashes.mtrl
+Material6:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Face.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Face.mtrl
+Material7:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Head.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Head.mtrl
+Material8:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Lower_Skin.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Lower_Skin.mtrl
+Material9:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Underwear.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Underwear.mtrl
+Material10:
+  Exist: 1
+  ResKey: material\Link_Maya\Mt_Upper_Skin.mtrl
+  ResRelativePath: material\Link_Maya\Mt_Upper_Skin.mtrl

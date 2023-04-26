@@ -8,7 +8,7 @@ private:
     CAnimation3D*               pTargetAnim;
     wstring                     pTargetAnimKey;
 
-    UINT                        iTranCond;    // determine specific value each of bit  
+    UINT                        iTranCond;    // determine specific value each of bit
     UINT                        iExcludeCond; // determine position of bit that should be compared
 
 public:

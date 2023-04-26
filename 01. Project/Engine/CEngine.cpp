@@ -83,7 +83,6 @@ void CEngine::tick()
 	CLevelMgr::GetInst()->progress();
 
 	CSoundMgr::GetInst()->tick();
-
 }
 
 void CEngine::render()

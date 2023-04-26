@@ -21,9 +21,7 @@ CRenderMgr::CRenderMgr()
 	, m_pLight2DBuffer(nullptr)
 	, m_pLight3DBuffer(nullptr)
 {
-	// ������ ����� ����ȭ ���� �����
 	m_pLight2DBuffer = new CStructuredBuffer();
-	// �ش� ����ȭ ���ۿ� ��� push_back�� �߰��� ����� �� �ִ� �����̱� ������ �켱�� Element�� 2���� ��� �������.
 	m_pLight2DBuffer->Create(sizeof(tLightInfo), 2, SB_TYPE::SRV_ONLY, nullptr, true);
 
 	m_pLight3DBuffer = new CStructuredBuffer();
@@ -32,7 +30,6 @@ CRenderMgr::CRenderMgr()
 
 CRenderMgr::~CRenderMgr()
 {
-	// �������ִ� ���� ����ȭ ���� ����
 	if (nullptr != m_pLight2DBuffer)
 		delete m_pLight2DBuffer;
 
@@ -52,35 +49,23 @@ void CRenderMgr::tick()
 
 void CRenderMgr::render()
 {
-	// MRT Ÿ�� Ŭ����
 	ClearMRT();
 	
 	//static Ptr<CTexture> pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTex");
 	//static Ptr<CTexture> pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTex");
-	//// RTV�� ���� �����ͷ� �޴� ������ ���� Ÿ���� ������ ������ �� �ֱ� �����̴�.
-	//// �� ���� �����ͳ��ϸ�, ���� ���ڰ� int ������, ������, ������ �̱� ������
-	//// �������� �����͸� �����ϱ� ���ؼ��� �Ѱ����� ���� �װ��� �����͸� �����ؾ��ϱ� ����
-	//// ��, MS������ �Լ��� �����ͷ� �صξ���, ���ο��� �ش� �����͸� ��� ���� ����� ä���߱� ������ �츮�� �׿� �˸°� ���ڸ� �������־�� �Ѵ�.
-	//// ����Ÿ���� �ִ� 8�������� �����ϰ�, ���� ���Ľ� ��� �ִ� 1���� ������ �����ϴ�. (0���� ����)
 	//CONTEXT->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf(), pDSTex->GetDSV().Get());
 
-	// ������ �ؽ�ó ������Ʈ
 	UpdateNoiseTexture();
 
-	// 2D ���� ������Ʈ
 	UpdateLight2D();
 
-	// 3D ���� ������Ʈ
 	UpdateLight3D();
 
-	// GlobalData ������Ʈ
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::GLOBAL);
 	pGlobalCB->SetData(&g_global);
 	pGlobalCB->UpdateData(PIPELINE_STAGE::ALL_STAGE);
-	pGlobalCB->UpdateData_CS(); // CS������ DT�� ����ϱ� ������ ���ε��� �ɾ��־�� Shader�ڵ� �ʿ����� �� �� �ִ�.
+	pGlobalCB->UpdateData_CS();
 
-	// ������ ���¿� ���� ������ �б� ó��
-	// �� ���� ����� ���� ���ӳ��� ī�޶�, ������ ����� ���� �����Ϳ� ī�޶�� �������� �̷������ �Ѵ�.
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
 
 	// clear InFrustumObj vector before sort objs.

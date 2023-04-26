@@ -19,7 +19,9 @@ CAnimator3D::CAnimator3D()
 	, m_bFinalMatUpdate(false)
 	, m_iFrmlimit(0)
 	, m_pCurAnim(nullptr)
+	, m_pCurAnimLower(nullptr)
 	, m_bRepeat(false)
+	, m_bRepeatLower(false)
 	, CComponent(COMPONENT_TYPE::ANIMATOR3D)
 {
 	m_pBoneFinalMatBuffer = new CStructuredBuffer;
@@ -31,7 +33,9 @@ CAnimator3D::CAnimator3D(const CAnimator3D& _origin)
 	, m_bFinalMatUpdate(false)
 	, m_iFrmlimit(_origin.m_iFrmlimit)
 	, m_pCurAnim(nullptr)
+	, m_pCurAnimLower(nullptr)
 	, m_bRepeat(false)
+	, m_bRepeatLower(false)
 	, CComponent(COMPONENT_TYPE::ANIMATOR3D)
 {
 	m_pBoneFinalMatBuffer = new CStructuredBuffer;
@@ -52,20 +56,42 @@ CAnimator3D::~CAnimator3D()
 
 void CAnimator3D::finaltick()
 {
-	if (!IsValid(m_pCurAnim))
+	//wstring strFileName = CPathMgr::GetInst()->GetContentPath();
+	//strFileName += L"LinkBoneName.txt";
+	//std::ofstream ofs(strFileName, std::ios::out);
+
+	//if (!m_pVecBones->empty())
+	//{
+	//	for (int i = 0; i < m_pVecBones->size(); ++i)
+	//	{
+	//		ofs << std::to_wstring(i) << " : " << m_pVecBones->at(i).strBoneName << std::endl;
+	//	}
+	//}
+
+	//ofs.close();
+
+	if (IsValid(m_pCurAnim))
 	{
-		return;
+		// 애니메이션이 Finish 상태이고, 반복 재생일 경우
+		if (m_pCurAnim->m_bFinish && m_bRepeat)
+		{
+			// 다시 0프레임으로 리셋시켜 동작하게 한다.
+			m_pCurAnim->Reset();
+		}
+
+		m_pCurAnim->finaltick();
 	}
 
-	// 애니메이션이 Finish 상태이고, 반복 재생일 경우
-	if (m_pCurAnim->m_bFinish && m_bRepeat)
+	if (IsValid(m_pCurAnimLower))
 	{
-		// 다시 0프레임으로 리셋시켜 동작하게 한다.
-		m_pCurAnim->Reset();
-	}
+		if (m_pCurAnimLower->m_bFinish && m_bRepeatLower)
+		{
+			// 다시 0프레임으로 리셋시켜 동작하게 한다.
+			m_pCurAnimLower->Reset();
+		}
 
-	// 애니메이션 업데이트
-	m_pCurAnim->finaltick();
+		m_pCurAnimLower->finaltick();
+	}
 
 	// 컴퓨트 쉐이더 연산여부
 	m_bFinalMatUpdate = false;
@@ -107,6 +133,7 @@ void CAnimator3D::UpdateData()
 		pUpdateShader->SetFrameIndex(0);
 		pUpdateShader->SetNextFrameIdx(0);
 		pUpdateShader->SetFrameRatio(0);
+		pUpdateShader->SetExtraAnimBool(0);
 
 		// 업데이트 쉐이더 실행
 		pUpdateShader->Execute();
@@ -128,13 +155,19 @@ void CAnimator3D::UpdateData()
 
 		UINT iBoneCount = (UINT)m_pVecBones->size();
 		pUpdateShader->SetBoneCount(iBoneCount);
-		pUpdateShader->SetFrameIndex(m_pCurAnim->m_iFrameIdx);
-		pUpdateShader->SetNextFrameIdx(m_pCurAnim->m_iNextFrameIdx);
-		pUpdateShader->SetFrameRatio(m_pCurAnim->m_fRatio);
+		pUpdateShader->SetFrameIdxRatio(m_pCurAnim->m_iFrameIdx, m_pCurAnim->m_fRatio);
 
+		if (m_pCurAnimLower)
+		{
+			pUpdateShader->SetFrameIdxRatioLower(m_pCurAnimLower->m_iFrameIdx, m_pCurAnimLower->m_fRatio);
+			pUpdateShader->SetBoneDividedPoint(m_iBoneDivPoint);
+		}
+		else
+		{
+			pUpdateShader->SetBoneDividedPoint(0);
+		}
 		// 업데이트 쉐이더 실행
 		pUpdateShader->Execute();
-
 		m_bFinalMatUpdate = true;
 	}
 
@@ -223,6 +256,23 @@ void CAnimator3D::Play(const wstring& _strKey, bool _bRepeat)
 	m_pCurAnim->Reset();
 }
 
+void CAnimator3D::PlayLowerAnim(const wstring& _strKey, bool _bRepeat)
+{
+	// 실행할 애니메이션을 찾기
+	CAnimation3D* pCurLowerAnim = FindAnimation(_strKey);
+
+	if (IsValid(pCurLowerAnim))
+	{
+		m_pCurAnimLower = pCurLowerAnim;
+	}
+
+	// 반복 여부 저장
+	m_bRepeatLower = _bRepeat;
+
+	// 실행할 애니메이션 리셋
+	m_pCurAnimLower->Reset();
+}
+
 void CAnimator3D::ChangeAnimName(const wstring& _strOrignKey, const wstring& _strNewKey)
 {
 	CAnimation3D* pAnim = FindAnimation(_strNewKey);
@@ -245,6 +295,9 @@ void CAnimator3D::EraseAnimation(const wstring& _strKey)
 {
 	if (m_pCurAnim != nullptr && m_pCurAnim->GetName() == _strKey)
 		m_pCurAnim = nullptr;
+
+	if (m_pCurAnimLower != nullptr && m_pCurAnimLower->GetName() == _strKey)
+		m_pCurAnimLower = nullptr;
 
 	map<wstring, CAnimation3D*>::iterator Target_iter = m_mapAnim.find(_strKey.c_str());
 	assert(Target_iter != m_mapAnim.end());
@@ -310,7 +363,8 @@ void CAnimator3D::SaveToYAML(YAML::Emitter& _emitter)
 
 void CAnimator3D::LoadFromYAML(YAML::Node& _node)
 {
-	SAFE_LOAD_FROM_YAML(int, m_iFrmlimit, _node["ANIMATOR3D"]["Frmlimit"]);
+	// MeshRender do this. if the animation clip changes, FrmLimit should change too.
+	// SAFE_LOAD_FROM_YAML(int, m_iFrmlimit, _node["ANIMATOR3D"]["Frmlimit"]);
 
 	size_t size = 0;
 	SAFE_LOAD_FROM_YAML(size_t, size, _node["ANIMATOR3D"]["AnimationCount"]);

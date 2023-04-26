@@ -4,6 +4,7 @@ CLayCastScript
 CLinkAnimScript
 CLinkCamScript
 CLinkScript
+CLockOnScript
 CMissileScript
 CMonsterScript
 CNavTestSCR

@@ -1,0 +1,87 @@
+name: ""
+ResourceKey: material\Link_Maya\Mt_Underwear.mtrl
+ResourceRelativePath: material\Link_Maya\Mt_Underwear.mtrl
+MaterialShader:
+  Exist: 1
+  ResKey: Std3D_DeferredShader
+  ResRelativePath: ""
+ConstMtrlDiff: [1, 1, 1, 1]
+ConstMtrlSpec: [0, 0, 0, 1]
+ConstMtrlAmb: [0.588, 0.588, 0.588, 1]
+ConstMtrlEmv: [0, 0, 0, 1]
+ConstIntArr:
+  - 0
+  - 0
+  - 0
+  - 0
+ConstFloatArr:
+  - 0
+  - 0
+  - 0
+  - 0
+ConstVec2Arr:
+  - [0, 0]
+  - [0, 0]
+  - [0, 0]
+  - [0, 0]
+ConstVec4Arr:
+  - [0, 0, 0, 0]
+  - [0, 0, 0, 0]
+  - [0, 0, 0, 0]
+  - [0, 0, 0, 0]
+ConstMatrixArr:
+  - [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+  - [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+  - [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+  - [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+ConstHasTex:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+ConstUVCount: 1
+MaterialShaderTexture0:
+  Exist: 1
+  ResKey: texture\FBXTexture\Link_Maya\Link_Skin_Alb.png
+  ResRelativePath: texture\FBXTexture\Link_Maya\Link_Skin_Alb.png
+  ConstTexUVIndex: 0
+MaterialShaderTexture1:
+  Exist: 1
+  ResKey: texture\FBXTexture\Link_Maya\Link_Skin_Nrm.png
+  ResRelativePath: texture\FBXTexture\Link_Maya\Link_Skin_Nrm.png
+  ConstTexUVIndex: 0
+MaterialShaderTexture2:
+  Exist: 1
+  ResKey: texture\FBXTexture\Link_Maya\Link_Skin_Spm.png
+  ResRelativePath: texture\FBXTexture\Link_Maya\Link_Skin_Spm.png
+  ConstTexUVIndex: 0
+MaterialShaderTexture3:
+  Exist: 0
+  ConstTexUVIndex: 0
+MaterialShaderTexture4:
+  Exist: 0
+  ConstTexUVIndex: 0
+MaterialShaderTexture5:
+  Exist: 0
+  ConstTexUVIndex: 0
+MaterialShaderTexture6:
+  Exist: 0
+  ConstTexUVIndex: 0
+MaterialShaderTexture7:
+  Exist: 0
+MaterialShaderTexture8:
+  Exist: 0
+MaterialShaderTexture9:
+  Exist: 0
+MaterialShaderTexture10:
+  Exist: 0
+MaterialShaderTexture11:
+  Exist: 0

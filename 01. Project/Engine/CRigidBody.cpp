@@ -140,7 +140,7 @@ void CRigidBody::finaltick()
 
 	// DebugDraw
 #ifdef _DEBUG
-	CallDebugDraw();
+	// CallDebugDraw();
 #endif
 }
 

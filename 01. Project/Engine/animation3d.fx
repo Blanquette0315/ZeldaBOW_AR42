@@ -212,28 +212,56 @@ RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);
 
 // ===========================
 // Animation3D Compute Shader
-#define BoneCount   g_int_0
-#define CurFrame    g_int_1
-#define Ratio       g_float_0
+#define BoneCount           g_int_0
+#define CurFrame            (int)g_vec2_0.x
+#define Ratio               g_vec2_0.y
+#define CurFrameLower       (int)g_vec2_1.x
+#define RatioLower          g_vec2_1.y
+#define BoneDivPoint       g_int_1
 // ===========================
 [numthreads(256, 1, 1)]
 void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
 {
     if (BoneCount <= _iThreadIdx.x)
         return;
-
+    
     // 오프셋 행렬을 곱하여 최종 본행렬을 만들어낸다.		
     float4 vQZero = float4(0.f, 0.f, 0.f, 1.f);
     matrix matBone = (matrix) 0.f;
 
+    float4 vScale, vTrans, qRot = (float4) 0.f;
+
     // Frame Data Index == Bone Count * Frame Count + _iThreadIdx.x
     uint iFrameDataIndex = BoneCount * CurFrame + _iThreadIdx.x;
     uint iNextFrameDataIdx = BoneCount * (CurFrame + 1) + _iThreadIdx.x;
+    
+    uint iFrameDataIndexLower = BoneCount * CurFrameLower + _iThreadIdx.x;
+    uint iNextFrameDataIdxLower = BoneCount * (CurFrameLower + 1) + _iThreadIdx.x;
+    
 
-    float4 vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
-    float4 vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
-    float4 qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
+    if (BoneDivPoint)
+    {
+        if (_iThreadIdx.x <= BoneDivPoint)
+        {
+            vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
+            vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+            qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
+        }
 
+        if (_iThreadIdx.x > BoneDivPoint)
+        {
+            vScale = lerp(g_arrFrameTrans[iFrameDataIndexLower].vScale, g_arrFrameTrans[iNextFrameDataIdxLower].vScale, RatioLower);
+            vTrans = lerp(g_arrFrameTrans[iFrameDataIndexLower].vTranslate, g_arrFrameTrans[iNextFrameDataIdxLower].vTranslate, RatioLower);
+            qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndexLower].qRot, g_arrFrameTrans[iNextFrameDataIdxLower].qRot, RatioLower);
+        }
+    }
+    else
+    {
+        vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
+        vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+        qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
+    }
+        
     // 최종 본행렬 연산
     MatrixAffineTransformation(vScale, vQZero, qRot, vTrans, matBone);
 

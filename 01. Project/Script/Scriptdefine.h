@@ -1,5 +1,7 @@
 #pragma once
 
+#define LinkBodyDivPoint (UINT)LINK_BONE_STRING::Ponytail_A_1
+
 enum class CAMERA_SELECTION
 {
     LINK,
@@ -37,10 +39,30 @@ enum LINK_ANIM_TYPE
     LAT_DASH,
     LAT_DASH_BRAKE_L,
     LAT_DASH_BRAKE_R,
+
     LAT_JUMP_L,
     LAT_JUMP_R,
     LAT_LAND_L,
     LAT_LAND_R,
+
+    LAT_SWORD_EQUIP_ON,
+    LAT_SWORD_EQUIP_OFF,
+    LAT_SWORD_LOCKON_WAIT,
+    LAT_SWORD_ATTACK_S1,
+    LAT_SWORD_ATTACK_S2,
+    LAT_SWORD_ATTACK_S3,
+    LAT_SWORD_ATTACK_SF,
+    LAT_SWORD_MOVE_RUN,
+
+    LAT_LOCKON_WALK_F,
+    LAT_LOCKON_WALK_B,
+    LAT_LOCKON_WALK_L,
+    LAT_LOCKON_WALK_R,
+    LAT_LOCKON_RUN_F,
+    LAT_LOCKON_RUN_B,
+    LAT_LOCKON_RUN_L,
+    LAT_LOCKON_RUN_R,
+
     LAT_END
 };
 
@@ -51,17 +73,19 @@ enum LINK_ANIM_CONDITION
     LAC_KEY_WSAD        = 0x00000001,
     LAC_KEY_SPACE       = 0x00000002,
     LAC_KEY_SHIFT       = 0x00000004,
+    LAC_KEY_E           = 0x00000008,
+    LAC_KEY_LBTN        = 0x00000010,
+    LAC_KEY_LBTN_COMBO  = 0x00000020,
+    LAC_KEY_RBTN        = 0x00000040,
 
-    LAC_MODE_WALK       = 0x00000008,
-    LAC_MODE_RUN        = 0x00000010,
+    LAC_MODE_WALK       = 0x00000080,
+    LAC_MODE_RUN        = 0x00000100,
+    LAC_ANIM_FINISHED   = 0x00000200,
+    LAC_TOE_L_FRONT     = 0x00000400,
+    LAC_TURN_BACK       = 0x00000800,
+    LAC_GROUNDED        = 0x00001000,
+    LAC_EQUIP_SWORD     = 0x00002000,
 
-    LAC_ANIM_FINISHED   = 0x00000020,
-
-    LAC_TOE_L_FRONT     = 0x00000040,
-
-    LAC_TURN_BACK       = 0x00000080,
-
-    LAC_GROUNDED        = 0x00000100,
 
     //GROUND_TO_AERIAL = 0x00000020,
     //AERIAL_TO_GROUND = 0x00000040,
@@ -83,19 +107,152 @@ enum LINK_ANIM_CONDITION
 enum LINK_ANIM_PREFERENCE
 {
     LAP_REPEAT          = 0x00000001,
+    LAP_BLEND           = 0x00000002,
+    LAP_COMBO           = 0x00000004,
 };
 
-enum class LINK_MODE
+enum LINK_MODE
 {
-    WALK,
-    RUN,
-    END
+    LINK_MODE_WALK      = 0x00000001,
+    LINK_MODE_RUN       = 0x00000002,
+	LINK_MODE_DASH		= 0x00000004,
+	LINK_MODE_LOCKON	= 0x00000008,
 };
 
-enum class LINK_STRING
+enum LINK_STRING
 {
     LINK_STRING_GROUND_CHECKER,
-    END
+    LINK_STRING_LINK,
+	LINK_STRING_LOCKON_RADAR,
+    LINK_STRING_END
 };
 
-extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::END];
+extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_END];
+
+enum class LINK_BONE_STRING
+{
+	Root,
+	Skl_Root,
+	Spine_1,
+	Spine_2,
+	Clavicle_L,
+	Arm_1_L,
+	Arm_1_Assist_L,
+	Arm_2_L,
+	Elbow_L,
+	Wrist_Assist_L,
+	Wrist_L,
+	Finger_A_1_L,
+	Finger_A_2_L,
+	Finger_A_3_L,
+	Finger_B_1_L,
+	Finger_B_2_L,
+	Finger_B_3_L,
+	Finger_C_1_L,
+	Finger_C_2_L,
+	Finger_C_3_L,
+	Finger_D_1_L,
+	Finger_D_2_L,
+	Finger_D_3_L,
+	Finger_E_1_L,
+	Finger_E_2_L,
+	Finger_E_3_L,
+	Weapon_L,
+	Clavicle_Assist_L, // shai gol
+	Clavicle_R,
+	Arm_1_R,
+	Arm_1_Assist_R,
+	Arm_2_R,
+	Elbow_R,
+	Wrist_Assist_R,
+	Wrist_R,
+	Finger_A_1_R,
+	Finger_A_2_R,
+	Finger_A_3_R,
+	Finger_B_1_R,
+	Finger_B_2_R,
+	Finger_B_3_R,
+	Finger_C_1_R,
+	Finger_C_2_R,
+	Finger_C_3_R,
+	Finger_D_1_R,
+	Finger_D_2_R,
+	Finger_D_3_R,
+	Finger_E_1_R,
+	Finger_E_2_R,
+	Finger_E_3_R,
+	Weapon_R,
+	Clavicle_Assist_R,
+	Neck,
+	Head,
+	Ear_L,
+	Ear_R,
+	Face_Root,
+	Cheek_D_L,
+	Cheek_D_R,
+	Cheek_U_L,
+	Cheek_U_R,
+	Chin,
+	Chin_Point,
+	Lip_D,
+	Lip_D_L_1,
+	Lip_D_R_1,
+	Teeth_D,
+	Eye_In_L,
+	Eye_In_R,
+	Eye_Out_L,
+	Eye_Out_R,
+	Eyeball_L,
+	Eyeball_R,
+	Eyebrow_In_L,
+	Eyebrow_In_R,
+	Eyebrow_Mid_L,
+	Eyebrow_Mid_R,
+	Eyebrow_Out_L,
+	Eyebrow_Out_R,
+	Eyelid_D_L,
+	Eyelid_D_R,
+	Eyelid_U_L,
+	Eyelid_U_R,
+	Lip_U,
+	Lip_U_L_1,
+	Lip_U_L_2,
+	Lip_U_R_1,
+	Lip_U_R_2,
+	Nose,
+	Teeth_U,
+	Hair_Root,
+	Ponytail_A_1, // end of upper
+	Pod_A,
+	Waist,
+	Belt_A_1,
+	Belt_A_2,
+	Belt_A_3,
+	Belt_C_1,
+	Belt_C_2,
+	Belt_C_3,
+	Belt_C_4,
+	Belt_C_5,
+	Belt_C_6,
+	Belt_C_7,
+	Pod_B,
+	Belt_C_8,
+	Leg_1_L,
+	Knee_L,
+	Leg_2_L,
+	Ankle_Assist_L,
+	Ankle_L,
+	Toe_L,
+	Leg_1_R,
+	Knee_R,
+	Leg_2_R,
+	Ankle_Assist_R,
+	Ankle_R,
+	Toe_R,
+	Poach_A,
+	Pod_C,
+	Weapon_Root,
+	END
+};
+
+extern const wchar_t* LINK_BONE_WCHAR[(UINT)LINK_BONE_STRING::END];

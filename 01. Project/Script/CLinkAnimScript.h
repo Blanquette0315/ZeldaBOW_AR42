@@ -5,7 +5,7 @@ class CAnimator3D;
 class CAnimation3D;
 class tAnimNode;
 class CGroundCheckScript;
-
+class CLockOnScript;
 
 
 class CLinkAnimScript :
@@ -20,15 +20,26 @@ private:
 private:
     CAnimator3D*    m_pAnimator;
     tAnimNode*      m_pCurAnimNode;
+    tAnimNode*      m_pCurAnimNodeLower;
     // tAnimNode*      m_pNextAnimNode;
     UINT            m_iCond;
 
     CGameObject*            m_pLinkCamObj;
     CGroundCheckScript*     m_pGroundChecker;
+    CLockOnScript*          m_pLockOnRadar;
+
     Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
+
+    UINT                    m_iMode;
 
     // use for function that should operate once
     bool                    m_bOnceAtAnimStart;
+
+    bool                    m_bComboProgress;
+    float                   m_fComboAccTime;
+    float                   m_fComboMaxTime;
+
+    bool                    m_bLockOn;
 
     // save
 private:
@@ -38,24 +49,22 @@ private:
     float           m_fRunSpeed;
     float           m_fDashSpeed;
     float           m_fJumpSpeed;
-    
-    UINT            m_iMode;
+    float           m_fSelectedSpeed;
 
     // FSM function
 private:
     void CreateAnimNode();
     void ReplaceNodeAnim();
     void MakeFSM();
-    void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim);
-    void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _ePref);
+    void SetAnimNode(tAnimNode*& _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _ePref = 0);
     void SetAnimTran(tAnimNode* _pAnimNode, LINK_ANIM_TYPE _eAnim, UINT _eIncludeAs1Bit, UINT _eIncludeAs0Bit = (LINK_ANIM_CONDITION)0);
-    
+
     // tick structure
 private:
     /*void PlayNextAnim();*/
     void SetLinkCond();
 
-    // This can use anim finished member 
+    // This Func can use anim finished member 
     void OperateAnimFuncAfter();
 
     void PlayNextAnim();
@@ -63,16 +72,23 @@ private:
 
     // anim function
 private:
-    void SetRotation();
+    void MoveRotation(Vec3 _vDir);
+    void SelectSpeed();
+    void MoveToFrontDir();
 
     void Func_WalkRunDash();
+    void Func_LockOnMove();
     void Func_TurnBack();
     void Func_Jump();
+    void Func_LowerBodyBlend();
+    void Func_SwordRun();
+    void Func_SwordAttackMove();
 
     // convenience function
 private:
     // check current anim's member finish
     bool IsCurAnim(LINK_ANIM_TYPE _eLAT); 
+    bool IsCurAnimLower(LINK_ANIM_TYPE _eLAT);
     
     // Find which Link's toe is front 
     LINK_FRONT_TOE GetFrontToe(CAnimation3D* _pCurAnim);
