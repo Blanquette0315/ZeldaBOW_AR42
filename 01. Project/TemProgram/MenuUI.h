@@ -6,6 +6,7 @@ class MenuUI :
 {
 private:
     LEVEL_STATE m_ePrevState;
+    wstring m_strOriCurLevelPath;
 
 public:
     virtual void render() override;

@@ -299,6 +299,14 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 	break;
 
 	case COMPONENT_TYPE::ANIMATOR3D:
+		if (_Select)
+		{
+			// _Target->AddComponent(new CAnimator3D);
+		}
+		else
+		{
+			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::ANIMATOR3D));
+		}
 		break;
 
 	case COMPONENT_TYPE::LIGHT2D:
