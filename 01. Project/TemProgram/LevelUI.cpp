@@ -38,8 +38,9 @@ void LevelUI::update()
 
         m_bUpdateOnce = true;
 
-        if (CLevelMgr::GetInst()->GetCurLevel() == m_TargetLevel)
+        if (nullptr != m_TargetLevelPath && CLevelMgr::GetInst()->GetCurLevel()->GetRelativePath() == *m_TargetLevelPath)
         {
+            m_TargetLevel = CLevelMgr::GetInst()->GetCurLevel();
             LevelNameIdx = LevelName.find(L".lv");
             LevelName.erase(LevelNameIdx, LevelName.length());
             if (CLevelMgr::GetInst()->GetCurLevel()->GetName() != LevelName)

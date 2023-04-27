@@ -28,27 +28,6 @@ void LayerCollisionUI::update()
             m_vecSelected[vecCollsion[i].iLeft][vecCollsion[i].iRight] = true;
         }
 
-        //for (int i = 0; i < MAX_LAYER; ++i)
-        //{
-        //    m_matrix[i] = CCollisionMgr::GetInst()->GetLayerMat(i);
-        //}
-        //
-        //memset(m_vecSelected, false, sizeof(m_vecSelected));
-        //
-        //// 가져온 메트릭스에 알맞게 bool 2차 행렬에 넣어주기
-        //for (int i = 0; i < MAX_LAYER; ++i)
-        //{
-        //    for (int j = 0; j < MAX_LAYER; ++j)
-        //    {
-        //        // 만약 해당 레이어가 체크되어 있다면
-        //        if (m_matrix[i] & (1 << j))
-        //        {
-        //            // 2차 행렬에도 체크를 해주어야 한다.
-        //            m_vecSelected[i][j] = true;
-        //        }
-        //    }
-        //}
-
         m_bChanged = false;
     }
 }
@@ -76,23 +55,6 @@ void LayerCollisionUI::render_update()
             }
         }
 
-
-        //// 충돌 레이어 설정 초기화
-        //CCollisionMgr::GetInst()->clear();
-
-        //// 선택된 설정에 알맞게 LayerCheck
-        //for (int i = 0; i < MAX_LAYER; ++i)
-        //{
-        //    for (int j = 0; j < MAX_LAYER; ++j)
-        //    {
-        //        if (m_vecSelected[i][j])
-        //        {
-        //            CCollisionMgr::GetInst()->CollisionLayerCheck(i, j);
-        //        }
-        //    }
-        //}
-
-        // 다음 update때 갱신이 될 수 있도록 true로 변경해준다.
         m_bChanged = true;
     }
 
@@ -117,7 +79,7 @@ void LayerCollisionUI::render_update()
 
         
         cursor.x += 180.f;
-        int LayerCount = MAX_LAYER - i;
+        int LayerCount = i + 1; // MAX_LAYER - i;
         for (int j = 0; j < LayerCount; ++j)
         {
             ImGui::SameLine();

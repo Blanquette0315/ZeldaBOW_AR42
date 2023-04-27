@@ -110,6 +110,7 @@ void MenuUI::render()
                 if (m_ePrevState == LEVEL_STATE::STOP)
                 {
                     CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
+                    m_strOriCurLevelPath = pCurLevel->GetRelativePath();
                     CSaveLoadMgr::SaveLevel(pCurLevel, L"tmpSave");
                 }
 
@@ -126,12 +127,8 @@ void MenuUI::render()
 
             if (ImGui::MenuItem("Stop", nullptr, nullptr, StopEnable))
             {
-                //tEvent evn = {};
-                //evn.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
-                //evn.wParam = (DWORD_PTR)LEVEL_STATE::STOP;
-                //CEventMgr::GetInst()->AddEvent(evn);
-
                 CLevel* pChangeLevel = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\tmpSave.lv");
+                pChangeLevel->SetRelativePath(m_strOriCurLevelPath.c_str());
                 ChangeLevel(pChangeLevel);
                 m_ePrevState = LEVEL_STATE::STOP;
                 InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
