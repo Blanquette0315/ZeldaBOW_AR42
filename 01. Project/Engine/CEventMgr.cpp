@@ -173,6 +173,5 @@ void CEventMgr::tick()
 		}
 	}
 
-
 	m_vecEvent.clear();
 }

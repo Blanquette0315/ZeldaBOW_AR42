@@ -23,6 +23,8 @@
 void CreateTestLevel()
 {
 	CLevel* pLevel = new CLevel;
+	ChangeLevel(pLevel);
+	return;
 
 	// Layer 이름 설정
 	pLevel->GetLayer(1)->SetName(L"Player");
@@ -531,5 +533,5 @@ void CreateTestLevel()
 
 	// 레벨 설정
 	// 만든 테스트 레벨을 지금 레벨로 전환
-	ChangeLevel(pLevel);
+
 }

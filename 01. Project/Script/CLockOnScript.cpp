@@ -28,6 +28,7 @@ void CLockOnScript::begin()
 	Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
 	Collider()->SetRadius(m_fColRadius);
 	m_pLink = GetOwner()->GetParent();
+	m_fDistFromTarget = m_fColRadius;
 }
 
 void CLockOnScript::tick()
@@ -36,7 +37,6 @@ void CLockOnScript::tick()
 
 void CLockOnScript::BeginOverlap(CGameObject* _pOther)
 {
-	int i = 0;
 }
 
 void CLockOnScript::Overlap(CGameObject* _pOther)
