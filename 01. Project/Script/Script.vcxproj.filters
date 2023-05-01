@@ -124,6 +124,11 @@
     <ClInclude Include="CGroundCheckScript.h">
       <Filter>Scripts\Link\GroundChecker</Filter>
     </ClInclude>
+    <ClInclude Include="CRayCastScript.h" />
+    <ClInclude Include="CLockOnScript.h" />
+    <ClInclude Include="CBonesocketScript.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -192,6 +197,12 @@
     </ClCompile>
     <ClCompile Include="CGroundCheckScript.cpp">
       <Filter>Scripts\Link\GroundChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="CRayCastScript.cpp" />
+    <ClCompile Include="CLinkAnimFunc.cpp" />
+    <ClCompile Include="CLockOnScript.cpp" />
+    <ClCompile Include="CBonesocketScript.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

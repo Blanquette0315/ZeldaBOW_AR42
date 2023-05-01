@@ -35,6 +35,8 @@ public:
     bool IsFinished() { return m_bFinish; }
 
     int GetCurFrame() { return m_iFrameIdx; }
+    int GetNextFrame() { return m_iNextFrameIdx; }
+    float GetRatio() { return m_fRatio; }
 
 private:
     void ResetClip();

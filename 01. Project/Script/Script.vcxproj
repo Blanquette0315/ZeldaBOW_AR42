@@ -170,6 +170,7 @@ call ScriptCopy.bat</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CBonesocketScript.h" />
     <ClInclude Include="CCameraMgr.h" />
     <ClInclude Include="CCamScript.h" />
     <ClInclude Include="CGroundCheckScript.h" />
@@ -195,6 +196,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="Scriptstruct.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBonesocketScript.cpp" />
     <ClCompile Include="CCameraMgr.cpp" />
     <ClCompile Include="CCamScript.cpp" />
     <ClCompile Include="CGroundCheckScript.cpp" />

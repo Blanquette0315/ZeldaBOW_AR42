@@ -2,6 +2,7 @@
 #include "CScriptMgr.h"
 
 #include "CBokoblinScript.h"
+#include "CBonesocketScript.h"
 #include "CCamScript.h"
 #include "CGroundCheckScript.h"
 #include "CLinkAnimScript.h"
@@ -19,6 +20,7 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CBokoblinScript");
+	_vec.push_back(L"CBonesocketScript");
 	_vec.push_back(L"CCamScript");
 	_vec.push_back(L"CGroundCheckScript");
 	_vec.push_back(L"CLinkAnimScript");
@@ -38,6 +40,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CBokoblinScript" == _strScriptName)
 		return new CBokoblinScript;
+	if (L"CBonesocketScript" == _strScriptName)
+		return new CBonesocketScript;
 	if (L"CCamScript" == _strScriptName)
 		return new CCamScript;
 	if (L"CGroundCheckScript" == _strScriptName)
@@ -73,6 +77,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::BOKOBLINSCRIPT:
 		return new CBokoblinScript;
+		break;
+	case (UINT)SCRIPT_TYPE::BONESOCKETSCRIPT:
+		return new CBonesocketScript;
 		break;
 	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
 		return new CCamScript;
@@ -123,6 +130,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::BOKOBLINSCRIPT:
 		return L"CBokoblinScript";
+		break;
+
+	case SCRIPT_TYPE::BONESOCKETSCRIPT:
+		return L"CBonesocketScript";
 		break;
 
 	case SCRIPT_TYPE::CAMSCRIPT:

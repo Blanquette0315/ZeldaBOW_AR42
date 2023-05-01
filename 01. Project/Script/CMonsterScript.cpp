@@ -8,7 +8,7 @@ CMonsterScript::CMonsterScript(int _iScriptType)
 	, m_iHP(10)
 	, m_eCurrentState(Monster_State::IDLE)
 	, m_fAcctime(0.f)
-	, m_fSpeed(1.f)
+	, m_fSpeed(0.01f)
     , m_iMotion(0)
 {
 }
