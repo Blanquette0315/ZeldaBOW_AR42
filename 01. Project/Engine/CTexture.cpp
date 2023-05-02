@@ -229,6 +229,9 @@ void CTexture::GenerateMip(UINT _iMipLevel)
 			, m_Image.GetImage(0, i, 0)->slicePitch);
 	}
 
+	// Create RTV
+	DEVICE->CreateRenderTargetView(m_Tex2D.Get(), nullptr, m_RTV.GetAddressOf());
+
 	// SRV »ý¼º
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewdesc = {};
 	viewdesc.Format = tDesc.Format;

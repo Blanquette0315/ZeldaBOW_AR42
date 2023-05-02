@@ -846,5 +846,8 @@
     <FxCompile Include="maxlandscape.fx">
       <Filter>HLSL\Render\3D\LandScape</Filter>
     </FxCompile>
+    <FxCompile Include="Bloom.fx">
+      <Filter>HLSL\Render\3D</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

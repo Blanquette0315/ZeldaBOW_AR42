@@ -140,5 +140,6 @@ Texture2D g_PTCopyTex : register(t61);
 // 샘플러 레지스터
 SamplerState g_sam_0 : register(s0); // Anisotropic Sampler
 SamplerState g_sam_1 : register(s1); // Point Sampler
+SamplerState g_sam_2 : register(s2);
 
 #endif

@@ -176,6 +176,9 @@ void CCamera::render()
 		vecLight3D[i]->render();
 	}
 
+	// Bloom Effect
+	render_Bloom();
+
 	// SwapChainMRT·Î º¯°æ
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
 
@@ -368,6 +371,62 @@ void CCamera::render_deferreddecal()
 	{
 		m_vecDeferredDecal[i]->render();
 	}
+}
+
+void CCamera::render_Bloom()
+{
+	// Bright
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::BRIGHT)->OMSet();
+	static Ptr<CMaterial> pBrightMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"BrightMtrl");
+	static Ptr<CMesh> pBrightMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+	pBrightMtrl->UpdateData();
+	pBrightMesh->render();
+
+	// Bloom UpScale
+	CONTEXT->GenerateMips(CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseBrightTargetTex")->GetSRV().Get());
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::BLOOM_UPSCALING)->OMSet();
+	static Ptr<CMaterial> pBloomBlurMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"BloomUpScaleMtrl");
+	pBloomBlurMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseBrightTargetTex"));
+	static Ptr<CMesh> pBloomBlurMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+	pBloomBlurMtrl->UpdateData();
+	pBloomBlurMesh->render();
+
+	// AlphaBloomMtrl
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::BLOOM_MARGE)->OMSet();
+	static Ptr<CMaterial> pBloomMargeMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"AlphaBloomMtrl");
+	static Ptr<CMesh> pBloomMargeMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+	pBloomMargeMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"BloomUpScaleTargetTex0"));
+	pBloomMargeMtrl->UpdateData();
+	pBloomMargeMesh->render();
+
+	pBloomMargeMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"BloomUpScaleTargetTex1"));
+	pBloomMargeMtrl->UpdateData();
+	pBloomMargeMesh->render();
+
+	pBloomMargeMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"BloomUpScaleTargetTex2"));
+	pBloomMargeMtrl->UpdateData();
+	pBloomMargeMesh->render();
+
+	pBloomMargeMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"BloomUpScaleTargetTex3"));
+	pBloomMargeMtrl->UpdateData();
+	pBloomMargeMesh->render();
+
+	pBloomMargeMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"BloomUpScaleTargetTex4"));
+	pBloomMargeMtrl->UpdateData();
+	pBloomMargeMesh->render();
+
+	pBloomMargeMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"BloomUpScaleTargetTex5"));
+	pBloomMargeMtrl->UpdateData();
+	pBloomMargeMesh->render();
+
+	// Bloom
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::BLOOM)->OMSet();
+	static Ptr<CMaterial> pBloomMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"BloomMtrl");
+	static Ptr<CMesh> pBloomMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+	pBloomMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
+	pBloomMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"BloomMargeTargetTex"));
+	pBloomMtrl->UpdateData();
+	pBloomMesh->render();
 }
 
 void CCamera::render_opaque()

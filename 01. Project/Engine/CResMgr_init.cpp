@@ -1022,6 +1022,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 	// �ش� ���̴��� ��ü�� �׸� ���̴��� �ƴϹǷ� �������� NONE�̴�.
 	pShader->SetDomain(SHADER_DOMAIN::NONE);
 
+	pShader->AddScalarParam(INT_0, "Render Method");
+	pShader->AddScalarParam(INT_2, "Diffuse Mip Level");
 	// �ش� ���̴��� ��ü�� �׸� ���̴��� �ƴ� MRT�� ���� Ÿ�� ���� �����̹Ƿ�
 	// �Ķ���͸� ������ �ʿ䰡 ����.
 	pShader->AddScalarParam(INT_3, "int");
@@ -1053,6 +1055,56 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 
 	AddRes<CGraphicsShader>(L"DepthMapShader", pShader);
+
+	// BrightShader
+	pShader = new CGraphicsShader;
+	pShader->SetDomain(SHADER_DOMAIN::NONE);
+	pShader->CreateVertexShader(L"Shader\\Bloom.fx", "VS_Bloom");
+	pShader->CreatePixelShader(L"Shader\\Bloom.fx", "PS_Bright");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	AddRes<CGraphicsShader>(L"BrightShader", pShader);
+
+	// BloomUpScaleShader
+	pShader = new CGraphicsShader;
+	pShader->SetDomain(SHADER_DOMAIN::NONE);
+	pShader->CreateVertexShader(L"Shader\\Bloom.fx", "VS_Bloom");
+	pShader->CreatePixelShader(L"Shader\\Bloom.fx", "PS_BloomUpScale");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	AddRes<CGraphicsShader>(L"BloomUpScaleShader", pShader);
+
+	// AlphaBloom
+	pShader = new CGraphicsShader;
+	pShader->SetDomain(SHADER_DOMAIN::NONE);
+	pShader->CreateVertexShader(L"Shader\\Bloom.fx", "VS_Bloom");
+	pShader->CreatePixelShader(L"Shader\\Bloom.fx", "PS_AlphaBloom");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+
+	AddRes<CGraphicsShader>(L"AlphaBloomShader", pShader);
+
+	// BloomShader
+	pShader = new CGraphicsShader;
+	pShader->SetDomain(SHADER_DOMAIN::NONE);
+	pShader->CreateVertexShader(L"Shader\\Bloom.fx", "VS_Bloom");
+	pShader->CreatePixelShader(L"Shader\\Bloom.fx", "PS_Bloom");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	pShader->AddScalarParam(INT_0, "Bloom Pow");
+
+	AddRes<CGraphicsShader>(L"BloomShader", pShader);
 }
 
 #include "CPaintShader.h"
@@ -1162,6 +1214,22 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DepthMapShader"));
 	AddRes<CMaterial>(L"DepthMapMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"BrightShader"));
+	AddRes<CMaterial>(L"BrightMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"BloomUpScaleShader"));
+	AddRes<CMaterial>(L"BloomUpScaleMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"AlphaBloomShader"));
+	AddRes<CMaterial>(L"AlphaBloomMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"BloomShader"));
+	AddRes<CMaterial>(L"BloomMtrl", pMtrl);
 }
 
 void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName, UINT _iSemanticIndex)

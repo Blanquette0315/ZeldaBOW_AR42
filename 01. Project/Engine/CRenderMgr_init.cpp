@@ -32,7 +32,8 @@ void CRenderMgr::init()
 	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_MergeMtrl");
 	pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"ColorTargetTex"));
 	pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
-	pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
+	//pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseBrightTargetTex"));
+	pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"BloomDiffuseTargetTex"));
 	pMtrl->SetTexParam(TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"SpecularTargetTex"));
 
 	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DirLightMtrl");
@@ -52,6 +53,9 @@ void CRenderMgr::init()
 
 	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DecalMtrl");
 	pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
+
+	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"BrightMtrl");
+	pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
 }
 
 void CRenderMgr::CreateMRT()
@@ -126,7 +130,7 @@ void CRenderMgr::CreateMRT()
 		{
 			CResMgr::GetInst()->CreateTexture(L"DiffuseTargetTex"
 											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
-											, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 			CResMgr::GetInst()->CreateTexture(L"SpecularTargetTex"
 											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
@@ -143,6 +147,124 @@ void CRenderMgr::CreateMRT()
 
 		m_arrMRT[(UINT)MRT_TYPE::LIGHT] = new CMRT;
 		m_arrMRT[(UINT)MRT_TYPE::LIGHT]->Create(arrRTTex, arrClear, pDSTex);
+	}
+
+	// =============
+	// Bright MRT
+	// =============
+	{
+		Ptr<CTexture> arrRTTex[8] =
+		{
+			CResMgr::GetInst()->CreateTexture(L"DiffuseBrightTargetTex"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+		};
+
+		CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseBrightTargetTex")->GenerateMip(8);
+
+		// 클리어 색상 정하기
+		Vec4 arrClear[8] = {
+			Vec4(0.f,0.f,0.f,0.f)
+		};
+
+		// 깊이 텍스처가 필요없으니 빼주었다.
+		Ptr<CTexture> pDSTex = nullptr;
+
+		m_arrMRT[(UINT)MRT_TYPE::BRIGHT] = new CMRT;
+		m_arrMRT[(UINT)MRT_TYPE::BRIGHT]->Create(arrRTTex, arrClear, pDSTex);
+	}
+
+	// =============
+	// BloomBlur MRT
+	// =============
+	{
+		Ptr<CTexture> arrRTTex[8] =
+		{
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex0"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex1"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex2"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex3"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex4"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex5"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+			CResMgr::GetInst()->CreateTexture(L"BloomUpScaleTargetTex6"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+		};
+
+		// 클리어 색상 정하기
+		Vec4 arrClear[8] = {
+			Vec4(0.f,0.f,0.f,0.f),
+			Vec4(0.f,0.f,0.f,0.f),
+			Vec4(0.f,0.f,0.f,0.f),
+			Vec4(0.f,0.f,0.f,0.f),
+			Vec4(0.f,0.f,0.f,0.f),
+			Vec4(0.f,0.f,0.f,0.f),
+			Vec4(0.f,0.f,0.f,0.f),
+		};
+
+		// 깊이 텍스처가 필요없으니 빼주었다.
+		Ptr<CTexture> pDSTex = nullptr;
+
+		m_arrMRT[(UINT)MRT_TYPE::BLOOM_UPSCALING] = new CMRT;
+		m_arrMRT[(UINT)MRT_TYPE::BLOOM_UPSCALING]->Create(arrRTTex, arrClear, pDSTex);
+	}
+
+	// =============
+	// BloomMarge MRT
+	// =============
+	{
+		Ptr<CTexture> arrRTTex[8] =
+		{
+			CResMgr::GetInst()->CreateTexture(L"BloomMargeTargetTex"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+		};
+
+		// 클리어 색상 정하기
+		Vec4 arrClear[8] = {
+			Vec4(0.f,0.f,0.f,0.f)
+		};
+
+		// 깊이 텍스처가 필요없으니 빼주었다.
+		Ptr<CTexture> pDSTex = nullptr;
+
+		m_arrMRT[(UINT)MRT_TYPE::BLOOM_MARGE] = new CMRT;
+		m_arrMRT[(UINT)MRT_TYPE::BLOOM_MARGE]->Create(arrRTTex, arrClear, pDSTex);
+	}
+
+	// =============
+	// Bloom MRT
+	// =============
+	{
+		Ptr<CTexture> arrRTTex[8] =
+		{
+			CResMgr::GetInst()->CreateTexture(L"BloomDiffuseTargetTex"
+											, (UINT)vRenderResolution.x, (UINT)vRenderResolution.y
+											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+		};
+
+		// 클리어 색상 정하기
+		Vec4 arrClear[8] = {
+			Vec4(0.f,0.f,0.f,0.f)
+		};
+
+		// 깊이 텍스처가 필요없으니 빼주었다.
+		Ptr<CTexture> pDSTex = nullptr;
+
+		m_arrMRT[(UINT)MRT_TYPE::BLOOM] = new CMRT;
+		m_arrMRT[(UINT)MRT_TYPE::BLOOM]->Create(arrRTTex, arrClear, pDSTex);
 	}
 
 	// =============
