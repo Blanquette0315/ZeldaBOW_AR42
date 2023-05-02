@@ -92,6 +92,7 @@ public:
     void render_deferred();
     void render_deferred_transparent();
     void render_deferreddecal();
+    void render_Bloom();
     void render_opaque();
     void render_mask();
     void render_decal();

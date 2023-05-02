@@ -92,5 +92,6 @@ public:
     ~CTexture();
 
     friend class CResMgr;
+    friend class CRenderMgr;
 };
 
