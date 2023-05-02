@@ -125,9 +125,11 @@
       <Filter>Scripts\Link\GroundChecker</Filter>
     </ClInclude>
     <ClInclude Include="CRayCastScript.h" />
-    <ClInclude Include="CLockOnScript.h" />
     <ClInclude Include="CBonesocketScript.h">
       <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CLockOnScript.h">
+      <Filter>Scripts\Link\LockOn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -199,10 +201,14 @@
       <Filter>Scripts\Link\GroundChecker</Filter>
     </ClCompile>
     <ClCompile Include="CRayCastScript.cpp" />
-    <ClCompile Include="CLinkAnimFunc.cpp" />
-    <ClCompile Include="CLockOnScript.cpp" />
     <ClCompile Include="CBonesocketScript.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CLockOnScript.cpp">
+      <Filter>Scripts\Link\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkAnimFunc.cpp">
+      <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -139,3 +139,4 @@ public:
     ~CLinkAnimScript();
 };
 
+typedef void (CLinkAnimScript::* Link_Func)(void);

@@ -268,6 +268,11 @@ void CLinkAnimScript::OperateAnimFunc()
 			Func_SwordAttackMove();
 		}
 
+		if (IsCurAnim(LAT_SWORD_EQUIP_ON))
+		{
+			Func_SwordEquipOn();
+		}
+
 		m_bOnceAtAnimStart = false;
 	}
 
@@ -275,6 +280,16 @@ void CLinkAnimScript::OperateAnimFunc()
 	if (CalBit(m_pCurAnimNode->iPreferences, LAP_BLEND, BIT_LEAST_ONE))
 	{
 		Func_LowerBodyBlend();
+	}
+	else
+	{
+		m_pCurAnimNodeLower = nullptr;
+		m_pAnimator->StopLowerAnim();
+	}
+
+	if (IsCurAnim(LAT_SWORD_EQUIP_OFF))
+	{
+		Func_SwordEquipOff();
 	}
 }
 

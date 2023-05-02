@@ -47,7 +47,7 @@ void CBonesocketScript::tick()
 
 		Vec3 vFinalOffset = XMVector3TransformCoord(m_vOffsetPos, matRot);
 
-		Transform()->SetRelativeScale(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vScale, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vScale, fRatio));
+		// Transform()->SetRelativeScale(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vScale, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vScale, fRatio));
 		Transform()->SetRelativePos(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vTranslate + vFinalOffset, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vTranslate + vFinalOffset, fRatio));
 		//Vec3 CurRot;
 		//Vec3 NextRot;

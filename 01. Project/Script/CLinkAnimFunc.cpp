@@ -3,10 +3,12 @@
 
 #include <Engine/CTransform.h>
 #include <Engine/CRigidbody.h>
+#include <Engine/CAnimation3D.h>
 
 #include "CLinkScript.h"
 #include "CLockOnScript.h"
 #include "FSMNode.h"
+#include "CBonesocketScript.h"
 
 
 
@@ -272,10 +274,16 @@ void CLinkAnimScript::Func_SwordAttackMove()
 
 void CLinkAnimScript::Func_SwordEquipOn()
 {
-
+	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Wrist_R);
+	pBoneScr->setOffsetPos(Vec3(-0.037f, -0.015f, 0.f));
+	pBoneScr->setOffsetRot(Vec3(-90.f, 0.f, 0.f));
 }
 
 void CLinkAnimScript::Func_SwordEquipOff()
 {
-
+	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Spine_2);
+	pBoneScr->setOffsetPos(Vec3(0.09f, -0.03f, -0.05f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -65.f));
 }

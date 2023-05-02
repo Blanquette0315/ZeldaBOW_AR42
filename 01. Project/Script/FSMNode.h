@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CLinkAnimScript.h"
+
 class CAnimation3D;
 
 class tTransition
