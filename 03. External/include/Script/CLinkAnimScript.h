@@ -28,6 +28,11 @@ private:
     CGroundCheckScript*     m_pGroundChecker;
     CLockOnScript*          m_pLockOnRadar;
 
+    CGameObject*            m_pSwordObj;
+    CGameObject*            m_pBowObj;
+    CGameObject*            m_pShieldObj;
+
+
     Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
 
     UINT                    m_iMode;
@@ -83,6 +88,8 @@ private:
     void Func_LowerBodyBlend();
     void Func_SwordRun();
     void Func_SwordAttackMove();
+    void Func_SwordEquipOn();
+    void Func_SwordEquipOff();
 
     // convenience function
 private:

@@ -214,6 +214,7 @@ void CLinkAnimScript::begin()
 	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
 	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
 	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
+	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
 }
 
 void CLinkAnimScript::tick()

@@ -169,6 +169,21 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
-	// Lockon
+	// Bow
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON);
+
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF);
+
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON_RUN);
+
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF_RUN);
+
+	SetAnimNode(pAnimNode, LAT_BOW_LOCKON_WAIT);
+
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_LOAD);
+
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_CHARGE);
+
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT);
 	
 }

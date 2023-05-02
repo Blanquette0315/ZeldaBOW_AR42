@@ -269,3 +269,13 @@ void CLinkAnimScript::Func_SwordAttackMove()
 	Vec3 vDir = Transform()->GetRelativeDir(DIR::FRONT);
 	RigidBody()->SetVelocity(vDir * m_fWalkSpeed);
 }
+
+void CLinkAnimScript::Func_SwordEquipOn()
+{
+
+}
+
+void CLinkAnimScript::Func_SwordEquipOff()
+{
+
+}

@@ -24,15 +24,17 @@ void CreateTestLevel()
 {
 	CLevel* pLevel = new CLevel;
 	ChangeLevel(pLevel);
+
+
 	return;
 
-	// Layer ÀÌ¸§ ¼³Á¤
+	// Layer ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 	pLevel->GetLayer(1)->SetName(L"Player");
 	pLevel->GetLayer(2)->SetName(L"PlayerProjectile");
 	pLevel->GetLayer(3)->SetName(L"Monster");
 	pLevel->GetLayer(4)->SetName(L"MonsterProjectile");
 
-	// Camera Object Ãß°¡
+	// Camera Object ï¿½ß°ï¿½
 	CGameObject* pCamObj = new CGameObject;
 	pCamObj->SetName(L"MainCamera");
 
@@ -47,10 +49,10 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pCamObj, 0);
 
-	// Directional Light Ãß°¡
-	// º¸Åë ¹æÇâ¼º ±¤¿øÀº ³·ÀÏ¶§´Â 0.7, ¹ã¿¡´Â 0.2Á¤µµ¸¦ µÎ°í »ç¿ëÇÑ´Ù.
-	// ±¤¿øÀº ±×·ÁÁú ÇÊ¿ä°¡ ¾ø±â ¶§¹®¿¡ CRenderMesh´Â Ãß°¡ÇÏÁö ¾Ê´Â´Ù.
-	// Directional Light´Â ¹æÇâ Á¤º¸°¡ ÇÊ¿ä ¾ø±â ¶§¹®¿¡ ³ÖÁö ¾Ê¾Ò´Ù.
+	// Directional Light ï¿½ß°ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¼º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ï¿½ 0.7, ï¿½ã¿¡ï¿½ï¿½ 0.2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½Ê¿ä°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CRenderMeshï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´ï¿½.
+	// Directional Lightï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò´ï¿½.
 	CGameObject* pDirLight = new CGameObject;
 	pDirLight->SetName(L"DirectionalLight");
 
@@ -65,7 +67,7 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pDirLight, 0);
 
 
-	// Point Light Ãß°¡
+	// Point Light ï¿½ß°ï¿½
 	/*CGameObject* pPointLight = new CGameObject;
 	pPointLight->SetName(L"PointLight");
 
@@ -83,7 +85,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pPointLight, 0);*/
 
-	// Spot Light Ãß°¡
+	// Spot Light ï¿½ß°ï¿½
 	/*CGameObject* pSpotLight = new CGameObject;
 	pSpotLight->SetName(L"SpotLight");
 
@@ -104,7 +106,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pSpotLight, 0);*/
 
-	// SkyBox Ãß°¡
+	// SkyBox ï¿½ß°ï¿½
 	CGameObject* pSkyBox = new CGameObject;
 	pSkyBox->SetName(L"SkyBox");
 
@@ -124,7 +126,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pSkyBox, 0);
 
-	// GameObject ÃÊ±âÈ­
+	// GameObject ï¿½Ê±ï¿½È­
 	CGameObject* pObject = nullptr;
 
 	pObject = new CGameObject;
@@ -161,7 +163,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pObject, 0);
 
-	// LandScape Ãß°¡
+	// LandScape ï¿½ß°ï¿½
 	//CGameObject* pLandScape = new CGameObject;
 	//pLandScape->SetName(L"LandScape");
 	//
@@ -265,7 +267,7 @@ void CreateTestLevel()
 
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Dungeon_80.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\sw.fbx");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
 		pObj = pMeshData->Instantiate();
@@ -273,87 +275,36 @@ void CreateTestLevel()
 		pObj->SetName(L"Map");
 		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 
+		pObj = pMeshData->Instantiate();
 		pObj->AddComponent(new CRigidBody);
-		pObj->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
-		pObj->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_MESH);
-		pObj->RigidBody()->SetColldierScaleSize(false);
-		pObj->RigidBody()->SetKinematicOption(true);
-		pObj->RigidBody()->SetDinamicOption(false);
-		pObj->RigidBody()->SetGravityOption(false);
-		pObj->RigidBody()->SetStaticFriction(0.f);
-		pObj->RigidBody()->SetDynamicFriction(0.f);
+		pObj->AddComponent(new CBokoblinScript);
+		pObj->SetFrustumCul(false);
+		pObj->SetName(L"Bokoblin_Red");
+		pObj->Transform()->SetRelativeScale(25.f, 25.f, 25.f);
+		pObj->Transform()->SetRelativePos(0.f, 0.f, -200.f);
+		pObj->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
+		pObj->RigidBody()->SetCapsuleSize(4.f, 8.f);
+		pObj->RigidBody()->SetMass(10.f);
 		pObj->RigidBody()->SetRestitution(0.f);
-		pObj->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
-
+		pObj->RigidBody()->SetStaticFriction(0.6f);
+		pObj->RigidBody()->SetDynamicFriction(0.6f);
+		pObj->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
+		pObj->RigidBody()->SetLockAxis_Rot(true, true, true);
+		pObj->RigidBody()->SetGravityOption(true);
 		pLevel->AddGameObject(pObj, 0);
+		//pObj->Animator3D()->Play(L"Take 001", true);
 
-		// DgnObj_FallDownPillar_A
-		pMeshData = nullptr;
-		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_FallDownPillar_A.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
-
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"DgnObj_FallDownPillar_A");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-		pLevel->AddGameObject(pObj, 0);
-
-		// DgnObj_Hrl_CandlePoleC_01
-		pMeshData = nullptr;
-		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_Hrl_CandlePoleC_01.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
-
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"DgnObj_Hrl_CandlePoleC_01");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-		pLevel->AddGameObject(pObj, 0);
-
-		// DgnObj_Hrl_CandlePoleC_02
-		pMeshData = nullptr;
-		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_Hrl_CandlePoleC_02.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
-
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"DgnObj_Hrl_CandlePoleC_02");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-		pLevel->AddGameObject(pObj, 0);
-
-		// DgnObj_Hrl_CandleStandA_01
-		pMeshData = nullptr;
-		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_Hrl_CandleStandA_01.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
-
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"DgnObj_Hrl_CandleStandA_01");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-		pLevel->AddGameObject(pObj, 0);
-
-		// DgnObj_ShutterFence
-		pMeshData = nullptr;
-		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_ShutterFence.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
-
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"DgnObj_ShutterFence");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-		pLevel->AddGameObject(pObj, 0);
+		CGameObject* pChild = new CGameObject;
+		pChild->SetName(L"MonsterAI");
+		pChild->AddComponent(new CTransform);
+		pChild->AddComponent(new CCollider);
+		pChild->AddComponent(new CMonsterAIScript);
+		pChild->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+		pChild->Collider()->SetRadius(300.f);
+		pObj->AddChild(pChild);
 	}
 
-	// µ¥Ä® »ý¼º
+	// ï¿½ï¿½Ä® ï¿½ï¿½ï¿½ï¿½
 	/*CGameObject* pDecal = new CGameObject;
 	pDecal->SetName(L"Decal");
 
@@ -368,7 +319,7 @@ void CreateTestLevel()
 
 	pLevel->AddGameObject(pDecal, 0);*/
 
-	// º® »ý¼º
+	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//pObject = new CGameObject;
 	//pObject->SetName(L"Plane_0");
 
@@ -523,15 +474,15 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pPostProcess, 0);*/
 
 
-	// Ãæµ¹ ·¹ÀÌ¾î ÁöÁ¤
+	// ï¿½æµ¹ ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 	CCollisionMgr::GetInst()->CollisionLayerCheck(0, 1);
 
-	// Level ÀúÀå
+	// Level ï¿½ï¿½ï¿½ï¿½
 	//pLevel->SetName(L"Test Level2");
 	//CSaveLoadMgr::GetInst()->SaveLevel(pLevel);
 	//CLevelMgr::GetInst()->RegisterLevel(pLevel->GetRelativePath(), pLevel);
 
-	// ·¹º§ ¼³Á¤
-	// ¸¸µç Å×½ºÆ® ·¹º§À» Áö±Ý ·¹º§·Î ÀüÈ¯
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 
 }
