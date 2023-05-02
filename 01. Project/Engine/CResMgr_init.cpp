@@ -931,6 +931,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
+	pShader->AddScalarParam(INT_3, "Shader Type         ");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
 	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
@@ -938,6 +939,26 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_4, "Masking Texture     ");
 
 	AddRes<CGraphicsShader>(L"Std3D_DeferredShader", pShader);
+
+	// Std3D_Deferred Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std3d_deferred.fx", "VS_Std3D_Deferred");
+	pShader->CreatePixelShader(L"shader\\std3d_deferred.fx", "PS_Std3D_Deferred");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::LESS_EQUAL);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+
+	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
+	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
+	pShader->AddScalarParam(INT_3, "Shader Type         ");
+	pShader->AddTexureParam(TEX_0, "Output Texture      ");
+	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
+	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
+	pShader->AddTexureParam(TEX_3, "Emissive Texture    ");
+	pShader->AddTexureParam(TEX_4, "Masking Texture     ");
+
+	AddRes<CGraphicsShader>(L"Std3D_DSLE_DeferredShader", pShader);
 
 	// Std3DAlpha_Deferred Shader
 	pShader = new CGraphicsShader;

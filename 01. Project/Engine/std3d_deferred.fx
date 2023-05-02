@@ -102,6 +102,14 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     if (g_btex_0)
     {
         vObjColor = g_tex_0.Sample(g_sam_0, SelectUV(g_iTex0UV, _in));
+        
+        if(g_int_3 != 0.f)
+        {
+            if (vObjColor.r == 0.f && vObjColor.g == 0.f && vObjColor.b == 0.f)
+            {
+                discard;
+            }
+        }
     }
 
     float3 vNormal = _in.vViewNormal;
