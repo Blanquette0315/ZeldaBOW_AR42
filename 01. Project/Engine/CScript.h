@@ -52,7 +52,8 @@ public:
 
 public:
     virtual void tick() = 0;
-    virtual void finaltick() final {};
+    // virtual void finaltick() final {};
+    virtual void finaltick() {};
 
 public:
     virtual void BeginOverlap(CGameObject* _pOther) {}

@@ -212,12 +212,17 @@ RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);
 
 // ===========================
 // Animation3D Compute Shader
-#define BoneCount           g_int_0
-#define CurFrame            (int)g_vec2_0.x
-#define Ratio               g_vec2_0.y
-#define CurFrameLower       (int)g_vec2_1.x
-#define RatioLower          g_vec2_1.y
-#define BoneDivPoint       g_int_1
+#define BoneCount               g_int_0
+#define CurFrame                (int)g_vec2_0.x
+#define Ratio                   g_vec2_0.y
+#define CurFrameLower           (int)g_vec2_1.x
+#define RatioLower              g_vec2_1.y
+#define BoneDivPoint            g_int_1
+
+#define UpperSklRootInv         g_mat_0
+#define UpperSklRootInvNext     g_mat_1
+#define LowerSklRoot            g_mat_2
+#define LowerSklRoot            g_mat_3
 // ===========================
 [numthreads(256, 1, 1)]
 void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
@@ -241,14 +246,25 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
 
     if (BoneDivPoint)
     {
+        // upper
         if (_iThreadIdx.x <= BoneDivPoint)
         {
+            float4 vCurFrameTrans = mul(float4(g_arrFrameTrans[iFrameDataIndex].vTranslate.xyz, 1.f), g_mat_0);
+            float4 vNextFrameTrans = mul(float4(g_arrFrameTrans[iNextFrameDataIdx].vTranslate.xyz, 1.f), g_mat_1);
+            
+            vCurFrameTrans = mul(float4(vCurFrameTrans.xyz, 1.f), g_mat_2);
+            vNextFrameTrans = mul(float4(vNextFrameTrans.xyz, 1.f), g_mat_3);
+
+            //vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
+            // vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+            //qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
             vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
-            vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+            vTrans = lerp(vCurFrameTrans, vNextFrameTrans, Ratio);
             qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
         }
-
-        if (_iThreadIdx.x > BoneDivPoint)
+        
+        // lower
+        else
         {
             vScale = lerp(g_arrFrameTrans[iFrameDataIndexLower].vScale, g_arrFrameTrans[iNextFrameDataIdxLower].vScale, RatioLower);
             vTrans = lerp(g_arrFrameTrans[iFrameDataIndexLower].vTranslate, g_arrFrameTrans[iNextFrameDataIdxLower].vTranslate, RatioLower);

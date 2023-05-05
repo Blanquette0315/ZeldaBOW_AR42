@@ -336,8 +336,6 @@ void CMesh::AddAnimationFromContainer(const wstring _strFBXPath)
 	loader.init();
 	loader.LoadOnlyAnimationInfo(strFullPath);
 
-	const tContainer* container = &loader.GetContainer(0);
-
 	m_vecBones.clear();
 	m_vecAnimClip.clear();
 	vector<tBone*>& vecBone = loader.GetBones();

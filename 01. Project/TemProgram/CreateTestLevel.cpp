@@ -23,6 +23,17 @@
 void CreateTestLevel()
 {
 	CLevel* pLevel = new CLevel;
+
+	//Ptr<CMeshData> pMeshData = nullptr;
+	//CGameObject* pObj = nullptr;
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Link_Full.fbx");
+	//pMeshData->Save(pMeshData->GetRelativePath());
+
+	//pObj = pMeshData->Instantiate();
+	//pObj->SetName(L"a");
+	//pObj->ChangePrefab();
+	//// pLevel->AddGameObejct(pObj, 0);
+
 	ChangeLevel(pLevel);
 
 

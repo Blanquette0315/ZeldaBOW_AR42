@@ -21,10 +21,15 @@ CBonesocketScript::~CBonesocketScript()
 
 void CBonesocketScript::tick()
 {
+
+}
+
+void CBonesocketScript::finaltick()
+{
 	if (GetOwner()->GetParent() == nullptr)
 		return;
 
-	
+
 	if (GetOwner()->GetParent()->Animator3D()->GetCurAnimation() != nullptr)
 	{
 		const vector<tMTBone>* vecBones = GetOwner()->GetParent()->MeshRender()->GetMesh()->GetBones();
@@ -48,16 +53,29 @@ void CBonesocketScript::tick()
 		Vec3 vFinalOffset = XMVector3TransformCoord(m_vOffsetPos, matRot);
 
 		// Transform()->SetRelativeScale(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vScale, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vScale, fRatio));
-		Transform()->SetRelativePos(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vTranslate + vFinalOffset, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vTranslate + vFinalOffset, fRatio));
+		if (GetOwner()->GetParent()->Animator3D() && GetOwner()->GetParent()->Animator3D()->GetCurAnimationLower())
+		{
+			CAnimator3D* pAnimator = GetOwner()->GetParent()->Animator3D();
+			Vec3 vCurFrameTrans = XMVector3TransformCoord(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vTranslate, pAnimator->GetMatUpperInv());
+			Vec3 vNextFrameTrans = XMVector3TransformCoord(vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vTranslate, pAnimator->GetMatUpperNextInv());
+			vCurFrameTrans = XMVector3TransformCoord(vCurFrameTrans, pAnimator->GetMatLowerNext());
+			vNextFrameTrans = XMVector3TransformCoord(vNextFrameTrans, pAnimator->GetMatLower());
+			Transform()->SetRelativePos(Vector3::Lerp(vCurFrameTrans + vFinalOffset, vNextFrameTrans + vFinalOffset, fRatio));
+		}
+		else
+		{
+			Transform()->SetRelativePos(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vTranslate + vFinalOffset, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vTranslate + vFinalOffset, fRatio));
+		}
+
+		Transform()->finaltick();
+		
 		//Vec3 CurRot;
 		//Vec3 NextRot;
 		//const vector<tMTKeyFrame>& vecKeyFrame = vecBones->at(m_iBoneIdx).vecKeyFrame;
-	
+
 		//QuaternionToEuler(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].qRot, CurRot);
 		//QuaternionToEuler(vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].qRot, NextRot);
 		//Transform()->SetRelativeRotation(Vector3::Lerp(CurRot, NextRot, fRatio) + (m_vOffsetRot * (XM_PI / 180.f)));
-
-
 
 		//Transform()->SetRelativePos(vecBones->at(18).vecKeyFrame[iCurFrame].vTranslate + m_vOffset);
 		//Transform()->SetRelativeScale(Vector3::Lerp(vecBones->at(18).vecKeyFrame[iCurFrame].vScale, vecBones->at(18).vecKeyFrame[iNextFrame].vScale, fRatio));

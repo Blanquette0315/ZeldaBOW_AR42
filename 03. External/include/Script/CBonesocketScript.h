@@ -15,6 +15,7 @@ public:
 
 public:
     virtual void tick() override;
+    virtual void finaltick() override;
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

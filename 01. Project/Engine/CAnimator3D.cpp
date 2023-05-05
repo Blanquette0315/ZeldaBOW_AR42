@@ -91,6 +91,23 @@ void CAnimator3D::finaltick()
 		}
 
 		m_pCurAnimLower->finaltick();
+
+		int iUpperFrm = m_pCurAnim->GetCurFrame();
+		int iUpperNextFrm = m_pCurAnim->GetNextFrame();
+
+		int iLowerFrm = m_pCurAnimLower->GetCurFrame();
+		int iLowerNextFrm = m_pCurAnimLower->GetNextFrame();
+
+		// skl_root : 1
+
+		m_matUpperInv = MakeMatrixFromKeyFrame(1, iUpperFrm);
+		m_matUpperInv = XMMatrixInverse(nullptr, m_matUpperInv);
+
+		m_matUpperNextInv = MakeMatrixFromKeyFrame(1, iUpperNextFrm);
+		m_matUpperNextInv = XMMatrixInverse(nullptr, m_matUpperNextInv);
+
+		m_matLower = MakeMatrixFromKeyFrame(1, iLowerFrm);
+		m_matLowerNext = MakeMatrixFromKeyFrame(1, iLowerNextFrm);
 	}
 
 	// 컴퓨트 쉐이더 연산여부
@@ -161,6 +178,12 @@ void CAnimator3D::UpdateData()
 		{
 			pUpdateShader->SetFrameIdxRatioLower(m_pCurAnimLower->m_iFrameIdx, m_pCurAnimLower->m_fRatio);
 			pUpdateShader->SetBoneDividedPoint(m_iBoneDivPoint);
+
+			// skl_root : 1
+			pUpdateShader->SetSklRootMatrixUpperInv(m_matUpperInv);
+			pUpdateShader->SetSklRootMatrixUpperNextInv(m_matUpperNextInv);
+			pUpdateShader->SetSklRootMatrixLower(m_matLower);
+			pUpdateShader->SetSklRootMatrixLowerNext(m_matLowerNext);
 		}
 		else
 		{
@@ -331,6 +354,27 @@ void CAnimator3D::check_mesh(Ptr<CMesh> _pMesh)
 	{
 		m_pBoneFinalMatBuffer->Create(sizeof(Matrix), iBoneCount, SB_TYPE::UAV_INC, nullptr, false);
 	}
+}
+
+Matrix CAnimator3D::MakeMatrixFromKeyFrame(int _iBoneIdx, int _iKeyFrameIdx)
+{
+	Vec3 vScale = m_pVecBones->at(_iBoneIdx).vecKeyFrame[_iKeyFrameIdx].vScale;
+	Vec4 vRotQ = m_pVecBones->at(_iBoneIdx).vecKeyFrame[_iKeyFrameIdx].qRot;
+	Vec3 vTrans = m_pVecBones->at(_iBoneIdx).vecKeyFrame[_iKeyFrameIdx].vTranslate;
+
+	Matrix mat = XMMatrixIdentity();
+	mat *= XMMatrixScaling(vScale.x, vScale.y, vScale.z);
+
+	Vec3 vRot;
+	QuaternionToEuler(vRotQ, vRot);
+
+	mat *= XMMatrixRotationX(vRot.x);
+	mat *= XMMatrixRotationY(vRot.y);
+	mat *= XMMatrixRotationZ(vRot.z);
+
+	mat *= XMMatrixTranslation(vTrans.x, vTrans.y, vTrans.z);
+	
+	return mat;
 }
 
 void CAnimator3D::CreateAnimation(CAnimation3D* _animation)

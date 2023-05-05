@@ -140,13 +140,13 @@ void CFBXLoader::LoadOnlyAnimationInfo(const wstring& _strPath)
 
 	FbxNode* pNode = m_pScene->GetRootNode();
 	LoadOnlyAnimToContainer(pNode);
+	LoadRemainingBone(pNode);
 	
-
-	int iChildCnt = pNode->GetChildCount();
-	for (int i = 0; i < iChildCnt; ++i)
-	{
-		LoadOnlyAnimToContainer(pNode->GetChild(i));
-	}
+	//int iChildCnt = pNode->GetChildCount();
+	//for (int i = 0; i < iChildCnt; ++i)
+	//{
+	//	LoadOnlyAnimToContainer(pNode->GetChild(i));
+	//}
 
 	m_pImporter->Destroy();
 }
@@ -167,6 +167,67 @@ void CFBXLoader::LoadOnlyAnimToContainer(FbxNode* _pNode)
 		Container.Resize(iVtxCnt);
 
 		LoadAnimationData(pMesh, &Container);
+	}
+
+
+	int iChildCnt = _pNode->GetChildCount();
+	for (int i = 0; i < iChildCnt; ++i)
+	{
+		LoadOnlyAnimToContainer(_pNode->GetChild(i));
+	}
+}
+
+void CFBXLoader::LoadRemainingBone(FbxNode* _pNode)
+{
+	FbxNodeAttribute* attribute = _pNode->GetNodeAttribute();
+	if (attribute && attribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+	{
+		std::string boneName = _pNode->GetName();
+		UINT iBoneIdx = FindBoneIndex(boneName);
+
+		if (m_vecBone[iBoneIdx]->vecKeyFrame.empty())
+		{
+			FbxVector4	v1 = { 1, 0, 0, 0 };
+			FbxVector4	v2 = { 0, 0, 1, 0 };
+			FbxVector4	v3 = { 0, 1, 0, 0 };
+			FbxVector4	v4 = { 0, 0, 0, 1 };
+			FbxAMatrix	matReflect;
+			matReflect.mData[0] = v1;
+			matReflect.mData[1] = v2;
+			matReflect.mData[2] = v3;
+			matReflect.mData[3] = v4;
+
+			FbxAMatrix matNodeTransform = GetTransform(_pNode);
+
+			// m_vecBone[iBoneIdx]->matBone = matNodeTransform;
+
+			FbxTime::EMode eTimeMode = m_pScene->GetGlobalSettings().GetTimeMode();
+
+			FbxLongLong llStartFrame = m_vecAnimClip[0]->tStartTime.GetFrameCount(eTimeMode);
+			FbxLongLong llEndFrame = m_vecAnimClip[0]->tEndTime.GetFrameCount(eTimeMode);
+
+			for (FbxLongLong i = llStartFrame; i < llEndFrame; ++i)
+			{
+				tKeyFrame tFrame = {};
+				FbxTime   tTime = 0;
+
+				tTime.SetFrame(i, eTimeMode);
+
+				FbxAMatrix matFromNode = _pNode->EvaluateGlobalTransform(tTime) * matNodeTransform;
+				matFromNode = matReflect * matFromNode * matReflect;
+
+				tFrame.dTime = tTime.GetSecondDouble();
+				tFrame.matTransform = matFromNode;
+
+				m_vecBone[iBoneIdx]->vecKeyFrame.push_back(tFrame);
+			}
+		}
+	}
+
+	int iChildCount = _pNode->GetChildCount();
+	for (int i = 0; i < iChildCount; ++i)
+	{
+		LoadRemainingBone(_pNode->GetChild(i));
 	}
 }
 
@@ -697,7 +758,14 @@ void CFBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
 	// Animation Data 로드할 필요가 없음
 	int iSkinCount = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
 	if (iSkinCount <= 0 || m_vecAnimClip.empty())
+	{
+		int debug = 0;
 		return;
+	}
+
+	FbxNodeAttribute* pAttr = _pMesh->GetNode()->GetNodeAttribute();
+	FbxNodeAttribute::EType a = pAttr->GetAttributeType();
+	string b = _pMesh->GetNode()->GetName();
 
 	_pContainer->bAnimation = true;
 
@@ -708,8 +776,8 @@ void CFBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
 
 		if (pSkin)
 		{
-			FbxSkin::EType eType = pSkin->GetSkinningType();
-			if (FbxSkin::eRigid == eType || FbxSkin::eLinear)
+			// FbxSkin::EType eType = pSkin->GetSkinningType();
+			// if (FbxSkin::eRigid == eType || FbxSkin::eLinear)
 			{
 				// Cluster 를 얻어온다
 				// Cluster == Joint == 관절
@@ -828,7 +896,8 @@ void CFBXLoader::LoadKeyframeTransform(FbxNode* _pNode, FbxCluster* _pCluster
 		tTime.SetFrame(i, eTimeMode);
 
 		FbxAMatrix matFromNode = _pNode->EvaluateGlobalTransform(tTime) * _matNodeTransform;
-		FbxAMatrix matCurTrans = matFromNode.Inverse() * _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
+		//FbxAMatrix matCurTrans = matFromNode.Inverse() * _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
+		FbxAMatrix matCurTrans = _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
 		matCurTrans = matReflect * matCurTrans * matReflect;
 
 		tFrame.dTime = tTime.GetSecondDouble();

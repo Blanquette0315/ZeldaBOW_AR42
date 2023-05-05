@@ -34,14 +34,24 @@ private:
 
     vector<tTransition*>    vecTranAnim;
 
+    Link_Func               Func_Start;
+    Link_Func               Func_Steady;
+    Link_Func               Func_End;
+
     // tAnimNode* arrReserveAnim[2];
 
 public:
     void AddPreferences(UINT _Preferences) { AddBit(iPreferences, _Preferences); }
+    void AddFuncStart(Link_Func _func) { Func_Start = _func; }
+    void AddFuncSteady(Link_Func _func) { Func_Steady = _func; }
+    void AddFuncEnd(Link_Func _func) { Func_End = _func; }
 
 public:
     tAnimNode()
         : iPreferences(0)
+        , Func_Start(nullptr)
+        , Func_Steady(nullptr)
+        , Func_End(nullptr)
     {
 
     }

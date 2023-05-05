@@ -59,7 +59,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_ON, LAC_KEY_E);
 
 	// Walk
-	SetAnimNode(pAnimNode, LAT_WALK, LAP_REPEAT);
+	SetAnimNode(pAnimNode, LAT_WALK, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_WalkRunDash);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_KEY_WSAD | LAC_MODE_RUN);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_WALK_ED_L, LAC_TOE_L_FRONT, LAC_KEY_WSAD);
@@ -80,7 +80,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
 	
 	// Run
-	SetAnimNode(pAnimNode, LAT_RUN, LAP_REPEAT);
+	SetAnimNode(pAnimNode, LAT_RUN, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_WalkRunDash);
 	SetAnimTran(pAnimNode, LAT_WAIT, 0, LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_WALK, LAC_KEY_WSAD | LAC_MODE_WALK);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
@@ -91,10 +91,10 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 
-	SetAnimNode(pAnimNode, LAT_RUN_BRAKE_L);
+	SetAnimNode(pAnimNode, LAT_RUN_BRAKE_L); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_TurnBack);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_RUN_BRAKE_R);
+	SetAnimNode(pAnimNode, LAT_RUN_BRAKE_R); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_TurnBack);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_RUN_ED_L);
@@ -110,7 +110,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
 
 	// Dash
-	SetAnimNode(pAnimNode, LAT_DASH, LAP_REPEAT);
+	SetAnimNode(pAnimNode, LAT_DASH, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_WalkRunDash);
 	SetAnimTran(pAnimNode, LAT_WAIT, 0, LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_WALK, LAC_KEY_WSAD | LAC_MODE_WALK, LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_KEY_WSAD | LAC_MODE_RUN, LAC_KEY_SHIFT);
@@ -119,30 +119,30 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 
-	SetAnimNode(pAnimNode, LAT_DASH_BRAKE_L);
+	SetAnimNode(pAnimNode, LAT_DASH_BRAKE_L); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_TurnBack);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_DASH_BRAKE_R);
+	SetAnimNode(pAnimNode, LAT_DASH_BRAKE_R); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_TurnBack);
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_ANIM_FINISHED);
 
 	// Jump
-	SetAnimNode(pAnimNode, LAT_JUMP_L);
+	SetAnimNode(pAnimNode, LAT_JUMP_L); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
 	SetAnimTran(pAnimNode, LAT_LAND_L, LAC_ANIM_FINISHED | LAC_GROUNDED);
 
 	SetAnimNode(pAnimNode, LAT_LAND_L);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_JUMP_R);
+	SetAnimNode(pAnimNode, LAT_JUMP_R); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
 	SetAnimTran(pAnimNode, LAT_LAND_R, LAC_ANIM_FINISHED | LAC_GROUNDED);
 
 	SetAnimNode(pAnimNode, LAT_LAND_R);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
 	// Sword
-	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_ON, LAP_BLEND);
+	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_ON, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOn);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND);
+	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOff);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT | LAP_BLEND);
@@ -150,23 +150,23 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT);
+	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_SwordRun);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, 0, LAC_KEY_LBTN | LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S1, LAP_COMBO);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S1, LAP_COMBO); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S2, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S2, LAP_COMBO);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S2, LAP_COMBO); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S3, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S3, LAP_COMBO);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S3, LAP_COMBO); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_SF, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 	// Bow

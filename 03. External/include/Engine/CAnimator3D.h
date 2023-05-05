@@ -30,6 +30,12 @@ private:
     // if anim divided to upper - lower, upper anim's end frame.
     int                         m_iBoneDivPoint;
 
+    // for animation blending ( added to member because of bonesocket which use this too)
+    Matrix                      m_matUpperInv;
+    Matrix                      m_matUpperNextInv;
+    Matrix                      m_matLower;
+    Matrix                      m_matLowerNext;
+
 public:
     virtual void finaltick() override;
     void UpdateData();
@@ -44,6 +50,12 @@ public:
     CStructuredBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
     UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
     const tMTBone& GetBoneByName(const wstring& _strBoneName);
+    const tMTBone& GetBoneByIdx(UINT _iIdx) { return m_pVecBones->at(_iIdx); }
+
+    const Matrix& GetMatUpperInv() { return m_matUpperInv; }
+    const Matrix& GetMatUpperNextInv() { return m_matUpperNextInv; }
+    const Matrix& GetMatLower() { return m_matLower; }
+    const Matrix& GetMatLowerNext() { return m_matLowerNext; }
 
     void ClearData();
 
@@ -70,6 +82,7 @@ public:
 
 private:
     void check_mesh(Ptr<CMesh> _pMesh);
+    Matrix MakeMatrixFromKeyFrame(int _iBoneIdx ,int _iKeyFrameIdx);
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

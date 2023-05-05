@@ -117,6 +117,11 @@ void CGameObject::finaltick()
 			m_arrCom[i]->finaltick();
 	}
 
+	for (size_t i = 0; i < m_vecScripts.size(); ++i)
+	{
+		m_vecScripts[i]->finaltick();
+	}
+
 	// Child Object
 	vector<CGameObject*>::iterator iter = m_vecChild.begin();
 	for (; iter != m_vecChild.end();)

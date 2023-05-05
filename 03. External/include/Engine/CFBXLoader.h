@@ -108,6 +108,7 @@ public:
 	void LoadOnlyAnimationInfo(const wstring& _strPath);
 	// use only in LoadOnlyAnimationInfo method
 	void LoadOnlyAnimToContainer(FbxNode* _pNode);
+	void LoadRemainingBone(FbxNode* _pNode);
 
 public:
 	int GetContainerCount() { return (int)m_vecContainer.size(); }
