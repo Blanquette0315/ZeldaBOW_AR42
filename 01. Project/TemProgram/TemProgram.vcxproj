@@ -162,6 +162,7 @@
     <ClInclude Include="AddAnimationToolUI.h" />
     <ClInclude Include="Animator2DUI.h" />
     <ClInclude Include="Animator3DUI.h" />
+    <ClInclude Include="AnimInjectionToolUI.h" />
     <ClInclude Include="CameraUI.h" />
     <ClInclude Include="CCameraScript.h" />
     <ClInclude Include="CEditor.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="AddAnimationToolUI.cpp" />
     <ClCompile Include="Animator2DUI.cpp" />
     <ClCompile Include="Animator3DUI.cpp" />
+    <ClCompile Include="AnimInjectionToolUI.cpp" />
     <ClCompile Include="CameraUI.cpp" />
     <ClCompile Include="CCameraScript.cpp" />
     <ClCompile Include="CEditor.cpp" />

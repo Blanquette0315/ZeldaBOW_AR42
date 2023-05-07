@@ -301,7 +301,10 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 	case COMPONENT_TYPE::ANIMATOR3D:
 		if (_Select)
 		{
-			// _Target->AddComponent(new CAnimator3D);
+			_Target->AddComponent(new CAnimator3D);
+			Ptr<CMesh> pMesh = _Target->GetRenderComponent()->GetMesh();
+			_Target->Animator3D()->SetBones(pMesh->GetBones());
+			_Target->Animator3D()->SetFrameLimit(pMesh->GetAnimClip()->at(0).iFrameLength);
 		}
 		else
 		{

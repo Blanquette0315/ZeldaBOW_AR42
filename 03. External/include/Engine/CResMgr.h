@@ -44,7 +44,7 @@ public:
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _FORMAT, UINT _iBindFlag);
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
 
-	Ptr<CMeshData> LoadFBX(const wstring& _strPath);
+	Ptr<CMeshData> LoadFBX(const wstring& _strPath, int _iOpt = 0);
 
 	const map<wstring, Ptr<CRes>>& GetResource(RES_TYPE _eType)
 	{

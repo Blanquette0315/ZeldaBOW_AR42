@@ -166,7 +166,8 @@ void CRenderComponent::LoadFromYAML(YAML::Node& _node)
 
 	if (true == m_pMesh->IsAnimMesh())
 	{
-		Animator3D()->SetBones(m_pMesh->GetBones());
+		if(Animator3D())
+			Animator3D()->SetBones(m_pMesh->GetBones());
 	}
 
 	UINT iMtrlCount;

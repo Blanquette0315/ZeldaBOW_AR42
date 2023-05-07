@@ -13,7 +13,7 @@ class CMeshData :
 	vector<Ptr<CMaterial>>	m_vecMtrl;
 
 public:
-	static CMeshData* LoadFromFBX(const wstring& _strFilePath);
+	static CMeshData* LoadFromFBX(const wstring& _strFilePath, int _iOpt = 0);
 
 	virtual void Save(const wstring& _strFilePath);
 	virtual int Load(const wstring& _strFilePath);

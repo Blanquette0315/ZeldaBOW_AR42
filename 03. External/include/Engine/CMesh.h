@@ -48,6 +48,8 @@ public:
 
     static CMesh* CreateFromContainer(CFBXLoader& _loader);
     void AddAnimationFromContainer(const wstring _strFBXPath);
+    void InjectAnimation(Ptr<CMesh> _pMeshSrc);
+    void InjectRecursive(tMTBone& _tBone);
 
 public:
     int Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount);

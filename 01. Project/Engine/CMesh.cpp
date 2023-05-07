@@ -30,14 +30,15 @@ void CMesh::render(UINT _iSubset)
 {
 	UpdateData(_iSubset);
 
-	//for (int i = 0; i < m_vecIdxInfo[_iSubset].iIdxCount; ++i)
-	//{
-	//	Vtx debugVtx = ((Vtx*)m_pVtxSys)[((UINT*)m_vecIdxInfo[_iSubset].pIdxSysMem)[i]];
-	//	if (debugVtx.vUV1.x < 0.5f && debugVtx.vUV1.x > 0.f)
-	//	{
-	//		Vec2 debug = debugVtx.vUV0;
-	//	}
-	//}
+	for (int i = 0; i < m_vecIdxInfo[_iSubset].iIdxCount; ++i)
+	{
+		Vtx debugVtx = ((Vtx*)m_pVtxSys)[((UINT*)m_vecIdxInfo[_iSubset].pIdxSysMem)[i]];
+		//if (debugVtx.vUV1.x < 0.5f && debugVtx.vUV1.x > 0.f)
+		//{
+		//	Vec2 debug = debugVtx.vUV0;
+		//}
+		int debug = 1;
+	}
 
 	CONTEXT->DrawIndexed(m_vecIdxInfo[_iSubset].iIdxCount, 0, 0);
 }
@@ -235,10 +236,6 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 
 	const tContainer* container = &_loader.GetContainer(0);
 
-	// Animation3D
-	if (!container->bAnimation)
-		return pMesh;
-
 	vector<tBone*>& vecBone = _loader.GetBones();
 	UINT iFrameCount = 0;
 	for (UINT i = 0; i < vecBone.size(); ++i)
@@ -265,7 +262,7 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 
 			tKeyframe.qRot.x = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[0];
 			tKeyframe.qRot.y = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[1];
-			tKeyframe.qRot.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[2];
+			tKeyframe.qRot.z = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[2];	
 			tKeyframe.qRot.w = (float)vecBone[i]->vecKeyFrame[j].matTransform.GetQ().mData[3];
 
 			bone.vecKeyFrame.push_back(tKeyframe);
@@ -275,6 +272,11 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 
 		pMesh->m_vecBones.push_back(bone);
 	}
+
+	// Animation3D
+	// moved -> to get the vecBone
+	if (!container->bAnimation)
+		return pMesh;
 
 	vector<tAnimClip*>& vecAnimClip = _loader.GetAnimClip();
 
@@ -434,6 +436,114 @@ void CMesh::AddAnimationFromContainer(const wstring _strFBXPath)
 	}
 
 	Save(GetRelativePath());
+}
+
+void CMesh::InjectAnimation(Ptr<CMesh> _pMeshSrc)
+{
+	vector<tMTBone>& vecSrcBones = _pMeshSrc->m_vecBones;
+
+	for (int i = 0; i < m_vecBones.size(); ++i)
+	{
+		m_vecBones[i].vecKeyFrame.clear();
+	}
+
+	// Same bone keyframe injection
+	for (int i = 0; i < vecSrcBones.size(); ++i)
+	{
+		for (int j = 0; j < m_vecBones.size(); ++j)
+		{
+			if (vecSrcBones[i].strBoneName == m_vecBones[j].strBoneName)
+			{
+				m_vecBones[j].vecKeyFrame.resize(vecSrcBones[i].vecKeyFrame.size());
+				m_vecBones[j].vecKeyFrame.assign(vecSrcBones[i].vecKeyFrame.begin(), vecSrcBones[i].vecKeyFrame.end());
+				break;
+			}
+		}
+	}
+
+	// New bone
+	for (int i = 0; i < m_vecBones.size(); ++i)
+	{
+		InjectRecursive(m_vecBones[i]);
+	}
+
+	m_vecAnimClip.clear();
+	m_vecAnimClip.push_back(_pMeshSrc->m_vecAnimClip[0]);
+	UINT iFrameCount = m_vecAnimClip[0].iFrameLength;
+
+
+	// BoneOffet
+	vector<Matrix> vecOffset;
+	vector<tFrameTrans> vecFrameTrans;
+	vecFrameTrans.resize((UINT)m_vecBones.size() * iFrameCount);
+
+	for (size_t i = 0; i < m_vecBones.size(); ++i)
+	{
+		vecOffset.push_back(m_vecBones[i].matOffset);
+
+		for (size_t j = 0; j < m_vecBones[i].vecKeyFrame.size(); ++j)
+		{
+			vecFrameTrans[(UINT)m_vecBones.size() * j + i]
+				= tFrameTrans{ Vec4(m_vecBones[i].vecKeyFrame[j].vTranslate, 0.f)
+				, Vec4(m_vecBones[i].vecKeyFrame[j].vScale, 0.f)
+				, m_vecBones[i].vecKeyFrame[j].qRot };
+		}
+	}
+
+	if (m_pBoneOffset)
+	{
+		delete m_pBoneOffset;
+		m_pBoneOffset = nullptr;
+	}
+	if (m_pBoneFrameData)
+	{
+		delete m_pBoneFrameData;
+		m_pBoneFrameData = nullptr;
+	}
+
+	m_pBoneOffset = new CStructuredBuffer;
+	m_pBoneOffset->Create(sizeof(Matrix), (UINT)vecOffset.size(), SB_TYPE::SRV_ONLY, vecOffset.data(), false);
+
+	m_pBoneFrameData = new CStructuredBuffer;
+	m_pBoneFrameData->Create(sizeof(tFrameTrans), (UINT)vecOffset.size() * iFrameCount
+		, SB_TYPE::SRV_ONLY, vecFrameTrans.data(), false);
+
+	Save(GetRelativePath());
+}
+
+void CMesh::InjectRecursive(tMTBone& _tBone)
+{
+	if (_tBone.vecKeyFrame.empty())
+	{
+		tMTBone& tBoneParent = m_vecBones[_tBone.iParentIndx];
+		InjectRecursive(tBoneParent);
+		/*Matrix matOffset = _tBone.matBone.Transpose();*/
+		Matrix matOffset = _tBone.matBone;
+		_tBone.vecKeyFrame.resize(tBoneParent.vecKeyFrame.size());
+		for (int i = 0; i < tBoneParent.vecKeyFrame.size(); ++i)
+		{
+			Matrix matScale = Matrix::CreateScale(tBoneParent.vecKeyFrame[i].vScale);		
+			Matrix matRot = Matrix::CreateFromQuaternion(tBoneParent.vecKeyFrame[i].qRot);
+			Matrix matTrans = Matrix::CreateTranslation(tBoneParent.vecKeyFrame[i].vTranslate);
+
+			Matrix matTransform = matScale * matRot * matTrans;
+			
+			Vec3 vScale;
+			Quaternion qRot;
+			Vec3 vTrans;
+			//matTransform.Decompose(vScale, qRot, vTrans);
+
+			matTransform = matOffset * matTransform;	
+
+			matTransform.Decompose(vScale, qRot, vTrans);
+			
+			_tBone.vecKeyFrame[i].qRot = (Vec4)qRot;
+			_tBone.vecKeyFrame[i].vScale = vScale;
+			_tBone.vecKeyFrame[i].vTranslate = vTrans;
+			_tBone.vecKeyFrame[i].dTime = tBoneParent.vecKeyFrame[i].dTime;
+			_tBone.vecKeyFrame[i].iFrame = tBoneParent.vecKeyFrame[i].iFrame;
+		}
+	}
 }
 
 int CMesh::Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount)

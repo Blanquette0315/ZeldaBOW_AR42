@@ -17,6 +17,7 @@
 #include "TestUI.h"
 #include "ExportToolUI.h"
 #include "AddAnimationToolUI.h"
+#include "AnimInjectionToolUI.h"
 
 #include "ListUI.h"
 #include "TextureUI.h"
@@ -181,6 +182,9 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new AddAnimationToolUI;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new AnimInjectionToolUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     ListUI* pList = new ListUI;

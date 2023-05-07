@@ -51,7 +51,7 @@ CGameObject* CMeshData::Instantiate()
 
 
 
-CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
+CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath, int _iOpt)
 {
 	wstring strFullPath = CPathMgr::GetInst()->GetContentPath();
 
@@ -64,7 +64,7 @@ CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
 
 	CFBXLoader loader;
 	loader.init();
-	loader.LoadFbx(strFullPath);
+	loader.LoadFbx(strFullPath, _iOpt);
 
 	// 메쉬 가져오기
 	CMesh* pMesh = nullptr;

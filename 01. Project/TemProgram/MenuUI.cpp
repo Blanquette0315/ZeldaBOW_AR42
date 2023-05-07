@@ -187,6 +187,11 @@ void MenuUI::render()
                 CImGuiMgr::GetInst()->FindUI("AddAnimationTool")->Open();
             }
 
+            if (ImGui::MenuItem("InjectAnimation"))
+            {
+                CImGuiMgr::GetInst()->FindUI("AnimInjectionTool")->Open();
+            }
+
             ImGui::EndMenu();
         }
 
