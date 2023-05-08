@@ -69,8 +69,9 @@ struct tBone
 	int					iDepth;			// °èÃþ±¸Á¶ ±íÀÌ
 	int					iParentIndx;	// ºÎ¸ð Bone ÀÇ ÀÎµ¦½º
 	FbxAMatrix			matOffset;		// Offset Çà·Ä( -> »Ñ¸® -> Local)
-	FbxAMatrix			matBone;
+	FbxAMatrix			matBone;		// parent to child mat
 	vector<tKeyFrame>	vecKeyFrame;
+	// FbxAMatrix			matRelative; 
 };
 
 struct tAnimClip
@@ -100,14 +101,22 @@ private:
 	FbxArray<FbxString*>			m_arrAnimName;
 	vector<tAnimClip*>				m_vecAnimClip;
 
+	int								m_iOption;
 
 public:
 	void init();
-	void LoadFbx(const wstring& _strPath);
+	void LoadFbx(const wstring& _strPath, int _iOpt = 0);
 
+	// additional function JM
+public:
 	void LoadOnlyAnimationInfo(const wstring& _strPath);
 	// use only in LoadOnlyAnimationInfo method
 	void LoadOnlyAnimToContainer(FbxNode* _pNode);
+	void LoadRemainingBone(FbxNode* _pNode);
+
+	void LoadBoneOffsetMatrix(FbxNode* _pNode);// not use
+
+	void LoadParentToChildMat(FbxNode* _pNode); // relative mat from parent to child
 
 public:
 	int GetContainerCount() { return (int)m_vecContainer.size(); }

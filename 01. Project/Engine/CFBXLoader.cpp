@@ -52,8 +52,9 @@ void CFBXLoader::init()
 		assert(NULL);
 }
 
-void CFBXLoader::LoadFbx(const wstring& _strPath)
+void CFBXLoader::LoadFbx(const wstring& _strPath, int _iOpt)
 {
+	m_iOption = _iOpt;
 	m_vecContainer.clear();
 
 	wstring wstrFileName = path(_strPath).stem();
@@ -91,6 +92,14 @@ void CFBXLoader::LoadFbx(const wstring& _strPath)
 
 	// 메쉬 데이터 얻기
 	LoadMeshDataFromNode(m_pScene->GetRootNode());
+
+	// Get Bone Offset although it has no animation
+	//if(m_iOption == 1)
+	//	LoadBoneOffsetMatrix(m_pScene->GetRootNode());
+
+	if (m_iOption == 1)
+		LoadParentToChildMat(m_pScene->GetRootNode());
+		
 
 	m_pImporter->Destroy();
 
@@ -140,13 +149,13 @@ void CFBXLoader::LoadOnlyAnimationInfo(const wstring& _strPath)
 
 	FbxNode* pNode = m_pScene->GetRootNode();
 	LoadOnlyAnimToContainer(pNode);
+	LoadRemainingBone(pNode);
 	
-
-	int iChildCnt = pNode->GetChildCount();
-	for (int i = 0; i < iChildCnt; ++i)
-	{
-		LoadOnlyAnimToContainer(pNode->GetChild(i));
-	}
+	//int iChildCnt = pNode->GetChildCount();
+	//for (int i = 0; i < iChildCnt; ++i)
+	//{
+	//	LoadOnlyAnimToContainer(pNode->GetChild(i));
+	//}
 
 	m_pImporter->Destroy();
 }
@@ -167,6 +176,197 @@ void CFBXLoader::LoadOnlyAnimToContainer(FbxNode* _pNode)
 		Container.Resize(iVtxCnt);
 
 		LoadAnimationData(pMesh, &Container);
+	}
+
+
+	int iChildCnt = _pNode->GetChildCount();
+	for (int i = 0; i < iChildCnt; ++i)
+	{
+		LoadOnlyAnimToContainer(_pNode->GetChild(i));
+	}
+}
+
+void CFBXLoader::LoadRemainingBone(FbxNode* _pNode)
+{
+	FbxNodeAttribute* attribute = _pNode->GetNodeAttribute();
+	if (attribute && attribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+	{
+		std::string boneName = _pNode->GetName();
+		UINT iBoneIdx = FindBoneIndex(boneName);
+
+		if (m_vecBone[iBoneIdx]->vecKeyFrame.empty())
+		{
+			FbxVector4	v1 = { 1, 0, 0, 0 };
+			FbxVector4	v2 = { 0, 0, 1, 0 };
+			FbxVector4	v3 = { 0, 1, 0, 0 };
+			FbxVector4	v4 = { 0, 0, 0, 1 };
+			FbxAMatrix	matReflect;
+			matReflect.mData[0] = v1;
+			matReflect.mData[1] = v2;
+			matReflect.mData[2] = v3;
+			matReflect.mData[3] = v4;
+
+			FbxAMatrix matNodeTransform = GetTransform(_pNode);
+
+			// m_vecBone[iBoneIdx]->matBone = matNodeTransform;
+
+			FbxTime::EMode eTimeMode = m_pScene->GetGlobalSettings().GetTimeMode();
+
+			FbxLongLong llStartFrame = m_vecAnimClip[0]->tStartTime.GetFrameCount(eTimeMode);
+			FbxLongLong llEndFrame = m_vecAnimClip[0]->tEndTime.GetFrameCount(eTimeMode);
+
+			for (FbxLongLong i = llStartFrame; i < llEndFrame; ++i)
+			{
+				tKeyFrame tFrame = {};
+				FbxTime   tTime = 0;
+
+				tTime.SetFrame(i, eTimeMode);
+
+				FbxAMatrix matFromNode = _pNode->EvaluateGlobalTransform(tTime) * matNodeTransform;
+				matFromNode = matReflect * matFromNode * matReflect;
+
+				tFrame.dTime = tTime.GetSecondDouble();
+				tFrame.matTransform = matFromNode;
+
+				m_vecBone[iBoneIdx]->vecKeyFrame.push_back(tFrame);
+			}
+		}
+	}
+
+	int iChildCount = _pNode->GetChildCount();
+	for (int i = 0; i < iChildCount; ++i)
+	{
+		LoadRemainingBone(_pNode->GetChild(i));
+	}
+}
+
+void CFBXLoader::LoadBoneOffsetMatrix(FbxNode* _pNode)
+{
+	FbxMesh* pMesh = nullptr;
+	FbxSkin* pSkin = nullptr;
+
+	pMesh = _pNode->GetMesh();
+	if (pMesh)
+	{
+		for (int i = 0; i < pMesh->GetDeformerCount(FbxDeformer::eSkin); ++i)
+		{
+			pSkin = (FbxSkin*)(pMesh->GetDeformer(i, FbxDeformer::eSkin));
+			if (pSkin) 
+				break;
+		}
+	}
+
+	if (pSkin)
+	{
+		for (int i = 0; i < pSkin->GetClusterCount(); ++i)
+		{
+			FbxCluster* pCluster = pSkin->GetCluster(i);
+			FbxNode* pBoneNode = pCluster->GetLink();
+
+			if (pBoneNode)
+			{
+				FbxAMatrix matClusterTrans;
+				FbxAMatrix matClusterLinkTrans;
+
+				pCluster->GetTransformMatrix(matClusterTrans);
+				pCluster->GetTransformLinkMatrix(matClusterLinkTrans);
+
+				// Reflect Matrix
+				FbxVector4 V0 = { 1, 0, 0, 0 };
+				FbxVector4 V1 = { 0, 0, 1, 0 };
+				FbxVector4 V2 = { 0, 1, 0, 0 };
+				FbxVector4 V3 = { 0, 0, 0, 1 };
+
+				FbxAMatrix matReflect;
+				matReflect[0] = V0;
+				matReflect[1] = V1;
+				matReflect[2] = V2;
+				matReflect[3] = V3;
+
+				// Geometric Transform
+				FbxVector4 vT = pBoneNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+				FbxVector4 vR = pBoneNode->GetGeometricRotation(FbxNode::eSourcePivot);
+				FbxVector4 vS = pBoneNode->GetGeometricScaling(FbxNode::eSourcePivot);
+
+				FbxAMatrix matNodeTransform(vT, vR, vS);
+
+				FbxAMatrix matOffset;
+				matOffset = matClusterLinkTrans.Inverse() * matClusterTrans * matNodeTransform;
+				matOffset = matReflect * matOffset * matReflect;
+
+				// Store or process the offset matrix as needed
+				int iBoneIdx = FindBoneIndex(pCluster->GetLink()->GetName());
+				m_vecBone[iBoneIdx]->matOffset = matOffset;
+			}
+		}
+	}
+
+	for (int i = 0; i < _pNode->GetChildCount(); ++i)
+	{
+		LoadBoneOffsetMatrix(_pNode->GetChild(i));
+	}
+}
+
+void CFBXLoader::LoadParentToChildMat(FbxNode* _pNode)
+{
+	FbxNodeAttribute* attribute = _pNode->GetNodeAttribute();
+	if (attribute && attribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+	{
+		std::string boneName = _pNode->GetName();
+		UINT iBoneIdx = FindBoneIndex(boneName);
+
+		//if (_pNode->GetParent())
+		//{
+		//	// Reflect Matrix
+		//	FbxVector4 V0 = { 1, 0, 0, 0 };
+		//	FbxVector4 V1 = { 0, 0, 1, 0 };
+		//	FbxVector4 V2 = { 0, 1, 0, 0 };
+		//	FbxVector4 V3 = { 0, 0, 0, 1 };
+
+		//	FbxAMatrix matReflect;
+		//	matReflect[0] = V0;
+		//	matReflect[1] = V1;
+		//	matReflect[2] = V2;
+		//	matReflect[3] = V3;
+
+		//	FbxNode* pParentNode = _pNode->GetParent();
+		//	FbxAMatrix matParent = pParentNode->EvaluateGlobalTransform();
+		//	FbxAMatrix matParentInv = matParent.Inverse();
+		//	FbxAMatrix matNode = _pNode->EvaluateGlobalTransform();
+		//	m_vecBone[iBoneIdx]->matBone = matReflect * matParentInv * matNode * matReflect;
+		//	
+		//	
+		//	//
+		//	//int debug = 0;
+		//}
+		// Reflect Matrix
+		FbxVector4 V0 = { 1, 0, 0, 0 };
+		FbxVector4 V1 = { 0, 0, 1, 0 };
+		FbxVector4 V2 = { 0, 1, 0, 0 };
+		FbxVector4 V3 = { 0, 0, 0, 1 };
+
+		FbxAMatrix matReflect;
+		matReflect[0] = V0;
+		matReflect[1] = V1;
+		matReflect[2] = V2;
+		matReflect[3] = V3;
+
+		FbxAMatrix matNodeLocal = _pNode->EvaluateLocalTransform();
+		matNodeLocal = matReflect * matNodeLocal * matReflect;
+		//Matrix a = GetMatrixFromFbxMatrix(matNodeLocal);
+		//a = a.Transpose();
+		//Vec3 vScale;
+		//Quaternion qRot;
+		//Vec3 vTrans;
+		//a.Decompose(vScale, qRot, vTrans);
+
+		m_vecBone[iBoneIdx]->matBone = matNodeLocal;
+	}
+
+	int iChildCount = _pNode->GetChildCount();
+	for (int i = 0; i < iChildCount; ++i)
+	{
+		LoadParentToChildMat(_pNode->GetChild(i));
 	}
 }
 
@@ -525,8 +725,11 @@ void CFBXLoader::LoadTexture(const wstring& _strFileName)
 				}
 			}
 		}
-		path_origin = path_origin.parent_path();
-		remove_all(path_origin);
+		if (exists(path_origin))
+		{
+			path_origin = path_origin.parent_path();
+			remove_all(path_origin);
+		}
 	}
 }
 
@@ -696,8 +899,18 @@ void CFBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
 {
 	// Animation Data 로드할 필요가 없음
 	int iSkinCount = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
-	if (iSkinCount <= 0 || m_vecAnimClip.empty())
-		return;
+	if (m_iOption != 1)
+	{
+		if (iSkinCount <= 0 || m_vecAnimClip.empty())
+		{
+			int debug = 0;
+			return;
+		}
+	}
+
+	FbxNodeAttribute* pAttr = _pMesh->GetNode()->GetNodeAttribute();
+	// FbxNodeAttribute::EType a = pAttr->GetAttributeType();
+	// string b = _pMesh->GetNode()->GetName();
 
 	_pContainer->bAnimation = true;
 
@@ -708,8 +921,8 @@ void CFBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
 
 		if (pSkin)
 		{
-			FbxSkin::EType eType = pSkin->GetSkinningType();
-			if (FbxSkin::eRigid == eType || FbxSkin::eLinear)
+			// FbxSkin::EType eType = pSkin->GetSkinningType();
+			// if (FbxSkin::eRigid == eType || FbxSkin::eLinear)
 			{
 				// Cluster 를 얻어온다
 				// Cluster == Joint == 관절
@@ -736,7 +949,8 @@ void CFBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
 					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
 
 					// Bone KeyFrame 별 행렬을 구한다.
-					LoadKeyframeTransform(_pMesh->GetNode(), pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					if(m_iOption != 1)
+						LoadKeyframeTransform(_pMesh->GetNode(), pCluster, matNodeTransform, iBoneIdx, _pContainer);
 				}
 			}
 		}
@@ -820,21 +1034,25 @@ void CFBXLoader::LoadKeyframeTransform(FbxNode* _pNode, FbxCluster* _pCluster
 	FbxLongLong llStartFrame = m_vecAnimClip[0]->tStartTime.GetFrameCount(eTimeMode);
 	FbxLongLong llEndFrame = m_vecAnimClip[0]->tEndTime.GetFrameCount(eTimeMode);
 
-	for (FbxLongLong i = llStartFrame; i < llEndFrame; ++i)
+	if (m_vecBone[_iBoneIdx]->vecKeyFrame.empty())
 	{
-		tKeyFrame tFrame = {};
-		FbxTime   tTime = 0;
+		for (FbxLongLong i = llStartFrame; i < llEndFrame; ++i)
+		{
+			tKeyFrame tFrame = {};
+			FbxTime   tTime = 0;
 
-		tTime.SetFrame(i, eTimeMode);
+			tTime.SetFrame(i, eTimeMode);
+				
+			FbxAMatrix matFromNode = _pNode->EvaluateGlobalTransform(tTime) * _matNodeTransform;
+			//FbxAMatrix matCurTrans = matFromNode.Inverse() * _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
+			FbxAMatrix matCurTrans = _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
+			matCurTrans = matReflect * matCurTrans * matReflect;
 
-		FbxAMatrix matFromNode = _pNode->EvaluateGlobalTransform(tTime) * _matNodeTransform;
-		FbxAMatrix matCurTrans = matFromNode.Inverse() * _pCluster->GetLink()->EvaluateGlobalTransform(tTime);
-		matCurTrans = matReflect * matCurTrans * matReflect;
+			tFrame.dTime = tTime.GetSecondDouble();
+			tFrame.matTransform = matCurTrans;
 
-		tFrame.dTime = tTime.GetSecondDouble();
-		tFrame.matTransform = matCurTrans;
-
-		m_vecBone[_iBoneIdx]->vecKeyFrame.push_back(tFrame);
+			m_vecBone[_iBoneIdx]->vecKeyFrame.push_back(tFrame);
+		}
 	}
 }
 
@@ -845,8 +1063,8 @@ void CFBXLoader::LoadOffsetMatrix(FbxCluster* _pCluster
 	FbxAMatrix matClusterTrans;
 	FbxAMatrix matClusterLinkTrans;
 
-	_pCluster->GetTransformMatrix(matClusterTrans);
-	_pCluster->GetTransformLinkMatrix(matClusterLinkTrans);
+	_pCluster->GetTransformMatrix(matClusterTrans); // mesh
+	_pCluster->GetTransformLinkMatrix(matClusterLinkTrans); // joint
 
 	// Reflect Matrix
 	FbxVector4 V0 = { 1, 0, 0, 0 };
@@ -862,6 +1080,7 @@ void CFBXLoader::LoadOffsetMatrix(FbxCluster* _pCluster
 
 	FbxAMatrix matOffset;
 	matOffset = matClusterLinkTrans.Inverse() * matClusterTrans * _matNodeTransform;
+	// matOffset = matClusterTrans * _matNodeTransform;
 	matOffset = matReflect * matOffset * matReflect;
 
 	m_vecBone[_iBoneIdx]->matOffset = matOffset;
@@ -887,7 +1106,6 @@ void CFBXLoader::LoadWeightsAndIndices(FbxCluster* _pCluster
 		_pContainer->vecWI[iVtxIdx].push_back(tWI);
 	}
 }
-
 
 
 int CFBXLoader::FindBoneIndex(string _strBoneName)

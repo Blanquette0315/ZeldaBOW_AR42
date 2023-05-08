@@ -1,6 +1,7 @@
 CBokoblinScript
 CBonesocketScript
 CCamScript
+CEquipableScript
 CGroundCheckScript
 CLinkAnimScript
 CLinkCamScript

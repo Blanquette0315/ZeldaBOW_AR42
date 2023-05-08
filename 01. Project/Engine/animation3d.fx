@@ -212,12 +212,18 @@ RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);
 
 // ===========================
 // Animation3D Compute Shader
-#define BoneCount           g_int_0
-#define CurFrame            (int)g_vec2_0.x
-#define Ratio               g_vec2_0.y
-#define CurFrameLower       (int)g_vec2_1.x
-#define RatioLower          g_vec2_1.y
-#define BoneDivPoint       g_int_1
+#define BoneCount               g_int_0
+#define CurFrame                (int)g_vec2_0.x
+#define Ratio                   g_vec2_0.y
+#define CurFrameLower           (int)g_vec2_1.x
+#define RatioLower              g_vec2_1.y
+#define BoneDivPoint            g_int_1
+#define EquipableType           g_int_2 // 0 -> none | 1 -> upper | 2 -> lower
+
+#define UpperSklRootInv         g_mat_0
+#define UpperSklRootInvNext     g_mat_1
+#define LowerSklRoot            g_mat_2
+#define LowerSklRootNext        g_mat_3
 // ===========================
 [numthreads(256, 1, 1)]
 void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
@@ -239,16 +245,27 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
     uint iNextFrameDataIdxLower = BoneCount * (CurFrameLower + 1) + _iThreadIdx.x;
     
 
-    if (BoneDivPoint)
+    if (BoneDivPoint || EquipableType)
     {
-        if (_iThreadIdx.x <= BoneDivPoint)
+        // upper
+        if (_iThreadIdx.x <= BoneDivPoint || EquipableType == 1)
         {
+            float4 vCurFrameTrans = mul(float4(g_arrFrameTrans[iFrameDataIndex].vTranslate.xyz, 1.f), UpperSklRootInv);
+            float4 vNextFrameTrans = mul(float4(g_arrFrameTrans[iNextFrameDataIdx].vTranslate.xyz, 1.f), UpperSklRootInvNext);
+            
+            vCurFrameTrans = mul(float4(vCurFrameTrans.xyz, 1.f), LowerSklRoot);
+            vNextFrameTrans = mul(float4(vNextFrameTrans.xyz, 1.f), LowerSklRootNext);
+
+            //vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
+            // vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+            //qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
             vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
-            vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
+            vTrans = lerp(vCurFrameTrans, vNextFrameTrans, Ratio);
             qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, Ratio);
         }
-
-        if (_iThreadIdx.x > BoneDivPoint)
+        
+        // lower
+        else if (_iThreadIdx.x > BoneDivPoint || EquipableType == 2)
         {
             vScale = lerp(g_arrFrameTrans[iFrameDataIndexLower].vScale, g_arrFrameTrans[iNextFrameDataIdxLower].vScale, RatioLower);
             vTrans = lerp(g_arrFrameTrans[iFrameDataIndexLower].vTranslate, g_arrFrameTrans[iNextFrameDataIdxLower].vTranslate, RatioLower);
@@ -265,7 +282,7 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
     // 최종 본행렬 연산
     MatrixAffineTransformation(vScale, vQZero, qRot, vTrans, matBone);
 
-    // 최종 본행렬 연산    
+    // 최종 본행렬 연산
     //MatrixAffineTransformation(g_arrFrameTrans[iFrameDataIndex].vScale, vQZero, g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iFrameDataIndex].vTranslate, matBone);
 
     matrix matOffset = transpose(g_arrOffset[_iThreadIdx.x]);

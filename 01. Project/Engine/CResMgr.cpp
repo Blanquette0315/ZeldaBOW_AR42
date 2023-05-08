@@ -79,7 +79,7 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, ComPtr<ID3D11Textur
 	return pTex;
 }
 
-Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath)
+Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath, int _iOpt)
 {
 	wstring strFileName = path(_strPath).stem();
 
@@ -91,7 +91,7 @@ Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath)
 	if (nullptr != pMeshData)
 		return pMeshData;
 
-	pMeshData = CMeshData::LoadFromFBX(_strPath);
+	pMeshData = CMeshData::LoadFromFBX(_strPath, _iOpt);
 	pMeshData->SetKey(strName);
 	pMeshData->SetRelativePath(strName);
 	pMeshData->m_bEngineRes = true;

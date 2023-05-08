@@ -93,19 +93,20 @@ LINK_FRONT_TOE CLinkAnimScript::GetFrontToe(CAnimation3D* _pCurAnim)
 	if (pAnim)
 	{
 		int iCurFrame = pAnim->GetCurFrame();
-		float fCurTime = iCurFrame / 60.f;
-		const tMTBone& tBoneToe_L = pAnimator->GetBoneByName(L"Toe_L");
-		const tMTBone& tBoneToe_R = pAnimator->GetBoneByName(L"Toe_R");
+		//float fCurTime = iCurFrame / 60.f;
+		const tMTBone& tBoneToe_L = pAnimator->GetBoneByIdx((UINT)LINK_BONE_STRING::Toe_L);
+		const tMTBone& tBoneToe_R = pAnimator->GetBoneByIdx((UINT)LINK_BONE_STRING::Toe_R);
 		const vector<tMTKeyFrame>& vecKeyFrame_Toe_L = tBoneToe_L.vecKeyFrame;
 		const vector<tMTKeyFrame>& vecKeyFrame_Toe_R = tBoneToe_R.vecKeyFrame;
 
-		int iIdxToe_L = vecKeyFrame_Toe_L.size() / 2;
-		int iIdxToe_R = vecKeyFrame_Toe_R.size() / 2;
-		iIdxToe_L = FindClosestIdx(vecKeyFrame_Toe_L, fCurTime, iIdxToe_L, 0, vecKeyFrame_Toe_L.size());
-		iIdxToe_R = FindClosestIdx(vecKeyFrame_Toe_R, fCurTime, iIdxToe_R, 0, vecKeyFrame_Toe_R.size());
+		//int iIdxToe_L = vecKeyFrame_Toe_L.size() / 2;
+		//int iIdxToe_R = vecKeyFrame_Toe_R.size() / 2;
+		//iIdxToe_L = FindClosestIdx(vecKeyFrame_Toe_L, fCurTime, iIdxToe_L, 0, vecKeyFrame_Toe_L.size());
+		//iIdxToe_R = FindClosestIdx(vecKeyFrame_Toe_R, fCurTime, iIdxToe_R, 0, vecKeyFrame_Toe_R.size());
 
-		// should consider direction of link
-		if (vecKeyFrame_Toe_L[iIdxToe_L].vTranslate.z < vecKeyFrame_Toe_R[iIdxToe_R].vTranslate.z)
+		//// should consider direction of link
+		//if (vecKeyFrame_Toe_L[iIdxToe_L].vTranslate.z < vecKeyFrame_Toe_R[iIdxToe_R].vTranslate.z)
+		if (vecKeyFrame_Toe_L[iCurFrame].vTranslate.z < vecKeyFrame_Toe_R[iCurFrame].vTranslate.z)
 			return LINK_FRONT_TOE::LEFT;
 		else
 			return LINK_FRONT_TOE::RIGHT;
@@ -214,6 +215,7 @@ void CLinkAnimScript::begin()
 	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
 	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
 	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
+	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
 }
 
 void CLinkAnimScript::tick()
@@ -244,28 +246,48 @@ void CLinkAnimScript::OperateAnimFunc()
 	CalcMoveDirection();
 	SelectSpeed();
 
-	if (IsCurAnim(LAT_WALK) || IsCurAnim(LAT_RUN) || IsCurAnim(LAT_DASH))
+	if (m_pCurAnimNode->Func_Steady)
 	{
-		Func_WalkRunDash();
+		(this->*m_pCurAnimNode->Func_Steady)();
 	}
 
-	if (IsCurAnim(LAT_SWORD_MOVE_RUN))
-	{
-		Func_SwordRun();
-	}
+	//if (IsCurAnim(LAT_WALK) || IsCurAnim(LAT_RUN) || IsCurAnim(LAT_DASH))
+	//{
+	//	Func_WalkRunDash();
+	//}
+
+	//if (IsCurAnim(LAT_SWORD_MOVE_RUN))
+	//{
+	//	Func_SwordRun();
+	//}
 
 	// Func that only operate at anim start
 	if (m_bOnceAtAnimStart)
 	{
-		if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
+		if (m_pCurAnimNode->Func_Start)
 		{
-			Func_Jump();
+			(this->*m_pCurAnimNode->Func_Start)();
 		}
 
-		if (IsCurAnim(LAT_SWORD_ATTACK_S1) || IsCurAnim(LAT_SWORD_ATTACK_S2) || IsCurAnim(LAT_SWORD_ATTACK_S3) || IsCurAnim(LAT_SWORD_ATTACK_SF))
-		{
-			Func_SwordAttackMove();
-		}
+		//if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
+		//{
+		//	Func_Jump();
+		//}
+
+		//if (IsCurAnim(LAT_SWORD_ATTACK_S1) || IsCurAnim(LAT_SWORD_ATTACK_S2) || IsCurAnim(LAT_SWORD_ATTACK_S3) || IsCurAnim(LAT_SWORD_ATTACK_SF))
+		//{
+		//	Func_SwordAttackMove();
+		//}
+
+		//if (IsCurAnim(LAT_SWORD_EQUIP_ON))
+		//{
+		//	Func_SwordEquipOn();
+		//}
+
+		//if (IsCurAnim(LAT_SWORD_EQUIP_OFF))
+		//{
+		//	Func_SwordEquipOff();
+		//}
 
 		m_bOnceAtAnimStart = false;
 	}
@@ -275,6 +297,13 @@ void CLinkAnimScript::OperateAnimFunc()
 	{
 		Func_LowerBodyBlend();
 	}
+	else
+	{
+		m_pCurAnimNodeLower = nullptr;
+		m_pAnimator->StopLowerAnim();
+	}
+
+
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -387,10 +416,15 @@ void CLinkAnimScript::OperateAnimFuncAfter()
 {
 	if (m_pCurAnimNode->pAnim->IsFinished())
 	{
-		if (IsCurAnim(LAT_RUN_BRAKE_L) || IsCurAnim(LAT_RUN_BRAKE_R) || IsCurAnim(LAT_DASH_BRAKE_L) || IsCurAnim(LAT_DASH_BRAKE_R))
+		if (m_pCurAnimNode->Func_End)
 		{
-			Func_TurnBack();
+			(this->*m_pCurAnimNode->Func_End)();
 		}
+
+		//if (IsCurAnim(LAT_RUN_BRAKE_L) || IsCurAnim(LAT_RUN_BRAKE_R) || IsCurAnim(LAT_DASH_BRAKE_L) || IsCurAnim(LAT_DASH_BRAKE_R))
+		//{
+		//	Func_TurnBack();
+		//}
 	}
 }
 

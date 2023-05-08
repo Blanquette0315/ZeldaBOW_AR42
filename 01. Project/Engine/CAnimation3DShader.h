@@ -26,6 +26,13 @@ public:
 	void SetFrameIdxRatioLower(int _vIdx, float _fRatio) { m_Param.v2Arr[1] = Vec2((float)_vIdx, _fRatio); }
 	void SetBoneDividedPoint(int _iDivPoint) { m_Param.iArr[1] = _iDivPoint; }
 
+	void SetSklRootMatrixUpperInv(const Matrix& _matrix) { m_Param.matArr[0] = _matrix; }
+	void SetSklRootMatrixUpperNextInv(const Matrix& _matrix) { m_Param.matArr[1] = _matrix; }
+	void SetSklRootMatrixLower(const Matrix& _matrix) { m_Param.matArr[2] = _matrix; }
+	void SetSklRootMatrixLowerNext(const Matrix& _matrix) { m_Param.matArr[3] = _matrix; }
+
+	void SetEquipableType(int _iOption) { m_Param.iArr[2] = _iOption; }
+
 	void SetFrameDataBuffer(CStructuredBuffer* _buffer) { m_pFrameDataBuffer = _buffer; }
 	void SetOffsetMatBuffer(CStructuredBuffer* _buffer) { m_pOffsetMatBuffer = _buffer; }
 	void SetOutputBuffer(CStructuredBuffer* _buffer) { m_pOutputBuffer = _buffer; }
@@ -33,6 +40,7 @@ public:
 public:
 	virtual void UpdateData();
 	virtual void Clear();
+	virtual void Execute() override;
 
 public:
 	CAnimation3DShader();

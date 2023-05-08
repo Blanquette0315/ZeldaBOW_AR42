@@ -30,6 +30,16 @@ private:
     // if anim divided to upper - lower, upper anim's end frame.
     int                         m_iBoneDivPoint;
 
+    // 0 -> none | 1 -> upper | 2 -> lower
+    int                         m_iEquipType;
+    // int                         m_iOption;
+
+    // for animation blending ( added to member because of bonesocket which use this too)
+    Matrix                      m_matUpperInv;
+    Matrix                      m_matUpperNextInv;
+    Matrix                      m_matLower;
+    Matrix                      m_matLowerNext;
+
 public:
     virtual void finaltick() override;
     void UpdateData();
@@ -44,6 +54,20 @@ public:
     CStructuredBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
     UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
     const tMTBone& GetBoneByName(const wstring& _strBoneName);
+    const tMTBone& GetBoneByIdx(UINT _iIdx) { return m_pVecBones->at(_iIdx); }
+
+    const Matrix& GetMatUpperInv() { return m_matUpperInv; }
+    const Matrix& GetMatUpperNextInv() { return m_matUpperNextInv; }
+    const Matrix& GetMatLower() { return m_matLower; }
+    const Matrix& GetMatLowerNext() { return m_matLowerNext; }
+
+    void SetMatUpperInv(const Matrix& _mat) { m_matUpperInv = _mat; }
+    void SetMatUpperNextInv(const Matrix& _mat) { m_matUpperNextInv = _mat; }
+    void SetMatLower(const Matrix& _mat) { m_matLower = _mat; }
+    void SetMatLowerNext(const Matrix& _mat) { m_matLowerNext = _mat; }
+
+    int  GetEquipType() { return m_iEquipType; }
+    void SetEquipType(EQUIPABLE_TYPE _eType) { m_iEquipType = (int)_eType; }
 
     void ClearData();
 
@@ -70,6 +94,7 @@ public:
 
 private:
     void check_mesh(Ptr<CMesh> _pMesh);
+    Matrix MakeMatrixFromKeyFrame(int _iBoneIdx ,int _iKeyFrameIdx);
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

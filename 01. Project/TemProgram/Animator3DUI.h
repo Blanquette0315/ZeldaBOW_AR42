@@ -20,6 +20,8 @@ private:
     int                 m_iFrameCountLower;
     bool                m_bRepeatLower;
 
+    int                 m_iEquipType;
+
 public:
     virtual void update() override;
     virtual void render_update() override;

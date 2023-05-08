@@ -35,6 +35,13 @@ typedef Vector4 Vec4;
 
 #define SAFE_LOAD_FROM_YAML(type, variable, node) if(node.IsDefined()) { variable = node.as<type>(); }
 
+enum class EQUIPABLE_TYPE
+{
+	NONE,
+	UPPER,
+	LOWER,
+};
+
 // 절도체 6면을 이루기 위해 필요한 면 정의
 enum class FACE_TYPE
 {

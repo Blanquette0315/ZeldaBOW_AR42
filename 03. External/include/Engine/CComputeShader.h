@@ -14,9 +14,10 @@ class CComputeShader :
 {
 private:
     ComPtr<ID3DBlob>                 m_CSBlob; // ComputeShader 블롭
-    ComPtr<ID3D11ComputeShader>      m_CS;     // ComputeShader
+    
 
 protected:
+    ComPtr<ID3D11ComputeShader>      m_CS;     // ComputeShader
     tMtrlConst                      m_Param;   // CS에 전달할 값
 
     UINT                            m_iGroupX; // 쓰레드 그룹 갯수 설정 X
@@ -30,7 +31,7 @@ protected:
 public:
     // 인자로 경로와 HLSL 함수 이름을 받아 ComputeShader를 생성해준다.
     void CreateComputeShader(const wstring& _strRelativePath, const string& _strFuncName);
-    void Execute();
+    virtual void Execute();
 
     virtual void UpdateData() = 0;
     virtual void Clear() = 0;

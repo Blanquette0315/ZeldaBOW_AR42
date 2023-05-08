@@ -3,10 +3,12 @@
 
 #include <Engine/CTransform.h>
 #include <Engine/CRigidbody.h>
+#include <Engine/CAnimation3D.h>
 
 #include "CLinkScript.h"
 #include "CLockOnScript.h"
 #include "FSMNode.h"
+#include "CBonesocketScript.h"
 
 
 
@@ -98,12 +100,12 @@ void CLinkAnimScript::Func_LockOnMove()
 	}
 	else if (KEY_PRESSED(KEY::A))
 	{
-		RigidBody()->SetVelocity(vDirMove * m_fSelectedSpeed);
+		RigidBody()->SetVelocity(-vDirMove * m_fSelectedSpeed);
 		MoveRotation(vDirLinkToLockOn);
 	}
 	else if (KEY_PRESSED(KEY::D))
 	{
-		RigidBody()->SetVelocity(-vDirMove * m_fSelectedSpeed);
+		RigidBody()->SetVelocity(vDirMove * m_fSelectedSpeed);
 		MoveRotation(vDirLinkToLockOn);
 	}
 }
@@ -128,48 +130,72 @@ void CLinkAnimScript::Func_LowerBodyBlend()
 		{
 			if (CalBit(m_iMode, LINK_MODE_WALK, BIT_LEAST_ONE))
 			{
-				if (KEY_PRESSED(KEY::W) && !IsCurAnimLower(LAT_LOCKON_WALK_F))
+				if (KEY_PRESSED(KEY::W))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_F);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_F], true);
+					if (!IsCurAnimLower(LAT_LOCKON_WALK_F))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_F);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_F], true);
+					}
 				}
-				else if (KEY_PRESSED(KEY::S) && !IsCurAnimLower(LAT_LOCKON_WALK_B))
+				else if (KEY_PRESSED(KEY::S))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_B);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_B], true);
+					if (!IsCurAnimLower(LAT_LOCKON_WALK_B))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_B);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_B], true);
+					}
 				}
-				else if (KEY_PRESSED(KEY::A) && !IsCurAnimLower(LAT_LOCKON_WALK_L))
+				else if (KEY_PRESSED(KEY::A))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_L);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_L], true);
+					if (!IsCurAnimLower(LAT_LOCKON_WALK_L))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_L);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_L], true);
+					}
 				}
-				else if (KEY_PRESSED(KEY::D) && !IsCurAnimLower(LAT_LOCKON_WALK_R))
+				else if (KEY_PRESSED(KEY::D))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_R);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_R], true);
+					if (!IsCurAnimLower(LAT_LOCKON_WALK_R))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_WALK_R);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_WALK_R], true);
+					}
 				}
 			}
 			else if (CalBit(m_iMode, LINK_MODE_RUN, BIT_LEAST_ONE))
 			{
-				if (KEY_PRESSED(KEY::W) && !IsCurAnimLower(LAT_LOCKON_RUN_F))
+				if (KEY_PRESSED(KEY::W))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_F);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_F], true);
+					if (!IsCurAnimLower(LAT_LOCKON_RUN_F))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_F);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_F], true);
+					}
 				}
-				else if (KEY_PRESSED(KEY::S) && !IsCurAnimLower(LAT_LOCKON_RUN_B))
+				else if (KEY_PRESSED(KEY::S))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_B);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_B], true);
+					if (!IsCurAnimLower(LAT_LOCKON_RUN_B))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_B);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_B], true);
+					}
 				}
-				else if (KEY_PRESSED(KEY::A) && !IsCurAnimLower(LAT_LOCKON_RUN_L))
+				else if (KEY_PRESSED(KEY::A))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_L);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_L], true);
+					if (!IsCurAnimLower(LAT_LOCKON_RUN_L))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_L);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_L], true);
+					}
 				}
-				else if (KEY_PRESSED(KEY::D) && !IsCurAnimLower(LAT_LOCKON_RUN_R))
+				else if (KEY_PRESSED(KEY::D))
 				{
-					SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_R);
-					m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_R], true);
+					if (!IsCurAnimLower(LAT_LOCKON_RUN_R))
+					{
+						SetAnimNode(m_pCurAnimNodeLower, LAT_LOCKON_RUN_R);
+						m_pAnimator->PlayLowerAnim(LINK_ANIM_WCHAR[LAT_LOCKON_RUN_R], true);
+					}
 				}
 			}
 		}
@@ -244,4 +270,20 @@ void CLinkAnimScript::Func_SwordAttackMove()
 {
 	Vec3 vDir = Transform()->GetRelativeDir(DIR::FRONT);
 	RigidBody()->SetVelocity(vDir * m_fWalkSpeed);
+}
+
+void CLinkAnimScript::Func_SwordEquipOn()
+{
+	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Wrist_R);
+	pBoneScr->setOffsetPos(Vec3(-0.037f, -0.015f, 0.f));
+	pBoneScr->setOffsetRot(Vec3(-90.f, 0.f, 0.f));
+}
+
+void CLinkAnimScript::Func_SwordEquipOff()
+{
+	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Spine_2);
+	pBoneScr->setOffsetPos(Vec3(0.09f, -0.03f, -0.05f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -65.f));
 }

@@ -30,6 +30,9 @@ void Animator3DUI::update()
 {
 	if (nullptr != GetTarget())
 	{
+		if(GetTarget()->Animator3D())
+			m_iEquipType = GetTarget()->Animator3D()->GetEquipType();
+
 		if (nullptr == m_Animation)
 		{
 			if (GetTarget()->Animator3D()->GetCurAnimation())
@@ -75,6 +78,27 @@ void Animator3DUI::update()
 void Animator3DUI::render_update()
 {
 	ComponentUI::render_update();
+
+	ImGui::Text("==Equipable Type==");
+	if (ImGui::RadioButton("None", m_iEquipType == (int)EQUIPABLE_TYPE::NONE))
+	{
+		m_iEquipType = (int)EQUIPABLE_TYPE::NONE;
+		GetTarget()->Animator3D()->SetEquipType((EQUIPABLE_TYPE)m_iEquipType);
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Upper", m_iEquipType == (int)EQUIPABLE_TYPE::UPPER))
+	{
+		m_iEquipType = (int)EQUIPABLE_TYPE::UPPER;
+		GetTarget()->Animator3D()->SetEquipType((EQUIPABLE_TYPE)m_iEquipType);
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Lower", m_iEquipType == (int)EQUIPABLE_TYPE::LOWER))
+	{
+		m_iEquipType = (int)EQUIPABLE_TYPE::LOWER;
+		GetTarget()->Animator3D()->SetEquipType((EQUIPABLE_TYPE)m_iEquipType);
+	}
+
+	
 
 	string AnimName;
 	if (nullptr != m_Animation)
