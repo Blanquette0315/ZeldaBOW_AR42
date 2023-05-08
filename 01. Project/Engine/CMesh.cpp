@@ -329,10 +329,10 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 	return pMesh;
 }
 
-void CMesh::AddAnimationFromContainer(const wstring _strFBXPath)
+void CMesh::AddAnimationFromContainer(const wstring _strFBXName)
 {
 	wstring strFullPath = CPathMgr::GetInst()->GetContentPath();
-	strFullPath += _strFBXPath;
+	strFullPath += L"fbx\\" + _strFBXName;
 
 	CFBXLoader loader;
 	loader.init();

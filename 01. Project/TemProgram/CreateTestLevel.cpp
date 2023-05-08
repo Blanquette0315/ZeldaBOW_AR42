@@ -24,15 +24,15 @@ void CreateTestLevel()
 {
 	CLevel* pLevel = new CLevel;
 
-	Ptr<CMeshData> pMeshData = nullptr;
-	CGameObject* pObj = nullptr;
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Default_Hair_Maya.fbx", 1);
-	pMeshData->Save(pMeshData->GetRelativePath());
+	//Ptr<CMeshData> pMeshData = nullptr;
+	//CGameObject* pObj = nullptr;
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Default_Hair_Maya.fbx", 1);
+	//pMeshData->Save(pMeshData->GetRelativePath());
 
-	pObj = pMeshData->Instantiate();
-	pObj->SetName(L"Default_Hair");
-	pObj->ChangePrefab();
-	// pLevel->AddGameObejct(pObj, 0);
+	//pObj = pMeshData->Instantiate();
+	//pObj->SetName(L"Default_Hair");
+	//pObj->ChangePrefab();
+	//// pLevel->AddGameObejct(pObj, 0);
 
 	ChangeLevel(pLevel);
 

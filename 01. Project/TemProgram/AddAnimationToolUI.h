@@ -7,7 +7,7 @@ class AddAnimationToolUI :
     public UI
 {
 private:
-    char m_FBXPathBuf[256];
+    char m_FBXName[256];
     ComboBoxUI* m_ComoboBox;
 
 public:

@@ -8,6 +8,7 @@ struct tFbxMaterial
 {
 	tMtrlData	tMtrl;
 	wstring     strMtrlName;
+	wstring		strMtrlKey;
 	wstring     strDiff;
 	wstring		strNormal;
 	wstring		strSpec;

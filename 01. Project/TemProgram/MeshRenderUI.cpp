@@ -29,6 +29,7 @@ void MeshRenderUI::update()
 		m_Mesh = GetTarget()->MeshRender()->GetMesh();
 		m_Material = GetTarget()->MeshRender()->GetCurMaterial();
 		m_bIsDyanmicMtrl = GetTarget()->MeshRender()->IsDynamicMtrl();
+		m_iOption = GetTarget()->MeshRender()->GetOption();
 	}
 
 	ComponentUI::update();
@@ -37,6 +38,9 @@ void MeshRenderUI::update()
 void MeshRenderUI::render_update()
 {
 	ComponentUI::render_update();
+
+	ImGui::Text("Option"); ImGui::SameLine(); ImGui::InputInt("##Option", &m_iOption, 0);
+	GetTarget()->MeshRender()->SetOption(m_iOption);
 
 	// 키 값 가져오기.
 	// 이때, GetKey()의 반환은 wstring인데, string()의 생성자를 이용해 wstring을 string으로 변경해주었다.

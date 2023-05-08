@@ -31,12 +31,12 @@ void AddAnimationToolUI::update()
 void AddAnimationToolUI::render_update()
 {
 	m_ComoboBox->render_update();
-	ImGui::Text("FBX relative path"); ImGui::SameLine(); ImGui::InputText("##FBXrelpath", m_FBXPathBuf, 256);
+	ImGui::Text("FBX Name"); ImGui::SameLine(); ImGui::InputText("##FBXName", m_FBXName, 256);
 
 	if(ImGui::Button("Add Animation"))
 	{
 		Ptr<CMesh> pMesh = CResMgr::GetInst()->FindRes<CMesh>(ConvertStrToWstr(m_ComoboBox->GetItemKey(m_ComoboBox->GetCurIdx())));
-		pMesh->AddAnimationFromContainer(ConvertStrToWstr(m_FBXPathBuf));
+		pMesh->AddAnimationFromContainer(ConvertStrToWstr(m_FBXName));
 	}
 }
 
