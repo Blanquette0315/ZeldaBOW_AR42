@@ -22,6 +22,7 @@ CAnimator3D::CAnimator3D()
 	, m_pCurAnimLower(nullptr)
 	, m_bRepeat(false)
 	, m_bRepeatLower(false)
+	, m_iEquipType((int)EQUIPABLE_TYPE::NONE)
 	, CComponent(COMPONENT_TYPE::ANIMATOR3D)
 {
 	m_pBoneFinalMatBuffer = new CStructuredBuffer;
@@ -36,6 +37,7 @@ CAnimator3D::CAnimator3D(const CAnimator3D& _origin)
 	, m_pCurAnimLower(nullptr)
 	, m_bRepeat(false)
 	, m_bRepeatLower(false)
+	, m_iEquipType(_origin.m_iEquipType)
 	, CComponent(COMPONENT_TYPE::ANIMATOR3D)
 {
 	m_pBoneFinalMatBuffer = new CStructuredBuffer;
@@ -132,7 +134,7 @@ void CAnimator3D::SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip)
 
 void CAnimator3D::UpdateData()
 {
-	if (!IsValid(m_pCurAnim))
+	if (!IsValid(m_pCurAnim) && m_iEquipType == (int)EQUIPABLE_TYPE::NONE )
 	{
 		// Animation3D Update Compute Shader
 		CAnimation3DShader* pUpdateShader = (CAnimation3DShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"Animation3DUpdateShader").Get();
@@ -172,23 +174,79 @@ void CAnimator3D::UpdateData()
 
 		UINT iBoneCount = (UINT)m_pVecBones->size();
 		pUpdateShader->SetBoneCount(iBoneCount);
-		pUpdateShader->SetFrameIdxRatio(m_pCurAnim->m_iFrameIdx, m_pCurAnim->m_fRatio);
 
-		if (m_pCurAnimLower)
+		if (m_iEquipType == (int)EQUIPABLE_TYPE::NONE)
 		{
-			pUpdateShader->SetFrameIdxRatioLower(m_pCurAnimLower->m_iFrameIdx, m_pCurAnimLower->m_fRatio);
-			pUpdateShader->SetBoneDividedPoint(m_iBoneDivPoint);
+			pUpdateShader->SetFrameIdxRatio(m_pCurAnim->m_iFrameIdx, m_pCurAnim->m_fRatio);
 
-			// skl_root : 1
-			pUpdateShader->SetSklRootMatrixUpperInv(m_matUpperInv);
-			pUpdateShader->SetSklRootMatrixUpperNextInv(m_matUpperNextInv);
-			pUpdateShader->SetSklRootMatrixLower(m_matLower);
-			pUpdateShader->SetSklRootMatrixLowerNext(m_matLowerNext);
+			if (m_pCurAnimLower)
+			{
+				pUpdateShader->SetFrameIdxRatioLower(m_pCurAnimLower->m_iFrameIdx, m_pCurAnimLower->m_fRatio);
+				pUpdateShader->SetBoneDividedPoint(m_iBoneDivPoint);
+
+				// skl_root : 1
+				pUpdateShader->SetSklRootMatrixUpperInv(m_matUpperInv);
+				pUpdateShader->SetSklRootMatrixUpperNextInv(m_matUpperNextInv);
+				pUpdateShader->SetSklRootMatrixLower(m_matLower);
+				pUpdateShader->SetSklRootMatrixLowerNext(m_matLowerNext);
+			}
+			else
+			{
+				pUpdateShader->SetBoneDividedPoint(0);
+			}
+			pUpdateShader->SetEquipableType(m_iEquipType);
 		}
 		else
 		{
-			pUpdateShader->SetBoneDividedPoint(0);
+			if (m_iEquipType == (int)EQUIPABLE_TYPE::UPPER)
+			{
+				CGameObject* pParent = GetOwner()->GetParent();
+				if (GetOwner()->GetParent() == nullptr)
+					return;
+
+				CAnimation3D* pCurAnim = GetOwner()->GetParent()->Animator3D()->GetCurAnimation();
+				CAnimation3D* pCurAnimLower = GetOwner()->GetParent()->Animator3D()->GetCurAnimationLower();
+				if (pCurAnim == nullptr)
+					return;
+
+				pUpdateShader->SetFrameIdxRatio(pCurAnim->m_iFrameIdx, pCurAnim->m_fRatio);
+
+				if (pCurAnimLower)
+				{
+					pUpdateShader->SetSklRootMatrixUpperInv(pParent->Animator3D()->m_matUpperInv);
+					pUpdateShader->SetSklRootMatrixUpperNextInv(pParent->Animator3D()->m_matUpperNextInv);
+					pUpdateShader->SetSklRootMatrixLower(pParent->Animator3D()->m_matLower);
+					pUpdateShader->SetSklRootMatrixLowerNext(pParent->Animator3D()->m_matLowerNext);
+					pUpdateShader->SetEquipableType(m_iEquipType);
+				}
+				else
+				{
+					pUpdateShader->SetEquipableType((int)EQUIPABLE_TYPE::NONE);
+				}
+			}
+			else if (m_iEquipType == (int)EQUIPABLE_TYPE::LOWER)
+			{
+				if (GetOwner()->GetParent() == nullptr)
+					return;
+
+				CAnimation3D* pCurAnim = GetOwner()->GetParent()->Animator3D()->GetCurAnimation();
+				CAnimation3D* pCurAnimLower = GetOwner()->GetParent()->Animator3D()->GetCurAnimationLower();
+				if (pCurAnim == nullptr)
+					return;
+
+				if (pCurAnimLower)
+				{
+					pUpdateShader->SetFrameIdxRatioLower(pCurAnimLower->m_iFrameIdx, pCurAnimLower->m_fRatio);
+					pUpdateShader->SetEquipableType(m_iEquipType);
+				}
+				else
+				{
+					pUpdateShader->SetFrameIdxRatio(pCurAnim->m_iFrameIdx, pCurAnim->m_fRatio);
+					pUpdateShader->SetEquipableType((int)EQUIPABLE_TYPE::NONE);
+				}
+			}
 		}
+
 		// 업데이트 쉐이더 실행
 		pUpdateShader->Execute();
 		m_bFinalMatUpdate = true;
@@ -404,6 +462,8 @@ void CAnimator3D::SaveToYAML(YAML::Emitter& _emitter)
 		iter->second->SaveToYAML(_emitter);
 		_emitter << YAML::EndMap;
 	}
+	_emitter << YAML::Key << "EquipableType";
+	_emitter << YAML::Value << m_iEquipType;
 
 	_emitter << YAML::EndMap;
 }
@@ -423,4 +483,5 @@ void CAnimator3D::LoadFromYAML(YAML::Node& _node)
 		anim->LoadFromYAML(node);
 		CreateAnimation(anim);
 	}
+	SAFE_LOAD_FROM_YAML(int, m_iEquipType, _node["ANIMATOR3D"]["EquipableType"]);
 }

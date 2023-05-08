@@ -173,6 +173,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CBonesocketScript.h" />
     <ClInclude Include="CCameraMgr.h" />
     <ClInclude Include="CCamScript.h" />
+    <ClInclude Include="CEquipableScript.h" />
     <ClInclude Include="CGroundCheckScript.h" />
     <ClInclude Include="CRayCastScript.h" />
     <ClInclude Include="CLinkAnimScript.h" />
@@ -199,6 +200,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CBonesocketScript.cpp" />
     <ClCompile Include="CCameraMgr.cpp" />
     <ClCompile Include="CCamScript.cpp" />
+    <ClCompile Include="CEquipableScript.cpp" />
     <ClCompile Include="CGroundCheckScript.cpp" />
     <ClCompile Include="CRayCastScript.cpp" />
     <ClCompile Include="CLinkAnimFSMInit.cpp" />

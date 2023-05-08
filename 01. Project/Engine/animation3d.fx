@@ -218,11 +218,12 @@ RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);
 #define CurFrameLower           (int)g_vec2_1.x
 #define RatioLower              g_vec2_1.y
 #define BoneDivPoint            g_int_1
+#define EquipableType           g_int_2 // 0 -> none | 1 -> upper | 2 -> lower
 
 #define UpperSklRootInv         g_mat_0
 #define UpperSklRootInvNext     g_mat_1
 #define LowerSklRoot            g_mat_2
-#define LowerSklRoot            g_mat_3
+#define LowerSklRootNext        g_mat_3
 // ===========================
 [numthreads(256, 1, 1)]
 void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
@@ -244,16 +245,16 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
     uint iNextFrameDataIdxLower = BoneCount * (CurFrameLower + 1) + _iThreadIdx.x;
     
 
-    if (BoneDivPoint)
+    if (BoneDivPoint || EquipableType)
     {
         // upper
-        if (_iThreadIdx.x <= BoneDivPoint)
+        if (_iThreadIdx.x <= BoneDivPoint || EquipableType == 1)
         {
-            float4 vCurFrameTrans = mul(float4(g_arrFrameTrans[iFrameDataIndex].vTranslate.xyz, 1.f), g_mat_0);
-            float4 vNextFrameTrans = mul(float4(g_arrFrameTrans[iNextFrameDataIdx].vTranslate.xyz, 1.f), g_mat_1);
+            float4 vCurFrameTrans = mul(float4(g_arrFrameTrans[iFrameDataIndex].vTranslate.xyz, 1.f), UpperSklRootInv);
+            float4 vNextFrameTrans = mul(float4(g_arrFrameTrans[iNextFrameDataIdx].vTranslate.xyz, 1.f), UpperSklRootInvNext);
             
-            vCurFrameTrans = mul(float4(vCurFrameTrans.xyz, 1.f), g_mat_2);
-            vNextFrameTrans = mul(float4(vNextFrameTrans.xyz, 1.f), g_mat_3);
+            vCurFrameTrans = mul(float4(vCurFrameTrans.xyz, 1.f), LowerSklRoot);
+            vNextFrameTrans = mul(float4(vNextFrameTrans.xyz, 1.f), LowerSklRootNext);
 
             //vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, Ratio);
             // vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, Ratio);
@@ -264,7 +265,7 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
         }
         
         // lower
-        else
+        else if (_iThreadIdx.x > BoneDivPoint || EquipableType == 2)
         {
             vScale = lerp(g_arrFrameTrans[iFrameDataIndexLower].vScale, g_arrFrameTrans[iNextFrameDataIdxLower].vScale, RatioLower);
             vTrans = lerp(g_arrFrameTrans[iFrameDataIndexLower].vTranslate, g_arrFrameTrans[iNextFrameDataIdxLower].vTranslate, RatioLower);

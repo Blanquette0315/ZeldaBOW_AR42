@@ -51,3 +51,25 @@ void CAnimation3DShader::Clear()
 		m_pOutputBuffer = nullptr;
 	}
 }
+
+void CAnimation3DShader::Execute()
+{
+	UpdateData();
+
+	// 상수 버퍼 업데이트
+	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::MATERIAL);
+	pCB->SetData(&m_Param);
+	pCB->UpdateData_CS();
+
+	CONTEXT->CSSetShader(m_CS.Get(), nullptr, 0);
+	CONTEXT->Dispatch(m_iGroupX, m_iGroupY, m_iGroupZ);
+
+	Clear();
+
+	// clear shared Param
+	m_Param.v2Arr[0] = Vec2(0.f, 0.f);
+	m_Param.v2Arr[1] = Vec2(0.f, 0.f);
+
+	m_Param.iArr[1] = 0;
+	m_Param.iArr[2] = 0;
+}

@@ -30,6 +30,10 @@ private:
     // if anim divided to upper - lower, upper anim's end frame.
     int                         m_iBoneDivPoint;
 
+    // 0 -> none | 1 -> upper | 2 -> lower
+    int                         m_iEquipType;
+    // int                         m_iOption;
+
     // for animation blending ( added to member because of bonesocket which use this too)
     Matrix                      m_matUpperInv;
     Matrix                      m_matUpperNextInv;
@@ -56,6 +60,14 @@ public:
     const Matrix& GetMatUpperNextInv() { return m_matUpperNextInv; }
     const Matrix& GetMatLower() { return m_matLower; }
     const Matrix& GetMatLowerNext() { return m_matLowerNext; }
+
+    void SetMatUpperInv(const Matrix& _mat) { m_matUpperInv = _mat; }
+    void SetMatUpperNextInv(const Matrix& _mat) { m_matUpperNextInv = _mat; }
+    void SetMatLower(const Matrix& _mat) { m_matLower = _mat; }
+    void SetMatLowerNext(const Matrix& _mat) { m_matLowerNext = _mat; }
+
+    int  GetEquipType() { return m_iEquipType; }
+    void SetEquipType(EQUIPABLE_TYPE _eType) { m_iEquipType = (int)_eType; }
 
     void ClearData();
 

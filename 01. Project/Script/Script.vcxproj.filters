@@ -52,6 +52,9 @@
     <Filter Include="Scripts\Link\LockOn">
       <UniqueIdentifier>{8b6a8b27-a396-48c5-92b3-68337c50ad0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Equipable">
+      <UniqueIdentifier>{16278255-c8c4-4948-a1cb-f37ab60eb2b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -131,6 +134,7 @@
     <ClInclude Include="CLockOnScript.h">
       <Filter>Scripts\Link\LockOn</Filter>
     </ClInclude>
+    <ClInclude Include="CEquipableScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -210,5 +214,6 @@
     <ClCompile Include="CLinkAnimFunc.cpp">
       <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
+    <ClCompile Include="CEquipableScript.cpp" />
   </ItemGroup>
 </Project>

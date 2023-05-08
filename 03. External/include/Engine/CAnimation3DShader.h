@@ -31,6 +31,8 @@ public:
 	void SetSklRootMatrixLower(const Matrix& _matrix) { m_Param.matArr[2] = _matrix; }
 	void SetSklRootMatrixLowerNext(const Matrix& _matrix) { m_Param.matArr[3] = _matrix; }
 
+	void SetEquipableType(int _iOption) { m_Param.iArr[2] = _iOption; }
+
 	void SetFrameDataBuffer(CStructuredBuffer* _buffer) { m_pFrameDataBuffer = _buffer; }
 	void SetOffsetMatBuffer(CStructuredBuffer* _buffer) { m_pOffsetMatBuffer = _buffer; }
 	void SetOutputBuffer(CStructuredBuffer* _buffer) { m_pOutputBuffer = _buffer; }
@@ -38,6 +40,7 @@ public:
 public:
 	virtual void UpdateData();
 	virtual void Clear();
+	virtual void Execute() override;
 
 public:
 	CAnimation3DShader();

@@ -100,8 +100,8 @@ void CImGuiMgr::progress()
     // 이제 구조가 바뀌어서 Create할 때 만들어두고 update, render쪽에서 해준다.
     {
         // 이것은 데모 윈도우를 띄우기 위한 코드다.
-        bool bTrue = true;
-        ImGui::ShowDemoWindow(&bTrue);
+		/*bool bTrue = true;
+		ImGui::ShowDemoWindow(&bTrue);*/
 
         // 모든 UI의 업데이트를 돌려주고, render를 돌려준다.
         map<string, UI*>::iterator iter = m_mapUI.begin();

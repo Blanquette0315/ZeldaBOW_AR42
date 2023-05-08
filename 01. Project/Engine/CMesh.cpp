@@ -30,15 +30,15 @@ void CMesh::render(UINT _iSubset)
 {
 	UpdateData(_iSubset);
 
-	for (int i = 0; i < m_vecIdxInfo[_iSubset].iIdxCount; ++i)
-	{
-		Vtx debugVtx = ((Vtx*)m_pVtxSys)[((UINT*)m_vecIdxInfo[_iSubset].pIdxSysMem)[i]];
-		//if (debugVtx.vUV1.x < 0.5f && debugVtx.vUV1.x > 0.f)
-		//{
-		//	Vec2 debug = debugVtx.vUV0;
-		//}
-		int debug = 1;
-	}
+	//for (int i = 0; i < m_vecIdxInfo[_iSubset].iIdxCount; ++i)
+	//{
+	//	Vtx debugVtx = ((Vtx*)m_pVtxSys)[((UINT*)m_vecIdxInfo[_iSubset].pIdxSysMem)[i]];
+	//	if (debugVtx.vUV1.x < 0.5f && debugVtx.vUV1.x > 0.f)
+	//	{
+	//		Vec2 debug = debugVtx.vUV0;
+	//	}
+	//	int debug = 1;
+	//}
 
 	CONTEXT->DrawIndexed(m_vecIdxInfo[_iSubset].iIdxCount, 0, 0);
 }
