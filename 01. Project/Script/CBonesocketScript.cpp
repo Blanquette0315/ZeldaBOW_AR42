@@ -58,8 +58,8 @@ void CBonesocketScript::finaltick()
 			CAnimator3D* pAnimator = GetOwner()->GetParent()->Animator3D();
 			Vec3 vCurFrameTrans = XMVector3TransformCoord(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vTranslate, pAnimator->GetMatUpperInv());
 			Vec3 vNextFrameTrans = XMVector3TransformCoord(vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vTranslate, pAnimator->GetMatUpperNextInv());
-			vCurFrameTrans = XMVector3TransformCoord(vCurFrameTrans, pAnimator->GetMatLowerNext());
-			vNextFrameTrans = XMVector3TransformCoord(vNextFrameTrans, pAnimator->GetMatLower());
+			vCurFrameTrans = XMVector3TransformCoord(vCurFrameTrans, pAnimator->GetMatLower());
+			vNextFrameTrans = XMVector3TransformCoord(vNextFrameTrans, pAnimator->GetMatLowerNext());
 			Transform()->SetRelativePos(Vector3::Lerp(vCurFrameTrans + vFinalOffset, vNextFrameTrans + vFinalOffset, fRatio));
 		}
 		else

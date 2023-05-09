@@ -22,6 +22,8 @@ void CAnimation3DShader::UpdateData()
 	// 구조화버퍼 전달
 	m_pFrameDataBuffer->UpdateData_CS(16, true); // t16
 	m_pOffsetMatBuffer->UpdateData_CS(17, true); // t17
+	if(m_pBoneCheckBuffer)
+		m_pBoneCheckBuffer->UpdateData_CS(18, true); // t18
 	m_pOutputBuffer->UpdateData_CS(0, false);   // u0
 
 	m_iGroupX = (m_Param.iArr[0] / m_iGroupPerThreadX) + 1;
@@ -49,6 +51,12 @@ void CAnimation3DShader::Clear()
 	{
 		m_pOutputBuffer->Clear();
 		m_pOutputBuffer = nullptr;
+	}
+
+	if (nullptr != m_pBoneCheckBuffer)
+	{
+		m_pBoneCheckBuffer->Clear();
+		m_pBoneCheckBuffer = nullptr;
 	}
 }
 

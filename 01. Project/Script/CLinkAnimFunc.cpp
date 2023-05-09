@@ -128,8 +128,6 @@ void CLinkAnimScript::Func_Jump()
 
 void CLinkAnimScript::Func_LowerBodyBlend()
 {
-	m_pAnimator->SetBoneDivPoint(LinkBodyDivPoint);
-
 	if (CalBit(m_iCond, LAC_KEY_WSAD, BIT_LEAST_ONE))
 	{
 		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))

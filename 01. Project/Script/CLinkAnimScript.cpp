@@ -192,6 +192,8 @@ void CLinkAnimScript::ClearAnimNode()
 void CLinkAnimScript::init()
 {
 	m_pAnimator = Animator3D();
+	m_pAnimator->SetBoneUpperAndElseLower(0, LinkBodyDivPoint);
+	m_pAnimator->CreateBoneCheckBuffer();
 	m_mapAnim = m_pAnimator->GetMapAnimation();
 	
 	if (m_bIsAnimNodeLoaded == false)
@@ -227,20 +229,6 @@ void CLinkAnimScript::tick()
 	OperateAnimFunc();
 }
 
-//void CLinkAnimScript::PlayNextAnim()
-//{
-//	if (m_pNextAnimNode != nullptr)
-//	{
-//		if (CalBit(m_pNextAnimNode->iPreferences, LAP_REPEAT, BIT_FUNC_OPT::BIT_LEAST_ONE))
-//			m_pAnimator->Play(m_pNextAnimNode->pAnimKey, true);
-//		else
-//			m_pAnimator->Play(m_pNextAnimNode->pAnimKey, false);
-//
-//		m_pCurAnimNode = m_pNextAnimNode;
-//		m_pNextAnimNode = nullptr;
-//	}
-//}
-
 void CLinkAnimScript::OperateAnimFunc()
 {
 	CalcMoveDirection();
@@ -251,16 +239,6 @@ void CLinkAnimScript::OperateAnimFunc()
 		(this->*m_pCurAnimNode->Func_Steady)();
 	}
 
-	//if (IsCurAnim(LAT_WALK) || IsCurAnim(LAT_RUN) || IsCurAnim(LAT_DASH))
-	//{
-	//	Func_WalkRunDash();
-	//}
-
-	//if (IsCurAnim(LAT_SWORD_MOVE_RUN))
-	//{
-	//	Func_SwordRun();
-	//}
-
 	// Func that only operate at anim start
 	if (m_bOnceAtAnimStart)
 	{
@@ -268,26 +246,6 @@ void CLinkAnimScript::OperateAnimFunc()
 		{
 			(this->*m_pCurAnimNode->Func_Start)();
 		}
-
-		//if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
-		//{
-		//	Func_Jump();
-		//}
-
-		//if (IsCurAnim(LAT_SWORD_ATTACK_S1) || IsCurAnim(LAT_SWORD_ATTACK_S2) || IsCurAnim(LAT_SWORD_ATTACK_S3) || IsCurAnim(LAT_SWORD_ATTACK_SF))
-		//{
-		//	Func_SwordAttackMove();
-		//}
-
-		//if (IsCurAnim(LAT_SWORD_EQUIP_ON))
-		//{
-		//	Func_SwordEquipOn();
-		//}
-
-		//if (IsCurAnim(LAT_SWORD_EQUIP_OFF))
-		//{
-		//	Func_SwordEquipOff();
-		//}
 
 		m_bOnceAtAnimStart = false;
 	}
@@ -302,8 +260,6 @@ void CLinkAnimScript::OperateAnimFunc()
 		m_pCurAnimNodeLower = nullptr;
 		m_pAnimator->StopLowerAnim();
 	}
-
-
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -420,11 +376,6 @@ void CLinkAnimScript::OperateAnimFuncAfter()
 		{
 			(this->*m_pCurAnimNode->Func_End)();
 		}
-
-		//if (IsCurAnim(LAT_RUN_BRAKE_L) || IsCurAnim(LAT_RUN_BRAKE_R) || IsCurAnim(LAT_DASH_BRAKE_L) || IsCurAnim(LAT_DASH_BRAKE_R))
-		//{
-		//	Func_TurnBack();
-		//}
 	}
 }
 

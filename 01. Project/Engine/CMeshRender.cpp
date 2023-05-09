@@ -75,6 +75,7 @@ void CMeshRender::finaltick()
 								if (strKeyChild.find(strKey) != wstring::npos)
 								{
 									m_vecCheck[k] = true;
+
 								}
 							}
 						}

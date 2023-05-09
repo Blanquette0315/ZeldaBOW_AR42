@@ -23,9 +23,11 @@ CAnimator3D::CAnimator3D()
 	, m_bRepeat(false)
 	, m_bRepeatLower(false)
 	, m_iEquipType((int)EQUIPABLE_TYPE::NONE)
+	, m_iSklRootIdx(0)
 	, CComponent(COMPONENT_TYPE::ANIMATOR3D)
 {
 	m_pBoneFinalMatBuffer = new CStructuredBuffer;
+	m_pBoneCheckBuffer = new CStructuredBuffer;
 }
 
 CAnimator3D::CAnimator3D(const CAnimator3D& _origin)
@@ -38,9 +40,11 @@ CAnimator3D::CAnimator3D(const CAnimator3D& _origin)
 	, m_bRepeat(false)
 	, m_bRepeatLower(false)
 	, m_iEquipType(_origin.m_iEquipType)
+	, m_iSklRootIdx(_origin.m_iSklRootIdx)
 	, CComponent(COMPONENT_TYPE::ANIMATOR3D)
 {
 	m_pBoneFinalMatBuffer = new CStructuredBuffer;
+	m_pBoneCheckBuffer = new CStructuredBuffer;
 
 	map<wstring, CAnimation3D*>::const_iterator iter = _origin.m_mapAnim.begin();
 	for (; iter != _origin.m_mapAnim.end(); ++iter)
@@ -52,6 +56,7 @@ CAnimator3D::CAnimator3D(const CAnimator3D& _origin)
 CAnimator3D::~CAnimator3D()
 {
 	SAFE_DELETE(m_pBoneFinalMatBuffer);
+	SAFE_DELETE(m_pBoneCheckBuffer);
 	Safe_Del_Map(m_mapAnim);
 }
 
@@ -102,14 +107,14 @@ void CAnimator3D::finaltick()
 
 		// skl_root : 1
 
-		m_matUpperInv = MakeMatrixFromKeyFrame(1, iUpperFrm);
+		m_matUpperInv = MakeMatrixFromKeyFrame(m_iSklRootIdx, iUpperFrm);
 		m_matUpperInv = XMMatrixInverse(nullptr, m_matUpperInv);
 
-		m_matUpperNextInv = MakeMatrixFromKeyFrame(1, iUpperNextFrm);
+		m_matUpperNextInv = MakeMatrixFromKeyFrame(m_iSklRootIdx, iUpperNextFrm);
 		m_matUpperNextInv = XMMatrixInverse(nullptr, m_matUpperNextInv);
 
-		m_matLower = MakeMatrixFromKeyFrame(1, iLowerFrm);
-		m_matLowerNext = MakeMatrixFromKeyFrame(1, iLowerNextFrm);
+		m_matLower = MakeMatrixFromKeyFrame(m_iSklRootIdx, iLowerFrm);
+		m_matLowerNext = MakeMatrixFromKeyFrame(m_iSklRootIdx, iLowerNextFrm);
 	}
 
 	// 컴퓨트 쉐이더 연산여부
@@ -145,6 +150,7 @@ void CAnimator3D::UpdateData()
 
 		pUpdateShader->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
 		pUpdateShader->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
+		pUpdateShader->SetBoneCheckBuffer(m_pBoneCheckBuffer);
 		pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer);
 
 		UINT iBoneCount = (UINT)m_pVecBones->size();
@@ -170,6 +176,7 @@ void CAnimator3D::UpdateData()
 
 		pUpdateShader->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
 		pUpdateShader->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
+		pUpdateShader->SetBoneCheckBuffer(m_pBoneCheckBuffer);
 		pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer);
 
 		UINT iBoneCount = (UINT)m_pVecBones->size();
@@ -182,7 +189,7 @@ void CAnimator3D::UpdateData()
 			if (m_pCurAnimLower)
 			{
 				pUpdateShader->SetFrameIdxRatioLower(m_pCurAnimLower->m_iFrameIdx, m_pCurAnimLower->m_fRatio);
-				pUpdateShader->SetBoneDividedPoint(m_iBoneDivPoint);
+				pUpdateShader->SetBoneBlendCheck(1);
 
 				// skl_root : 1
 				pUpdateShader->SetSklRootMatrixUpperInv(m_matUpperInv);
@@ -192,7 +199,7 @@ void CAnimator3D::UpdateData()
 			}
 			else
 			{
-				pUpdateShader->SetBoneDividedPoint(0);
+				pUpdateShader->SetBoneBlendCheck(0);
 			}
 			pUpdateShader->SetEquipableType(m_iEquipType);
 		}
@@ -256,12 +263,58 @@ void CAnimator3D::UpdateData()
 	m_pBoneFinalMatBuffer->UpdateData(30, PIPELINE_STAGE::VS);
 }
 
+void CAnimator3D::SetBoneUpper(UINT _iStart, UINT _iEnd)
+{
+	ResizeVecBone();
+	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
+	std::fill(iter + _iStart, iter + _iEnd + 1, 1);
+}
+
+void CAnimator3D::SetBoneLower(UINT _iStart, UINT _iEnd)
+{
+	ResizeVecBone();
+	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
+	std::fill(iter + _iStart, iter + _iEnd + 1, 2);
+}
+
+void CAnimator3D::SetBoneUpperAndElseLower(UINT _iStart, UINT _iEnd)
+{
+	ResizeVecBone();
+	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
+	std::fill(iter + _iStart, iter + _iEnd + 1, 1);
+	std::fill(iter, iter + _iStart, 1);
+	std::fill(iter + _iEnd + 1, m_vecBoneBlendCheck.end(), 1);
+}
+
+void CAnimator3D::SetBoneLowerAndElseUpper(UINT _iStart, UINT _iEnd)
+{
+	ResizeVecBone();
+	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
+	std::fill(iter + _iStart, iter + _iEnd + 1, 2);
+	std::fill(iter, iter + _iStart, 2);
+	std::fill(iter + _iEnd + 1, m_vecBoneBlendCheck.end(), 2);
+}
+
+void CAnimator3D::CreateBoneCheckBuffer()
+{
+	m_pBoneCheckBuffer->Create((UINT)sizeof(int), m_vecBoneBlendCheck.size(), SB_TYPE::SRV_ONLY, m_vecBoneBlendCheck.data(), false);
+}
+
 const tMTBone& CAnimator3D::GetBoneByName(const wstring& _strBoneName)
 {
 	for (size_t i = 0; i < m_pVecBones->size(); ++i)
 	{
 		if ((*m_pVecBones)[i].strBoneName == _strBoneName)
 			return (*m_pVecBones)[i];
+	}
+}
+
+int CAnimator3D::GetBoneIdxByName(const wstring& _strBoneName)
+{
+	for (size_t i = 0; i < m_pVecBones->size(); ++i)
+	{
+		if ((*m_pVecBones)[i].strBoneName == _strBoneName)
+			return i;
 	}
 }
 
@@ -464,6 +517,8 @@ void CAnimator3D::SaveToYAML(YAML::Emitter& _emitter)
 	}
 	_emitter << YAML::Key << "EquipableType";
 	_emitter << YAML::Value << m_iEquipType;
+	_emitter << YAML::Key << "SkeletonRootIdx";
+	_emitter << YAML::Value << m_iSklRootIdx;
 
 	_emitter << YAML::EndMap;
 }
@@ -484,4 +539,5 @@ void CAnimator3D::LoadFromYAML(YAML::Node& _node)
 		CreateAnimation(anim);
 	}
 	SAFE_LOAD_FROM_YAML(int, m_iEquipType, _node["ANIMATOR3D"]["EquipableType"]);
+	SAFE_LOAD_FROM_YAML(int, m_iSklRootIdx, _node["ANIMATOR3D"]["SkeletonRootIdx"]);
 }
