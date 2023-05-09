@@ -55,6 +55,18 @@
     <Filter Include="Scripts\Equipable">
       <UniqueIdentifier>{16278255-c8c4-4948-a1cb-f37ab60eb2b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Link\Weapon">
+      <UniqueIdentifier>{fe83b28d-25e8-41f6-9215-23182185b837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Link\Dummy">
+      <UniqueIdentifier>{4997f10e-dd69-443c-9936-89d744fb7fb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\BoneSocket">
+      <UniqueIdentifier>{061493d5-f9b3-4c3e-9146-d4130994eb7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Link\Weapon\Sword">
+      <UniqueIdentifier>{d1533fb7-365e-4bbe-b0af-6ab1c6bf9e20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -127,14 +139,21 @@
     <ClInclude Include="CGroundCheckScript.h">
       <Filter>Scripts\Link\GroundChecker</Filter>
     </ClInclude>
-    <ClInclude Include="CRayCastScript.h" />
-    <ClInclude Include="CBonesocketScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="CLockOnScript.h">
       <Filter>Scripts\Link\LockOn</Filter>
     </ClInclude>
-    <ClInclude Include="CEquipableScript.h" />
+    <ClInclude Include="CEquipableScript.h">
+      <Filter>Scripts\Link\Dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="CRayCastScript.h">
+      <Filter>Scripts\RayCast</Filter>
+    </ClInclude>
+    <ClInclude Include="CBonesocketScript.h">
+      <Filter>Scripts\BoneSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkSwordScript.h">
+      <Filter>Scripts\Link\Weapon\Sword</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -204,16 +223,23 @@
     <ClCompile Include="CGroundCheckScript.cpp">
       <Filter>Scripts\Link\GroundChecker</Filter>
     </ClCompile>
-    <ClCompile Include="CRayCastScript.cpp" />
-    <ClCompile Include="CBonesocketScript.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="CLockOnScript.cpp">
       <Filter>Scripts\Link\LockOn</Filter>
     </ClCompile>
     <ClCompile Include="CLinkAnimFunc.cpp">
       <Filter>Scripts\Link\FSM</Filter>
     </ClCompile>
-    <ClCompile Include="CEquipableScript.cpp" />
+    <ClCompile Include="CEquipableScript.cpp">
+      <Filter>Scripts\Link\Dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="CRayCastScript.cpp">
+      <Filter>Scripts\RayCast</Filter>
+    </ClCompile>
+    <ClCompile Include="CBonesocketScript.cpp">
+      <Filter>Scripts\BoneSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkSwordScript.cpp">
+      <Filter>Scripts\Link\Weapon\Sword</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

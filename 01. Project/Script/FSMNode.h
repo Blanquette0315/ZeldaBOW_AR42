@@ -46,12 +46,18 @@ public:
     void AddFuncSteady(Link_Func _func) { Func_Steady = _func; }
     void AddFuncEnd(Link_Func _func) { Func_End = _func; }
 
+    UINT GetPreference() { return iPreferences; }
+
 public:
     tAnimNode()
         : iPreferences(0)
         , Func_Start(nullptr)
         , Func_Steady(nullptr)
         , Func_End(nullptr)
+        , pAnim()
+        , pAnimKey()
+        , vecTranAnim{}
+        
     {
 
     }

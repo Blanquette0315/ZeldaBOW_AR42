@@ -33,7 +33,6 @@ public:
 	void SetSklRootMatrixLowerNext(const Matrix& _matrix) { m_Param.matArr[3] = _matrix; }
 
 	void SetEquipableType(int _iOption) { m_Param.iArr[2] = _iOption; }
-	void SetBoneUseCheckBuffer(int _iUse) { m_Param.iArr[3] = _iUse; } // use : 1 | not use : 0
 
 	void SetFrameDataBuffer(CStructuredBuffer* _buffer) { m_pFrameDataBuffer = _buffer; }
 	void SetOffsetMatBuffer(CStructuredBuffer* _buffer) { m_pOffsetMatBuffer = _buffer; }
