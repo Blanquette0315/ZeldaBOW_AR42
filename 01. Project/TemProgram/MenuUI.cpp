@@ -192,6 +192,11 @@ void MenuUI::render()
                 CImGuiMgr::GetInst()->FindUI("AnimInjectionTool")->Open();
             }
 
+            if (ImGui::MenuItem("FBXLoad"))
+            {
+                CImGuiMgr::GetInst()->FindUI("FBXLoadTool")->Open();
+            }
+
             ImGui::EndMenu();
         }
 

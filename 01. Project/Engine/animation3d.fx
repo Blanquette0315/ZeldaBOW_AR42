@@ -206,18 +206,22 @@ struct tFrameTrans
     float4 qRot;
 };
 
-StructuredBuffer<tFrameTrans> g_arrFrameTrans : register(t16);
-StructuredBuffer<matrix> g_arrOffset : register(t17);
-RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);
+StructuredBuffer<tFrameTrans>   g_arrFrameTrans : register(t16);
+StructuredBuffer<matrix>        g_arrOffset : register(t17);
+StructuredBuffer<int>           g_arrBoneCheck : register(t18);
+RWStructuredBuffer<matrix>      g_arrFinelMat : register(u0);
 
 // ===========================
 // Animation3D Compute Shader
+#define UPPER                   1
+#define LOWER                   2
+
 #define BoneCount               g_int_0
 #define CurFrame                (int)g_vec2_0.x
 #define Ratio                   g_vec2_0.y
 #define CurFrameLower           (int)g_vec2_1.x
 #define RatioLower              g_vec2_1.y
-#define BoneDivPoint            g_int_1
+#define BoneBlendCheck          g_int_1
 #define EquipableType           g_int_2 // 0 -> none | 1 -> upper | 2 -> lower
 
 #define UpperSklRootInv         g_mat_0
@@ -245,10 +249,10 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
     uint iNextFrameDataIdxLower = BoneCount * (CurFrameLower + 1) + _iThreadIdx.x;
     
 
-    if (BoneDivPoint || EquipableType)
+    if (BoneBlendCheck || EquipableType)
     {
         // upper
-        if (_iThreadIdx.x <= BoneDivPoint || EquipableType == 1)
+        if (g_arrBoneCheck[_iThreadIdx.x] == UPPER || EquipableType == UPPER)
         {
             float4 vCurFrameTrans = mul(float4(g_arrFrameTrans[iFrameDataIndex].vTranslate.xyz, 1.f), UpperSklRootInv);
             float4 vNextFrameTrans = mul(float4(g_arrFrameTrans[iNextFrameDataIdx].vTranslate.xyz, 1.f), UpperSklRootInvNext);
@@ -265,7 +269,7 @@ void CS_Animation3D(int3 _iThreadIdx : SV_DispatchThreadID)
         }
         
         // lower
-        else if (_iThreadIdx.x > BoneDivPoint || EquipableType == 2)
+        else if (g_arrBoneCheck[_iThreadIdx.x] == LOWER || EquipableType == LOWER)
         {
             vScale = lerp(g_arrFrameTrans[iFrameDataIndexLower].vScale, g_arrFrameTrans[iNextFrameDataIdxLower].vScale, RatioLower);
             vTrans = lerp(g_arrFrameTrans[iFrameDataIndexLower].vTranslate, g_arrFrameTrans[iNextFrameDataIdxLower].vTranslate, RatioLower);

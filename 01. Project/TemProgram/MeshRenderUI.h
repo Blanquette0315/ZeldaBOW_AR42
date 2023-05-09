@@ -15,6 +15,7 @@ private:
     Ptr<CMaterial>  m_Material;
     
     bool            m_bIsDyanmicMtrl;
+    int             m_iOption;
 
 public:
     virtual void update() override;

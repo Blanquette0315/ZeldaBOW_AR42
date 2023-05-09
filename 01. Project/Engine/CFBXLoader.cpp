@@ -758,7 +758,8 @@ void CFBXLoader::CreateMaterial(const wstring& _strFileName)
 			strPath += strMtrlName + L".mtrl";
 
 			// 재질 이름
-			m_vecContainer[i].vecMtrl[j].strMtrlName = strPath;
+			m_vecContainer[i].vecMtrl[j].strMtrlKey = strPath;
+			// m_vecContainer[i].vecMtrl[j].strMtrlName = strPath;
 
 			// 이미 로딩된 재질이면 로딩된 것을 사용
 			Ptr<CMaterial> pMaterial = CResMgr::GetInst()->FindRes<CMaterial>(strPath);
@@ -769,6 +770,7 @@ void CFBXLoader::CreateMaterial(const wstring& _strFileName)
 
 			// 상대경로가 곧 키
 			pMaterial->SetKey(strPath);
+			pMaterial->SetName(m_vecContainer[i].vecMtrl[j].strMtrlName);
 			pMaterial->SetRelativePath(strPath);
 
 			pMaterial->SetShader(CResMgr::GetInst()->FindRes<CGraphicsShader>(L"Std3D_DeferredShader"));

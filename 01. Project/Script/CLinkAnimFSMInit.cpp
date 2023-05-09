@@ -26,7 +26,8 @@ void CLinkAnimScript::ReplaceNodeAnim()
 	map<wstring, tAnimNode*>::iterator iter = m_mapAnimNode.begin();
 	for (; iter != m_mapAnimNode.end(); ++iter)
 	{
-		iter->second->pAnim = m_mapAnim.find(iter->second->pAnimKey)->second;
+		if(iter->second->pAnim)
+			iter->second->pAnim = m_mapAnim.find(iter->second->pAnimKey)->second;
 	}
 }
 
@@ -139,34 +140,34 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
 	// Sword
-	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_ON, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOn);
+	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_ON, LAP_BLEND | LAP_EQUIP_SWORD); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOn);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOff);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT | LAP_BLEND);
+	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT | LAP_BLEND | LAP_EQUIP_SWORD);
 	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_OFF, LAC_KEY_E);
 	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_SwordRun);
+	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT | LAP_EQUIP_SWORD); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_SwordRun);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, 0, LAC_KEY_LBTN | LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S1, LAP_COMBO); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S1, LAP_COMBO | LAP_ATTACK | LAP_EQUIP_SWORD); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S2, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S2, LAP_COMBO); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S2, LAP_COMBO | LAP_ATTACK | LAP_EQUIP_SWORD); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S3, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S3, LAP_COMBO); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_S3, LAP_COMBO | LAP_ATTACK | LAP_EQUIP_SWORD); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_SF, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF, LAP_ATTACK | LAP_EQUIP_SWORD); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 	// Bow
@@ -186,4 +187,21 @@ void CLinkAnimScript::MakeFSM()
 
 	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT);
 	
+	// Damaged
+	SetAnimNode(pAnimNode, LAT_DAMAGE_S_B);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW);
+
+	SetAnimNode(pAnimNode, LAT_DAMAGE_M_B);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW);
+
+	// Any State Node
+	tAnimNode* pAnyStateNode = new tAnimNode();
+	pAnyStateNode->pAnimKey = LINK_STRING_WCHAR[LINK_STRING_ANYSTATE_NODE_KEY];
+	SetAnimTran(pAnyStateNode, LAT_DAMAGE_M_B, LAC_DAMAGED_BACK | LAC_DAMAGED_MEDIUM, LAC_DEAD);
+	SetAnimTran(pAnyStateNode, LAT_DAMAGE_S_B, LAC_DAMAGED_BACK | LAC_DAMAGED_SMALL, LAC_DEAD);
+	m_mapAnimNode.insert({ pAnyStateNode->pAnimKey, pAnyStateNode });
 }

@@ -28,10 +28,13 @@ private:
     bool                        m_bRepeatLower;
 
     // if anim divided to upper - lower, upper anim's end frame.
-    int                         m_iBoneDivPoint;
+    vector<int>                 m_vecBoneBlendCheck; // fiiled with lower : 0
+    CStructuredBuffer*          m_pBoneCheckBuffer;
 
     // 0 -> none | 1 -> upper | 2 -> lower
     int                         m_iEquipType;
+
+    int                         m_iSklRootIdx;
     // int                         m_iOption;
 
     // for animation blending ( added to member because of bonesocket which use this too)
@@ -44,17 +47,26 @@ public:
     virtual void finaltick() override;
     void UpdateData();
 
+    // vecBoneBlendCheckFunction
 public:
-    void SetBones(const vector<tMTBone>* _vecBones) { m_pVecBones = _vecBones; }
+    void ResizeVecBone() { if (m_vecBoneBlendCheck.empty()) { m_vecBoneBlendCheck.resize(m_pVecBones->size(), 0); } }
+    void SetBoneUpper(UINT _iStart, UINT _iEnd); // Upper : 1
+    void SetBoneLower(UINT _iStart, UINT _iEnd); // Lower : 2
+    void SetBoneUpperAndElseLower(UINT _iStart, UINT _iEnd);
+    void SetBoneLowerAndElseUpper(UINT _iStart, UINT _iEnd);
+    void CreateBoneCheckBuffer();
+
+public:
+    void SetBones(const vector<tMTBone>* _vecBones);
     void SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip);
     void SetFinalMatUpdate(bool _bool) { m_bFinalMatUpdate = _bool; }
     void SetFrameLimit(UINT _iFrameLimit) { m_iFrmlimit = _iFrameLimit; }
-    void SetBoneDivPoint(int _iDivPoint) { m_iBoneDivPoint = _iDivPoint; }
 
     CStructuredBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
     UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
     const tMTBone& GetBoneByName(const wstring& _strBoneName);
     const tMTBone& GetBoneByIdx(UINT _iIdx) { return m_pVecBones->at(_iIdx); }
+    int GetBoneIdxByName(const wstring& _strBoneName);
 
     const Matrix& GetMatUpperInv() { return m_matUpperInv; }
     const Matrix& GetMatUpperNextInv() { return m_matUpperNextInv; }
@@ -69,6 +81,9 @@ public:
     int  GetEquipType() { return m_iEquipType; }
     void SetEquipType(EQUIPABLE_TYPE _eType) { m_iEquipType = (int)_eType; }
 
+    int  GetSklRoot() { return m_iSklRootIdx; }
+    void SetSklRoot(int _iSklRootIdx) { m_iSklRootIdx = _iSklRootIdx; }
+
     void ClearData();
 
     void CreateAnimation(const wstring& _strKey, int _iStartFrame, int _iEndFrame, int _iFrameCount);
@@ -82,6 +97,8 @@ public:
     // LowerAnim
     void PlayLowerAnim(const wstring& _strKey, bool _bRepeat);
     void StopLowerAnim() { m_pCurAnimLower = nullptr; }
+
+
 
 public:
     const map<wstring, CAnimation3D*>& GetMapAnimation() { return m_mapAnim; }
@@ -107,4 +124,3 @@ public:
     CAnimator3D(const CAnimator3D& _origin);
     ~CAnimator3D();
 };
-

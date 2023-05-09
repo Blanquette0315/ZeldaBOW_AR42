@@ -171,6 +171,7 @@
     <ClInclude Include="CGrid2DScript.h" />
     <ClInclude Include="CImGuiMgr.h" />
     <ClInclude Include="ExportToolUI.h" />
+    <ClInclude Include="FBXLoadToolUI.h" />
     <ClInclude Include="GraphicsShaderUI.h" />
     <ClInclude Include="DecalUI.h" />
     <ClInclude Include="ImGuizmo.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="CGrid2DScript.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
     <ClCompile Include="ExportToolUI.cpp" />
+    <ClCompile Include="FBXLoadToolUI.cpp" />
     <ClCompile Include="GraphicsShaderUI.cpp" />
     <ClCompile Include="DecalUI.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />

@@ -21,6 +21,7 @@ private:
     bool                m_bRepeatLower;
 
     int                 m_iEquipType;
+    int                 m_iSklRootIdx;
 
 public:
     virtual void update() override;

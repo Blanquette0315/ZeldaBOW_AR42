@@ -78,7 +78,7 @@ public:
 
     const Matrix& GetWorldMatInv() { return m_matWorldInv; }
     
-    const Matrix& GetRotMat() { return m_matRot; }  
+    const Matrix& GetRotMat() { return m_matRot; }
     const Matrix& GetRotMatInv() { return m_matRotInv; }
 
     const Matrix& GetTransMat() { return m_matTrans; }

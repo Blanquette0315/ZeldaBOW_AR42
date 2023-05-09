@@ -31,9 +31,15 @@ void CLinkAnimScript::MoveRotation(Vec3 _vDir)
 	Vec3 vRotDir = Vec3(sinf(vRot.y + XM_PI), 0.f, cosf(vRot.y + XM_PI));
 	vCross = vRotDir.Cross(_vDir);
 	float fAdd = fRad - vRot.y;
+	fAdd = fAdd - XM_2PI * floorf(fAdd / XM_2PI);
+	if (fAdd < 0 && fabsf(fAdd) > XM_PI)
+		fAdd += XM_2PI;
+	else if (fAdd > 0 && fabsf(fAdd) > XM_PI)
+		fAdd -= XM_2PI;
 
 	if (vCross.y < 0.f)
 		fAngleSpeedPerFrame *= -1.f;
+
 
 	if (fabsf(fAdd) <= fabsf(fAngleSpeedPerFrame))
 		fAngleSpeedPerFrame = fAdd;
@@ -122,8 +128,6 @@ void CLinkAnimScript::Func_Jump()
 
 void CLinkAnimScript::Func_LowerBodyBlend()
 {
-	m_pAnimator->SetBoneDivPoint(LinkBodyDivPoint);
-
 	if (CalBit(m_iCond, LAC_KEY_WSAD, BIT_LEAST_ONE))
 	{
 		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
@@ -232,38 +236,9 @@ void CLinkAnimScript::Func_LowerBodyBlend()
 
 void CLinkAnimScript::Func_SwordRun()
 {
-	Vec3 vDir = GetCombinedDir();
-
-	if (vDir != Vec3::Zero)
-	{
-
-		Vec3 vCross = Vec3(0.f, 0.f, -1.f).Cross(vDir);
-		float fRad = acosf(Vec3(0.f, 0.f, -1.f).Dot(vDir));
-
-		// directx is left-handed axis
-		if (vCross.y < 0.f)
-		{
-			fRad *= -1.f;
-		}
-		float fAngleSpeedPerFrame = m_fAnglePerSec * FDT;
-
-		Vec3 vRot = Transform()->GetRelativeRotation();
-		Vec3 vRotDir = Vec3(sinf(vRot.y + XM_PI), 0.f, cosf(vRot.y + XM_PI));
-		vCross = vRotDir.Cross(vDir);
-		float fAdd = fRad - vRot.y;
-
-		if (vCross.y < 0.f)
-			fAngleSpeedPerFrame *= -1.f;
-
-		if (fabsf(fAdd) <= fabsf(fAngleSpeedPerFrame))
-			fAngleSpeedPerFrame = fAdd;
-
-		Transform()->AddRelativeRotation(Vec3(0.f, fAngleSpeedPerFrame, 0.f));
-
-		vDir = Transform()->GetRelativeDir(DIR::FRONT);
-
-		RigidBody()->SetVelocity(vDir * m_fRunSpeed);
-	}
+	MoveRotation(GetCombinedDir());
+	m_fSelectedSpeed = m_fRunSpeed;
+	MoveToDir(DIR::FRONT);
 }
 
 void CLinkAnimScript::Func_SwordAttackMove()

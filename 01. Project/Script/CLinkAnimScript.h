@@ -1,12 +1,23 @@
 #pragma once
 #include <Engine/CScript.h>
 
+struct tLinkStatus
+{
+    float fHP;
+};
+
+struct tLinkDamaged
+{
+    float fDamage;
+    LINK_DAMAGED_TYPE eType;
+};
+
+
 class CAnimator3D;
 class CAnimation3D;
 class tAnimNode;
 class CGroundCheckScript;
 class CLockOnScript;
-
 
 class CLinkAnimScript :
     public CScript
@@ -21,6 +32,9 @@ private:
     CAnimator3D*    m_pAnimator;
     tAnimNode*      m_pCurAnimNode;
     tAnimNode*      m_pCurAnimNodeLower;
+    tAnimNode*      m_pPrevAnimNode;
+    tAnimNode*      m_pAnyStateNode;
+
     // tAnimNode*      m_pNextAnimNode;
     UINT            m_iCond;
 
@@ -45,6 +59,7 @@ private:
     float                   m_fComboMaxTime;
 
     bool                    m_bLockOn;
+    bool                    m_bIsAnimChanged;
 
     // save
 private:
@@ -55,6 +70,8 @@ private:
     float           m_fDashSpeed;
     float           m_fJumpSpeed;
     float           m_fSelectedSpeed;
+    tLinkStatus     m_tLinkStatus;
+    tLinkDamaged    m_tLinkDamaged;
 
     // FSM function
 private:
@@ -66,14 +83,14 @@ private:
 
     // tick structure
 private:
-    /*void PlayNextAnim();*/
+    // set link condition
     void SetLinkCond();
 
     // This Func can use anim finished member 
     void OperateAnimFuncAfter();
 
     void PlayNextAnim();
-    void OperateAnimFunc();
+    void OperateAnimFunc(); 
 
     // anim function
 private:
@@ -114,6 +131,15 @@ private:
 
     // get ground from child ground checker
     bool IsGround();
+
+public:
+    tAnimNode* GetCurAnimNode() { return m_pCurAnimNode; }
+    bool IsAnimChanged() { return m_bIsAnimChanged; }
+
+    // Interaction with monster function
+public:
+    void SetDamage(tLinkDamaged _tDamage) { m_tLinkDamaged = _tDamage; }
+    void ApplyDamage();
 
 public:
     static void ClearAnimNode();

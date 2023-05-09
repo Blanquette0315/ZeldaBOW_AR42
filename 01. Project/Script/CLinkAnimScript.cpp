@@ -30,6 +30,9 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_fJumpSpeed(4.f)
 	, m_bOnceAtAnimStart(true)
 	, m_bComboProgress(false)
+	, m_bLockOn(false)
+	, m_bIsAnimChanged(false)
+	, m_pPrevAnimNode(nullptr)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -50,6 +53,9 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_fComboAccTime(0.f)
 	, m_fComboMaxTime(_origin.m_fComboMaxTime)
 	, m_bComboProgress(false)
+	, m_bLockOn(false)
+	, m_bIsAnimChanged(false)
+	, m_pPrevAnimNode(nullptr)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -183,6 +189,12 @@ bool CLinkAnimScript::IsGround()
 	return m_pGroundChecker->IsGround();
 }
 
+void CLinkAnimScript::ApplyDamage()
+{
+	m_tLinkStatus.fHP -= m_tLinkDamaged.fDamage;
+	m_tLinkDamaged = {};
+}
+
 void CLinkAnimScript::ClearAnimNode()
 {
 	m_mapAnim.clear();
@@ -192,6 +204,8 @@ void CLinkAnimScript::ClearAnimNode()
 void CLinkAnimScript::init()
 {
 	m_pAnimator = Animator3D();
+	m_pAnimator->SetBoneUpperAndElseLower(0, LinkBodyDivPoint);
+	m_pAnimator->CreateBoneCheckBuffer();
 	m_mapAnim = m_pAnimator->GetMapAnimation();
 	
 	if (m_bIsAnimNodeLoaded == false)
@@ -216,6 +230,9 @@ void CLinkAnimScript::begin()
 	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
 	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
+	m_tLinkStatus.fHP = 7777.f;
+	m_tLinkDamaged.eType = LINK_DAMAGED_TYPE::NONE;
+	m_pAnyStateNode = m_mapAnimNode.find(LINK_STRING_WCHAR[LINK_STRING_ANYSTATE_NODE_KEY])->second;
 }
 
 void CLinkAnimScript::tick()
@@ -227,20 +244,6 @@ void CLinkAnimScript::tick()
 	OperateAnimFunc();
 }
 
-//void CLinkAnimScript::PlayNextAnim()
-//{
-//	if (m_pNextAnimNode != nullptr)
-//	{
-//		if (CalBit(m_pNextAnimNode->iPreferences, LAP_REPEAT, BIT_FUNC_OPT::BIT_LEAST_ONE))
-//			m_pAnimator->Play(m_pNextAnimNode->pAnimKey, true);
-//		else
-//			m_pAnimator->Play(m_pNextAnimNode->pAnimKey, false);
-//
-//		m_pCurAnimNode = m_pNextAnimNode;
-//		m_pNextAnimNode = nullptr;
-//	}
-//}
-
 void CLinkAnimScript::OperateAnimFunc()
 {
 	CalcMoveDirection();
@@ -251,16 +254,6 @@ void CLinkAnimScript::OperateAnimFunc()
 		(this->*m_pCurAnimNode->Func_Steady)();
 	}
 
-	//if (IsCurAnim(LAT_WALK) || IsCurAnim(LAT_RUN) || IsCurAnim(LAT_DASH))
-	//{
-	//	Func_WalkRunDash();
-	//}
-
-	//if (IsCurAnim(LAT_SWORD_MOVE_RUN))
-	//{
-	//	Func_SwordRun();
-	//}
-
 	// Func that only operate at anim start
 	if (m_bOnceAtAnimStart)
 	{
@@ -268,26 +261,6 @@ void CLinkAnimScript::OperateAnimFunc()
 		{
 			(this->*m_pCurAnimNode->Func_Start)();
 		}
-
-		//if (IsCurAnim(LAT_JUMP_L) || IsCurAnim(LAT_JUMP_R))
-		//{
-		//	Func_Jump();
-		//}
-
-		//if (IsCurAnim(LAT_SWORD_ATTACK_S1) || IsCurAnim(LAT_SWORD_ATTACK_S2) || IsCurAnim(LAT_SWORD_ATTACK_S3) || IsCurAnim(LAT_SWORD_ATTACK_SF))
-		//{
-		//	Func_SwordAttackMove();
-		//}
-
-		//if (IsCurAnim(LAT_SWORD_EQUIP_ON))
-		//{
-		//	Func_SwordEquipOn();
-		//}
-
-		//if (IsCurAnim(LAT_SWORD_EQUIP_OFF))
-		//{
-		//	Func_SwordEquipOff();
-		//}
 
 		m_bOnceAtAnimStart = false;
 	}
@@ -302,8 +275,6 @@ void CLinkAnimScript::OperateAnimFunc()
 		m_pCurAnimNodeLower = nullptr;
 		m_pAnimator->StopLowerAnim();
 	}
-
-
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -410,6 +381,57 @@ void CLinkAnimScript::SetLinkCond()
 		AddBit(m_iCond, LAC_GROUNDED);
 	}
 	RigidBody()->SetGround(IsGround());
+
+	if (KEY_TAP(KEY::Z))
+	{
+		tLinkDamaged test;
+		test.eType = LINK_DAMAGED_TYPE::SMALL;
+		test.fDamage = 1.f;
+		SetDamage(test);
+	}
+	// Check Damage
+	if (m_tLinkDamaged.eType != LINK_DAMAGED_TYPE::NONE)
+	{
+		AddBit(m_iCond, LAC_DAMAGED_BACK);
+
+		switch (m_tLinkDamaged.eType)
+		{
+			case LINK_DAMAGED_TYPE::SMALL:
+			{
+				AddBit(m_iCond, LAC_DAMAGED_SMALL);
+			}
+			break;
+
+			case LINK_DAMAGED_TYPE::MEDIUM:
+			{
+				AddBit(m_iCond, LAC_DAMAGED_MEDIUM);
+			}
+			break;
+
+			case LINK_DAMAGED_TYPE::LARGE:
+			{
+				AddBit(m_iCond, LAC_DAMAGED_LARGE);
+			}
+			break;
+		}
+
+		ApplyDamage();
+		if(m_tLinkStatus.fHP < 0.f)
+			AddBit(m_iCond, LAC_DEAD);
+	}
+
+	// check equipment
+	if (m_pPrevAnimNode)
+	{
+		if (CalBit(m_pPrevAnimNode->iPreferences, LAP_EQUIP_SWORD, BIT_LEAST_ONE))
+		{
+			AddBit(m_iCond, LAC_EQUIP_SWORD);
+		}
+		else if (CalBit(m_pCurAnimNode->iPreferences, LAP_EQUIP_BOW, BIT_LEAST_ONE))
+		{
+			AddBit(m_iCond, LAC_EQUIP_BOW);
+		}
+	}
 }
 
 void CLinkAnimScript::OperateAnimFuncAfter()
@@ -420,17 +442,52 @@ void CLinkAnimScript::OperateAnimFuncAfter()
 		{
 			(this->*m_pCurAnimNode->Func_End)();
 		}
-
-		//if (IsCurAnim(LAT_RUN_BRAKE_L) || IsCurAnim(LAT_RUN_BRAKE_R) || IsCurAnim(LAT_DASH_BRAKE_L) || IsCurAnim(LAT_DASH_BRAKE_R))
-		//{
-		//	Func_TurnBack();
-		//}
 	}
 }
 
 void CLinkAnimScript::PlayNextAnim()
 {
-	size_t iTranCount = m_pCurAnimNode->vecTranAnim.size();
+	size_t iTranCount = m_pAnyStateNode->vecTranAnim.size();
+
+	for (size_t i = 0; i < iTranCount; ++i)
+	{
+		UINT iCmpBit = m_iCond;
+
+		RemoveBit(iCmpBit, m_pAnyStateNode->vecTranAnim[i]->iExcludeCond);
+
+		if (CalBit(iCmpBit, m_pAnyStateNode->vecTranAnim[i]->iTranCond, BIT_EQUAL))
+		{
+			m_pPrevAnimNode = m_pCurAnimNode;
+			m_pCurAnimNode = m_mapAnimNode.find(m_pAnyStateNode->vecTranAnim[i]->pTargetAnimKey)->second;
+			//return;
+
+			if (CalBit(m_pCurAnimNode->iPreferences, LAP_REPEAT, BIT_FUNC_OPT::BIT_LEAST_ONE))
+			{
+				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, true);
+
+				m_bOnceAtAnimStart = true;
+				return;
+			}
+			else
+			{
+				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, false);
+
+				m_bOnceAtAnimStart = true;
+				return;
+			}
+
+			m_bIsAnimChanged = true;
+		}
+		else
+		{
+			m_bIsAnimChanged = false;
+		}
+	}
+
+	if (m_bIsAnimChanged)
+		return;
+
+	iTranCount = m_pCurAnimNode->vecTranAnim.size();
 
 	for (size_t i = 0; i < iTranCount; ++i)
 	{
@@ -440,6 +497,7 @@ void CLinkAnimScript::PlayNextAnim()
 
 		if (CalBit(iCmpBit, m_pCurAnimNode->vecTranAnim[i]->iTranCond, BIT_EQUAL))
 		{
+			m_pPrevAnimNode = m_pCurAnimNode;
 			m_pCurAnimNode = m_mapAnimNode.find(m_pCurAnimNode->vecTranAnim[i]->pTargetAnimKey)->second;
 			//return;
 
@@ -457,6 +515,12 @@ void CLinkAnimScript::PlayNextAnim()
   				m_bOnceAtAnimStart = true;
 				return;
 			}
+
+			m_bIsAnimChanged = true;
+		}
+		else
+		{
+			m_bIsAnimChanged = false;
 		}
 	}
 }
@@ -497,6 +561,9 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "Link Combo Max Time";
 	_emitter << YAML::Value << m_fComboMaxTime;
+
+	_emitter << YAML::Key << "Link Status HP";
+	_emitter << YAML::Value << m_tLinkStatus.fHP;
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -510,6 +577,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fAnglePerSec, _node["Link Angle Per Sec"]);
 	/*SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);*/
 	SAFE_LOAD_FROM_YAML(float, m_fComboMaxTime, _node["Link Combo Max Time"]);
+	SAFE_LOAD_FROM_YAML(float, m_tLinkStatus.fHP, _node["Link Status HP"]);
 }
 
 

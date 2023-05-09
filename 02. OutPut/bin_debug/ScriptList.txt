@@ -6,6 +6,7 @@ CGroundCheckScript
 CLinkAnimScript
 CLinkCamScript
 CLinkScript
+CLinkSwordScript
 CLockOnScript
 CMissileScript
 CMonsterAIScript
