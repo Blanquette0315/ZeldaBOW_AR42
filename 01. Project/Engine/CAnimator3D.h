@@ -57,7 +57,7 @@ public:
     void CreateBoneCheckBuffer();
 
 public:
-    void SetBones(const vector<tMTBone>* _vecBones) { m_pVecBones = _vecBones; }
+    void SetBones(const vector<tMTBone>* _vecBones);
     void SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip);
     void SetFinalMatUpdate(bool _bool) { m_bFinalMatUpdate = _bool; }
     void SetFrameLimit(UINT _iFrameLimit) { m_iFrmlimit = _iFrameLimit; }

@@ -121,6 +121,13 @@ void CAnimator3D::finaltick()
 	m_bFinalMatUpdate = false;
 }
 
+void CAnimator3D::SetBones(const vector<tMTBone>* _vecBones)
+{
+	m_pVecBones = _vecBones;
+	ResizeVecBone();
+	CreateBoneCheckBuffer();
+}
+
 void CAnimator3D::SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip)
 {
 	vector<tMTAnimClip>::const_iterator iter = _vecAnimClip->begin();
@@ -158,7 +165,6 @@ void CAnimator3D::UpdateData()
 		pUpdateShader->SetFrameIndex(0);
 		pUpdateShader->SetNextFrameIdx(0);
 		pUpdateShader->SetFrameRatio(0);
-		pUpdateShader->SetExtraAnimBool(0);
 
 		// 업데이트 쉐이더 실행
 		pUpdateShader->Execute();
@@ -265,21 +271,18 @@ void CAnimator3D::UpdateData()
 
 void CAnimator3D::SetBoneUpper(UINT _iStart, UINT _iEnd)
 {
-	ResizeVecBone();
 	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
 	std::fill(iter + _iStart, iter + _iEnd + 1, 1);
 }
 
 void CAnimator3D::SetBoneLower(UINT _iStart, UINT _iEnd)
 {
-	ResizeVecBone();
 	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
 	std::fill(iter + _iStart, iter + _iEnd + 1, 2);
 }
 
 void CAnimator3D::SetBoneUpperAndElseLower(UINT _iStart, UINT _iEnd)
 {
-	ResizeVecBone();
 	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
 	std::fill(iter + _iStart, iter + _iEnd + 1, 1);
 	std::fill(iter, iter + _iStart, 1);
@@ -288,7 +291,6 @@ void CAnimator3D::SetBoneUpperAndElseLower(UINT _iStart, UINT _iEnd)
 
 void CAnimator3D::SetBoneLowerAndElseUpper(UINT _iStart, UINT _iEnd)
 {
-	ResizeVecBone();
 	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
 	std::fill(iter + _iStart, iter + _iEnd + 1, 2);
 	std::fill(iter, iter + _iStart, 2);

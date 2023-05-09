@@ -17,8 +17,8 @@ public:
 
 	void SetFrameIndex(int _iFrameIdx) { m_Param.iArr[1] = _iFrameIdx; }
 	void SetNextFrameIdx(int _iFrameIdx) { m_Param.iArr[2] = _iFrameIdx; }
-	void SetExtraAnimBool(int _bHasExtraAnim) { m_Param.iArr[2] = _bHasExtraAnim; }
-	void SetUpperAnimBool(int _bIsUpperAnim) { m_Param.iArr[3] = _bIsUpperAnim; }
+	 //void SetExtraAnimBool(int _bHasExtraAnim) { m_Param.iArr[2] = _bHasExtraAnim; }
+	 //void SetUpperAnimBool(int _bIsUpperAnim) { m_Param.iArr[3] = _bIsUpperAnim; }
 	void SetFrameRatio(float _fFrameRatio) { m_Param.fArr[0] = _fFrameRatio; }
 
 
@@ -33,6 +33,7 @@ public:
 	void SetSklRootMatrixLowerNext(const Matrix& _matrix) { m_Param.matArr[3] = _matrix; }
 
 	void SetEquipableType(int _iOption) { m_Param.iArr[2] = _iOption; }
+	void SetBoneUseCheckBuffer(int _iUse) { m_Param.iArr[3] = _iUse; } // use : 1 | not use : 0
 
 	void SetFrameDataBuffer(CStructuredBuffer* _buffer) { m_pFrameDataBuffer = _buffer; }
 	void SetOffsetMatBuffer(CStructuredBuffer* _buffer) { m_pOffsetMatBuffer = _buffer; }

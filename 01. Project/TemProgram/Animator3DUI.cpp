@@ -102,8 +102,6 @@ void Animator3DUI::render_update()
 	ImGui::SetNextItemWidth(45.f);
 	ImGui::InputInt("##SklRootIdx", &m_iSklRootIdx, 0); ImGui::SameLine();
 
-	ImGui::Separator();
-
 	if (ImGui::Button("Auto Find SklRoot"))
 	{
 		m_iSklRootIdx = GetTarget()->Animator3D()->GetBoneIdxByName(L"Skl_Root");
@@ -111,6 +109,8 @@ void Animator3DUI::render_update()
 	if (m_iSklRootIdx < 0)
 		m_iSklRootIdx = 0;
 	GetTarget()->Animator3D()->SetSklRoot(m_iSklRootIdx);
+
+	ImGui::Separator();
 
 
 	string AnimName;

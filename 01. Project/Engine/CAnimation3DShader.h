@@ -17,8 +17,8 @@ public:
 
 	void SetFrameIndex(int _iFrameIdx) { m_Param.iArr[1] = _iFrameIdx; }
 	void SetNextFrameIdx(int _iFrameIdx) { m_Param.iArr[2] = _iFrameIdx; }
-	void SetExtraAnimBool(int _bHasExtraAnim) { m_Param.iArr[2] = _bHasExtraAnim; }
-	void SetUpperAnimBool(int _bIsUpperAnim) { m_Param.iArr[3] = _bIsUpperAnim; }
+	 //void SetExtraAnimBool(int _bHasExtraAnim) { m_Param.iArr[2] = _bHasExtraAnim; }
+	 //void SetUpperAnimBool(int _bIsUpperAnim) { m_Param.iArr[3] = _bIsUpperAnim; }
 	void SetFrameRatio(float _fFrameRatio) { m_Param.fArr[0] = _fFrameRatio; }
 
 

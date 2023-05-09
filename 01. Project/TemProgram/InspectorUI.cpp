@@ -49,7 +49,7 @@ InspectorUI::InspectorUI()
 {
 	// ComponentUI
 	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM] = new TransformUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetSize(ImVec2(0.f, 210.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetSize(ImVec2(0.f, 260.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER] = new MeshRenderUI;
@@ -85,7 +85,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D] = new Animator3DUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D]->SetSize(ImVec2(0.f, 450.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D]->SetSize(ImVec2(0.f, 550.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR3D]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::SKYBOX] = new SkyBoxUI;
@@ -97,7 +97,7 @@ InspectorUI::InspectorUI()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::DECAL]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY] = new RigidBodyUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]->SetSize(ImVec2(0.f, 450.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]->SetSize(ImVec2(0.f, 500.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::RIGIDBODY]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::LANDSCAPE] = new LandScapeUI;
