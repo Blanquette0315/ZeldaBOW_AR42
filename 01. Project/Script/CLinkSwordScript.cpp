@@ -57,14 +57,38 @@ void CLinkSwordScript::BeginOverlap(CGameObject* _pOther)
 			m_vecObjHit.push_back(_pOther);
 
 			// Set Damage to Monster Here
-			int damagefunction = 0;
+			pMonsterScr->Damage(2);
 		}
 	}
 }
 
 void CLinkSwordScript::Overlap(CGameObject* _pOther)
 {
+	if (IsAttackAnim())
+	{
+		CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
 
+		assert(pMonsterScr); // not monster
+
+		bool bCheck = true;
+
+		for (int i = 0; i < m_vecObjHit.size(); ++i)
+		{
+			if (m_vecObjHit[i] == pMonsterScr->GetOwner())
+			{
+				bCheck = false;
+				break;
+			}
+		}
+
+		if (bCheck)
+		{
+			m_vecObjHit.push_back(_pOther);
+
+			// Set Damage to Monster Here
+			pMonsterScr->Damage(2);
+		}
+	}
 }
 
 void CLinkSwordScript::EndOverlap(CGameObject* _pOther)

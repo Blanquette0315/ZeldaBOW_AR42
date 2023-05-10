@@ -97,9 +97,6 @@
     <ClInclude Include="CMonsterAIScript.h">
       <Filter>Scripts\MonsterAI</Filter>
     </ClInclude>
-    <ClInclude Include="CMonsterScript.h">
-      <Filter>Scripts\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="CMissileScript.h">
       <Filter>Scripts\Test</Filter>
     </ClInclude>
@@ -154,6 +151,12 @@
     <ClInclude Include="CLinkSwordScript.h">
       <Filter>Scripts\Link\Weapon\Sword</Filter>
     </ClInclude>
+    <ClInclude Include="CMonsterScript.h">
+      <Filter>Scripts\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonWeaponScript.h">
+      <Filter>Scripts\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -177,9 +180,6 @@
     </ClCompile>
     <ClCompile Include="CMonsterAIScript.cpp">
       <Filter>Scripts\MonsterAI</Filter>
-    </ClCompile>
-    <ClCompile Include="CMonsterScript.cpp">
-      <Filter>Scripts\Monster</Filter>
     </ClCompile>
     <ClCompile Include="CMissileScript.cpp">
       <Filter>Scripts\Test</Filter>
@@ -240,6 +240,12 @@
     </ClCompile>
     <ClCompile Include="CLinkSwordScript.cpp">
       <Filter>Scripts\Link\Weapon\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterScript.cpp">
+      <Filter>Scripts\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonWeaponScript.cpp">
+      <Filter>Scripts\Monster</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

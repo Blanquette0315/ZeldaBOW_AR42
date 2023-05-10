@@ -24,6 +24,7 @@ public:
     CLONE(CBonesocketScript);
 public:
     CBonesocketScript();
+    CBonesocketScript(const CBonesocketScript& _origin);
     ~CBonesocketScript();
 };
 
