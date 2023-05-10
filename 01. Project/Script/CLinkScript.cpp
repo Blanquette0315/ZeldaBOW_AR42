@@ -30,31 +30,6 @@ void CLinkScript::CalcMoveDirection()
 	m_vDir[(UINT)LINK_DIRECTION::LEFT] = Vec3(-m_vDir[(UINT)LINK_DIRECTION::FRONT].z, 0.f, m_vDir[(UINT)LINK_DIRECTION::FRONT].x);
 	m_vDir[(UINT)LINK_DIRECTION::RIGHT] = Vec3(m_vDir[(UINT)LINK_DIRECTION::FRONT].z, 0.f, -m_vDir[(UINT)LINK_DIRECTION::FRONT].x);
 	m_vDir[(UINT)LINK_DIRECTION::NONE] = Vec3::Zero;
-
-	// Test Code
-	//Vec3 vPos = Transform()->GetRelativePos();
-	//if (KEY_PRESSED(KEY::W))
-	//{
-	//	m_vDir[(UINT)LINK_DIRECTION::FRONT] *= 10.f;
-	//	vPos += m_vDir[(UINT)LINK_DIRECTION::FRONT];
-	//}
-	//if (KEY_PRESSED(KEY::S))
-	//{
-	//	m_vDir[(UINT)LINK_DIRECTION::BACK] *= 10.f;
-	//	vPos += m_vDir[(UINT)LINK_DIRECTION::BACK];
-	//}
-	//if (KEY_PRESSED(KEY::A))
-	//{
-	//	m_vDir[(UINT)LINK_DIRECTION::LEFT] *= 10.f;
-	//	vPos += m_vDir[(UINT)LINK_DIRECTION::LEFT];
-	//}
-	//if (KEY_PRESSED(KEY::D))
-	//{
-	//	m_vDir[(UINT)LINK_DIRECTION::RIGHT] *= 10.f;
-	//	vPos += m_vDir[(UINT)LINK_DIRECTION::RIGHT];
-	//}
-
-	//Transform()->SetRelativePos(vPos);
 }
 
 void CLinkScript::begin()

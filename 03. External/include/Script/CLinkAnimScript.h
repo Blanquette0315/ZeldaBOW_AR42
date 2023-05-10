@@ -104,6 +104,9 @@ private:
     void Func_Jump();
     void Func_LowerBodyBlend();
     void Func_SwordRun();
+    void Func_BowRun();
+    void Func_BowEquipOn();
+    void Func_BowEquipOff();
     void Func_SwordAttackMove();
     void Func_SwordEquipOn();
     void Func_SwordEquipOff();

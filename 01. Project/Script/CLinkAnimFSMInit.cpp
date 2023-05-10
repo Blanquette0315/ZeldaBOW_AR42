@@ -57,8 +57,9 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_KEY_WSAD | LAC_KEY_SHIFT);
 	SetAnimTran(pAnimNode, LAT_JUMP_L, LAC_KEY_SPACE | LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
-	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_ON, LAC_KEY_E);
-
+	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_ON, LAC_KEY_N1);
+	SetAnimTran(pAnimNode, LAT_BOW_EQUIP_ON, LAC_KEY_N2);
+	
 	// Walk
 	SetAnimNode(pAnimNode, LAT_WALK, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_WalkRunDash);
 	SetAnimTran(pAnimNode, LAT_RUN, LAC_KEY_WSAD | LAC_MODE_RUN);
@@ -147,7 +148,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT | LAP_BLEND | LAP_EQUIP_SWORD);
-	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_OFF, LAC_KEY_E);
+	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_OFF, LAC_KEY_N1);
 	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
 
@@ -171,21 +172,36 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 	// Bow
-	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON);
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON, LAP_BLEND | LAP_EQUIP_BOW); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowEquipOn);
+	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF);
+	SetAnimNode(pAnimNode, LAT_BOW_LOCKON_WAIT, LAP_REPEAT | LAP_EQUIP_BOW); 
+	SetAnimTran(pAnimNode, LAT_BOW_EQUIP_OFF, LAC_KEY_N2);
+	SetAnimTran(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_KEY_LBTN);
 
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowEquipOff);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAP_REPEAT | LAP_EQUIP_BOW); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_BowRun);
+	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, 0, LAC_KEY_LBTN | LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_KEY_LBTN);
+
+	//SetAnimNode(pAnimNode, LAT_BOW_ATTACK_LOAD, LAP_BLEND | LAP_EQUIP_BOW);
+	//SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAP_BLEND | LAP_EQUIP_BOW);
+	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_SHOOT, 0, LAC_KEY_LBTN);
+
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT, LAP_EQUIP_BOW);
+	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_ANIM_FINISHED);
+		
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON_RUN);
 
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF_RUN);
+	
 
-	SetAnimNode(pAnimNode, LAT_BOW_LOCKON_WAIT);
 
-	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_LOAD);
-
-	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_CHARGE);
-
-	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT);
 	
 	// Damaged
 	SetAnimNode(pAnimNode, LAT_DAMAGE_S_B);

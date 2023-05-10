@@ -241,6 +241,28 @@ void CLinkAnimScript::Func_SwordRun()
 	MoveToDir(DIR::FRONT);
 }
 
+void CLinkAnimScript::Func_BowRun()
+{
+	MoveRotation(GetCombinedDir());
+	m_fSelectedSpeed = m_fRunSpeed;
+	MoveToDir(DIR::FRONT);
+}
+
+void CLinkAnimScript::Func_BowEquipOn()
+{
+	CBonesocketScript* pBoneScr = m_pBowObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_L);
+	pBoneScr->ClearOffset();
+}
+
+void CLinkAnimScript::Func_BowEquipOff()
+{
+	CBonesocketScript* pBoneScr = m_pBowObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, -0.07f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -45.f));
+}
+
 void CLinkAnimScript::Func_SwordAttackMove()
 {
 	Vec3 vDir = Transform()->GetRelativeDir(DIR::FRONT);
@@ -250,15 +272,14 @@ void CLinkAnimScript::Func_SwordAttackMove()
 void CLinkAnimScript::Func_SwordEquipOn()
 {
 	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
-	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Wrist_R);
-	pBoneScr->setOffsetPos(Vec3(-0.037f, -0.015f, 0.f));
-	pBoneScr->setOffsetRot(Vec3(-90.f, 0.f, 0.f));
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_R);
+	pBoneScr->ClearOffset();
 }
 
 void CLinkAnimScript::Func_SwordEquipOff()
 {
 	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
-	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Spine_2);
-	pBoneScr->setOffsetPos(Vec3(0.09f, -0.03f, -0.05f));
-	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -65.f));
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 60.f));
 }

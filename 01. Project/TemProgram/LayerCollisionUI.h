@@ -21,4 +21,3 @@ public:
     LayerCollisionUI(string _UIName);
     ~LayerCollisionUI();
 };
-

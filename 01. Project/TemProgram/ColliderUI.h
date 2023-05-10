@@ -13,6 +13,8 @@ private:
 
     COLLIDER_TYPE m_eType;
     int m_iCurItem;
+
+    bool m_bDebugDraw;
 public:
     virtual void update() override;
     virtual void render_update() override;

@@ -59,10 +59,6 @@ void LayerCollisionUI::render_update()
         m_bChanged = true;
     }
 
-
-
-
-
     // Layer 충돌 설정이 가능한 테이블
     ImGui::Text("Layer Collsion Table");
     // 타일의 갯수 만큼 행렬 생성
@@ -77,7 +73,6 @@ void LayerCollisionUI::render_update()
         LayerName += string(m_TargetLevel->GetLayer(i)->GetName().begin(), m_TargetLevel->GetLayer(i)->GetName().end());
 
         ImGui::Text(LayerName.c_str());
-
         
         cursor.x += 180.f;
         int LayerCount = i + 1; // MAX_LAYER - i;

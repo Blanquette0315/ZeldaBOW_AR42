@@ -12,6 +12,7 @@ public:
     void setOffsetPos(Vec3 _vOffsetPos) { m_vOffsetPos = _vOffsetPos; }
     void setOffsetRot(Vec3 _vOffsetRot) { m_vOffsetRot = _vOffsetRot; }
     void setBoneIdx(UINT _iBoneIdx) { m_iBoneIdx = _iBoneIdx; }
+    void ClearOffset() { m_vOffsetPos = Vec3::Zero; m_vOffsetRot = Vec3::Zero; }
 
 public:
     virtual void tick() override;
