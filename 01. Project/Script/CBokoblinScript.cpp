@@ -10,6 +10,13 @@ CBokoblinScript::~CBokoblinScript()
 {
 }
 
+void CBokoblinScript::Damage(int _iNumber)
+{
+	m_iHP -= _iNumber;
+
+
+}
+
 void CBokoblinScript::begin()
 {
 	RigidBody()->SetGround(true);
@@ -33,14 +40,12 @@ void CBokoblinScript::tick()
 			Transform()->SetRelativeRotation(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 
 		Animator3D()->Play(L"walk", true);
-		RigidBody()->AddVelocity(vPlayerDir * m_fSpeed);
+		RigidBody()->SetVelocity(vPlayerDir * m_fSpeed);
 
 	}
 	else if (m_eCurrentState == Monster_State::ATTACK)
 	{
 		m_fAcctime += FDT;
-
-		Transform()->SetRelativeRotation(m_vFront);
 
 		if (m_iMotion == 0)
 		{
@@ -64,17 +69,24 @@ void CBokoblinScript::tick()
 			Animator3D()->Play(L"attack_small", false);
 			++m_iMotion;
 		}
-		else if (m_fAcctime >= 3.13333f && m_iMotion == 2)
+		else if (m_fAcctime >= 1.66f && m_iMotion == 2)
 		{
+			Weapon->setReady(true);
+			++m_iMotion;
+		}
+		else if (m_fAcctime >= 3.13333f && m_iMotion == 3)
+		{
+			Weapon->setReady(false);
 			Animator3D()->Play(L"wait", false);
 			++m_iMotion;
 		}
-		else if (m_fAcctime >= 4.5f && m_iMotion == 3)
+		else if (m_fAcctime >= 4.5f && m_iMotion == 4)
 		{
 			AI->Done();
 			m_iMotion = 0;
 			m_fAcctime = 0;
 		}
+		Transform()->SetRelativeRotation(m_vFront);
 	}
 	else if (m_eCurrentState == Monster_State::RUN)
 	{
@@ -86,7 +98,7 @@ void CBokoblinScript::tick()
 			Transform()->SetRelativeRotation(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 
 		Animator3D()->Play(L"run", true);
-		RigidBody()->AddVelocity(vPlayerDir * m_fSpeed * 1.3f);
+		RigidBody()->SetVelocity(vPlayerDir * m_fSpeed * 1.3f);
 	}
 	else if (m_eCurrentState == Monster_State::FIND)
 	{
@@ -127,7 +139,7 @@ void CBokoblinScript::tick()
 			Transform()->SetRelativeRotation(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 
 		Animator3D()->Play(L"run", true);
-		RigidBody()->AddVelocity(vInitialPosDir * m_fSpeed * 1.3f);
+		RigidBody()->SetVelocity(vInitialPosDir * m_fSpeed * 1.3f);
 	}
 }
 

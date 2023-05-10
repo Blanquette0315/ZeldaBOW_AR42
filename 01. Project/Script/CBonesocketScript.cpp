@@ -15,6 +15,17 @@ CBonesocketScript::CBonesocketScript()
 	AddScriptParam(SCRIPT_PARAM::INT,  "BoneIdx         ", &m_iBoneIdx);
 }
 
+CBonesocketScript::CBonesocketScript(const CBonesocketScript& _origin)
+	: CScript(BONESOCKETSCRIPT)
+	, m_vOffsetPos(_origin.m_vOffsetPos)
+	, m_vOffsetRot(_origin.m_vOffsetRot)
+	, m_iBoneIdx(_origin.m_iBoneIdx)
+{
+	AddScriptParam(SCRIPT_PARAM::VEC3, "OffsetPos       ", &m_vOffsetPos);
+	AddScriptParam(SCRIPT_PARAM::VEC3, "OffsetRot       ", &m_vOffsetRot);
+	AddScriptParam(SCRIPT_PARAM::INT, "BoneIdx         ", &m_iBoneIdx);
+}
+
 CBonesocketScript::~CBonesocketScript()
 {
 }

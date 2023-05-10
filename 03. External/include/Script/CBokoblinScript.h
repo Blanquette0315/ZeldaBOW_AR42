@@ -5,6 +5,9 @@ class CBokoblinScript :
     public CMonsterScript
 {
 public:
+    virtual void Damage(int _iNumber) override;
+
+public:
     virtual void begin() override;
     virtual void tick() override;
 
