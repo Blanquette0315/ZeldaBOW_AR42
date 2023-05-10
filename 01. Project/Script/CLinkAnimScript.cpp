@@ -466,6 +466,7 @@ void CLinkAnimScript::PlayNextAnim()
 				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, true);
 
 				m_bOnceAtAnimStart = true;
+				m_bIsAnimChanged = true;
 				return;
 			}
 			else
@@ -473,10 +474,9 @@ void CLinkAnimScript::PlayNextAnim()
 				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, false);
 
 				m_bOnceAtAnimStart = true;
+				m_bIsAnimChanged = true;
 				return;
 			}
-
-			m_bIsAnimChanged = true;
 		}
 		else
 		{
@@ -506,6 +506,7 @@ void CLinkAnimScript::PlayNextAnim()
 				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, true);
 
 				m_bOnceAtAnimStart = true;
+				m_bIsAnimChanged = true;
 				return;
 			}
 			else
@@ -513,10 +514,9 @@ void CLinkAnimScript::PlayNextAnim()
 				m_pAnimator->Play(m_pCurAnimNode->pAnimKey, false);
 
   				m_bOnceAtAnimStart = true;
+				m_bIsAnimChanged = true;
 				return;
 			}
-
-			m_bIsAnimChanged = true;
 		}
 		else
 		{

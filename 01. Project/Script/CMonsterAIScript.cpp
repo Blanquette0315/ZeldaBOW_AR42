@@ -89,7 +89,7 @@ Vec3 CMonsterAIScript::FindInitialPosDir()
 
 void CMonsterAIScript::BeginOverlap(CGameObject* _pOther)
 {
-	if (_pOther->GetName() == L"Player")
+	if (_pOther->GetName() == L"Link")
 	{
 		m_pPlayer = _pOther;
 		m_bActDone = true;
@@ -102,7 +102,7 @@ void CMonsterAIScript::Overlap(CGameObject* _pOther)
 
 void CMonsterAIScript::EndOverlap(CGameObject* _pOther)
 {
-	if (_pOther->GetName() == L"Player")
+	if (_pOther->GetName() == L"Link")
 	{
 		m_pPlayer = nullptr;
 	}
