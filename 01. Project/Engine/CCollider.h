@@ -5,6 +5,9 @@ class PhysData;
 class CCollider :
     public CComponent
 {
+public:
+    bool            m_bDebugDraw;
+
 private:
     PhysData*       m_pPhysData;
     COLLIDER_TYPE   m_eType;
@@ -16,6 +19,7 @@ private:
     Vec3            m_vFinalRot;
 
     int             m_iOverlapCount;
+
 public:
     void SetType(COLLIDER_TYPE _type) { m_eType = _type; }
     void SetOffsetPos(Vec3 _vOffset) { m_vOffsetPos = _vOffset; }

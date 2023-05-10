@@ -35,6 +35,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_bMeshCollider(_origin.m_bMeshCollider)
 	, m_bCreateActor(false)
 	, m_bUsePhysRot(_origin.m_bUsePhysRot)
+	, m_vBoxSize(_origin.m_vBoxSize)
 {
 	// base is m_vecPhysData[0]
 	m_vecPhysData.push_back(new PhysData);

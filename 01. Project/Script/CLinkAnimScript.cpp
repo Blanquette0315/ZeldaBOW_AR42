@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CLinkAnimScript.h"
 
-
 #include <Engine/CAnimator3D.h>
 #include <Engine/CAnimation3D.h>
 #include <Engine/CGameObject.h>
@@ -10,6 +9,7 @@
 #include "FSMNode.h"
 #include "CGroundCheckScript.h"
 #include "CLockOnScript.h"
+#include "CBonesocketScript.h"
 
 
 map<wstring, CAnimation3D*> CLinkAnimScript::m_mapAnim = {};
@@ -225,11 +225,21 @@ void CLinkAnimScript::begin()
 {
 	SetAnimNode(m_pCurAnimNode, LAT_WAIT);
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
+
 	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
 	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
+
 	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
 	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
+
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
+	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
+	Func_SwordEquipOff();
+
+	m_pBowObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_BOW]);
+	m_pBowObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_BOW]);
+	Func_BowEquipOff();
+
 	m_tLinkStatus.fHP = 7777.f;
 	m_tLinkDamaged.eType = LINK_DAMAGED_TYPE::NONE;
 	m_pAnyStateNode = m_mapAnimNode.find(LINK_STRING_WCHAR[LINK_STRING_ANYSTATE_NODE_KEY])->second;
@@ -292,8 +302,11 @@ void CLinkAnimScript::SetLinkCond()
 	if (KEY_PRESSED(KEY::SPACE) || KEY_TAP(KEY::SPACE))
 		AddBit(m_iCond, LAC_KEY_SPACE);
 
-	if (KEY_PRESSED(KEY::E) || KEY_TAP(KEY::E))
-		AddBit(m_iCond, LAC_KEY_E);
+	if (KEY_PRESSED(KEY::N_1) || KEY_TAP(KEY::N_1))
+		AddBit(m_iCond, LAC_KEY_N1);
+
+	if (KEY_PRESSED(KEY::N_2) || KEY_TAP(KEY::N_2))
+		AddBit(m_iCond, LAC_KEY_N2);
 
 	if (KEY_PRESSED(KEY::LBTN) || KEY_TAP(KEY::LBTN))
 	{
@@ -427,7 +440,7 @@ void CLinkAnimScript::SetLinkCond()
 		{
 			AddBit(m_iCond, LAC_EQUIP_SWORD);
 		}
-		else if (CalBit(m_pCurAnimNode->iPreferences, LAP_EQUIP_BOW, BIT_LEAST_ONE))
+		else if (CalBit(m_pPrevAnimNode->iPreferences, LAP_EQUIP_BOW, BIT_LEAST_ONE))
 		{
 			AddBit(m_iCond, LAC_EQUIP_BOW);
 		}

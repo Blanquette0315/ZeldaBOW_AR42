@@ -97,7 +97,7 @@ CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath, int _iOpt)
 		for (UINT i = 0; i < loader.GetContainer(j).vecMtrl.size(); ++i)
 		{
 			// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(loader.GetContainer(j).vecMtrl[i].strMtrlName);
+			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(loader.GetContainer(j).vecMtrl[i].strMtrlKey);
 			assert(pMtrl.Get());
 
 			vecMtrl.push_back(pMtrl);

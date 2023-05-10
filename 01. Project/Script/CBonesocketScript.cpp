@@ -52,14 +52,33 @@ void CBonesocketScript::finaltick()
 		Quaternion b = vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].qRot;
 
 		Quaternion c = Quaternion::Lerp(a, b, fRatio);
-		Vec3 Rot;
-		QuaternionToEuler(c, Rot);
-		Transform()->SetRelativeRotation(Rot + (m_vOffsetRot * (XM_PI / 180.f)));
+		Vec3 vRot;
+
+		
+		// vRot =  vRot + (m_vOffsetRot * (XM_PI / 180.f));
+
+
+		Matrix matC = Matrix::CreateFromQuaternion(c);
+
+		Matrix matRotTest = XMMatrixRotationX(m_vOffsetRot.x / XM_PI * 180.f);
+		matRotTest *= XMMatrixRotationY(m_vOffsetRot.y / XM_PI * 180.f);
+		matRotTest *= XMMatrixRotationZ(m_vOffsetRot.z / XM_PI * 180.f);
+
+		Matrix matFinal = matRotTest * matC;
+
+		Vec3 decomposeScale;
+		Quaternion decomposeRot;
+		Vec3 decomposeTrans;
+		matFinal.Decompose(decomposeScale, decomposeRot, decomposeTrans);
+		QuaternionToEuler(decomposeRot, vRot);
+
+
+		Transform()->SetRelativeRotation(vRot);
 
 		// offsetpos should be effected by rot
-		Matrix matRot = XMMatrixRotationX(Rot.x);
-		matRot *= XMMatrixRotationY(Rot.y);
-		matRot *= XMMatrixRotationZ(Rot.z);
+		Matrix matRot = XMMatrixRotationX(vRot.x);
+		matRot *= XMMatrixRotationY(vRot.y);
+		matRot *= XMMatrixRotationZ(vRot.z);
 
 		Vec3 vFinalOffset = XMVector3TransformCoord(m_vOffsetPos, matRot);
 

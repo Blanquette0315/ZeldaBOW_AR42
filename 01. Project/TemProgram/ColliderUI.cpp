@@ -42,6 +42,11 @@ void ColliderUI::render_update()
 {
 	ComponentUI::render_update();
 
+	ImGui::Text("Debug Draw"); ImGui::SameLine();
+	ImGui::Checkbox("##DebugDraw", &(GetTarget()->Collider()->m_bDebugDraw));
+	
+	
+
 	// Collider Type : ComboBox
 
 	static const char* m_arrColType[] = { "COLLIDER_CUBE", "COLLIDER_SPHERE", "COLLIDER_CAPSULE", "COLLIDER_TRI" };

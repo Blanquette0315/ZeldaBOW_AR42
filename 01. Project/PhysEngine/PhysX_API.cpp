@@ -10,7 +10,7 @@ PhysEngine* Engine = nullptr;
 void PhysX_Initialize(int ThreadCount, bool OnDebug)
 {
 	Engine = new PhysEngine();
-	Engine->Initialize(ThreadCount,nullptr,OnDebug);
+	Engine->Initialize(ThreadCount, nullptr, OnDebug);
 }
 
 void PhysX_Release()
