@@ -69,7 +69,7 @@ void CBokoblinScript::tick()
 			Animator3D()->Play(L"attack_small", false);
 			++m_iMotion;
 		}
-		else if (m_fAcctime >= 1.66f && m_iMotion == 2)
+		else if (m_fAcctime >= 1.7f && m_iMotion == 2)
 		{
 			Weapon->setReady(true);
 			++m_iMotion;
