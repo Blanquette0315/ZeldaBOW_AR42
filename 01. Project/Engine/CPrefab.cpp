@@ -22,10 +22,10 @@ CPrefab::CPrefab(CGameObject* _pProto)
 
 	SetName(ResName);
 
-	m_pProtoObj->m_OwnerPrefab = this;
 	if (-1 != _pProto->GetLayerIdx())
 	{
 		m_pProtoObj = _pProto->Clone();
+		m_pProtoObj->m_OwnerPrefab = this;
 	}
 }
 

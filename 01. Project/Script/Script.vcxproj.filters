@@ -67,6 +67,12 @@
     <Filter Include="Scripts\Link\Weapon\Sword">
       <UniqueIdentifier>{d1533fb7-365e-4bbe-b0af-6ab1c6bf9e20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Link\Weapon\Bow">
+      <UniqueIdentifier>{b13b16bb-51a7-45a8-9584-c440ecc32df7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Link\Weapon\Bow\Arrow">
+      <UniqueIdentifier>{7aff41c9-d248-4208-8be6-36abe681fcc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -148,14 +154,17 @@
     <ClInclude Include="CBonesocketScript.h">
       <Filter>Scripts\BoneSocket</Filter>
     </ClInclude>
-    <ClInclude Include="CLinkSwordScript.h">
-      <Filter>Scripts\Link\Weapon\Sword</Filter>
-    </ClInclude>
     <ClInclude Include="CMonsterScript.h">
       <Filter>Scripts\Monster</Filter>
     </ClInclude>
     <ClInclude Include="CMonWeaponScript.h">
       <Filter>Scripts\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkBowScript.h">
+      <Filter>Scripts\Link\Weapon\Bow</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkSwordScript.h">
+      <Filter>Scripts\Link\Weapon\Sword</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -238,14 +247,17 @@
     <ClCompile Include="CBonesocketScript.cpp">
       <Filter>Scripts\BoneSocket</Filter>
     </ClCompile>
-    <ClCompile Include="CLinkSwordScript.cpp">
-      <Filter>Scripts\Link\Weapon\Sword</Filter>
-    </ClCompile>
     <ClCompile Include="CMonsterScript.cpp">
       <Filter>Scripts\Monster</Filter>
     </ClCompile>
     <ClCompile Include="CMonWeaponScript.cpp">
       <Filter>Scripts\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkSwordScript.cpp">
+      <Filter>Scripts\Link\Weapon\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkBowScript.cpp">
+      <Filter>Scripts\Link\Weapon\Bow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

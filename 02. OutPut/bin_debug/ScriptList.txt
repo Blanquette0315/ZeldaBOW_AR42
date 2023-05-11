@@ -4,6 +4,7 @@ CCamScript
 CEquipableScript
 CGroundCheckScript
 CLinkAnimScript
+CLinkBowScript
 CLinkCamScript
 CLinkScript
 CLinkSwordScript

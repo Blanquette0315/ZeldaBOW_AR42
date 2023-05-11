@@ -41,24 +41,18 @@ void CLockOnScript::BeginOverlap(CGameObject* _pOther)
 
 void CLockOnScript::Overlap(CGameObject* _pOther)
 {
-	if (IsValid(_pOther))
+	float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
+	if (fDistFromTarget < m_fDistFromTarget)
 	{
-		 float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
-		 if (fDistFromTarget < m_fDistFromTarget)
-		 {
-			 m_pLockOnTarget = _pOther;
-			 m_fDistFromTarget = fDistFromTarget;
-		 }
+		m_pLockOnTarget = _pOther;
+		m_fDistFromTarget = fDistFromTarget;
 	}
 }
 
 void CLockOnScript::EndOverlap(CGameObject* _pOther)
 {
-	if (IsValid(_pOther))
-	{
-		if (_pOther == m_pLockOnTarget)
-			ClearTarget();
-	}
+	if (_pOther == m_pLockOnTarget)
+		ClearTarget();
 }
 
 void CLockOnScript::SaveToYAML(YAML::Emitter& _emitter)

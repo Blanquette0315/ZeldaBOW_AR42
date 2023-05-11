@@ -185,7 +185,6 @@ void CGameObject::ChangePrefab()
 	strKey += L"_Prefab_";
 
 	// Prefab으로 등록할 클론을 만든다.
-	CGameObject* temClone = Clone();
 
 	// 중복이 되지 않도록 넘버링을 해준다.
 	UINT Count = 0;
@@ -208,7 +207,7 @@ void CGameObject::ChangePrefab()
 		}
 	}
 	// 중복되지 않는 키값을 찾았으면, 해당 키값으로 Prefab을 등록해준다.
-	Ptr<CPrefab> pNewPref = new CPrefab(temClone);
+	Ptr<CPrefab> pNewPref = new CPrefab(this);
 	wstring strRelativePath;
 	strRelativePath = L"prefab\\";
 	strRelativePath += GetName();

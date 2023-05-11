@@ -178,19 +178,25 @@ bool ParamUI::Param_Tex(const string& _ParamName, Ptr<CTexture>& _Tex, UI* _Inst
 
 bool ParamUI::Param_Prefab(const string& _ParamName, Ptr<CPrefab>& _Prefab, UI* _Inst, FUNC_1 _Func)
 {
-	// 키를 텍스트로 띄워준다.
-	ImGui::Text(_ParamName.c_str());
-	
-	ImGui::SameLine();
+	 //void *p = _Prefab.Get();
 
-	// Prafab의 이름을 띄워준다.
-	ImGui::PushItemWidth(250.f);
-	char PrefabNameID[50] = "";
-	sprintf_s(PrefabNameID, 50, "##PrefabName%d", ParamCount++);
-	char PrefabName[50] = {};
-	sprintf_s(PrefabName, 50, WStringToString(_Prefab->GetName()).c_str());
-	ImGui::InputText(PrefabNameID, PrefabName, 50, ImGuiInputTextFlags_ReadOnly);
-	ImGui::PopItemWidth();
+	if (_Prefab.Get())
+	{
+		// 키를 텍스트로 띄워준다.
+		ImGui::Text(_ParamName.c_str());
+
+		ImGui::SameLine();
+
+		// Prafab의 이름을 띄워준다.
+		ImGui::PushItemWidth(250.f);
+		char PrefabNameID[50] = "";
+		sprintf_s(PrefabNameID, 50, "##PrefabName%d", ParamCount++);
+		char PrefabName[50] = {};
+
+		sprintf_s(PrefabName, 50, WStringToString(_Prefab->GetKey()).c_str());
+		ImGui::InputText(PrefabNameID, PrefabName, 50, ImGuiInputTextFlags_ReadOnly);
+		ImGui::PopItemWidth();
+	}
 
 	// 버튼의 이름이 겹치지 안도록 만들기 위해 추가함.
 	char szName[50] = "";
@@ -208,7 +214,6 @@ bool ParamUI::Param_Prefab(const string& _ParamName, Ptr<CPrefab>& _Prefab, UI* 
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
 		assert(pListUI);
 
-		// 메쉬 목록을 받아와서, ListUI 에 전달
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::PREFAB);
 		static vector<wstring> vecRes;
 		vecRes.clear();
