@@ -849,5 +849,8 @@
     <FxCompile Include="Bloom.fx">
       <Filter>HLSL\Render\3D</Filter>
     </FxCompile>
+    <FxCompile Include="effect.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

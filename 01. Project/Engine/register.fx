@@ -130,6 +130,9 @@ StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t14);
 // Noise Texture
 Texture2D g_Noise : register(t15);
 
+// Burn Texture
+Texture2DArray arrtex_burn_ramp : register(t16);
+
 // Animation3D Bone Matrix Buffer
 StructuredBuffer<Matrix> g_arrBoneMat : register(t30);
 

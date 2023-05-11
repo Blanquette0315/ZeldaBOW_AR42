@@ -12,9 +12,31 @@ CBokoblinScript::~CBokoblinScript()
 
 void CBokoblinScript::Damage(int _iNumber)
 {
+	if (m_iHP <= 0)
+		return;
+
 	m_iHP -= _iNumber;
 
+	if (m_iHP <= 0)
+	{
+		m_eCurrentState = Monster_State::DEAD;
+		m_fAcctime = 0.f;
+		m_iMotion = 0;
+		AI->Done(false);
+		Animator3D()->Play(L"sleep_start", false);
 
+		for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
+		{
+			Ptr<CMaterial> pMaterial = MeshRender()->GetCurMaterial(i);
+			int j = 1;
+			pMaterial->SetScalarParam(INT_0, &j);
+			pMaterial->SetScalarParam(FLOAT_1, &m_fAcctime);
+			float alltime = 4.5f;
+			pMaterial->SetScalarParam(FLOAT_2, &alltime);
+		}
+
+		GetOwner()->GetChildObject()[1]->Destroy();
+	}
 }
 
 void CBokoblinScript::begin()
@@ -140,6 +162,22 @@ void CBokoblinScript::tick()
 
 		Animator3D()->Play(L"run", true);
 		RigidBody()->SetVelocity(vInitialPosDir * m_fSpeed * 1.3f);
+	}
+	else if (m_eCurrentState == Monster_State::DEAD)
+	{
+		m_fAcctime += FDT;
+		if (m_fAcctime >= 4.5f)
+		{
+			GetOwner()->Destroy();
+		}
+		else
+		{
+			for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
+			{
+				Ptr<CMaterial> pMaterial = MeshRender()->GetCurMaterial(i);
+				pMaterial->SetScalarParam(FLOAT_1, &m_fAcctime);
+			}
+		}
 	}
 }
 
