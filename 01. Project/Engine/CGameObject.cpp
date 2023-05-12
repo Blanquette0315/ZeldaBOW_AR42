@@ -22,7 +22,6 @@ CGameObject::CGameObject()
 	, m_bRender(true)
 	, m_bFrustumCul(true)
 	, m_OwnerPrefab(nullptr)
-	, m_bInstancing(true)
 {
 }
 
@@ -36,7 +35,6 @@ CGameObject::CGameObject(const CGameObject& _origin)
 	, m_bRender(true)
 	, m_bFrustumCul(_origin.m_bFrustumCul)
 	, m_OwnerPrefab(nullptr)
-	, m_bInstancing(_origin.m_bInstancing)
 {
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -423,7 +421,6 @@ void CGameObject::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Key << "LayerIdx";
 	_emitter << YAML::Value << m_iLayerIdx;
 	_emitter << YAML::Key << "IsInstancing";
-	_emitter << YAML::Value << m_bInstancing;
 }
 
 void CGameObject::LoadFromYAML(YAML::Node& _node)
@@ -432,5 +429,4 @@ void CGameObject::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(bool, m_bFrustumCul, _node["FrustumCulling"]);
 	SAFE_LOAD_FROM_YAML(bool, m_bRender, _node["Rendering"]);
 	SAFE_LOAD_FROM_YAML(int, m_iLayerIdx, _node["LayerIdx"]);
-	SAFE_LOAD_FROM_YAML(bool, m_bInstancing, _node["IsInstancing"]);
 }

@@ -36,7 +36,6 @@ private:
     bool                        m_bDead;
     bool                        m_bRender;  // 랜더를 할 지 말지 정해주는 변수 기본은 true
     bool                        m_bFrustumCul; // CameraFrustum Culling을 할지 말지
-    bool                        m_bInstancing;
 
     Ptr<CPrefab>                m_OwnerPrefab;
 
@@ -110,9 +109,6 @@ public:
     void SetAllLayer(int _LayerIdx);
 
     bool IsDead() { return m_bDead; }
-    bool IsInstancing() { return m_bInstancing; }
-    bool& GetInstancingRef() { return m_bInstancing; }
-    void SetInstancing(bool _b) { m_bInstancing = _b; }
     void Destroy();
 
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

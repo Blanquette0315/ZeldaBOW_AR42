@@ -205,8 +205,6 @@ void InspectorUI::render_update()
 		if (ImGui::Button("##ChangeObjNameBtn", ImVec2(18.f, 18.f)))
 			ImGui::OpenPopup("Change Object Name?");
 
-		ImGui::Text("Instancing"); ImGui::Checkbox("##Instancing", &m_TargetObj->GetInstancingRef());
-
 		CGameObject* pParentObj = m_TargetObj;
 		while (pParentObj->GetParent())
 		{
@@ -216,8 +214,6 @@ void InspectorUI::render_update()
 		{
 			SavePrefab(pParentObj); ImGui::SameLine(); InstantiatePrefab(pParentObj);
 		}
-
-		
 
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));

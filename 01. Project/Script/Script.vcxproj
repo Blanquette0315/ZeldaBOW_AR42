@@ -171,6 +171,7 @@ call ScriptCopy.bat</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CBonesocketScript.h" />
+    <ClInclude Include="CLinkArrowScript.h" />
     <ClInclude Include="CLinkBowScript.h" />
     <ClInclude Include="CCameraMgr.h" />
     <ClInclude Include="CCamScript.h" />
@@ -201,6 +202,7 @@ call ScriptCopy.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBonesocketScript.cpp" />
+    <ClCompile Include="CLinkArrowScript.cpp" />
     <ClCompile Include="CLinkBowScript.cpp" />
     <ClCompile Include="CCameraMgr.cpp" />
     <ClCompile Include="CCamScript.cpp" />

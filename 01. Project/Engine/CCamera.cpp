@@ -274,11 +274,8 @@ void CCamera::SortObject()
 
 				UINT iMtrlCount = pRenderCom->GetMtrlCount();
 
-				bool bEscape = false;
 				for (UINT iMtrl = 0; iMtrl < iMtrlCount; ++iMtrl)
 				{
-					if (bEscape)
-						break;
 
 					if (nullptr != pRenderCom->GetCurMaterial(iMtrl) || nullptr != pRenderCom->GetCurMaterial(iMtrl)->GetShader())
 					{
@@ -294,94 +291,62 @@ void CCamera::SortObject()
 						case SHADER_DOMAIN::DOMAIN_OPAQUE:
 						case SHADER_DOMAIN::DOMAIN_MASK:
 						{
-							if (vecObj[j]->IsInstancing())
+							map<ULONG64, vector<tInstObj>>* pMap = NULL;
+							Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
+
+							if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE
+								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
+								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
 							{
-								map<ULONG64, vector<tInstObj>>* pMap = NULL;
-								Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
-
-								if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE
-									|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
-									|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
-								{
-									pMap = &m_mapInstGroup_D;
-								}
-								else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
-									|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_MASK)
-								{
-									pMap = &m_mapInstGroup_F;
-								}
-								else
-								{
-									assert(nullptr);
-									continue;
-								}
-
-								uInstID uID = {};
-								uID.llID = pRenderCom->GetInstID(iMtrl);
-
-								if (0 == uID.llID)
-									continue;
-
-								map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uID.llID);
-								if (iter == pMap->end())
-								{
-									pMap->insert(make_pair(uID.llID, vector<tInstObj>{tInstObj{ vecObj[j], iMtrl }}));
-								}
-								else
-								{
-									iter->second.push_back(tInstObj{ vecObj[j], iMtrl });
-								}
+								pMap = &m_mapInstGroup_D;
+							}
+							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
+								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_MASK)
+							{
+								pMap = &m_mapInstGroup_F;
 							}
 							else
 							{
-								m_vecDeferred.push_back(vecObj[j]);
-								bEscape = true;
+								assert(nullptr);
+								continue;
+							}
+
+							uInstID uID = {};
+							uID.llID = pRenderCom->GetInstID(iMtrl);
+
+							if (0 == uID.llID)
+								continue;
+
+							map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uID.llID);
+							if (iter == pMap->end())
+							{
+								pMap->insert(make_pair(uID.llID, vector<tInstObj>{tInstObj{ vecObj[j], iMtrl }}));
+							}
+							else
+							{
+								iter->second.push_back(tInstObj{ vecObj[j], iMtrl });
 							}
 						}
 						break;
 						case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
-							if (vecObj[j]->IsInstancing())
-							{
-								
-							}
-							else
-							{
-								m_vecDeferredDecal.push_back(vecObj[j]);
-								bEscape = true;
-							}
+						{
+							m_vecDeferredDecal.push_back(vecObj[j]);
+						}
 							break;
 						case SHADER_DOMAIN::DOMAIN_DECAL:
-							if (vecObj[j]->IsInstancing())
-							{
-								
-							}
-							else
-							{
-								m_vecDecal.push_back(vecObj[j]);
-								bEscape = true;
-							}
+						{
+							m_vecDecal.push_back(vecObj[j]);
+						}
 							break;
 						case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
-							if (vecObj[j]->IsInstancing())
-							{
-								
-							}
-							else
-							{
-								m_vecTransparent.push_back(vecObj[j]);
-								bEscape = true;
-							}
+						{
+							m_vecTransparent.push_back(vecObj[j]);
+						}
 							break;
 						case SHADER_DOMAIN::DOMAIN_POST_PROCESS:
-							if (vecObj[j]->IsInstancing())
-							{
-								
-							}
-							else
-							{
-								m_vecPostProcess.push_back(vecObj[j]);
-								bEscape = true;
-							}
+						{
+							m_vecPostProcess.push_back(vecObj[j]);
+						}
 							break;
 						}
 					}
@@ -456,7 +421,9 @@ void CCamera::render_deferred()
 					= m_mapSingleObj.find((INT_PTR)pair.second[i].pObj);
 
 				if (iter != m_mapSingleObj.end())
+				{
 					iter->second.push_back(pair.second[i]);
+				}
 				else
 				{
 					m_mapSingleObj.insert(make_pair((INT_PTR)pair.second[i].pObj, vector<tInstObj>{pair.second[i]}));
@@ -521,10 +488,7 @@ void CCamera::render_deferred()
 
 		pair.second[0].pObj->Transform()->UpdateData();
 
-		for (auto& instObj : pair.second)
-		{
-			instObj.pObj->GetRenderComponent()->render(instObj.iMtrlIdx);
-		}
+		pair.second[0].pObj->GetRenderComponent()->render();
 
 		if (pair.second[0].pObj->Animator3D())
 		{
