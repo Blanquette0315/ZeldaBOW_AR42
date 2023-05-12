@@ -234,6 +234,7 @@ void CCamera::SortObject()
 	for (auto& pair : m_mapInstGroup_F)
 		pair.second.clear();
 
+	m_vecDeferred.clear();
 	m_vecDeferredDecal.clear();
 	m_vecDecal.clear();
 	m_vecTransparent.clear();
@@ -243,14 +244,11 @@ void CCamera::SortObject()
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		// LayerȮ��
 		if (m_iLayerMask & (1 << i))
 
 		{
-			// �ش� ���̾ ���� ���� ������Ʈ�� �����´�.
 			CLayer* pLayer = pCurLevel->GetLayer(i);
 
-			// ������Ʈ���� ���̴� �����ο� ���� �з��Ѵ�.
 			const vector<CGameObject*>& vecObj = pLayer->GetObjects();
 			for (size_t j = 0; j < vecObj.size(); ++j)
 			{
@@ -264,10 +262,8 @@ void CCamera::SortObject()
 					continue;
 				}
 
-				// Frustum Culling ���� ��
 				if (vecObj[j]->IS_FrustumCul())
 				{
-					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
 					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 20.f))
 					{
 						continue;
@@ -276,12 +272,11 @@ void CCamera::SortObject()
 				// pushback for picking
 				CFrustum::PushBackInFrustumObjs(vecObj[j]);
 
-
-				// ���׸��� ������ŭ �ݺ�
 				UINT iMtrlCount = pRenderCom->GetMtrlCount();
 
 				for (UINT iMtrl = 0; iMtrl < iMtrlCount; ++iMtrl)
 				{
+
 					if (nullptr != pRenderCom->GetCurMaterial(iMtrl) || nullptr != pRenderCom->GetCurMaterial(iMtrl)->GetShader())
 					{
 						Ptr<CGraphicsShader> pShader = pRenderCom->GetCurMaterial(iMtrl)->GetShader();
@@ -296,7 +291,6 @@ void CCamera::SortObject()
 						case SHADER_DOMAIN::DOMAIN_OPAQUE:
 						case SHADER_DOMAIN::DOMAIN_MASK:
 						{
-							// Shader �� POV �� ���� �ν��Ͻ� �׷��� �з��Ѵ�.
 							map<ULONG64, vector<tInstObj>>* pMap = NULL;
 							Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
 
@@ -320,7 +314,6 @@ void CCamera::SortObject()
 							uInstID uID = {};
 							uID.llID = pRenderCom->GetInstID(iMtrl);
 
-							// ID �� 0 �� ==> Mesh �� Material �� ���õ��� �ʾҴ�.
 							if (0 == uID.llID)
 								continue;
 
@@ -336,16 +329,24 @@ void CCamera::SortObject()
 						}
 						break;
 						case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
+						{
 							m_vecDeferredDecal.push_back(vecObj[j]);
+						}
 							break;
 						case SHADER_DOMAIN::DOMAIN_DECAL:
+						{
 							m_vecDecal.push_back(vecObj[j]);
+						}
 							break;
 						case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
+						{
 							m_vecTransparent.push_back(vecObj[j]);
+						}
 							break;
 						case SHADER_DOMAIN::DOMAIN_POST_PROCESS:
+						{
 							m_vecPostProcess.push_back(vecObj[j]);
+						}
 							break;
 						}
 					}
@@ -392,6 +393,11 @@ void CCamera::SortShadowObject()
 
 void CCamera::render_deferred()
 {
+	for (size_t i = 0; i < m_vecDeferred.size(); ++i)
+	{
+		m_vecDeferred[i]->render();
+	}
+
 	for (auto& pair : m_mapSingleObj)
 	{
 		pair.second.clear();
@@ -402,25 +408,22 @@ void CCamera::render_deferred()
 
 	for (auto& pair : m_mapInstGroup_D)
 	{
-		// �׷� ������Ʈ�� ���ų�, ���̴��� ���� ���
 		if (pair.second.empty())
 			continue;
 
-		// instancing ���� ���� �̸��̰ų�
-		// Animation2D ������Ʈ�ų�(��������Ʈ �ִϸ��̼� ������Ʈ)
-		// Shader �� Instancing �� �������� �ʴ°��
 		if (pair.second.size() <= 1
 			|| pair.second[0].pObj->Animator2D()
 			|| pair.second[0].pObj->GetRenderComponent()->GetCurMaterial(pair.second[0].iMtrlIdx)->GetShader()->GetVSInst() == nullptr)
 		{
-			// �ش� ��ü���� ���� ���������� ��ȯ
 			for (UINT i = 0; i < pair.second.size(); ++i)
 			{
 				map<INT_PTR, vector<tInstObj>>::iterator iter
 					= m_mapSingleObj.find((INT_PTR)pair.second[i].pObj);
 
 				if (iter != m_mapSingleObj.end())
+				{
 					iter->second.push_back(pair.second[i]);
+				}
 				else
 				{
 					m_mapSingleObj.insert(make_pair((INT_PTR)pair.second[i].pObj, vector<tInstObj>{pair.second[i]}));
@@ -485,10 +488,7 @@ void CCamera::render_deferred()
 
 		pair.second[0].pObj->Transform()->UpdateData();
 
-		for (auto& instObj : pair.second)
-		{
-			instObj.pObj->GetRenderComponent()->render(instObj.iMtrlIdx);
-		}
+		pair.second[0].pObj->GetRenderComponent()->render();
 
 		if (pair.second[0].pObj->Animator3D())
 		{

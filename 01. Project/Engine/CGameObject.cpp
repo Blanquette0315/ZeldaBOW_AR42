@@ -420,6 +420,7 @@ void CGameObject::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_bRender;
 	_emitter << YAML::Key << "LayerIdx";
 	_emitter << YAML::Value << m_iLayerIdx;
+	_emitter << YAML::Key << "IsInstancing";
 }
 
 void CGameObject::LoadFromYAML(YAML::Node& _node)

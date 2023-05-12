@@ -30,7 +30,7 @@ private:
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_F;	    // Foward ( Opaque, Mask )
     map<INT_PTR, vector<tInstObj>>		m_mapSingleObj;		    // Single Object
 
-    //vector<CGameObject*>    m_vecDeferred;
+    vector<CGameObject*>    m_vecDeferred;
     //vector<CGameObject*>    m_vecDeferredTransparent;
     vector<CGameObject*>    m_vecDeferredDecal;
     //vector<CGameObject*>    m_vecQpaque;

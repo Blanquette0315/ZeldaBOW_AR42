@@ -167,7 +167,6 @@ int CTexture::Load(const wstring& _strFilePath, int _iMipLevel)
 		viewdesc.Texture2D.MostDetailedMip = 0;
 	}
 
-
 	DEVICE->CreateShaderResourceView(m_Tex2D.Get(), &viewdesc, m_SRV.GetAddressOf());
 
 	// ¹Ó¸Ê »ý¼º

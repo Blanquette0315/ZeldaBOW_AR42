@@ -20,6 +20,7 @@ CLinkBowScript::CLinkBowScript(const CLinkBowScript& _origin)
 	: CScript(_origin)
 	, m_pLinkAnimScr(nullptr)
 	, m_pArrowObj(nullptr)
+	, m_pArrowPref(_origin.m_pArrowPref)
 {
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "ArrowPref", &m_pArrowPref);
 }

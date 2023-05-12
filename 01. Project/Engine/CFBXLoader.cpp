@@ -14,6 +14,7 @@ CFBXLoader::CFBXLoader()
 	: m_pManager(NULL)
 	, m_pScene(NULL)
 	, m_pImporter(NULL)
+	, m_pRootNode(nullptr)
 {
 }
 
@@ -80,6 +81,19 @@ void CFBXLoader::LoadFbx(const wstring& _strPath, int _iOpt)
 
 	// Bone 정보 읽기
 	LoadSkeleton(m_pScene->GetRootNode());
+
+	if (m_iOption == 2)
+	{
+		FbxNode* pNode = m_pScene->GetRootNode();
+		for (int i = 0; i < pNode->GetChildCount(); ++i)
+		{
+			if (pNode->GetChild(i)->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+			{
+				m_pRootNode = pNode->GetChild(i);
+				break;
+			}
+		}
+	}
 
 	// Animation 이름정보 
 	m_pScene->FillAnimStackNameArray(m_arrAnimName);
@@ -418,11 +432,30 @@ void CFBXLoader::LoadMesh(FbxMesh* _pFbxMesh)
 
 	FbxVector4* pFbxPos = _pFbxMesh->GetControlPoints();
 
+	Matrix matRot;
+	if (m_iOption == 2)
+	{
+		if (m_pRootNode)
+		{
+			FbxVector4 fvRot = m_pRootNode->EvaluateLocalRotation();
+			Quaternion qRot = Quaternion(fvRot.mData[0], fvRot.mData[1], fvRot.mData[2], fvRot.mData[3]);
+			matRot = Matrix::CreateFromQuaternion(qRot);
+		}
+	}
+
 	for (int i = 0; i < iVtxCnt; ++i)
 	{
-		Container.vecPos[i].x = (float)pFbxPos[i].mData[0];
-		Container.vecPos[i].y = (float)pFbxPos[i].mData[2];
-		Container.vecPos[i].z = (float)pFbxPos[i].mData[1];
+		if (m_iOption == 2)
+		{
+
+		}
+		else
+		{
+			Container.vecPos[i].x = (float)pFbxPos[i].mData[0];
+			Container.vecPos[i].y = (float)pFbxPos[i].mData[2];
+			Container.vecPos[i].z = (float)pFbxPos[i].mData[1];
+		}
+		
 	}
 
 	// 폴리곤 개수
