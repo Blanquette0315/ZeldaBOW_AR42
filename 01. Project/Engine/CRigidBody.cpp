@@ -18,6 +18,7 @@ CRigidBody::CRigidBody()
 	, m_bMeshCollider(false)
 	, m_bCreateActor(false)
 	, m_bUsePhysRot(true)
+	, m_bDebugDraw(true)
 {
 	// base is m_vecPhysData[0]
 	m_vecPhysData.push_back(new PhysData);
@@ -36,6 +37,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_bCreateActor(false)
 	, m_bUsePhysRot(_origin.m_bUsePhysRot)
 	, m_vBoxSize(_origin.m_vBoxSize)
+	, m_bDebugDraw(true)
 {
 	// base is m_vecPhysData[0]
 	m_vecPhysData.push_back(new PhysData);
@@ -141,7 +143,8 @@ void CRigidBody::finaltick()
 
 	// DebugDraw
 #ifdef _DEBUG
-	 CallDebugDraw();
+	if(m_bDebugDraw)
+		CallDebugDraw();
 #endif
 }
 

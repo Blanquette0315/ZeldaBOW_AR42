@@ -22,6 +22,10 @@ private:
     bool m_bMeshCollider;
     bool m_bCreateActor;
     bool m_bUsePhysRot;
+    bool m_bDebugDraw;
+
+public:
+    bool& GetDebugDraw() { return m_bDebugDraw; }
 
 public:
     vector<PhysData*> GetRigidData() { return m_vecPhysData; }

@@ -137,6 +137,8 @@ void RigidBodyUI::render_update()
 	// will be add DebugDraw
 	// ...
 
+	ImGui::Text("DebugDraw"); ImGui::SameLine(); ImGui::Checkbox("##DebugDrawCheckBox", &(GetTarget()->RigidBody()->GetDebugDraw()));
+
 	//Mtrl Setting
 	ImGui::Text("== PhysData Setting ==");
 	ImGui::Text("Mass           "); ImGui::SameLine(); ImGui::InputFloat("##RB_Mass", &m_fMass);
