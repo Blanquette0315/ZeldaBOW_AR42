@@ -340,6 +340,7 @@ void ContentUI::AddGameObjectToTree(TreeNode* _ParentNode, CGameObject* _Object)
 {
 	string strObjectName = string(_Object->GetName().begin(), _Object->GetName().end());
 	TreeNode* pCurNode = m_Tree->AddItem(_ParentNode, strObjectName.c_str(), (DWORD_PTR)_Object);
+	pCurNode->SetDataPrefab(true);
 
 	const vector<CGameObject*>& vecChild = _Object->GetChildObject();
 	for (size_t i = 0; i < vecChild.size(); ++i)

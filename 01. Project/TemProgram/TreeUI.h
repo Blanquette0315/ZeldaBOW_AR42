@@ -18,12 +18,15 @@ private:
     bool                m_bFrame;
     bool                m_bSelected;
     bool                m_bIsDataLevel; // this member is indicates whether m_data is a level or not.
+    bool                m_bIsDataPrefab;
 
 
 public:
     DWORD_PTR GetData() { return m_data; }
     bool IsLevelData() { return m_bIsDataLevel; }
     const string& GetName() { return m_strName; }
+
+    void SetDataPrefab(bool _b) { m_bIsDataPrefab = _b; }
 
     // 외부에서 노드의 이름과 데이터가 수정이 되면 안되기 때문에 Private필드로 은닉하고, TreeUI에게만 알려준다.
     // 따라서 TreeUI를 통해서만 노드 추가가 가능하다.

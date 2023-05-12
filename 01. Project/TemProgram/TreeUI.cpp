@@ -30,6 +30,7 @@ TreeNode::TreeNode()
 	, m_bFrame(false)
 	, m_bSelected(false)
 	, m_iIdx(0)
+	, m_bIsDataPrefab(false)
 {
 }
 
@@ -93,6 +94,10 @@ void TreeNode::render_update()
 				if (m_bIsDataLevel && IS_LevelRelativePath(m_data))
 				{
 					ImGui::OpenPopup("##LevelNode");
+				}
+				else if (m_bIsDataPrefab)
+				{
+					ImGui::OpenPopup("##OutLinerNode");
 				}
 				else
 				{
