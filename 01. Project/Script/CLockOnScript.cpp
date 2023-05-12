@@ -54,11 +54,8 @@ void CLockOnScript::Overlap(CGameObject* _pOther)
 
 void CLockOnScript::EndOverlap(CGameObject* _pOther)
 {
-	if (IsValid(_pOther))
-	{
-		if (_pOther == m_pLockOnTarget)
-			ClearTarget();
-	}
+	if (_pOther == m_pLockOnTarget)
+		ClearTarget();
 }
 
 void CLockOnScript::SaveToYAML(YAML::Emitter& _emitter)
