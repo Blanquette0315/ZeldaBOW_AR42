@@ -175,9 +175,9 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON, LAP_BLEND | LAP_EQUIP_BOW); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowEquipOn);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_BOW_LOCKON_WAIT, LAP_REPEAT | LAP_EQUIP_BOW); 
+	SetAnimNode(pAnimNode, LAT_BOW_LOCKON_WAIT, LAP_REPEAT | LAP_EQUIP_BOW | LAP_BLEND);
 	SetAnimTran(pAnimNode, LAT_BOW_EQUIP_OFF, LAC_KEY_N2);
-	SetAnimTran(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAC_KEY_WSAD);
+	SetAnimTran(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_KEY_LBTN);
 
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowEquipOff);

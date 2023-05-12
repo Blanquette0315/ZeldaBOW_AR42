@@ -11,7 +11,6 @@
 #include "CLockOnScript.h"
 #include "CBonesocketScript.h"
 
-
 map<wstring, CAnimation3D*> CLinkAnimScript::m_mapAnim = {};
 map<wstring, tAnimNode*> CLinkAnimScript::m_mapAnimNode = {};
 bool CLinkAnimScript::m_bIsAnimNodeLoaded = false;

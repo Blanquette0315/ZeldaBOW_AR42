@@ -68,6 +68,8 @@ void CLinkSwordScript::Overlap(CGameObject* _pOther)
 	if (IsAttackAnim())
 	{
 		CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
+		if (pMonsterScr == nullptr)
+			return;
 
 		assert(pMonsterScr); // not monster
 
