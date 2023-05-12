@@ -3,6 +3,7 @@
 
 #include "CDevice.h"
 #include "CFBXLoader.h"
+#include "CInstancingBuffer.h"
 
 CMesh::CMesh(bool _bEngineRes)
 	: CRes(RES_TYPE::MESH, _bEngineRes)
@@ -41,6 +42,14 @@ void CMesh::render(UINT _iSubset)
 	//}
 
 	CONTEXT->DrawIndexed(m_vecIdxInfo[_iSubset].iIdxCount, 0, 0);
+}
+
+void CMesh::render_instancing(UINT _iSubset)
+{
+	UpdateData_Inst(_iSubset);
+
+	CONTEXT->DrawIndexedInstanced(m_vecIdxInfo[_iSubset].iIdxCount
+		, CInstancingBuffer::GetInst()->GetInstanceCount(), 0, 0, 0);
 }
 
 void CMesh::render_particle(UINT _iCount)
@@ -612,6 +621,19 @@ void CMesh::UpdateData(UINT _iSubset)
 	UINT iStride = sizeof(Vtx);
 	UINT iOffset = 0;
 	CONTEXT->IASetVertexBuffers(0, 1, m_VB.GetAddressOf(), &iStride, &iOffset);
+	CONTEXT->IASetIndexBuffer(m_vecIdxInfo[_iSubset].pIB.Get(), DXGI_FORMAT_R32_UINT, 0);
+}
+
+void CMesh::UpdateData_Inst(UINT _iSubset)
+{
+	if (_iSubset >= m_vecIdxInfo.size())
+		assert(nullptr);
+
+	ID3D11Buffer* arrBuffer[2] = { m_VB.Get(), CInstancingBuffer::GetInst()->GetBuffer().Get() };
+	UINT		  iStride[2] = { sizeof(Vtx), sizeof(tInstancingData) };
+	UINT		  iOffset[2] = { 0, 0 };
+
+	CONTEXT->IASetVertexBuffers(0, 2, arrBuffer, iStride, iOffset);
 	CONTEXT->IASetIndexBuffer(m_vecIdxInfo[_iSubset].pIB.Get(), DXGI_FORMAT_R32_UINT, 0);
 }
 

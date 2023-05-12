@@ -44,8 +44,21 @@ public:
     bool IsUsePhysRot() { return m_bUsePhysRot; }
 
     // ===== Collider Filter Setting =====
-    void SetColliderFilter(FILTER_GROUP _eGroup) { m_vecPhysData[0]->SetFilterData0(_eGroup); }
-    void SetColliderFilter(uint32_t _Filter) { m_vecPhysData[0]->SetFilterData0(_Filter); }
+    void SetQueryColliderFilter(FILTER_GROUP _eGroup) { m_vecPhysData[0]->SetFilterData0(_eGroup); }
+    void SetQueryColliderFilter(uint32_t _Filter) { m_vecPhysData[0]->SetFilterData0(_Filter); }
+    uint32_t GetQueryColliderFilter() { return m_vecPhysData[0]->GetFilterData0(); }
+
+    void SetQueryMskColFilter(FILTER_GROUP _eGroup) { m_vecPhysData[0]->SetFilterData1(_eGroup); }
+    void SetQueryMskColFilter(uint32_t _Filter) { m_vecPhysData[0]->SetFilterData1(_Filter); }
+    uint32_t GetQueryMskColFilter() { return m_vecPhysData[0]->GetFilterData1(); }
+
+    void SetSimulationColFilter(FILTER_GROUP _eGroup) { m_vecPhysData[0]->SetSimulationFData0(_eGroup); }
+    void SetSimulationColFilter(uint32_t _Filter) { m_vecPhysData[0]->SetSimulationFData0(_Filter); }
+    uint32_t GetSimulationColFilter() { return m_vecPhysData[0]->GetSimulationFData0(); }
+
+    void SetSimulationMskColFilter(FILTER_GROUP _eGroup) { m_vecPhysData[0]->SetSimulationFData1(_eGroup); }
+    void SetSimulationMskColFilter(uint32_t _Filter) { m_vecPhysData[0]->SetSimulationFData1(_Filter); }
+    uint32_t GetSimulationMskColFilter() { return m_vecPhysData[0]->GetSimulationFData1(); }
 
     // ===== PhysX Data Setting =====
     // -- Mass Setting --

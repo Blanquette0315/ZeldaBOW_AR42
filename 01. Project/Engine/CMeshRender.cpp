@@ -157,6 +157,47 @@ void CMeshRender::render()
 		Animator3D()->ClearData();
 }
 
+void CMeshRender::render(UINT _iSubset)
+{
+	if (nullptr == GetMesh() || nullptr == GetCurMaterial(_iSubset))
+		return;
+
+	// ==========
+	// UpdateData
+	// ==========
+	// Transform 업데이트
+	Transform()->UpdateData();
+
+	// Animation2D 업데이트
+	if (Animator2D())
+	{
+		Animator2D()->UpdateData();
+	}
+
+	// Animator3D 업데이트
+	if (Animator3D())
+	{
+		Animator3D()->UpdateData();
+		GetCurMaterial(_iSubset)->SetAnim3D(true); // Animation Mesh 알리기
+		GetCurMaterial(_iSubset)->SetBoneCount(Animator3D()->GetBoneCount());
+	}
+
+	// ======
+	// Render
+	// ======
+	GetCurMaterial(_iSubset)->UpdateData();
+	GetMesh()->render(_iSubset);
+
+	// =====
+	// Clear
+	// =====	
+	if (Animator2D())
+		Animator2D()->Clear();
+
+	if (Animator3D())
+		Animator3D()->ClearData();
+}
+
 void CMeshRender::SaveToYAML(YAML::Emitter& _emitter)
 {
 	_emitter << YAML::Key << "MESHRENDER";

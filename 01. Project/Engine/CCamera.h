@@ -26,11 +26,15 @@ private:
 
     UINT        m_iLayerMask;
 
-    vector<CGameObject*>    m_vecDeferred;
-    vector<CGameObject*>    m_vecDeferredTransparent;
+    map<ULONG64, vector<tInstObj>>		m_mapInstGroup_D;	    // Deferred
+    map<ULONG64, vector<tInstObj>>		m_mapInstGroup_F;	    // Foward ( Opaque, Mask )
+    map<INT_PTR, vector<tInstObj>>		m_mapSingleObj;		    // Single Object
+
+    //vector<CGameObject*>    m_vecDeferred;
+    //vector<CGameObject*>    m_vecDeferredTransparent;
     vector<CGameObject*>    m_vecDeferredDecal;
-    vector<CGameObject*>    m_vecQpaque;
-    vector<CGameObject*>    m_vecMask;
+    //vector<CGameObject*>    m_vecQpaque;
+    //vector<CGameObject*>    m_vecMask;
     vector<CGameObject*>    m_vecDecal;
     vector<CGameObject*>    m_vecTransparent;
     vector<CGameObject*>    m_vecPostProcess;
@@ -93,6 +97,8 @@ public:
     void render_deferred_transparent();
     void render_deferreddecal();
     void render_Bloom();
+
+    void render_Forward();
     void render_opaque();
     void render_mask();
     void render_decal();

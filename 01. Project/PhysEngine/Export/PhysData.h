@@ -18,7 +18,9 @@ enum class FILTER_GROUP
 	NONE = -1,
 	ePlayer = (1 << 0),
 	eGround = (1 << 1),
-	eWall = (1 << 2 ),
+	eMonster = (1 << 2),
+	eWall = (1 << 3),
+	eCollider = (1 << 4),
 };
 
 
@@ -99,11 +101,26 @@ public:
 
 private:
 	uint32_t m_iFilterData0; // word0 is PxU32(uint32_t)
+	uint32_t m_iFilterData1;
+	uint32_t m_iSimulationFilterData0;
+	uint32_t m_iSimulationFilterData1;
 
 public:
 	void SetFilterData0(FILTER_GROUP _eFilterGroup);
 	void SetFilterData0(uint32_t _FilterData);
 	uint32_t GetFilterData0();
+
+	void SetFilterData1(FILTER_GROUP _eFilterGroup);
+	void SetFilterData1(uint32_t _FilterData);
+	uint32_t GetFilterData1();
+
+	void SetSimulationFData0(FILTER_GROUP _eFilterGroup);
+	void SetSimulationFData0(uint32_t _FilterData);
+	uint32_t GetSimulationFData0();
+
+	void SetSimulationFData1(FILTER_GROUP _eFilterGroup);
+	void SetSimulationFData1(uint32_t _FilterData);
+	uint32_t GetSimulationFData1();
 
 public:
 	//이동에 관한 축변환을 막는다

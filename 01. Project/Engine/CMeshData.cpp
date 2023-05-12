@@ -29,7 +29,7 @@ CGameObject* CMeshData::Instantiate()
 	pNewObj->AddComponent(new CMeshRender);
 
 	pNewObj->MeshRender()->SetMesh(m_pMesh);
-
+	
 	for (UINT i = 0; i < m_vecMtrl.size(); ++i)
 	{
 		pNewObj->MeshRender()->SetSharedMaterial(m_vecMtrl[i], i);
@@ -38,10 +38,10 @@ CGameObject* CMeshData::Instantiate()
 	// Animation 파트 추가
 	if (false == m_pMesh->IsAnimMesh())
 		return pNewObj;
-
+	
 	CAnimator3D* pAnimator = new CAnimator3D;
 	pNewObj->AddComponent(pAnimator);
-
+	
 	pAnimator->SetBones(m_pMesh->GetBones());
 	pAnimator->SetAnimClip(m_pMesh->GetAnimClip());
 

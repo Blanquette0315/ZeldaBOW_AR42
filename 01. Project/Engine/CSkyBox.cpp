@@ -60,6 +60,11 @@ void CSkyBox::render()
 	CMaterial::Clear();
 }
 
+void CSkyBox::render(UINT _iSubset)
+{
+	render();
+}
+
 void CSkyBox::SetSkyMesh()
 {
 	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)

@@ -29,6 +29,7 @@ private:
 
 public:
     int Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _eType, void* _pInitial, bool _CPUAccess = false);
+    UINT GetBufferSize() { return m_iElementSize * m_iElementCount; }
     UINT GetElementSize() { return m_iElementSize; }
     UINT GetElementCount() { return m_iElementCount; }
 

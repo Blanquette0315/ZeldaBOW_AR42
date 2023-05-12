@@ -60,6 +60,7 @@ public:
     virtual void begin() override;
     virtual void finaltick() override;
     virtual void render() override;
+    virtual void render(UINT _iSubset) override;
 
 public:
     void SetFaceCount(UINT _X, UINT _Z);

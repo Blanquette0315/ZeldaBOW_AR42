@@ -3,7 +3,8 @@
 #include "CGameObject.h"
 
 CResMgr::CResMgr()
-	: m_iLayoutOffset(0)
+	: m_iLayoutOffset_0(0)
+	, m_iLayoutOffset_1(0)
 	, m_bChanged(false)
 {
 

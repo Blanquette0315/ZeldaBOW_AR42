@@ -8,27 +8,27 @@ void CRenderMgr::init()
 {
 	Vec2 vRenderResol = CDevice::GetInst()->GetRenderResolution();
 
-	// ÈÄÃ³¸® ¿ëµµ, ·»´õ Å¸°Ù º¹»ç¿ë
+	// ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ëµµ, ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_RTCopyTex = CResMgr::GetInst()->CreateTexture(L"RTCopyTex"
 		, (UINT)vRenderResol.x, (UINT)vRenderResol.y
 		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
 
 	m_RTCopyTex->UpdateData(60, PIPELINE_STAGE::PS);
 
-	// Deferred Decal Test¿ë Position Target Tex º¹»ç¿ë
+	// Deferred Decal Testï¿½ï¿½ Position Target Tex ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_PTCopyTex = CResMgr::GetInst()->CreateTexture(L"PTCopyTex"
 		, (UINT)vRenderResol.x, (UINT)vRenderResol.y
 		, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_SHADER_RESOURCE);
 
 	m_PTCopyTex->UpdateData(61, PIPELINE_STAGE::PS);
 
-	// MRT »ý¼º
+	// MRT ï¿½ï¿½ï¿½ï¿½
 	CreateMRT();
 
-	// Deferred_MergeMtrl¿¡ ÆÄ¶ó¹ÌÅÍ ¼ÂÆÃ
-	// Deferred_MergeMtrlÀÇ ÆÄ¶ó¹ÌÅÍ¸¦ ÀÌ°÷¿¡¼­ ¼ÂÆÃÇÏ´Â ÀÌÀ¯´Â ResMgrÀÇ init ´Ü°è¿¡¼­´Â ¾ÆÁ÷ DeferredMRTÀÇ ·£´õ Å¸°Ù ÅØ½ºÃ³°¡
-	// »ý¼ºµÇ±â ÀüÀÌ±â ¶§¹®¿¡ ÆÄ¶ó¹ÌÅÍ ¼³Á¤À» ÇÏ°í ½Í¾îµµ ÇÒ ¼ö ¾ø´Ù.
-	// ÆÄ¶ó¹ÌÅÍ ¼ÂÆÃÀ» ÇÏ±â Á¦ÀÏ ÆíÇÏ´Ù°í »ý°¢µÇ´Â °÷ÀÌ ÀÌ°÷ÀÌ±â ¶§¹®¿¡ ÀÌ°÷¿¡¼­ ÇØÁØ°ÍÀÌ´Ù.
+	// Deferred_MergeMtrlï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// Deferred_MergeMtrlï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ResMgrï¿½ï¿½ init ï¿½Ü°è¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ DeferredMRTï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ç±ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï°ï¿½ ï¿½Í¾îµµ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+	// ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì°ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø°ï¿½ï¿½Ì´ï¿½.
 	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_MergeMtrl");
 	pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"ColorTargetTex"));
 	pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
@@ -69,7 +69,7 @@ void CRenderMgr::CreateMRT()
 	{
 		Ptr<CTexture> arrRTTex[8] = {};
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = { Vec4(0.2f, 0.2f, 0.2f, 1.f), };
 
 		Ptr<CTexture> pDSTex = nullptr;
@@ -104,7 +104,7 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),
@@ -122,9 +122,9 @@ void CRenderMgr::CreateMRT()
 
 	// ============
 	//   Light MRT
-	//  ÇØ´ç MRT´Â ºû¸¸ µû·Î Ã³¸®ÇØ¼­ ºû¸¸ ·£´õ¸µÇÒ ·£´õ Å¸°ÙÀÌ´Ù.
-	// RenderTargetTextureÀÇ °æ¿ì ³­¹Ý»ç±¤°ú ¹Ý»ç±¤ ÀÌ·¸°Ô 2°³¸¸ ¸¸µé °ÍÀÌ´Ù.
-	// ÀÌ¹Ì½ÃºêÀÇ °æ¿ì ÁÖÃ¼°¡ ¹°Ã¼ÀÌ±â ¶§¹®¿¡ ÀÌ°÷ÀÌ ¾Æ´Ñ DeferredMRT¿¡¼­ ÇØÁÙ °ÍÀÌ´Ù.
+	//  ï¿½Ø´ï¿½ MRTï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½Ì´ï¿½.
+	// RenderTargetTextureï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ý»ç±¤ï¿½ï¿½ ï¿½Ý»ç±¤ ï¿½Ì·ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
+	// ï¿½Ì¹Ì½Ãºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì°ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ DeferredMRTï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
 	// ============
 	{
 		Ptr<CTexture> arrRTTex[8] =
@@ -137,13 +137,13 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f)
 		};
 
-		// ±íÀÌ ÅØ½ºÃ³°¡ ÇÊ¿ä¾øÀ¸´Ï »©ÁÖ¾ú´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::LIGHT] = new CMRT;
@@ -163,12 +163,12 @@ void CRenderMgr::CreateMRT()
 
 		CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseBrightTargetTex")->GenerateMip(8);
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f)
 		};
 
-		// ±íÀÌ ÅØ½ºÃ³°¡ ÇÊ¿ä¾øÀ¸´Ï »©ÁÖ¾ú´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::BRIGHT] = new CMRT;
@@ -204,7 +204,7 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),
@@ -215,7 +215,7 @@ void CRenderMgr::CreateMRT()
 			Vec4(0.f,0.f,0.f,0.f),
 		};
 
-		// ±íÀÌ ÅØ½ºÃ³°¡ ÇÊ¿ä¾øÀ¸´Ï »©ÁÖ¾ú´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::BLOOM_UPSCALING] = new CMRT;
@@ -233,12 +233,12 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f)
 		};
 
-		// ±íÀÌ ÅØ½ºÃ³°¡ ÇÊ¿ä¾øÀ¸´Ï »©ÁÖ¾ú´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::BLOOM_MARGE] = new CMRT;
@@ -256,12 +256,12 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Å¬¸®¾î »ö»ó Á¤ÇÏ±â
+		// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f)
 		};
 
-		// ±íÀÌ ÅØ½ºÃ³°¡ ÇÊ¿ä¾øÀ¸´Ï »©ÁÖ¾ú´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::BLOOM] = new CMRT;
@@ -283,7 +283,7 @@ void CRenderMgr::CreateMRT()
 				 Vec4(0.f, 0.f, 0.f, 0.f)
 		};
 
-		// Depth Stencil Texture ¸¸µé±â
+		// Depth Stencil Texture ï¿½ï¿½ï¿½ï¿½ï¿½
 		Ptr<CTexture> pDepthStencilTex
 			= CResMgr::GetInst()->CreateTexture(L"DepthMapDSTex"
 				, 4096, 4096

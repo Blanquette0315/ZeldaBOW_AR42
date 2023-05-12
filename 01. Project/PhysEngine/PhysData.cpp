@@ -15,6 +15,9 @@ PhysData::PhysData()
 	PhysX_Velocity  = { 0.0f,0.0f,0.0f};
 
 	m_iFilterData0 = 0;
+	m_iFilterData1 = 0;
+	m_iSimulationFilterData0 = 0;
+	m_iSimulationFilterData1 = 0;
 
 	MT_Mass = 1.0f;
 
@@ -145,12 +148,57 @@ void PhysData::SetFilterData0(FILTER_GROUP _eFilterGroup)
 
 void PhysData::SetFilterData0(uint32_t _FilterData)
 {
-	m_iFilterData0 |= _FilterData;
+	m_iFilterData0 = _FilterData;
 }
 
 uint32_t PhysData::GetFilterData0()
 {
 	return m_iFilterData0;
+}
+
+void PhysData::SetFilterData1(FILTER_GROUP _eFilterGroup)
+{
+	m_iFilterData1 |= (uint32_t)_eFilterGroup;
+}
+
+void PhysData::SetFilterData1(uint32_t _FilterData)
+{
+	m_iFilterData1 = _FilterData;
+}
+
+uint32_t PhysData::GetFilterData1()
+{
+	return m_iFilterData1;
+}
+
+void PhysData::SetSimulationFData0(FILTER_GROUP _eFilterGroup)
+{
+	m_iSimulationFilterData0 |= (uint32_t)_eFilterGroup;
+}
+
+void PhysData::SetSimulationFData0(uint32_t _FilterData)
+{
+	m_iSimulationFilterData0 = _FilterData;
+}
+
+uint32_t PhysData::GetSimulationFData0()
+{
+	return m_iSimulationFilterData0;
+}
+
+void PhysData::SetSimulationFData1(FILTER_GROUP _eFilterGroup)
+{
+	m_iSimulationFilterData1 |= (uint32_t)_eFilterGroup;
+}
+
+void PhysData::SetSimulationFData1(uint32_t _FilterData)
+{
+	m_iSimulationFilterData1 = _FilterData;
+}
+
+uint32_t PhysData::GetSimulationFData1()
+{
+	return m_iSimulationFilterData1;
 }
 
 void PhysData::SetLockAxis_Position(bool x, bool y, bool z)

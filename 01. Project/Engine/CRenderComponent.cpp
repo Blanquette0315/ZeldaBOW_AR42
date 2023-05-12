@@ -134,6 +134,15 @@ Ptr<CMaterial> CRenderComponent::GetDynamicMaterial(UINT _iIdx)
 	return m_vecMtrls[_iIdx].pCurMtrl;
 }
 
+ULONG64 CRenderComponent::GetInstID(UINT _iMtrlIdx)
+{
+	if (m_pMesh == NULL || m_vecMtrls[_iMtrlIdx].pCurMtrl == NULL)
+		return 0;
+
+	uInstID id{ (UINT)m_pMesh->GetID(), (WORD)m_vecMtrls[_iMtrlIdx].pCurMtrl->GetID(), (WORD)_iMtrlIdx };
+	return id.llID;
+}
+
 void CRenderComponent::SaveToYAML(YAML::Emitter& _emitter)
 {
 	// 실제로 들고있는 재질은 공유 재질이기 때문에 공유 재질만 저장하면 된다.

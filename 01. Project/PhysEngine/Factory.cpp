@@ -16,6 +16,7 @@ Factory::Factory()
 	m_Phys		= nullptr;
 	m_Scene		= nullptr;
 	m_Cooking	= nullptr;
+	m_Allocator = nullptr;
 }
 
 Factory::~Factory()
@@ -24,11 +25,12 @@ Factory::~Factory()
 	m_Scene = nullptr;
 }
 
-void Factory::Initialize(physx::PxPhysics* Phys, physx::PxScene* Scene, physx::PxCooking* Cooking)
+void Factory::Initialize(physx::PxPhysics* Phys, physx::PxScene* Scene, physx::PxCooking* Cooking, physx::PxDefaultAllocator* Allocator)
 {
 	m_Phys		= Phys;
 	m_Scene		= Scene;
 	m_Cooking	= Cooking;
+	m_Allocator = Allocator;
 }
 
 physx::PxShapeFlags Factory::CreateShapeFlag(bool isTrigger)
@@ -150,7 +152,6 @@ void Factory::CreateDinamicActor(PhysData* Data, physx::PxShape* shape, physx::P
 
 	body->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, Data->isKinematic);
 	body->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !Data->isGravity);
-	
 
 	//서로 연결
 	body->userData = Data;
@@ -169,7 +170,33 @@ void Factory::CreateStaticActor(PhysData* Data, physx::PxShape* shape, physx::Px
 	//shape->setSimulationFilterData(triggerFilterData);
 
 	body->attachShape(*shape);
-	m_Scene->addActor(*body);
+
+	if (Data->mCollider->GetType() == PhysCollider::TYPE::MESH)
+	{
+		PxU32 numBounds = 0;
+
+		PxBounds3* bounds = PxRigidActorExt::getRigidActorShapeLocalBoundsList(*body, numBounds);
+
+		// setup the PxBVHStructureDesc, it does contain only the PxBounds3 data
+		PxBVHStructureDesc bvhDesc;
+		bvhDesc.bounds.count = numBounds;
+		bvhDesc.bounds.data = bounds;
+		bvhDesc.bounds.stride = sizeof(PxBounds3);
+
+		// cook the bvh structure
+		PxBVHStructure* bvh = m_Cooking->createBVHStructure(bvhDesc, m_Phys->getPhysicsInsertionCallback());
+
+		// release the memory allocated within extensions, the bounds are not required anymore
+		m_Allocator->deallocate(bounds);
+
+		// add the actor to the scene and provide the bvh structure
+		m_Scene->addActor(*body, bvh);
+
+		// bvh can be released at this point, the precomputed BVH structure was copied to the SDK pruners.
+		bvh->release();
+	}
+	else
+		m_Scene->addActor(*body);
 
 	//서로 연결
 	body->userData = Data;
@@ -191,7 +218,13 @@ void Factory::CreateActoer(PhysData* data)
 	// Seting Filter
 	PxFilterData PxFilter;
 	PxFilter.word0 = data->GetFilterData0();
+	PxFilter.word1 = data->GetFilterData1();
 	shape->setQueryFilterData(PxFilter);
+
+	PxFilterData PxSimulationFilter;
+	PxSimulationFilter.word0 = data->GetSimulationFData0();
+	PxSimulationFilter.word1 = data->GetSimulationFData1();
+	shape->setSimulationFilterData(PxSimulationFilter);
 
 	///로컬 포지션을 지정
 	//shape->setLocalPose(PxTransform(data->CenterPoint.x, data->CenterPoint.y, data->CenterPoint.z));

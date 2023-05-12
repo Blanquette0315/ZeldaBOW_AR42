@@ -26,6 +26,23 @@ struct VS_IN
     float3 vBinormal : BINORMAL;
 };
 
+
+struct VTX_IN_INST
+{
+    float3 vPos : POSITION;
+    float2 vUV : TEXCOORD;
+    
+    float3 vTangent : TANGENT;
+    float3 vNormal : NORMAL;
+    float3 vBinormal : BINORMAL;
+    
+    // Per Instance Data
+    row_major matrix matWorld : WORLD;
+    row_major matrix matWV : WV;
+    row_major matrix matWVP : WVP;
+    uint iRowIndex : ROWINDEX;
+};
+
 struct VS_OUT
 {
     float4 vPosition : SV_Position;
@@ -57,6 +74,22 @@ VS_OUT VS_Std3D(VS_IN _in)
     
     //float3 LightDir = normalize(g_Light3DBuffer[0].vWorldDir);
     //output.fPow = saturate(dot(-LightDir, vWorldNormal));
+    
+    return output;
+}
+
+VS_OUT VS_Std3D_Inst(VTX_IN_INST _in)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+    
+    output.vPosition = mul(float4(_in.vPos, 1.f), _in.matWVP);
+    output.vUV = _in.vUV;
+    
+    // Phong Shading
+    output.vViewPos = mul(float4(_in.vPos, 1.f), _in.matWV).xyz;
+    output.vViewTangent = normalize(mul(float4(_in.vTangent, 0.f), _in.matWV).xyz);
+    output.vViewNormal = normalize(mul(float4(_in.vNormal, 0.f), _in.matWV).xyz);
+    output.vViewBinormal = normalize(mul(float4(_in.vBinormal, 0.f), _in.matWV).xyz);
     
     return output;
 }

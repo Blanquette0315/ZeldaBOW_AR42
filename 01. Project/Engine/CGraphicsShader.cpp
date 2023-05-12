@@ -49,6 +49,22 @@ void CGraphicsShader::CreateVertexShader(const wstring& _strRelativePath, const 
 	}
 	
 	assert(!FAILED(hr));
+
+	// Vertex Inst Shader 컴파일 하기
+	hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+		, (_strFuncName + "_Inst").c_str(), "vs_5_0", 0, 0, m_VSInstBlob.GetAddressOf(), m_ErrBlob.GetAddressOf());
+
+	if (SUCCEEDED(hr))
+	{
+		// 컴파일 된 코드로 Vertex Instancing Shader 객체 만들기
+		DEVICE->CreateVertexShader(m_VSInstBlob->GetBufferPointer(), m_VSInstBlob->GetBufferSize(), nullptr, m_VSInst.GetAddressOf());
+
+
+		hr = DEVICE->CreateInputLayout(vecLayout.data(), (UINT)vecLayout.size()
+			, m_VSInstBlob->GetBufferPointer(), m_VSInstBlob->GetBufferSize()
+			, m_LayoutInst.GetAddressOf());
+		assert(!FAILED(hr));
+	}
 }
 
 void CGraphicsShader::CreateHullShader(const wstring& _strRelativePath, const string& _strFuncName)
@@ -201,5 +217,29 @@ void CGraphicsShader::UpdateData()
 
 	CONTEXT->IASetInputLayout(m_Layout.Get());
 
+	CONTEXT->IASetPrimitiveTopology(m_eTopology);
+}
+
+void CGraphicsShader::UpdateData_Inst()
+{
+	CONTEXT->VSSetShader(m_VSInst.Get(), 0, 0);
+	CONTEXT->HSSetShader(m_HS.Get(), 0, 0);
+	CONTEXT->DSSetShader(m_DS.Get(), 0, 0);
+	CONTEXT->GSSetShader(m_GS.Get(), 0, 0);
+	CONTEXT->PSSetShader(m_PS.Get(), 0, 0);
+
+	// 레스터라이즈 스테이트 설정
+	ComPtr<ID3D11RasterizerState> RSState = CDevice::GetInst()->GetRasterizerState(m_eRSType);
+	CONTEXT->RSSetState(RSState.Get());
+
+	// 뎊스 스텐실 스테이트 설정
+	ComPtr<ID3D11DepthStencilState> DSState = CDevice::GetInst()->GetDepthStencilState(m_eDSType);
+	CONTEXT->OMSetDepthStencilState(DSState.Get(), 0);
+
+	// 블렌드 스테이트 설정
+	ComPtr<ID3D11BlendState> BSState = CDevice::GetInst()->GetBlendState(m_eBSType);
+	CONTEXT->OMSetBlendState(BSState.Get(), nullptr, 0xffffff);
+
+	CONTEXT->IASetInputLayout(m_LayoutInst.Get());
 	CONTEXT->IASetPrimitiveTopology(m_eTopology);
 }

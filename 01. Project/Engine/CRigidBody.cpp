@@ -220,7 +220,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(bool, m_bUsePhysRot, _node["RIGIDBODY"]["UsePhysRot"]);
 	SAFE_LOAD_FROM_YAML(Vec3, m_vColOffSet, _node["RIGIDBODY"]["ColOffSet"]);
 
-	SetColliderFilter(Filter);
+	SetQueryColliderFilter(Filter);
 }
 
 
@@ -355,6 +355,7 @@ void CRigidBody::UpdatePhysDataVec()
 		m_vecPhysData[i]->m_vPxLinearVelocity = m_vecPhysData[0]->m_vPxLinearVelocity;
 		m_vecPhysData[i]->Rotation = m_vecPhysData[0]->Rotation;
 		m_vecPhysData[i]->WorldPosition = m_vecPhysData[0]->WorldPosition;
+		m_vecPhysData[i]->SetFilterData0(m_vecPhysData[0]->GetFilterData0());
 	}
 }
 

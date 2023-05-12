@@ -5,6 +5,7 @@ class CGraphicsShader :
 {
 private:
     ComPtr<ID3DBlob>                m_VSBlob;
+    ComPtr<ID3DBlob>				m_VSInstBlob;
     ComPtr<ID3DBlob>                m_HSBlob;
     ComPtr<ID3DBlob>                m_DSBlob;
     ComPtr<ID3DBlob>                m_GSBlob;
@@ -12,6 +13,7 @@ private:
     ComPtr<ID3DBlob>                m_PSBlob;
 
     ComPtr<ID3D11VertexShader>      m_VS;
+    ComPtr<ID3D11VertexShader>		m_VSInst;
     ComPtr<ID3D11HullShader>        m_HS;
     ComPtr<ID3D11DomainShader>      m_DS;
     ComPtr<ID3D11GeometryShader>    m_GS;
@@ -19,6 +21,7 @@ private:
     ComPtr<ID3D11PixelShader>       m_PS;
 
     ComPtr<ID3D11InputLayout>       m_Layout;
+    ComPtr<ID3D11InputLayout>       m_LayoutInst;
 
     D3D10_PRIMITIVE_TOPOLOGY        m_eTopology;
 
@@ -39,6 +42,7 @@ public:
     void CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName);
 
     void UpdateData();
+    void UpdateData_Inst();
 
     bool USE_VS() { if (m_VS != nullptr) { return true; } else { return false; } }
     bool USE_HS() { if (m_HS != nullptr) { return true; } else { return false; } }
@@ -59,6 +63,7 @@ public:
     DS_TYPE GetDSType() { return m_eDSType; }
 
     SHADER_DOMAIN GetDomain() { return m_eDomain; }
+    ComPtr<ID3D11VertexShader> GetVSInst() { return	m_VSInst; }
 
 public:
     CGraphicsShader();

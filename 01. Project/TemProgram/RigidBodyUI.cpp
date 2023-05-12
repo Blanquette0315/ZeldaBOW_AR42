@@ -93,6 +93,35 @@ void RigidBodyUI::update()
 
 		m_vColOffSet = GetTarget()->RigidBody()->GetColOffSet();
 
+		m_iQueryColFilter = GetTarget()->RigidBody()->GetQueryColliderFilter();
+		m_arrQueryColFilter[0] = m_iQueryColFilter & (uint32_t)FILTER_GROUP::ePlayer;
+		m_arrQueryColFilter[1] = m_iQueryColFilter & (uint32_t)FILTER_GROUP::eGround;
+		m_arrQueryColFilter[2] = m_iQueryColFilter & (uint32_t)FILTER_GROUP::eMonster;
+		m_arrQueryColFilter[3] = m_iQueryColFilter & (uint32_t)FILTER_GROUP::eWall;
+		m_arrQueryColFilter[4] = m_iQueryColFilter & (uint32_t)FILTER_GROUP::eCollider;
+
+
+		m_iQueryMskColFilter = GetTarget()->RigidBody()->GetQueryMskColFilter();
+		m_arrQueryMaskColFilter[0] = m_iQueryMskColFilter & (uint32_t)FILTER_GROUP::ePlayer;
+		m_arrQueryMaskColFilter[1] = m_iQueryMskColFilter & (uint32_t)FILTER_GROUP::eGround;
+		m_arrQueryMaskColFilter[2] = m_iQueryMskColFilter & (uint32_t)FILTER_GROUP::eMonster;
+		m_arrQueryMaskColFilter[3] = m_iQueryMskColFilter & (uint32_t)FILTER_GROUP::eWall;
+		m_arrQueryMaskColFilter[4] = m_iQueryMskColFilter & (uint32_t)FILTER_GROUP::eCollider;
+
+		m_iSimulationColFilter = GetTarget()->RigidBody()->GetSimulationColFilter();
+		m_arrSimulationColFilter[0] = m_iSimulationColFilter & (uint32_t)FILTER_GROUP::ePlayer;
+		m_arrSimulationColFilter[1] = m_iSimulationColFilter & (uint32_t)FILTER_GROUP::eGround;
+		m_arrSimulationColFilter[2] = m_iSimulationColFilter & (uint32_t)FILTER_GROUP::eMonster;
+		m_arrSimulationColFilter[3] = m_iSimulationColFilter & (uint32_t)FILTER_GROUP::eWall;
+		m_arrSimulationColFilter[4] = m_iSimulationColFilter & (uint32_t)FILTER_GROUP::eCollider;
+
+		m_iSimulationMskColFilter = GetTarget()->RigidBody()->GetSimulationMskColFilter();
+		m_arrSimulationMaskColFilter[0] = m_iSimulationMskColFilter & (uint32_t)FILTER_GROUP::ePlayer;
+		m_arrSimulationMaskColFilter[1] = m_iSimulationMskColFilter & (uint32_t)FILTER_GROUP::eGround;
+		m_arrSimulationMaskColFilter[2] = m_iSimulationMskColFilter & (uint32_t)FILTER_GROUP::eMonster;
+		m_arrSimulationMaskColFilter[3] = m_iSimulationMskColFilter & (uint32_t)FILTER_GROUP::eWall;
+		m_arrSimulationMaskColFilter[4] = m_iSimulationMskColFilter & (uint32_t)FILTER_GROUP::eCollider;
+
 		m_vVelocity = GetTarget()->RigidBody()->GetVelocity();
 		m_vSaveVelocity = GetTarget()->RigidBody()->GetSaveVelocity();
 		m_vForce = GetTarget()->RigidBody()->GetForce();
@@ -138,6 +167,212 @@ void RigidBodyUI::render_update()
 
 	// Collider Setting
 	ImGui::Text("== Collider Setting ==");
+
+	static int FilterItem = 0;
+	static const char* m_arrFilterType[] = { "QueryFilter", "QueryMaskFilter", "SimulationFilter", "SimulationMaskFilter"};
+	ImGui::Text("Filter Setting:"); ImGui::SameLine(); ImGui::Combo("##Filter_Type", &FilterItem, m_arrFilterType, IM_ARRAYSIZE(m_arrFilterType));
+
+	switch (FilterItem)
+	{
+	case 0:
+	{
+		if (ImGui::Selectable("Player", &m_arrQueryColFilter[0], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryColFilter[0])
+				m_iQueryColFilter |= (uint32_t)FILTER_GROUP::ePlayer;
+			else
+				m_iQueryColFilter ^= (uint32_t)FILTER_GROUP::ePlayer;
+
+			GetTarget()->RigidBody()->SetQueryColliderFilter(m_iQueryColFilter);
+		}
+		if (ImGui::Selectable("Ground##Q", &m_arrQueryColFilter[1], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryColFilter[1])
+				m_iQueryColFilter |= (uint32_t)FILTER_GROUP::eGround;
+			else
+				m_iQueryColFilter ^= (uint32_t)FILTER_GROUP::eGround;
+
+			GetTarget()->RigidBody()->SetQueryColliderFilter(m_iQueryColFilter);
+		}
+		if (ImGui::Selectable("Monster##Q", &m_arrQueryColFilter[2], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryColFilter[2])
+				m_iQueryColFilter |= (uint32_t)FILTER_GROUP::eMonster;
+			else
+				m_iQueryColFilter ^= (uint32_t)FILTER_GROUP::eMonster;
+
+			GetTarget()->RigidBody()->SetQueryColliderFilter(m_iQueryColFilter);
+		}
+		if (ImGui::Selectable("Wall##Q", &m_arrQueryColFilter[3], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryColFilter[3])
+				m_iQueryColFilter |= (uint32_t)FILTER_GROUP::eWall;
+			else
+				m_iQueryColFilter ^= (uint32_t)FILTER_GROUP::eWall;
+
+			GetTarget()->RigidBody()->SetQueryColliderFilter(m_iQueryColFilter);
+		}
+		if (ImGui::Selectable("Collider##Q", &m_arrQueryColFilter[4], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryColFilter[4])
+				m_iQueryColFilter |= (uint32_t)FILTER_GROUP::eCollider;
+			else
+				m_iQueryColFilter ^= (uint32_t)FILTER_GROUP::eCollider;
+
+			GetTarget()->RigidBody()->SetQueryColliderFilter(m_iQueryColFilter);
+		}
+		break;
+	}
+	case 1:
+	{
+		if (ImGui::Selectable("Player##QM", &m_arrQueryMaskColFilter[0], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryMaskColFilter[0])
+				m_iQueryMskColFilter |= (uint32_t)FILTER_GROUP::ePlayer;
+			else
+				m_iQueryMskColFilter ^= (uint32_t)FILTER_GROUP::ePlayer;
+
+			GetTarget()->RigidBody()->SetQueryMskColFilter(m_iQueryMskColFilter);
+		}
+		if (ImGui::Selectable("Ground##QM", &m_arrQueryMaskColFilter[1], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryMaskColFilter[1])
+				m_iQueryMskColFilter |= (uint32_t)FILTER_GROUP::eGround;
+			else
+				m_iQueryMskColFilter ^= (uint32_t)FILTER_GROUP::eGround;
+
+			GetTarget()->RigidBody()->SetQueryMskColFilter(m_iQueryMskColFilter);
+		}
+		if (ImGui::Selectable("Monster##QM", &m_arrQueryMaskColFilter[2], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryMaskColFilter[2])
+				m_iQueryMskColFilter |= (uint32_t)FILTER_GROUP::eMonster;
+			else
+				m_iQueryMskColFilter ^= (uint32_t)FILTER_GROUP::eMonster;
+
+			GetTarget()->RigidBody()->SetQueryMskColFilter(m_iQueryMskColFilter);
+		}
+		if (ImGui::Selectable("Wall##QM", &m_arrQueryMaskColFilter[3], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryMaskColFilter[3])
+				m_iQueryMskColFilter |= (uint32_t)FILTER_GROUP::eWall;
+			else
+				m_iQueryMskColFilter ^= (uint32_t)FILTER_GROUP::eWall;
+
+			GetTarget()->RigidBody()->SetQueryMskColFilter(m_iQueryMskColFilter);
+		}
+		if (ImGui::Selectable("Collider##QM", &m_arrQueryMaskColFilter[4], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrQueryMaskColFilter[4])
+				m_iQueryMskColFilter |= (uint32_t)FILTER_GROUP::eCollider;
+			else
+				m_iQueryMskColFilter ^= (uint32_t)FILTER_GROUP::eCollider;
+
+			GetTarget()->RigidBody()->SetQueryMskColFilter(m_iQueryMskColFilter);
+		}
+		break;
+	}
+	case 2:
+	{
+		if (ImGui::Selectable("Player##S", &m_arrSimulationColFilter[0], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationColFilter[0])
+				m_iSimulationColFilter |= (uint32_t)FILTER_GROUP::ePlayer;
+			else
+				m_iSimulationColFilter ^= (uint32_t)FILTER_GROUP::ePlayer;
+
+			GetTarget()->RigidBody()->SetSimulationColFilter(m_iSimulationColFilter);
+		}
+		if (ImGui::Selectable("Ground##S", &m_arrSimulationColFilter[1], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationColFilter[1])
+				m_iSimulationColFilter |= (uint32_t)FILTER_GROUP::eGround;
+			else
+				m_iSimulationColFilter ^= (uint32_t)FILTER_GROUP::eGround;
+
+			GetTarget()->RigidBody()->SetSimulationColFilter(m_iSimulationColFilter);
+		}
+		if (ImGui::Selectable("Monster##S", &m_arrSimulationColFilter[2], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationColFilter[2])
+				m_iSimulationColFilter |= (uint32_t)FILTER_GROUP::eMonster;
+			else
+				m_iSimulationColFilter ^= (uint32_t)FILTER_GROUP::eMonster;
+
+			GetTarget()->RigidBody()->SetSimulationColFilter(m_iSimulationColFilter);
+		}
+		if (ImGui::Selectable("Wall##S", &m_arrSimulationColFilter[3], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationColFilter[3])
+				m_iSimulationColFilter |= (uint32_t)FILTER_GROUP::eWall;
+			else
+				m_iSimulationColFilter ^= (uint32_t)FILTER_GROUP::eWall;
+
+			GetTarget()->RigidBody()->SetSimulationColFilter(m_iSimulationColFilter);
+		}
+		if (ImGui::Selectable("Collider##S", &m_arrSimulationColFilter[4], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationColFilter[4])
+				m_iSimulationColFilter |= (uint32_t)FILTER_GROUP::eCollider;
+			else
+				m_iSimulationColFilter ^= (uint32_t)FILTER_GROUP::eCollider;
+
+			GetTarget()->RigidBody()->SetSimulationColFilter(m_iSimulationColFilter);
+		}
+		break;
+	}
+	case 3:
+	{
+		if (ImGui::Selectable("Player##SM", &m_arrSimulationMaskColFilter[0], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationMaskColFilter[0])
+				m_iSimulationMskColFilter |= (uint32_t)FILTER_GROUP::ePlayer;
+			else
+				m_iSimulationMskColFilter ^= (uint32_t)FILTER_GROUP::ePlayer;
+
+			GetTarget()->RigidBody()->SetSimulationMskColFilter(m_iSimulationMskColFilter);
+		}
+		if (ImGui::Selectable("Ground##SM", &m_arrSimulationMaskColFilter[1], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationMaskColFilter[1])
+				m_iSimulationMskColFilter |= (uint32_t)FILTER_GROUP::eGround;
+			else
+				m_iSimulationMskColFilter ^= (uint32_t)FILTER_GROUP::eGround;
+
+			GetTarget()->RigidBody()->SetSimulationMskColFilter(m_iSimulationMskColFilter);
+		}
+		if (ImGui::Selectable("Monster##SM", &m_arrSimulationMaskColFilter[2], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationMaskColFilter[2])
+				m_iSimulationMskColFilter |= (uint32_t)FILTER_GROUP::eMonster;
+			else
+				m_iSimulationMskColFilter ^= (uint32_t)FILTER_GROUP::eMonster;
+
+			GetTarget()->RigidBody()->SetSimulationMskColFilter(m_iSimulationMskColFilter);
+		}
+		if (ImGui::Selectable("Wall##SM", &m_arrSimulationMaskColFilter[3], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationMaskColFilter[3])
+				m_iSimulationMskColFilter |= (uint32_t)FILTER_GROUP::eWall;
+			else
+				m_iSimulationMskColFilter ^= (uint32_t)FILTER_GROUP::eWall;
+
+			GetTarget()->RigidBody()->SetSimulationMskColFilter(m_iSimulationMskColFilter);
+		}
+
+		if (ImGui::Selectable("Collider##SM", &m_arrSimulationMaskColFilter[4], 0, ImVec2(50.f, 15.f)))
+		{
+			if (m_arrSimulationMaskColFilter[4])
+				m_iSimulationMskColFilter |= (uint32_t)FILTER_GROUP::eCollider;
+			else
+				m_iSimulationMskColFilter ^= (uint32_t)FILTER_GROUP::eCollider;
+
+			GetTarget()->RigidBody()->SetSimulationMskColFilter(m_iSimulationMskColFilter);
+		}
+		break;
+	}
+	}
+
 	static const char* m_arrRigidColType[] = { "CUBE", "SPHERE", "CAPSULE", "TRIANGLE", "MESH"};
 	ImGui::Text("Collider Type  "); ImGui::SameLine(); ImGui::Combo("##Light3D_Type", &m_iCurItem, m_arrRigidColType, IM_ARRAYSIZE(m_arrRigidColType));
 

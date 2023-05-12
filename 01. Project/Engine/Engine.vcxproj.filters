@@ -220,6 +220,12 @@
     <Filter Include="HLSL\Render\3D\LandScape">
       <UniqueIdentifier>{fc89eb20-6da6-483e-bb29-1371d24ce003}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Mgr\14. Instancing">
+      <UniqueIdentifier>{e3929f1c-0dd8-4f02-92ea-7c325e5b2508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\CopyBone">
+      <UniqueIdentifier>{614b7bed-194d-46e3-9c77-1ac3c601f228}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -498,6 +504,12 @@
     <ClInclude Include="CRaymapShader.h">
       <Filter>HLSL\Compute\LandScape\RayCast\RayMap</Filter>
     </ClInclude>
+    <ClInclude Include="CInstancingBuffer.h">
+      <Filter>Engine\03. Mgr\14. Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="CCopyBoneShader.h">
+      <Filter>HLSL\Compute\CopyBone</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -755,6 +767,12 @@
     <ClCompile Include="CRaymapShader.cpp">
       <Filter>HLSL\Compute\LandScape\RayCast\RayMap</Filter>
     </ClCompile>
+    <ClCompile Include="CInstancingBuffer.cpp">
+      <Filter>Engine\03. Mgr\14. Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="CCopyBoneShader.cpp">
+      <Filter>HLSL\Compute\CopyBone</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -848,6 +866,9 @@
     </FxCompile>
     <FxCompile Include="Bloom.fx">
       <Filter>HLSL\Render\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="copybone.fx">
+      <Filter>HLSL\Compute\CopyBone</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

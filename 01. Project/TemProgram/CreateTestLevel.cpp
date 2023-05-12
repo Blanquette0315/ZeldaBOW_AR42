@@ -149,7 +149,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CCollider);
 	pObject->AddComponent(new CPlayerScript);
 	//Sphere
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 50.f, -595.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 50.f, 0.f));
 	pObject->Transform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
@@ -175,31 +175,31 @@ void CreateTestLevel()
 	pLevel->AddGameObject(pObject, 0);
 
 	// LandScape �߰�
-	//CGameObject* pLandScape = new CGameObject;
-	//pLandScape->SetName(L"LandScape");
-	//
-	//pLandScape->AddComponent(new CTransform);
-	//pLandScape->AddComponent(new CLandScape);
-	//pLandScape->AddComponent(new CRigidBody);
-	//
-	//pLandScape->Transform()->SetRelativePos(1.f, 1.f, 1.f);
-	//pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
-	//pLandScape->LandScape()->SetFaceCount(16, 16);
-	//pLandScape->SetFrustumCul(true);
-	//
-	////pLandScape->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_TRI, true, true);
-	//pLandScape->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
-	//pLandScape->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_TRI);
-	//pLandScape->RigidBody()->SetColldierScaleSize(false);
-	//pLandScape->RigidBody()->SetKinematicOption(true);
-	//pLandScape->RigidBody()->SetDinamicOption(false);
-	//pLandScape->RigidBody()->SetGravityOption(false);
-	//pLandScape->RigidBody()->SetStaticFriction(0.f);
-	//pLandScape->RigidBody()->SetDynamicFriction(0.f);
-	//pLandScape->RigidBody()->SetRestitution(0.f);
-	//pLandScape->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
-	//
-	//pLevel->AddGameObject(pLandScape, 0);
+	CGameObject* pLandScape = new CGameObject;
+	pLandScape->SetName(L"LandScape");
+	
+	pLandScape->AddComponent(new CTransform);
+	pLandScape->AddComponent(new CLandScape);
+	pLandScape->AddComponent(new CRigidBody);
+	
+	pLandScape->Transform()->SetRelativePos(1.f, 1.f, 1.f);
+	pLandScape->Transform()->SetRelativeScale(100.f, 100.f, 100.f);
+	pLandScape->LandScape()->SetFaceCount(16, 16);
+	pLandScape->SetFrustumCul(true);
+	
+	//pLandScape->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_TRI, true, true);
+	pLandScape->RigidBody()->SetWorldPosition(0.f, 0.f, 0.f);
+	pLandScape->RigidBody()->SetColliderType(COLLIDER_TYPE::COLLIDER_TRI);
+	pLandScape->RigidBody()->SetColldierScaleSize(false);
+	pLandScape->RigidBody()->SetKinematicOption(true);
+	pLandScape->RigidBody()->SetDinamicOption(false);
+	pLandScape->RigidBody()->SetGravityOption(false);
+	pLandScape->RigidBody()->SetStaticFriction(0.f);
+	pLandScape->RigidBody()->SetDynamicFriction(0.f);
+	pLandScape->RigidBody()->SetRestitution(0.f);
+	pLandScape->RigidBody()->SetQueryColliderFilter(FILTER_GROUP::eGround);
+	
+	pLevel->AddGameObject(pLandScape, 0);
 
 
 	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
@@ -281,10 +281,10 @@ void CreateTestLevel()
 		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\sw.fbx");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
-		pObj = pMeshData->Instantiate();
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"Map");
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		//pObj = pMeshData->Instantiate();
+		//pObj->SetFrustumCul(false);
+		//pObj->SetName(L"Map");
+		//pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 
 		pObj = pMeshData->Instantiate();
 		pObj->AddComponent(new CRigidBody);
@@ -316,42 +316,42 @@ void CreateTestLevel()
 	}
 
 	// ��Į ����
-	/*CGameObject* pDecal = new CGameObject;
-	pDecal->SetName(L"Decal");
-
-	pDecal->AddComponent(new CTransform);
-	pDecal->AddComponent(new CDecal);
-
-	pDecal->Transform()->SetRelativePos(0.f, 500.f, 0.f);
-	pDecal->Transform()->SetRelativeScale(250.f, 250.f, 250.f);
-
-	pDecal->Decal()->SetRenderType(true);
-	pDecal->Decal()->SetDecalTexture(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\MagicCircle.png"));
-
-	pLevel->AddGameObject(pDecal, 0);*/
+	//CGameObject* pDecal = new CGameObject;
+	//pDecal->SetName(L"Decal");
+	//
+	//pDecal->AddComponent(new CTransform);
+	//pDecal->AddComponent(new CDecal);
+	//
+	//pDecal->Transform()->SetRelativePos(0.f, 500.f, 0.f);
+	//pDecal->Transform()->SetRelativeScale(250.f, 250.f, 250.f);
+	//
+	//pDecal->Decal()->SetRenderType(true);
+	//pDecal->Decal()->SetDecalTexture(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\MagicCircle.png"));
+	//
+	//pLevel->AddGameObject(pDecal, 0);
 
 	// �� ����
 	//pObject = new CGameObject;
 	//pObject->SetName(L"Plane_0");
-
+	//
 	//pObject->AddComponent(new CTransform);
 	//pObject->AddComponent(new CMeshRender);
 	//pObject->AddComponent(new CRigidBody);
-
-	//pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 400.f));
-	//pObject->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1.f));
+	//
+	//pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+	//pObject->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 1.f));
 	//pObject->Transform()->SetRelativeRotation(Vec3(XM_PI / 3.f, 0.f, 0.f));
-
+	//
 	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-
+	//
 	//pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CUBE, true, true);
 	//pObject->RigidBody()->SetColldierScaleSize(true);
 	//pObject->RigidBody()->SetStaticFriction(0.f);
 	//pObject->RigidBody()->SetDynamicFriction(0.f);
 	//pObject->RigidBody()->SetRestitution(0.f);
 	//pObject->RigidBody()->SetColliderFilter(FILTER_GROUP::eGround);
-
+	//
 	//pLevel->AddGameObject(pObject, 0);
 
 	//pObject = new CGameObject;

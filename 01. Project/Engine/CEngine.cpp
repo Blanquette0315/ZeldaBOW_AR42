@@ -16,6 +16,8 @@
 #include "CPhysMgr.h"
 #include "CSoundMgr.h"
 
+#include "CInstancingBuffer.h"
+
 #include <PhysEngine/Export/PhysCollider.h>
 
 CEngine::CEngine()
@@ -65,6 +67,8 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CFontMgr::GetInst()->init();
 
 	CPhysMgr::GetInst()->init();
+
+	CInstancingBuffer::GetInst()->init();
 
 	return S_OK;
 }
