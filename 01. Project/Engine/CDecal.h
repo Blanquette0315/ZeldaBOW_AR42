@@ -23,6 +23,7 @@ public:
 public:
     virtual void finaltick() override;
     virtual void render() override;
+    virtual void render(UINT _iSubset) override;
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

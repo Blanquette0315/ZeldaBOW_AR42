@@ -29,7 +29,7 @@ public:
 	Factory();
 	~Factory();
 
-	void Initialize(physx::PxPhysics* Phys, physx::PxScene* Scene, physx::PxCooking* Cooking);
+	void Initialize(physx::PxPhysics* Phys, physx::PxScene* Scene, physx::PxCooking* Cooking, physx::PxDefaultAllocator* Allocator);
 	void CreateActoer(PhysData* data);
 private:
 	///Shape ¼ÂÆÃ
@@ -54,5 +54,6 @@ private:
 	physx::PxPhysics*	m_Phys;
 	physx::PxScene*		m_Scene;
 	physx::PxCooking*	m_Cooking;
+	physx::PxDefaultAllocator* m_Allocator;
 };
 

@@ -67,7 +67,7 @@ bool PhysEngine::Initialize(int ThreadCount, PhysSceneData* SceneData, bool Debu
 	
 	//ÆåÅä¸® »ý¼º
 	m_Factory = new Factory();
-	m_Factory->Initialize(m_Physics,m_Scene, m_Cooking);
+	m_Factory->Initialize(m_Physics,m_Scene, m_Cooking, m_Allocator);
 
 	m_RayManager = new RaycastManager();
 	m_RayManager->Initialize(m_Scene);

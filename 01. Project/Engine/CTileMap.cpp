@@ -67,6 +67,11 @@ void CTileMap::render()
 	GetMesh()->render();
 }
 
+void CTileMap::render(UINT _iSubset)
+{
+	render();
+}
+
 void CTileMap::Initialize()
 {
 	Vec2 vLeftTop = Vec2(0.f, 0.f);

@@ -152,6 +152,11 @@ void CParticleSystem::render()
 	m_ParticleBuffer->Clear();
 }
 
+void CParticleSystem::render(UINT _iSubset)
+{
+	render();
+}
+
 void CParticleSystem::SetMaxCount(UINT _MaxCount)
 {
 	if (m_iMaxCount != _MaxCount)

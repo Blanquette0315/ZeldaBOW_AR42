@@ -112,7 +112,6 @@ void CAnimator3D::SetAnimClip(const vector<tMTAnimClip>* _vecAnimClip)
 	}
 }
 
-
 void CAnimator3D::UpdateData()
 {
 	if (!IsValid(m_pCurAnim))

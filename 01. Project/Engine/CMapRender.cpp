@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CMeshRender.h"
+#include "CMapRender.h"
 
 #include "CGameObject.h"
 #include "CTransform.h"
@@ -12,24 +12,25 @@
 
 #include "CDevice.h"
 
-CMeshRender::CMeshRender()
-	: CRenderComponent(COMPONENT_TYPE::MESHRENDER)
+CMapRender::CMapRender()
+	: CRenderComponent(COMPONENT_TYPE::MAPRENDER)
 {
 }
 
-CMeshRender::~CMeshRender()
+CMapRender::~CMapRender()
 {
 }
 
-void CMeshRender::tick()
+
+void CMapRender::tick()
 {
 }
 
-void CMeshRender::finaltick()
+void CMapRender::finaltick()
 {
 }
 
-void CMeshRender::render()
+void CMapRender::render()
 {
 	if (!IsActivate())
 		return;
@@ -87,7 +88,7 @@ void CMeshRender::render()
 		Animator3D()->ClearData();
 }
 
-void CMeshRender::render(UINT _iSubset)
+void CMapRender::render(UINT _iSubset)
 {
 	if (nullptr == GetMesh() || nullptr == GetCurMaterial(_iSubset))
 		return;
@@ -128,17 +129,17 @@ void CMeshRender::render(UINT _iSubset)
 		Animator3D()->ClearData();
 }
 
-void CMeshRender::SaveToYAML(YAML::Emitter& _emitter)
+void CMapRender::SaveToYAML(YAML::Emitter& _emitter)
 {
-	_emitter << YAML::Key << "MESHRENDER";
+	_emitter << YAML::Key << "MAPRENDER";
 	_emitter << YAML::Value << YAML::BeginMap;
 	CRenderComponent::SaveToYAML(_emitter);
 	_emitter << YAML::EndMap;
 }
 
-void CMeshRender::LoadFromYAML(YAML::Node& _node)
+void CMapRender::LoadFromYAML(YAML::Node& _node)
 {
-	YAML::Node node = _node["MESHRENDER"];
+	YAML::Node node = _node["MAPRENDER"];
 	CRenderComponent::LoadFromYAML(node);
 
 	if (Animator3D())
@@ -147,5 +148,3 @@ void CMeshRender::LoadFromYAML(YAML::Node& _node)
 		Animator3D()->SetFrameLimit(GetMesh()->GetAnimClip()->at(0).iEndFrame);
 	}
 }
-
-

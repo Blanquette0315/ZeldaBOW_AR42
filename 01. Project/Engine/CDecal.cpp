@@ -57,6 +57,11 @@ void CDecal::render()
 	CMaterial::Clear();
 }
 
+void CDecal::render(UINT _iSubset)
+{
+	render();
+}
+
 void CDecal::SaveToYAML(YAML::Emitter& _emitter)
 {
 	_emitter << YAML::Key << "DECAL";

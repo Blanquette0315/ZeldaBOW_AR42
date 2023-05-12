@@ -36,6 +36,7 @@ public:
     void SetUVCount(int _iUVCount) { m_tConst.iUVCount = _iUVCount; }
 
     void UpdateData();
+    void UpdateData_Inst();
     static void Clear();
 
     virtual void Save(const wstring& _strRelativePath) override;

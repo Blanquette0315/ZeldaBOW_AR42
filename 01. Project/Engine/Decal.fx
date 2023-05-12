@@ -90,11 +90,31 @@ PS_OUT PS_Decal(VS_OUT _in)
 // g_tex_1 : Decal Tex
 // ===============================
 
+struct VTX_IN_INST
+{
+    float3 vPos : POSITION;
+    
+     // Per Instance Data
+    row_major matrix matWorld : WORLD;
+    row_major matrix matWV : WV;
+    row_major matrix matWVP : WVP;
+    uint iRowIndex : ROWINDEX;
+};
+
 VS_OUT VS_DeferredDecal(VS_IN _in)
 {
     VS_OUT output = (VS_OUT) 0.f;
     
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
+    
+    return output;
+}
+
+VS_OUT VS_DeferredDecal_Inst(VTX_IN_INST _in)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+    
+    output.vPosition = mul(float4(_in.vPos, 1.f), _in.matWVP);
     
     return output;
 }

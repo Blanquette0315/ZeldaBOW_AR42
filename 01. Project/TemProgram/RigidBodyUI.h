@@ -26,6 +26,14 @@ private:
     float           m_fSphereSize;
     Vec2            m_vCapsuleSize;
     Vec3            m_vColOffSet;
+    uint32_t        m_iQueryColFilter;
+    bool m_arrQueryColFilter[5];
+    uint32_t        m_iQueryMskColFilter;
+    bool m_arrQueryMaskColFilter[5];
+    uint32_t        m_iSimulationColFilter;
+    bool m_arrSimulationColFilter[5];
+    uint32_t        m_iSimulationMskColFilter;
+    bool m_arrSimulationMaskColFilter[5];
 
     Vec3            m_vVelocity;
     Vec3            m_vSaveVelocity;

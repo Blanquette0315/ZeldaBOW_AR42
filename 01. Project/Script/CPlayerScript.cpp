@@ -20,7 +20,7 @@ CPlayerScript::CPlayerScript()
 	AddScriptParam(SCRIPT_PARAM::VEC3, "Vec3 Test       ", &m_v3Test);
 	AddScriptParam(SCRIPT_PARAM::VEC4, "Vec4 Test       ", &m_v4Test);
 
-	//m_Prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\TestArrow.pref");
+	//m_Prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\Plane_0.pref");
 	//AddScriptParam(SCRIPT_PARAM::PREFAB, "Prefab  Test    ", &m_Prefab);
 
 	//m_Prefab1 = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\Test_Prefab_0.pref");

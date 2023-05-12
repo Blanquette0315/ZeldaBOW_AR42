@@ -4,7 +4,7 @@
 #include "CMesh.h"
 #include "CMaterial.h"
 
-class CMeshRender :
+class CMapRender :
     public CRenderComponent
 {
 public:
@@ -16,12 +16,9 @@ public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
     virtual void LoadFromYAML(YAML::Node& _node) override;
 
-    CLONE(CMeshRender);
+    CLONE(CMapRender);
 
 public:
-    CMeshRender();
-    virtual ~CMeshRender();
-
-
+    CMapRender();
+    virtual ~CMapRender();
 };
-

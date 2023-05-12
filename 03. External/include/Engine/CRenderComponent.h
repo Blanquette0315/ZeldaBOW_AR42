@@ -23,6 +23,7 @@ private:
 
 public:
     virtual void render() = 0;
+    virtual void render(UINT _iSubset) = 0;
     virtual void render_depthmap();
 
 public:
@@ -41,6 +42,8 @@ public:
 
     void SetDynamicShadow(bool _bSet) { m_bDynamicShadow = _bSet; }
     bool IsDynamicShadow() { return m_bDynamicShadow; }
+
+    ULONG64 GetInstID(UINT _iMtrlIdx);
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

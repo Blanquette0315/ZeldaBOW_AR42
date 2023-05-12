@@ -23,6 +23,27 @@ struct VS_IN
     float4 vIndices : BLENDINDICES;
 };
 
+struct VTX_IN_INST
+{
+    float3 vPos : POSITION;
+    float2 vUV0 : TEXCOORD0;
+    float2 vUV1 : TEXCOORD1;
+    float2 vUV2 : TEXCOORD2;
+
+    float3 vTangent : TANGENT;
+    float3 vNormal : NORMAL;
+    float3 vBinormal : BINORMAL;
+
+    float4 vWeights : BLENDWEIGHT;
+    float4 vIndices : BLENDINDICES;
+
+    // Per Instance Data
+    row_major matrix matWorld : WORLD;
+    row_major matrix matWV : WV;
+    row_major matrix matWVP : WVP;
+    uint iRowIndex : ROWINDEX;
+};
+
 struct VS_OUT
 {
     float4 vPosition : SV_Position;
@@ -55,6 +76,27 @@ VS_OUT VS_Std3D_Deferred(VS_IN _in)
     output.vViewTangent = normalize(mul(float4(_in.vTangent, 0.f), g_matWV).xyz);
     output.vViewNormal = normalize(mul(float4(_in.vNormal, 0.f), g_matWV).xyz);
     output.vViewBinormal = normalize(mul(float4(_in.vBinormal, 0.f), g_matWV).xyz);
+
+    return output;
+}
+
+VS_OUT VS_Std3D_Deferred_Inst(VTX_IN_INST _in)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+
+    if (g_iAnim)
+    {
+        Skinning(_in.vPos, _in.vTangent, _in.vBinormal, _in.vNormal, _in.vWeights, _in.vIndices, _in.iRowIndex);
+    }
+
+    output.vPosition = mul(float4(_in.vPos, 1.f), _in.matWVP);
+    output.vUV0 = _in.vUV0;
+    output.vUV1 = _in.vUV1;
+
+    output.vViewPos = mul(float4(_in.vPos, 1.f), _in.matWV).xyz;
+    output.vViewTangent = normalize(mul(float4(_in.vTangent, 0.f), _in.matWV).xyz);
+    output.vViewNormal = normalize(mul(float4(_in.vNormal, 0.f), _in.matWV).xyz);
+    output.vViewBinormal = normalize(mul(float4(_in.vBinormal, 0.f), _in.matWV).xyz);
 
     return output;
 }
