@@ -10,6 +10,8 @@
 #include "CLayer.h"
 #include "CGameObject.h"
 
+#include "GlobalComponent.h"
+
 CEventMgr::CEventMgr()
 	: m_bLevelStateChange(false)
 {
@@ -167,6 +169,66 @@ void CEventMgr::tick()
 		{
 			CTimeMgr::GetInst()->PlaySlow();
 		}
+		break;
+
+		case EVENT_TYPE::MAKE_PARENT:
+		{
+			CGameObject* pChildObj = (CGameObject*)m_vecEvent[i].wParam;
+			CGameObject* pParentObj = pChildObj->GetParent();
+			if (pParentObj)
+			{
+				pChildObj->DisconnectFromParent();
+				CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
+				pLevel->AddGameObject(pChildObj, pChildObj->GetLayerIdx());
+				m_bLevelChanged = true;
+			}
+		}
+		break;
+
+		case EVENT_TYPE::ADD_COMPONENT:
+		{
+			CGameObject* pObj = (CGameObject*)m_vecEvent[i].wParam;
+			COMPONENT_TYPE eType = COMPONENT_TYPE(m_vecEvent[i].lParam);
+
+			switch (eType)
+			{
+			case COMPONENT_TYPE::TRANSFORM:
+				pObj->AddComponent(new CTransform);
+				break;
+			case COMPONENT_TYPE::CAMERA:
+				pObj->AddComponent(new CCamera);
+				break;
+			case COMPONENT_TYPE::COLLIDER:
+				pObj->AddComponent(new CCollider);
+				break;
+			case COMPONENT_TYPE::ANIMATOR3D:
+				pObj->AddComponent(new CAnimator3D);
+				break;
+			case COMPONENT_TYPE::LIGHT3D:
+				pObj->AddComponent(new CLight3D);
+				break;
+			case COMPONENT_TYPE::RIGIDBODY:
+				pObj->AddComponent(new CRigidBody);
+				break;
+			case COMPONENT_TYPE::MESHRENDER:
+				pObj->AddComponent(new CMeshRender);
+				break;
+			case COMPONENT_TYPE::PARTICLESYSTEM:
+				pObj->AddComponent(new CParticleSystem);
+				break;
+			case COMPONENT_TYPE::SKYBOX:
+				pObj->AddComponent(new CSkyBox);
+				break;
+			case COMPONENT_TYPE::DECAL:
+				pObj->AddComponent(new CDecal);
+				break;
+			case COMPONENT_TYPE::LANDSCAPE:
+				pObj->AddComponent(new CLandScape);
+				break;
+			}
+			m_bLevelChanged = true;
+		}
+		break;
 
 		default:
 			break;

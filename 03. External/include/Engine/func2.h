@@ -178,6 +178,9 @@ class CLevel;
 void ChangeLevel(CLevel* _NextLevel);
 void ChangeLevelAndPlay(CLevel* _NextLevel);
 
+void MakeParent(CGameObject* _pChildObj);
+void AddComponent(CGameObject* _pObj, COMPONENT_TYPE _eType);
+
 class CRes;
 void AddRes(CRes* _Res, RES_TYPE _Type);
 void DeleteRes(CRes* _Res, RES_TYPE _Type);

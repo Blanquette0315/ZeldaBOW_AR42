@@ -11,11 +11,14 @@ private:
     Vec3     m_vOffsetRot;
     UINT     m_iBoneIdx;
 
+    bool     m_bDisable;
+
 public:
     void setOffsetPos(Vec3 _vOffsetPos) { m_vOffsetPos = _vOffsetPos; }
     void setOffsetRot(Vec3 _vOffsetRot) { m_vOffsetRot = _vOffsetRot; }
     void setBoneIdx(UINT _iBoneIdx) { m_iBoneIdx = _iBoneIdx; }
     void ClearOffset() { m_vOffsetPos = Vec3::Zero; m_vOffsetRot = Vec3::Zero; }
+    void SetDisable(bool _b) { m_bDisable = _b; }
 
 public:
     virtual void tick() override;

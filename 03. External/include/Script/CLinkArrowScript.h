@@ -1,9 +1,16 @@
 #pragma once
 
 #include <Engine\CScript.h>
+
+class CRigidBody;
+class CCollider;
+
 class CLinkArrowScript :
     public CScript
 {
+
+
+    // not save
 private:
 
 
