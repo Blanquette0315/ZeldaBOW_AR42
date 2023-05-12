@@ -226,9 +226,6 @@
     <Filter Include="HLSL\Compute\CopyBone">
       <UniqueIdentifier>{614b7bed-194d-46e3-9c77-1ac3c601f228}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\02. RenderComponent\MapRender">
-      <UniqueIdentifier>{3efdc69b-9cf5-4643-896a-15a1311178c5}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -513,9 +510,6 @@
     <ClInclude Include="CCopyBoneShader.h">
       <Filter>HLSL\Compute\CopyBone</Filter>
     </ClInclude>
-    <ClInclude Include="CMapRender.h">
-      <Filter>Engine\06. Component\02. RenderComponent\MapRender</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -778,9 +772,6 @@
     </ClCompile>
     <ClCompile Include="CCopyBoneShader.cpp">
       <Filter>HLSL\Compute\CopyBone</Filter>
-    </ClCompile>
-    <ClCompile Include="CMapRender.cpp">
-      <Filter>Engine\06. Component\02. RenderComponent\MapRender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

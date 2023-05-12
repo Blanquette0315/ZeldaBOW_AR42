@@ -8,7 +8,6 @@
 #include "CTransform.h"
 #include "CMeshRender.h"
 #include "CAnimator3D.h"
-#include "CMapRender.h"
 
 #include "CFBXLoader.h"
 

@@ -210,7 +210,6 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CLevelMgr.h" />
     <ClInclude Include="CLight2D.h" />
     <ClInclude Include="CLight3D.h" />
-    <ClInclude Include="CMapRender.h" />
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CMeshData.h" />
@@ -307,7 +306,6 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CLevelMgr.cpp" />
     <ClCompile Include="CLight2D.cpp" />
     <ClCompile Include="CLight3D.cpp" />
-    <ClCompile Include="CMapRender.cpp" />
     <ClCompile Include="CMaterial.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CMeshData.cpp" />

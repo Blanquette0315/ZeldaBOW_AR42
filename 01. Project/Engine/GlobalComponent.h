@@ -14,6 +14,5 @@
 #include "CLandScape.h"
 #include "CRigidBody.h"
 #include "CAnimator3D.h"
-#include "CMapRender.h"
 
 //#include "CBoundingBox.h"

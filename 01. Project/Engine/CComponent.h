@@ -46,7 +46,6 @@ public:
     GET_OTHER_COMPONENT(SkyBox);
     GET_OTHER_COMPONENT(LandScape);
     GET_OTHER_COMPONENT(RigidBody);
-    GET_OTHER_COMPONENT(MapRender);
 
 public:
     // Debug Draw Function
