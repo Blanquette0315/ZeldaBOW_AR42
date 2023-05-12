@@ -125,31 +125,35 @@ void LoadWStringFromFile(wstring& _str, FILE* _pFile);
 template<typename T>
 void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 {
-	// 참조중인 리소스가 없었다면 없는대로 nullptr이 들어갈 것이다.
-	int bExist = !!_res.Get();
-	_emitter << YAML::Key << "Exist";
-	_emitter << YAML::Value << bExist;
-	// 참조중인 리소스가 있었다면, 어떤 리소스를 가지고 있었는지 키와 경로를 저장한다.
-	if (bExist)
-	{
-		_emitter << YAML::Key << "ResKey";
-		_emitter << YAML::Value << WStringToString(_res->GetKey());
-		_emitter << YAML::Key << "ResRelativePath";
-		_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
-	}
+	//// 참조중인 리소스가 없었다면 없는대로 nullptr이 들어갈 것이다.
+	//int bExist = !!_res.Get();
+	//_emitter << YAML::Key << "Exist";
+	//_emitter << YAML::Value << bExist;
+	//// 참조중인 리소스가 있었다면, 어떤 리소스를 가지고 있었는지 키와 경로를 저장한다.
+
+	_emitter << YAML::Key << "ResKey";
+	_emitter << YAML::Value << WStringToString(_res->GetKey());
+	_emitter << YAML::Key << "ResRelativePath";
+	_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
 }
 
 template<typename T>
 void LoadResourceRef(Ptr<T>& _Res, YAML::Node& _node)
 {
-	int bExist = _node["Exist"].as<int>();
+	wstring strKey, strRelativePath;
 
-	if (bExist)
+	if (_node["ResKey"].IsDefined())
 	{
-		wstring strKey, strRelativePath;
 		strKey = StringToWString(_node["ResKey"].as<string>());
+	}
+
+	if (_node["ResRelativePath"].IsDefined())
+	{
 		strRelativePath = StringToWString(_node["ResRelativePath"].as<string>());
-		
+	}
+
+	if (!strKey.empty())
+	{
 		_Res = CResMgr::GetInst()->Load<T>(strKey, strRelativePath);
 	}
 }
@@ -166,6 +170,7 @@ const wchar_t* ToWString(COMPONENT_TYPE);
 // ========================
 class CGameObject;
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);
+void AddChild(CGameObject* _pParent, CGameObject* _pChild);
 class CLevel;
 void ChangeLevel(CLevel* _NextLevel);
 void ChangeLevelAndPlay(CLevel* _NextLevel);

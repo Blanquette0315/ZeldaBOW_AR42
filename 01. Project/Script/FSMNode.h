@@ -47,6 +47,7 @@ public:
     void AddFuncEnd(Link_Func _func) { Func_End = _func; }
 
     UINT GetPreference() { return iPreferences; }
+    const wstring& GetKey() { return pAnimKey; }
 
 public:
     tAnimNode()

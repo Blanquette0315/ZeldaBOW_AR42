@@ -168,25 +168,26 @@ void CLevel::RegisterObjects()
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
 		const vector<CGameObject*>& vecParent = m_arrLayer[i].GetParentObject();
-		for (size_t j = 0; j < vecParent.size(); ++j)
+		
+		for (int j = 0; j < vecParent.size(); ++j)
 		{
-			m_arrLayer[vecParent[j]->GetLayerIdx()].RegisterObject(vecParent[j]);
-			if (vecParent[j]->Camera())
+			std::queue<CGameObject*> queueObj;
+			queueObj.push(vecParent[j]);
+			while (!queueObj.empty())
 			{
-				CRenderMgr::GetInst()->RegisterCamera(vecParent[j]->Camera());
-			}
-			const vector<CGameObject*>& vecChild = vecParent[j]->GetChildObject();
-			for (size_t k = 0; k < vecChild.size(); ++k)
-			{
-				m_arrLayer[vecChild[k]->GetLayerIdx()].RegisterObject(vecChild[k]);
-				if (vecChild[k]->Camera())
-				{
-					CRenderMgr::GetInst()->RegisterCamera(vecChild[k]->Camera());
-				}
+				const vector<CGameObject*>& vecChild =  queueObj.front()->GetChildObject();
+				for (int k = 0; k < vecChild.size(); ++k)
+					queueObj.push(vecChild[k]);
+
+				m_arrLayer[i].RegisterObject(queueObj.front());
+				if (queueObj.front()->Camera())
+					CRenderMgr::GetInst()->RegisterCamera(queueObj.front()->Camera());
+				queueObj.pop();
 			}
 		}
 	}
 }
+
 
 void CLevel::SaveToYAML(YAML::Emitter& _emitter)
 {

@@ -238,6 +238,16 @@ void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx)
 	CEventMgr::GetInst()->AddEvent(evn);
 }
 
+void AddChild(CGameObject* _pParent, CGameObject* _pChild)
+{
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::ADD_CHILD;
+	evn.wParam = (DWORD_PTR)_pChild;
+	evn.lParam = (DWORD_PTR)_pParent;
+
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
 void AddRes(CRes* _Res, RES_TYPE _Type)
 {
 	_Res->AddRef();

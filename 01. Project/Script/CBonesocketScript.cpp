@@ -37,6 +37,7 @@ void CBonesocketScript::tick()
 
 void CBonesocketScript::finaltick()
 {
+	
 	if (GetOwner()->GetParent() == nullptr)
 		return;
 

@@ -1,5 +1,8 @@
 #pragma once
 #include <Engine/CScript.h>
+
+// Optimal : decompose only Rot, recalculate rot offset matrix and pos when offset changes. 
+
 class CBonesocketScript :
     public CScript
 {
