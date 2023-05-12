@@ -103,6 +103,8 @@ private:
 	vector<tAnimClip*>				m_vecAnimClip;
 
 	int								m_iOption;
+	
+	FbxNode*						m_pRootNode;
 
 public:
 	void init();

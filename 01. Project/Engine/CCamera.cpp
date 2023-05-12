@@ -234,6 +234,7 @@ void CCamera::SortObject()
 	for (auto& pair : m_mapInstGroup_F)
 		pair.second.clear();
 
+	m_vecDeferred.clear();
 	m_vecDeferredDecal.clear();
 	m_vecDecal.clear();
 	m_vecTransparent.clear();
@@ -243,14 +244,11 @@ void CCamera::SortObject()
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		// LayerȮ��
 		if (m_iLayerMask & (1 << i))
 
 		{
-			// �ش� ���̾ ���� ���� ������Ʈ�� �����´�.
 			CLayer* pLayer = pCurLevel->GetLayer(i);
 
-			// ������Ʈ���� ���̴� �����ο� ���� �з��Ѵ�.
 			const vector<CGameObject*>& vecObj = pLayer->GetObjects();
 			for (size_t j = 0; j < vecObj.size(); ++j)
 			{
@@ -264,10 +262,8 @@ void CCamera::SortObject()
 					continue;
 				}
 
-				// Frustum Culling ���� ��
 				if (vecObj[j]->IS_FrustumCul())
 				{
-					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
 					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 20.f))
 					{
 						continue;
@@ -276,12 +272,14 @@ void CCamera::SortObject()
 				// pushback for picking
 				CFrustum::PushBackInFrustumObjs(vecObj[j]);
 
-
-				// ���׸��� ������ŭ �ݺ�
 				UINT iMtrlCount = pRenderCom->GetMtrlCount();
 
+				bool bEscape = false;
 				for (UINT iMtrl = 0; iMtrl < iMtrlCount; ++iMtrl)
 				{
+					if (bEscape)
+						break;
+
 					if (nullptr != pRenderCom->GetCurMaterial(iMtrl) || nullptr != pRenderCom->GetCurMaterial(iMtrl)->GetShader())
 					{
 						Ptr<CGraphicsShader> pShader = pRenderCom->GetCurMaterial(iMtrl)->GetShader();
@@ -296,56 +294,94 @@ void CCamera::SortObject()
 						case SHADER_DOMAIN::DOMAIN_OPAQUE:
 						case SHADER_DOMAIN::DOMAIN_MASK:
 						{
-							// Shader �� POV �� ���� �ν��Ͻ� �׷��� �з��Ѵ�.
-							map<ULONG64, vector<tInstObj>>* pMap = NULL;
-							Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
+							if (vecObj[j]->IsInstancing())
+							{
+								map<ULONG64, vector<tInstObj>>* pMap = NULL;
+								Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
 
-							if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE
-								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
-								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
-							{
-								pMap = &m_mapInstGroup_D;
-							}
-							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
-								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_MASK)
-							{
-								pMap = &m_mapInstGroup_F;
+								if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE
+									|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
+									|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
+								{
+									pMap = &m_mapInstGroup_D;
+								}
+								else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
+									|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_MASK)
+								{
+									pMap = &m_mapInstGroup_F;
+								}
+								else
+								{
+									assert(nullptr);
+									continue;
+								}
+
+								uInstID uID = {};
+								uID.llID = pRenderCom->GetInstID(iMtrl);
+
+								if (0 == uID.llID)
+									continue;
+
+								map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uID.llID);
+								if (iter == pMap->end())
+								{
+									pMap->insert(make_pair(uID.llID, vector<tInstObj>{tInstObj{ vecObj[j], iMtrl }}));
+								}
+								else
+								{
+									iter->second.push_back(tInstObj{ vecObj[j], iMtrl });
+								}
 							}
 							else
 							{
-								assert(nullptr);
-								continue;
-							}
-
-							uInstID uID = {};
-							uID.llID = pRenderCom->GetInstID(iMtrl);
-
-							// ID �� 0 �� ==> Mesh �� Material �� ���õ��� �ʾҴ�.
-							if (0 == uID.llID)
-								continue;
-
-							map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uID.llID);
-							if (iter == pMap->end())
-							{
-								pMap->insert(make_pair(uID.llID, vector<tInstObj>{tInstObj{ vecObj[j], iMtrl }}));
-							}
-							else
-							{
-								iter->second.push_back(tInstObj{ vecObj[j], iMtrl });
+								m_vecDeferred.push_back(vecObj[j]);
+								bEscape = true;
 							}
 						}
 						break;
 						case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
-							m_vecDeferredDecal.push_back(vecObj[j]);
+							if (vecObj[j]->IsInstancing())
+							{
+								
+							}
+							else
+							{
+								m_vecDeferredDecal.push_back(vecObj[j]);
+								bEscape = true;
+							}
 							break;
 						case SHADER_DOMAIN::DOMAIN_DECAL:
-							m_vecDecal.push_back(vecObj[j]);
+							if (vecObj[j]->IsInstancing())
+							{
+								
+							}
+							else
+							{
+								m_vecDecal.push_back(vecObj[j]);
+								bEscape = true;
+							}
 							break;
 						case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
-							m_vecTransparent.push_back(vecObj[j]);
+							if (vecObj[j]->IsInstancing())
+							{
+								
+							}
+							else
+							{
+								m_vecTransparent.push_back(vecObj[j]);
+								bEscape = true;
+							}
 							break;
 						case SHADER_DOMAIN::DOMAIN_POST_PROCESS:
-							m_vecPostProcess.push_back(vecObj[j]);
+							if (vecObj[j]->IsInstancing())
+							{
+								
+							}
+							else
+							{
+								m_vecPostProcess.push_back(vecObj[j]);
+								bEscape = true;
+							}
 							break;
 						}
 					}
@@ -392,6 +428,11 @@ void CCamera::SortShadowObject()
 
 void CCamera::render_deferred()
 {
+	for (size_t i = 0; i < m_vecDeferred.size(); ++i)
+	{
+		m_vecDeferred[i]->render();
+	}
+
 	for (auto& pair : m_mapSingleObj)
 	{
 		pair.second.clear();
@@ -402,18 +443,13 @@ void CCamera::render_deferred()
 
 	for (auto& pair : m_mapInstGroup_D)
 	{
-		// �׷� ������Ʈ�� ���ų�, ���̴��� ���� ���
 		if (pair.second.empty())
 			continue;
 
-		// instancing ���� ���� �̸��̰ų�
-		// Animation2D ������Ʈ�ų�(��������Ʈ �ִϸ��̼� ������Ʈ)
-		// Shader �� Instancing �� �������� �ʴ°��
 		if (pair.second.size() <= 1
 			|| pair.second[0].pObj->Animator2D()
 			|| pair.second[0].pObj->GetRenderComponent()->GetCurMaterial(pair.second[0].iMtrlIdx)->GetShader()->GetVSInst() == nullptr)
 		{
-			// �ش� ��ü���� ���� ���������� ��ȯ
 			for (UINT i = 0; i < pair.second.size(); ++i)
 			{
 				map<INT_PTR, vector<tInstObj>>::iterator iter

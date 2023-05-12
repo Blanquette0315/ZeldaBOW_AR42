@@ -205,6 +205,8 @@ void InspectorUI::render_update()
 		if (ImGui::Button("##ChangeObjNameBtn", ImVec2(18.f, 18.f)))
 			ImGui::OpenPopup("Change Object Name?");
 
+		ImGui::Text("Instancing"); ImGui::Checkbox("##Instancing", &m_TargetObj->GetInstancingRef());
+
 		CGameObject* pParentObj = m_TargetObj;
 		while (pParentObj->GetParent())
 		{
