@@ -13,7 +13,7 @@ private:
     bool m_bActDone;
 
 public:
-    void Done() { m_bActDone = true; }
+    void Done(bool _done = true) { m_bActDone = _done; }
     Vec3 FindPlayerDir();
     Vec3 FindInitialPosDir();
 

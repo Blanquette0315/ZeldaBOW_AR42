@@ -4,9 +4,15 @@
 #include "register.fx"
 #include "struct.fx"
 #include "func.fx"
+#include "effect.fx"
 
 #define fSpecCoefficent g_float_0
 #define vAddEmissiveColor g_vec4_3
+//-----------------------------------
+// g_float_1 = Acctime
+// g_float_2 = Maxtime
+// g_int_0 = IsBurn
+//-----------------------------------
 
 struct VS_IN
 {
@@ -201,6 +207,12 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
 
     
     output.vData.x = encode(vSpecCoeff);
+    
+    // PaperBurn Effect
+    if(g_int_0 == 1)
+    {
+        output.vColor = PaperBurn(output.vColor, SelectUV(g_iTex0UV, _in));
+    }
     
     return output;
 }

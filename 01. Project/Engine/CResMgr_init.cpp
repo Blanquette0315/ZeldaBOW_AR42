@@ -717,6 +717,7 @@ void CResMgr::CreateDefaultTexture()
 	
 	Load<CTexture>(L"texture\\noise\\TestNoise.png", L"texture\\noise\\TestNoise.png");
 
+	Load<CTexture>(L"texture\\burn\\BurnRamp.dds", L"texture\\burn\\BurnRamp.dds");
 	// ����
 	// Texture ����
 	// D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS �� �� ����

@@ -867,8 +867,13 @@
     <FxCompile Include="Bloom.fx">
       <Filter>HLSL\Render\3D</Filter>
     </FxCompile>
+<<<<<<< HEAD
     <FxCompile Include="copybone.fx">
       <Filter>HLSL\Compute\CopyBone</Filter>
+=======
+    <FxCompile Include="effect.fx">
+      <Filter>HLSL\Render</Filter>
+>>>>>>> Monster
     </FxCompile>
   </ItemGroup>
 </Project>

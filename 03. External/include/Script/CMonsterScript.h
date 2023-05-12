@@ -13,6 +13,7 @@ enum class Monster_State
     FIND,
     ATTACK,
     RETURN,
+    DEAD,
 };
 
 class CMonsterScript :
