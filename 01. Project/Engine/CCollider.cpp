@@ -43,9 +43,6 @@ void CCollider::begin()
 
 void CCollider::finaltick()
 {
-	if (CLevelMgr::GetInst()->GetCurLevel()->GetState() != LEVEL_STATE::PLAY)
-		return;
-
 	Vec3 vRot = m_vRot;
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
