@@ -6,6 +6,7 @@
 CBonesocketScript::CBonesocketScript()
 	: CScript(BONESOCKETSCRIPT)
 	, m_iBoneIdx(0)
+	, m_bDisable(false)
 {
 	//m_vOffset = Vec3(-0.29, -0.06, -0.036);
 	//m_vOffsetRot = Vec3(-XM_PI / 2.f, 0.f, 0.f);
@@ -20,6 +21,7 @@ CBonesocketScript::CBonesocketScript(const CBonesocketScript& _origin)
 	, m_vOffsetPos(_origin.m_vOffsetPos)
 	, m_vOffsetRot(_origin.m_vOffsetRot)
 	, m_iBoneIdx(_origin.m_iBoneIdx)
+	, m_bDisable(false)
 {
 	AddScriptParam(SCRIPT_PARAM::VEC3, "OffsetPos       ", &m_vOffsetPos);
 	AddScriptParam(SCRIPT_PARAM::VEC3, "OffsetRot       ", &m_vOffsetRot);
@@ -37,7 +39,9 @@ void CBonesocketScript::tick()
 
 void CBonesocketScript::finaltick()
 {
-	
+	if (m_bDisable)
+		return;
+
 	if (GetOwner()->GetParent() == nullptr)
 		return;
 

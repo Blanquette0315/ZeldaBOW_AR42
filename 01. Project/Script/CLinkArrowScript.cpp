@@ -12,6 +12,7 @@ CLinkArrowScript::~CLinkArrowScript()
 
 void CLinkArrowScript::begin()
 {
+
 }
 
 void CLinkArrowScript::tick()

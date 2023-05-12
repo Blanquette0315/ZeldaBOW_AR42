@@ -292,6 +292,23 @@ void ChangeLevelAndPlay(CLevel* _NextLevel)
 	CEventMgr::GetInst()->AddEvent(ChangeLevelState);
 }
 
+void MakeParent(CGameObject* _pChildObj)
+{
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::MAKE_PARENT;
+	evn.wParam = (DWORD_PTR)_pChildObj;
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
+void AddComponent(CGameObject* _pObj, COMPONENT_TYPE _eType)
+{
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::ADD_COMPONENT;
+	evn.wParam = (DWORD_PTR)_pObj;
+	evn.lParam = (DWORD_PTR)_eType;
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
 #include "CRenderMgr.h"
 
 // 나중에 UI에서 RECT를 고르면 반지름을 넣어주지 못하도록 막아줄 것이다.

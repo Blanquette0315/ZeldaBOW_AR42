@@ -200,6 +200,8 @@ enum class EVENT_TYPE
 	CHANGE_PREFAB,
 	CHANGE_LEVEL_STATE, //wParam : Next Level State
 	SLOWTIME,
+	MAKE_PARENT,
+	ADD_COMPONENT,
 
 	END,
 };

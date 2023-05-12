@@ -10,9 +10,16 @@ class CLinkBowScript :
 {
     // not save
 private:
-    CLinkAnimScript* m_pLinkAnimScr;
-    Ptr<CPrefab> m_pArrowPref;
-    CGameObject* m_pArrowObj;
+    CLinkAnimScript*    m_pLinkAnimScr;
+    Ptr<CPrefab>        m_pArrowPref;
+    CGameObject*        m_pArrowObj;
+
+    Vec3                m_vArrowWorldScale;
+    Vec3                m_vArrowWorldRot;
+    Vec3                m_vArrowWorldPos;
+
+    bool                m_bOnce;
+    bool                m_bOneFrameAfter;
 
 public:
     virtual void begin() override;
