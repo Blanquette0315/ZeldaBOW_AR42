@@ -10,6 +10,7 @@
 #include "CGroundCheckScript.h"
 #include "CLockOnScript.h"
 #include "CBonesocketScript.h"
+#include "CLinkCamScript.h"
 
 map<wstring, CAnimation3D*> CLinkAnimScript::m_mapAnim = {};
 map<wstring, tAnimNode*> CLinkAnimScript::m_mapAnimNode = {};
@@ -32,6 +33,7 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_bLockOn(false)
 	, m_bIsAnimChanged(false)
 	, m_pPrevAnimNode(nullptr)
+	, m_bLockOnRotFinish(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -55,6 +57,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_bLockOn(false)
 	, m_bIsAnimChanged(false)
 	, m_pPrevAnimNode(nullptr)
+	, m_bLockOnRotFinish(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -348,6 +351,20 @@ void CLinkAnimScript::SetLinkCond()
 		}
 	}
 
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_KEEP_LOCKON, BIT_LEAST_ONE))
+	{
+
+	}
+	else
+	{
+		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
+		{
+			// m_pLinkCamObj->GetScript<CLinkCamScript>()->SetMode(LINK_CAM_MODE::GENERAL_START);
+			RemoveBit(m_iMode, LINK_MODE_LOCKON);
+			m_bLockOnRotFinish = false;
+		}
+	}
+
 	if (m_pLockOnRadar->GetLockOnTarget())
 	{
 		if (KEY_TAP(KEY::Q))
@@ -355,17 +372,23 @@ void CLinkAnimScript::SetLinkCond()
 			if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_INCLUDE))
 			{
 				RemoveBit(m_iMode, LINK_MODE_LOCKON);
+				//m_pLinkCamObj->GetScript<CLinkCamScript>()->SetMode(LINK_CAM_MODE::GENERAL_START);
+				m_bLockOnRotFinish = false;
 			}
 			else
 			{
 				AddBit(m_iMode, LINK_MODE_LOCKON);
+				// m_pLinkCamObj->GetScript<CLinkCamScript>()->SetMode(LINK_CAM_MODE::LOCKON_START);
 			}
 		}
 	}
 	else
 	{
 		RemoveBit(m_iMode, LINK_MODE_LOCKON);
+		m_bLockOnRotFinish = false;
 	}
+
+
 
 	if(CalBit(m_iMode, (UINT)LINK_MODE::LINK_MODE_RUN, BIT_LEAST_ONE))
 		AddBit(m_iCond, LAC_MODE_RUN);

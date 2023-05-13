@@ -7,6 +7,12 @@ CScript::CScript(int _iScriptType)
 {
 }
 
+CScript::CScript(const CScript& _origin)
+	: CComponent(COMPONENT_TYPE::SCRIPT)
+	, m_iScriptType(_origin.m_iScriptType)
+{
+}
+
 CScript::~CScript()
 {
 }

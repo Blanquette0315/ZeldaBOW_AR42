@@ -10,6 +10,14 @@ vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr);
 
 bool PickingObj(CGameObject*& _pObjOut);
 
+DirectX::XMFLOAT3 GetEulerAngleFromDirection(const DirectX::XMVECTOR& direction);
+
+template <typename T>
+T lerp(const T& start, const T& end, float t)
+{
+	return start + t * (end - start);
+}
+
 template <typename T1, typename T2>
 int GetMapIdx(const map<T1, T2>& _map, T2 _key);
 

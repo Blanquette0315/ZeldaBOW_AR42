@@ -401,6 +401,7 @@ vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr)
 }
 
 #include "CCamera.h"
+#include "func2.h"
 
 bool PickingObj(CGameObject*& _pObjOut)
 {
@@ -422,6 +423,31 @@ bool PickingObj(CGameObject*& _pObjOut)
 		return true;
 	else
 		return false;
+}
+
+DirectX::XMFLOAT3 GetEulerAngleFromDirection(const DirectX::XMVECTOR& direction)
+{
+	// Normalize the direction vector
+	DirectX::XMVECTOR normalizedDir = DirectX::XMVector3Normalize(direction);
+
+	// Calculate the pitch angle (rotation around x-axis)
+	float pitch = std::asinf(-DirectX::XMVectorGetY(normalizedDir));
+
+	// Calculate the yaw angle (rotation around y-axis)
+	float yaw = std::atan2f(
+		DirectX::XMVectorGetX(normalizedDir),
+		DirectX::XMVectorGetZ(normalizedDir)
+	);
+
+	// Calculate the roll angle (rotation around z-axis) - set to 0 if not needed
+	float roll = 0.0f;
+
+	// Convert the angles to degrees if desired
+	// float pitchDegrees = DirectX::XMConvertToDegrees(pitch);
+	// float yawDegrees = DirectX::XMConvertToDegrees(yaw);
+	// float rollDegrees = DirectX::XMConvertToDegrees(roll);
+
+	return DirectX::XMFLOAT3(pitch, yaw, roll);
 }
 
 

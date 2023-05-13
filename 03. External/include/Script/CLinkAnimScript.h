@@ -59,6 +59,7 @@ private:
     float                   m_fComboMaxTime;
 
     bool                    m_bLockOn;
+    bool                    m_bLockOnRotFinish;
     bool                    m_bIsAnimChanged;
 
     // save
@@ -94,9 +95,10 @@ private:
 
     // anim function
 private:
-    void MoveRotation(Vec3 _vDir);
+    bool MoveRotation(Vec3 _vDir);
     void SelectSpeed();
     void MoveToDir(DIR _eDir, bool _bReverse = 0);
+    void MoveToDirAdd(DIR _eDir, bool _bReverse = 0);
 
     void Func_WalkRunDash();
     void Func_LockOnMove();
@@ -138,6 +140,11 @@ private:
 public:
     tAnimNode* GetCurAnimNode() { return m_pCurAnimNode; }
     bool IsAnimChanged() { return m_bIsAnimChanged; }
+
+    UINT GetLinkMode() { return m_iMode; }
+    UINT& GetLinkModeRef() { return m_iMode; }
+    CLockOnScript* GetLockOnRadar() { return m_pLockOnRadar; }
+    CGameObject* GetLinkCam() { return m_pLinkCamObj; }
 
     // Interaction with monster function
 public:

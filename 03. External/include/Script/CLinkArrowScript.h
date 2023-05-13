@@ -8,11 +8,21 @@ class CCollider;
 class CLinkArrowScript :
     public CScript
 {
+    float m_fGravity;
+    float m_vVelocity;
+    Vec3  m_vDir;
 
+    float m_fCurGravity;
+    float m_fMaxGravity;
 
+    Vec3 m_vPrevPos;
+    
     // not save
 private:
 
+
+public:
+    void SetDir(Vec3 _vDir) { m_vDir = _vDir; }
 
 public:
     virtual void begin() override;
@@ -30,6 +40,7 @@ public:
 
 public:
     CLinkArrowScript();
+    CLinkArrowScript(const CLinkArrowScript& _origin);
     ~CLinkArrowScript();
 };
 

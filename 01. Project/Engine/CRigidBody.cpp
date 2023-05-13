@@ -230,7 +230,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinematick, bool _bDinamic)
 {
 	// PhysData Position Setting
-	Vec3 vFinalPos = Transform()->GetRelativePos();
+	Vec3 vFinalPos = Transform()->GetWorldPos();
 	vFinalPos += m_vColOffSet;
 		
 	RigidBody()->SetWorldPosition(vFinalPos);

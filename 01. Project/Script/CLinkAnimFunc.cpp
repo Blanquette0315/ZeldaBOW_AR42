@@ -12,10 +12,10 @@
 
 
 
-void CLinkAnimScript::MoveRotation(Vec3 _vDir)
+bool CLinkAnimScript::MoveRotation(Vec3 _vDir)
 {
 	if (_vDir == Vec3::Zero)
-		return;
+		return true;
 
 	Vec3 vCross = Vec3(0.f, 0.f, -1.f).Cross(_vDir);
 	float fRad = acosf(Vec3(0.f, 0.f, -1.f).Dot(_vDir));
@@ -32,6 +32,7 @@ void CLinkAnimScript::MoveRotation(Vec3 _vDir)
 	vCross = vRotDir.Cross(_vDir);
 	float fAdd = fRad - vRot.y;
 	fAdd = fAdd - XM_2PI * floorf(fAdd / XM_2PI);
+
 	if (fAdd < 0 && fabsf(fAdd) > XM_PI)
 		fAdd += XM_2PI;
 	else if (fAdd > 0 && fabsf(fAdd) > XM_PI)
@@ -40,11 +41,15 @@ void CLinkAnimScript::MoveRotation(Vec3 _vDir)
 	if (vCross.y < 0.f)
 		fAngleSpeedPerFrame *= -1.f;
 
-
+	bool bRotFinish = false;
 	if (fabsf(fAdd) <= fabsf(fAngleSpeedPerFrame))
+	{
 		fAngleSpeedPerFrame = fAdd;
+		bRotFinish = true;
+	}
 
 	Transform()->AddRelativeRotation(Vec3(0.f, fAngleSpeedPerFrame, 0.f));
+	return bRotFinish;
 }
 
 void CLinkAnimScript::MoveToDir(DIR _eDir, bool _bReverse)
@@ -66,6 +71,21 @@ void CLinkAnimScript::MoveToDir(DIR _eDir, bool _bReverse)
 		RigidBody()->SetVelocity(vDir * m_fWalkSpeed);
 	else if (m_iMode == (UINT)LINK_MODE::LINK_MODE_RUN)
 		RigidBody()->SetVelocity(vDir * m_fRunSpeed);*/
+}
+
+void CLinkAnimScript::MoveToDirAdd(DIR _eDir, bool _bReverse)
+{
+	Vec3 vDir = GetCombinedDir();
+	if (vDir == Vec3::Zero)
+		return;
+
+	vDir = Transform()->GetRelativeDir(_eDir);
+	if (_bReverse)
+	{
+		vDir *= -1;
+	}
+
+	RigidBody()->AddVelocity(vDir * m_fSelectedSpeed);
 }
 
 void CLinkAnimScript::SelectSpeed()
@@ -96,23 +116,34 @@ void CLinkAnimScript::Func_LockOnMove()
 
 	vDirMove = Vec3(vCoord.z, 0.f, -vCoord.x).Normalize();
 
-	if (KEY_PRESSED(KEY::W))
+	// First -> Turn
+	if (!m_bLockOnRotFinish)
 	{
-		MoveToDir(DIR::FRONT);
+		if (MoveRotation(vDirLinkToLockOn))
+			m_bLockOnRotFinish = true;
 	}
-	else if (KEY_PRESSED(KEY::S))
+	else
 	{
-		MoveToDir(DIR::FRONT, true);
-	}
-	else if (KEY_PRESSED(KEY::A))
-	{
-		RigidBody()->SetVelocity(-vDirMove * m_fSelectedSpeed);
-		MoveRotation(vDirLinkToLockOn);
-	}
-	else if (KEY_PRESSED(KEY::D))
-	{
-		RigidBody()->SetVelocity(vDirMove * m_fSelectedSpeed);
-		MoveRotation(vDirLinkToLockOn);
+		RigidBody()->SetVelocity(Vec3::Zero);
+		if (KEY_PRESSED(KEY::W))
+		{
+			MoveToDirAdd(DIR::FRONT);
+		}
+		else if (KEY_PRESSED(KEY::S))
+		{
+			MoveToDirAdd(DIR::FRONT, true);
+		}
+
+		if (KEY_PRESSED(KEY::A))
+		{
+			RigidBody()->AddVelocity(-vDirMove * m_fSelectedSpeed);
+			MoveRotation(vDirLinkToLockOn);
+		}
+		else if (KEY_PRESSED(KEY::D))
+		{
+			RigidBody()->AddVelocity(vDirMove * m_fSelectedSpeed);
+			MoveRotation(vDirLinkToLockOn);
+		}
 	}
 }
 

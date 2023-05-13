@@ -21,6 +21,8 @@ private:
     bool                m_bOnce;
     bool                m_bOneFrameAfter;
 
+    float               m_fForce;
+
 public:
     virtual void begin() override;
     virtual void tick() override;

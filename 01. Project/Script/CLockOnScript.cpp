@@ -3,6 +3,11 @@
 
 #include <Engine/CGameObject.h>
 
+#include "CLinkAnimScript.h"
+#include "FSMNode.h"
+
+#include "CLinkCamScript.h"
+
 CLockOnScript::CLockOnScript()
 	: CScript(SCRIPT_TYPE::LOCKONSCRIPT)
 	, m_fColRadius(400.f)
@@ -21,14 +26,15 @@ CLockOnScript::~CLockOnScript()
 
 void CLockOnScript::init()
 {
-}
-
-void CLockOnScript::begin()
-{
 	Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
 	Collider()->SetRadius(m_fColRadius);
 	m_pLink = GetOwner()->GetParent();
 	m_fDistFromTarget = m_fColRadius;
+}
+
+void CLockOnScript::begin()
+{
+
 }
 
 void CLockOnScript::tick()
@@ -52,7 +58,11 @@ void CLockOnScript::Overlap(CGameObject* _pOther)
 void CLockOnScript::EndOverlap(CGameObject* _pOther)
 {
 	if (_pOther == m_pLockOnTarget)
+	{
 		ClearTarget();
+		RemoveBit(m_pLink->GetScript<CLinkAnimScript>()->GetLinkModeRef(), LINK_MODE::LINK_MODE_LOCKON);
+		// m_pLink->GetScript<CLinkAnimScript>()->GetLinkCam()->GetScript<CLinkCamScript>()->SetMode(LINK_CAM_MODE::GENERAL_START);
+	}
 }
 
 void CLockOnScript::SaveToYAML(YAML::Emitter& _emitter)

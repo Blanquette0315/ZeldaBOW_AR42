@@ -13,6 +13,7 @@ CCollider::CCollider()
 	, m_pPhysData(nullptr)
 	, m_eType(COLLIDER_TYPE::COLLIDER_CUBE)
 	, m_iOverlapCount(0)
+	, m_bDebugDraw(false)
 {
 }
 
@@ -24,6 +25,7 @@ CCollider::CCollider(const CCollider& _origin)
 	, m_vScale(_origin.m_vScale)
 	, m_vRot(_origin.m_vRot)
 	, m_iOverlapCount(0)
+	, m_bDebugDraw(_origin.m_bDebugDraw)
 {
 }
 
