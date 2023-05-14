@@ -112,6 +112,7 @@ private:
     void Func_SwordAttackMove();
     void Func_SwordEquipOn();
     void Func_SwordEquipOff();
+    void Func_BowChargeMove();
 
     // convenience function
 private:
@@ -145,6 +146,7 @@ public:
     UINT& GetLinkModeRef() { return m_iMode; }
     CLockOnScript* GetLockOnRadar() { return m_pLockOnRadar; }
     CGameObject* GetLinkCam() { return m_pLinkCamObj; }
+    CGameObject* GetLinkBow() { return m_pBowObj; }
 
     // Interaction with monster function
 public:

@@ -52,7 +52,7 @@ public:
 
     Vec3 GetRelativePos() { return m_vRelativePos; }
     Vec3 GetRelativeScale() { return m_vRelativeScale; }
-    Vec3 GetRelativeRotation() { return m_vRelativeRotation; }
+    Vec3 GetRelativeRotation() { return Vec3(m_vRelativeRotation.x - XM_2PI * floor(m_vRelativeRotation.x / XM_2PI), m_vRelativeRotation.y - XM_2PI * floor(m_vRelativeRotation.y / XM_2PI), m_vRelativeRotation.z - XM_2PI * floor(m_vRelativeRotation.z / XM_2PI)); }
 
     Vec3 GetWorldPos() { return m_matWorld.Translation(); }
     Vec3 GetWorldScale();

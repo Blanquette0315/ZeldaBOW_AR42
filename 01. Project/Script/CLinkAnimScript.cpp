@@ -351,20 +351,6 @@ void CLinkAnimScript::SetLinkCond()
 		}
 	}
 
-	if (CalBit(m_pCurAnimNode->iPreferences, LAP_KEEP_LOCKON, BIT_LEAST_ONE))
-	{
-
-	}
-	else
-	{
-		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
-		{
-			// m_pLinkCamObj->GetScript<CLinkCamScript>()->SetMode(LINK_CAM_MODE::GENERAL_START);
-			RemoveBit(m_iMode, LINK_MODE_LOCKON);
-			m_bLockOnRotFinish = false;
-		}
-	}
-
 	if (m_pLockOnRadar->GetLockOnTarget())
 	{
 		if (KEY_TAP(KEY::Q))
@@ -387,6 +373,21 @@ void CLinkAnimScript::SetLinkCond()
 		RemoveBit(m_iMode, LINK_MODE_LOCKON);
 		m_bLockOnRotFinish = false;
 	}
+
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_KEEP_LOCKON, BIT_LEAST_ONE))
+	{
+
+	}
+	else
+	{
+		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
+		{
+			// m_pLinkCamObj->GetScript<CLinkCamScript>()->SetMode(LINK_CAM_MODE::GENERAL_START);
+			RemoveBit(m_iMode, LINK_MODE_LOCKON);
+			m_bLockOnRotFinish = false;
+		}
+	}
+
 
 
 

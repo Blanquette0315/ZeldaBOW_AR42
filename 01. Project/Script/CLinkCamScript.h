@@ -21,13 +21,18 @@ class CLinkCamScript :
 {
     // save
 private:
-    float           m_fCameraRadiusMax;    // camera radius
-    float           m_fCameraRadiusMin;    // camera radius min
+    float               m_fCameraRadiusMax;    // camera radius
+    float               m_fCameraRadiusMin;    // camera radius min
 
-    float           m_fMaxDistLockOn;      // begin : take LockOnObj's collider radius
+    float               m_fMaxDistLockOn;      // begin : take LockOnObj's collider radius
 
-    float           m_fFrontDistFromLink;  // front dist from link that assumed as link's position. 
+    float               m_fFrontDistFromLink;  // front dist from link that assumed as link's position. 
 
+    float               m_fPosUp; // additional offset Y
+
+    float               m_fLockOnMaxTime;
+    float               m_fGeneralMaxTime;
+    float               m_fBowMaxTime;
     // not save
 private:
     CLinkAnimScript*    m_pLinkScr;
@@ -39,20 +44,22 @@ private:
     bool                m_bLockOn;
     bool                m_bLockOnStart;
 
-    float               m_fLockOnMaxTime;
     float               m_fLockOnAccTime;
-    float               m_fGeneralMaxTime;
+
     float               m_fGeneralAccTime;
-    float               m_fBowMaxTime;
+
     float               m_fBowAccTime;
 
     bool                m_bOnce;
 
     Vec3                m_vLerpStartPos;
     Vec3                m_vLerpStartRot;
+    Vec3                m_vLerpEndRot;
     float               m_fLerpStartRadius; // radius
 
     float               m_fCameraRadiusCur;
+
+    Vec3                m_vAddRot;
 
 public:
     void GeneralMove();
@@ -70,8 +77,13 @@ public:
     void SetMode(LINK_CAM_MODE _eMode) { m_eMode = _eMode; }
 
 private:
-    void RBTNMove();
+    void DetermineRotDir(const Vec3& _vStart, const Vec3& _vEnd, Vec3& _vOutStart, Vec3& _vOutEnd);
 
+private:
+    // set rotation
+    void RBTNMove(bool _bRestrictX = true, float _fMaxX = XM_2PI / 6.f, float _fMinX = 0.f, bool _bRestrictY = false, float _fMaxY = XM_2PI, float _fMinY = 0.f);
+    // add rotation
+    void LBTNMove(bool _bRestrictX = true, float _fMaxX = XM_2PI / 6.f, float _fMinX = 0.f, bool _bRestrictY = false, float _fMaxY = XM_2PI, float _fMinY = 0.f);
 public:
     virtual void init() override;
     virtual void begin() override;

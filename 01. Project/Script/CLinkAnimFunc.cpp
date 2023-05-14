@@ -161,7 +161,7 @@ void CLinkAnimScript::Func_LowerBodyBlend()
 {
 	if (CalBit(m_iCond, LAC_KEY_WSAD, BIT_LEAST_ONE))
 	{
-		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
+		if (CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE) || CalBit(m_pCurAnimNode->iPreferences, LAP_BOW_CHARGE, BIT_LEAST_ONE))
 		{
 			if (CalBit(m_iMode, LINK_MODE_WALK, BIT_LEAST_ONE))
 			{
@@ -259,6 +259,10 @@ void CLinkAnimScript::Func_LowerBodyBlend()
 	{
 		Func_LockOnMove();
 	}
+	else if (CalBit(m_pCurAnimNode->iPreferences, LAP_BOW_CHARGE, BIT_LEAST_ONE))
+	{
+		Func_BowChargeMove();
+	}
 	else
 	{
 		Func_WalkRunDash();
@@ -313,4 +317,25 @@ void CLinkAnimScript::Func_SwordEquipOff()
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
 	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
 	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 60.f));
+}
+
+void CLinkAnimScript::Func_BowChargeMove()
+{
+	if (KEY_PRESSED(KEY::W))
+	{
+		MoveToDir(DIR::FRONT);
+	}
+	else if (KEY_PRESSED(KEY::S))
+	{
+		MoveToDir(DIR::FRONT, true);
+	}
+
+	if (KEY_PRESSED(KEY::A))
+	{
+		MoveToDir(DIR::RIGHT, true);
+	}
+	else if (KEY_PRESSED(KEY::D))
+	{
+		MoveToDir(DIR::RIGHT);
+	}
 }

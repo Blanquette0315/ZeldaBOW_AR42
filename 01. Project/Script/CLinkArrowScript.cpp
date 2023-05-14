@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CLinkArrowScript.h"
 
-
 CLinkArrowScript::CLinkArrowScript()
 	: CScript(SCRIPT_TYPE::LINKARROWSCRIPT)
 	, m_fGravity(9.8f)
@@ -16,7 +15,7 @@ CLinkArrowScript::CLinkArrowScript()
 CLinkArrowScript::CLinkArrowScript(const CLinkArrowScript& _origin)
 	: CScript(_origin)
 	, m_fGravity(_origin.m_fGravity)
-	, m_fMaxGravity(20.f)
+	, m_fMaxGravity(_origin.m_fMaxGravity)
 	, m_vVelocity(_origin.m_vVelocity)
 	, m_vDir(Vec3::Zero)
 {
@@ -25,11 +24,9 @@ CLinkArrowScript::CLinkArrowScript(const CLinkArrowScript& _origin)
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "MaxGravity", &m_fMaxGravity, 0.f, 100.f, 0.1f);
 }
 
-
-
 CLinkArrowScript::~CLinkArrowScript()
-
 {
+
 }
 
 void CLinkArrowScript::begin()
@@ -41,7 +38,6 @@ void CLinkArrowScript::tick()
 {
 	if (GetOwner()->GetParent() == nullptr)
 	{
-
 		Vec3 vPos = Transform()->GetRelativePos();
 		Vec3 vPosSave = vPos;
 		vPos += m_vDir * m_vVelocity * FDT;
@@ -94,5 +90,3 @@ void CLinkArrowScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_vVelocity, _node["Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fMaxGravity, _node["MaxGravity"]);
 }
-
-
