@@ -451,6 +451,8 @@ void CLinkAnimScript::SetLinkCond()
 			break;
 		}
 
+		// -- add code : sword guard hit
+
 		ApplyDamage();
 		if(m_tLinkStatus.fHP < 0.f)
 			AddBit(m_iCond, LAC_DEAD);

@@ -137,9 +137,6 @@ void Factory::CreateDinamicActor(PhysData* Data, physx::PxShape* shape, physx::P
 	PxRigidDynamic* body = m_Phys->createRigidDynamic(*Tr);
 	SetAxisLock(body, Data);
 
-	//const PxFilterData triggerFilterData(0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
-	//shape->setSimulationFilterData(triggerFilterData);
-
 	shape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
 	shape->setFlag(PxShapeFlag::eVISUALIZATION, true); //Ray, sweep등 할때 사용됨
 	shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, Data->isTrigger);
@@ -165,9 +162,6 @@ void Factory::CreateStaticActor(PhysData* Data, physx::PxShape* shape, physx::Px
 {
 	if (Data->isDinamic == true) { return; }
 	PxRigidStatic* body = m_Phys->createRigidStatic(*Tr);
-	
-	//const PxFilterData triggerFilterData(0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
-	//shape->setSimulationFilterData(triggerFilterData);
 
 	body->attachShape(*shape);
 
@@ -219,12 +213,14 @@ void Factory::CreateActoer(PhysData* data)
 	PxFilterData PxFilter;
 	PxFilter.word0 = data->GetFilterData0();
 	PxFilter.word1 = data->GetFilterData1();
-	shape->setQueryFilterData(PxFilter);
+	shape->setSimulationFilterData(PxFilter);
+	//shape->setQueryFilterData(PxFilter);
 
-	PxFilterData PxSimulationFilter;
-	PxSimulationFilter.word0 = data->GetSimulationFData0();
-	PxSimulationFilter.word1 = data->GetSimulationFData1();
-	shape->setSimulationFilterData(PxSimulationFilter);
+
+	//PxFilterData PxSimulationFilter;
+	//PxSimulationFilter.word0 = data->GetSimulationFData0();
+	//PxSimulationFilter.word1 = data->GetSimulationFData1();
+	//shape->setSimulationFilterData(PxSimulationFilter);
 
 	///로컬 포지션을 지정
 	//shape->setLocalPose(PxTransform(data->CenterPoint.x, data->CenterPoint.y, data->CenterPoint.z));

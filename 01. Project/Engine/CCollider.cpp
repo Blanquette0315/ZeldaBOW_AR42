@@ -228,6 +228,8 @@ void CCollider::CreateColliderActor()
 		m_pPhysData->TriggerStay_List[i] = nullptr;
 		m_pPhysData->TriggerExit_List[i] = nullptr;
 	}
+	m_pPhysData->SetFilterData0(GetLayerBitFromIdx(GetOwner()->GetLayerIdx()));
+	m_pPhysData->SetFilterData1(GetLayerMaskBitFromIdx(GetOwner()->GetLayerIdx()));
 
 	PhysX_Create_Actor(m_pPhysData);
 }

@@ -85,6 +85,4 @@ private:
 
 	Factory*		m_Factory;
 	RaycastManager* m_RayManager;
-
-	
 };

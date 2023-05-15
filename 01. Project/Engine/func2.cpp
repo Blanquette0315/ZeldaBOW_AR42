@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "CLevelMgr.h"
+#include "CCollisionMgr.h"
 
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath)
 {
@@ -424,6 +425,18 @@ bool PickingObj(CGameObject*& _pObjOut)
 	else
 		return false;
 }
+
+uint32_t GetLayerBitFromIdx(WORD _idx)
+{
+	return 1 << _idx;
+}
+
+uint32_t GetLayerMaskBitFromIdx(WORD _idx)
+{
+	return (uint32_t)CCollisionMgr::GetInst()->GetLayerMat(_idx);
+}
+
+
 
 DirectX::XMFLOAT3 GetEulerAngleFromDirection(const DirectX::XMVECTOR& direction)
 {

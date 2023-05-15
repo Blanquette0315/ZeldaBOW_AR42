@@ -9,6 +9,8 @@ vector<wstring> ConvertStrToWstrVec(const vector<string>& _vecStr);
 vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr);
 
 bool PickingObj(CGameObject*& _pObjOut);
+uint32_t GetLayerBitFromIdx(WORD _idx);
+uint32_t GetLayerMaskBitFromIdx(WORD _idx);
 
 DirectX::XMFLOAT3 GetEulerAngleFromDirection(const DirectX::XMVECTOR& direction);
 

@@ -70,7 +70,7 @@ void CLinkBowScript::tick()
 			m_pArrowObj->Transform()->SetRelativePos(m_vArrowWorldPos);
 			CGameObject* pLinkCam = m_pLinkAnimScr->GetLinkCam();
 			Vec3 vArrowToCam = pLinkCam->Transform()->GetRelativePos() - m_pArrowObj->Transform()->GetRelativePos();
-			Vec3 vEndPos = pLinkCam->Transform()->GetRelativeDir(DIR::FRONT) * 100.f;
+			Vec3 vEndPos = pLinkCam->Transform()->GetRelativeDir(DIR::FRONT) * 1000.f;
 			Vec3 vArrowDir = (vEndPos + vArrowToCam).Normalize();
 			m_pArrowObj->GetScript<CLinkArrowScript>()->SetDir(vArrowDir);
 

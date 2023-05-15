@@ -228,6 +228,28 @@ PxFilterFlags SampleSubmarineFilterShader
 	return PxFilterFlag::eDEFAULT;
 }
 
+PxFilterFlags CustomLayerShader
+(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+		// If one of the shapes is a trigger
+		if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+		{
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+		}
+		else  // If both shapes are not triggers
+		{
+			pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		}
+
+	// Trigger only collides with non-trigger, non-trigger only collides with non-trigger
+	bool b = filterData0.word0 & filterData1.word1;
+	return (filterData0.word0 & filterData1.word1) ? PxFilterFlag::eDEFAULT : PxFilterFlag::eSUPPRESS;
+	// return PxFilterFlag::eDEFAULT;
+}
+
 bool PhysEngine::CreateScene(PhysSceneData* SceneData)
 {
 	//gpu »ç¿ë
@@ -239,7 +261,7 @@ bool PhysEngine::CreateScene(PhysSceneData* SceneData)
 	sceneDesc.gravity					= PxVec3(0.0f, -9.8f, 0.0f);
 	sceneDesc.cpuDispatcher				= m_Dispatcher;
 	sceneDesc.simulationEventCallback	= m_BaseEvent;
-	sceneDesc.filterShader				= SampleSubmarineFilterShader;
+	sceneDesc.filterShader				= CustomLayerShader;
 	//sceneDesc.filterShader				= PxDefaultSimulationFilterShader;
 	sceneDesc.cudaContextManager		= m_CudaContextManager;
 	sceneDesc.broadPhaseType			= PxBroadPhaseType::eGPU;

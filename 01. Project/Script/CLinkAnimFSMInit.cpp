@@ -151,6 +151,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_OFF, LAC_KEY_N1);
 	SetAnimTran(pAnimNode, LAT_SWORD_MOVE_RUN, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_S1, LAC_KEY_LBTN);
+	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_KEY_N3);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_MOVE_RUN, LAP_REPEAT | LAP_EQUIP_SWORD); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_SwordRun);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, 0, LAC_KEY_LBTN | LAC_KEY_WSAD);
@@ -199,17 +200,19 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON_RUN);
 
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF_RUN);
+
+	// Sword Guard
+	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_WAIT, LAP_KEEP_LOCKON);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_KEY_N3);
 	
-
-
 	
 	// Damaged
-	SetAnimNode(pAnimNode, LAT_DAMAGE_S_B);
+	SetAnimNode(pAnimNode, LAT_DAMAGE_S_B, LAP_KEEP_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW);
 
-	SetAnimNode(pAnimNode, LAT_DAMAGE_M_B);
+	SetAnimNode(pAnimNode, LAT_DAMAGE_M_B, LAP_KEEP_LOCKON);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW);

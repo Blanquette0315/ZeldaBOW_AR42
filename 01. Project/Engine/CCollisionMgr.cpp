@@ -257,6 +257,7 @@ void CCollisionMgr::CollisionLayerCheck(int _iLeft, int _iRight)
 		iCol = _iLeft;
 	}
 
+	m_matrix[iCol] |= (1 << iRow);
 	m_matrix[iRow] |= (1 << iCol);
 }
 
@@ -275,6 +276,7 @@ void CCollisionMgr::CollisionLayerRelease(int _iLeft, int _iRight)
 		iCol = _iLeft;
 	}
 
+	m_matrix[iCol] &= ~(1 << iRow);
 	m_matrix[iRow] &= ~(1 << iCol);
 }
 
