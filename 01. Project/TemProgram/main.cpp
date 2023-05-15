@@ -89,10 +89,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             CTimeMgr::GetInst()->tick();
             CTimeMgr::GetInst()->render();
             fDeltaTime += SYSTEM_DT;
-            if (fDeltaTime >= FDT)
+            if (fDeltaTime >= FDT_TICK)
             {
 #ifdef _DEBUG
-                fDeltaTime -= FDT * ( floor(fDeltaTime / FDT) );
+                fDeltaTime -= FDT_TICK * ( floor(fDeltaTime / FDT_TICK) );
 #elif
                 fDeltaTime -= FDT;
 #endif

@@ -190,6 +190,7 @@ void ChangeLevelAndPlay(CLevel* _NextLevel);
 
 void MakeParent(CGameObject* _pChildObj);
 void AddComponent(CGameObject* _pObj, COMPONENT_TYPE _eType);
+void TimeSlow(bool _bActive, float _fRatio = 2.f);
 
 class CRes;
 void AddRes(CRes* _Res, RES_TYPE _Type);

@@ -50,7 +50,16 @@ void CTimeMgr::tick()
 	}*/
 
 	g_global.fDT = FDT;
-	g_global.fAccTime += m_fDeltaTime;
+	if (g_timeslow.bActive)
+	{
+		g_global.fAccTime += m_fDeltaTime / g_timeslow.fRatio;
+	}
+	else
+	{
+		g_global.fAccTime += m_fDeltaTime;
+	}
+	
+	
 
 	m_fEffDeltaTime = m_fDeltaTime;
 
@@ -93,7 +102,6 @@ void CTimeMgr::tick()
 
 		m_fEffDeltaTime = m_fEffDeltaTime * m_fSlowRatio;
 	}
-	
 }
 
 void CTimeMgr::render()

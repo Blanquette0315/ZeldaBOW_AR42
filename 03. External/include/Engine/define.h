@@ -14,7 +14,9 @@ typedef Vector4 Vec4;
 							type();\
 							~type();
 
-#define FDT (1.f / 120.f) // 120fps
+#define FDT_TICK (1.f / 120.f)
+#define FDT (g_timeslow.bActive ? (1.f / 120.f) / g_timeslow.fRatio : (1.f / 120.f)) // 120fps
+// #define FDT (1.f / 120.f)
 #define SYSTEM_DT CTimeMgr::GetInst()->GetDeltaTime()
 //#define EDT CTimeMgr::GetInst()->GetEffectDeltaTime()
 

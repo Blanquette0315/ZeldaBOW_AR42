@@ -167,7 +167,9 @@ void CEventMgr::tick()
 
 		case EVENT_TYPE::SLOWTIME:
 		{
-			CTimeMgr::GetInst()->PlaySlow();
+			// CTimeMgr::GetInst()->PlaySlow();
+			g_timeslow.bActive = m_vecEvent[i].wParam;
+			g_timeslow.fRatio = m_vecEvent[i].lParam;
 		}
 		break;
 

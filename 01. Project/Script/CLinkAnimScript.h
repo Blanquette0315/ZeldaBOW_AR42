@@ -61,6 +61,8 @@ private:
     bool                    m_bLockOn;
     bool                    m_bLockOnRotFinish;
     bool                    m_bIsAnimChanged;
+    bool                    m_bShieldGuard;
+    bool                    m_bShieldJust;
 
     // save
 private:
@@ -113,6 +115,9 @@ private:
     void Func_SwordEquipOn();
     void Func_SwordEquipOff();
     void Func_BowChargeMove();
+    void Func_ShieldGuard();
+    void Func_ShieldJust();
+    void Func_ShieldJustEnd();
 
     // convenience function
 private:
@@ -152,6 +157,7 @@ public:
 public:
     void SetDamage(tLinkDamaged _tDamage) { m_tLinkDamaged = _tDamage; }
     void ApplyDamage();
+
 
 public:
     static void ClearAnimNode();
