@@ -188,6 +188,10 @@ void InspectorUI::render_update()
 {
 	if (nullptr != m_TargetObj)
 	{
+		int TestCount = m_TargetObj->GetTestCount();
+		ImGui::InputInt("##TESTCOUNT##TEST", &TestCount);
+		m_TargetObj->SetTestCount(TestCount);
+
 		ImGui::PushID(0);
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.6f, 0.8f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.9f));

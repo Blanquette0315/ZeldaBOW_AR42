@@ -36,6 +36,21 @@ void CreateTestLevel()
 
 	ChangeLevel(pLevel);
 
+	Ptr<CMeshData> pMeshData = nullptr;
+	CGameObject* pObj = nullptr;
+
+	// DgnObj_FallDownPillar_A
+	pMeshData = nullptr;
+	pObj = nullptr;
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_FallDownPillar_A.fbx");
+	pMeshData->Save(pMeshData->GetRelativePath());
+
+	pObj = pMeshData->Instantiate();
+	pObj->SetFrustumCul(false);
+	pObj->SetName(L"DgnObj_FallDownPillar_A");
+	pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+
+	pLevel->AddGameObject(pObj, 0);
 
 	return;
 
@@ -239,6 +254,22 @@ void CreateTestLevel()
 	// FBX Loading
 	// ============	
 	{
+		Ptr<CMeshData> pMeshData = nullptr;
+		CGameObject* pObj = nullptr;
+
+		// DgnObj_FallDownPillar_A
+		pMeshData = nullptr;
+		pObj = nullptr;
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_FallDownPillar_A.fbx");
+		pMeshData->Save(pMeshData->GetRelativePath());
+
+		pObj = pMeshData->Instantiate();
+		pObj->SetFrustumCul(false);
+		pObj->SetName(L"DgnObj_FallDownPillar_A");
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+
+		pLevel->AddGameObject(pObj, 0);
+
 		//Ptr<CMeshData> pMeshData = nullptr;
 		//CGameObject* pObj = nullptr;
 		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Bokoblin_Red.fbx");
@@ -276,43 +307,43 @@ void CreateTestLevel()
 		//pChild->Collider()->SetRadius(300.f);
 		//pObj->AddChild(pChild);
 
-		Ptr<CMeshData> pMeshData = nullptr;
-		CGameObject* pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\sw.fbx");
-		pMeshData->Save(pMeshData->GetRelativePath());
-
+		//Ptr<CMeshData> pMeshData = nullptr;
+		//CGameObject* pObj = nullptr;
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\sw.fbx");
+		//pMeshData->Save(pMeshData->GetRelativePath());
+		//
+		////pObj = pMeshData->Instantiate();
+		////pObj->SetFrustumCul(false);
+		////pObj->SetName(L"Map");
+		////pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		//
 		//pObj = pMeshData->Instantiate();
+		//pObj->AddComponent(new CRigidBody);
+		//pObj->AddComponent(new CBokoblinScript);
 		//pObj->SetFrustumCul(false);
-		//pObj->SetName(L"Map");
-		//pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-		pObj = pMeshData->Instantiate();
-		pObj->AddComponent(new CRigidBody);
-		pObj->AddComponent(new CBokoblinScript);
-		pObj->SetFrustumCul(false);
-		pObj->SetName(L"Bokoblin_Red");
-		pObj->Transform()->SetRelativeScale(25.f, 25.f, 25.f);
-		pObj->Transform()->SetRelativePos(0.f, 0.f, -200.f);
-		pObj->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
-		pObj->RigidBody()->SetCapsuleSize(4.f, 8.f);
-		pObj->RigidBody()->SetMass(10.f);
-		pObj->RigidBody()->SetRestitution(0.f);
-		pObj->RigidBody()->SetStaticFriction(0.6f);
-		pObj->RigidBody()->SetDynamicFriction(0.6f);
-		pObj->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
-		pObj->RigidBody()->SetLockAxis_Rot(true, true, true);
-		pObj->RigidBody()->SetGravityOption(true);
-		pLevel->AddGameObject(pObj, 0);
-		//pObj->Animator3D()->Play(L"Take 001", true);
-
-		CGameObject* pChild = new CGameObject;
-		pChild->SetName(L"MonsterAI");
-		pChild->AddComponent(new CTransform);
-		pChild->AddComponent(new CCollider);
-		pChild->AddComponent(new CMonsterAIScript);
-		pChild->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
-		pChild->Collider()->SetRadius(300.f);
-		pObj->AddChild(pChild);
+		//pObj->SetName(L"Bokoblin_Red");
+		//pObj->Transform()->SetRelativeScale(25.f, 25.f, 25.f);
+		//pObj->Transform()->SetRelativePos(0.f, 0.f, -200.f);
+		//pObj->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
+		//pObj->RigidBody()->SetCapsuleSize(4.f, 8.f);
+		//pObj->RigidBody()->SetMass(10.f);
+		//pObj->RigidBody()->SetRestitution(0.f);
+		//pObj->RigidBody()->SetStaticFriction(0.6f);
+		//pObj->RigidBody()->SetDynamicFriction(0.6f);
+		//pObj->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
+		//pObj->RigidBody()->SetLockAxis_Rot(true, true, true);
+		//pObj->RigidBody()->SetGravityOption(true);
+		//pLevel->AddGameObject(pObj, 0);
+		////pObj->Animator3D()->Play(L"Take 001", true);
+		//
+		//CGameObject* pChild = new CGameObject;
+		//pChild->SetName(L"MonsterAI");
+		//pChild->AddComponent(new CTransform);
+		//pChild->AddComponent(new CCollider);
+		//pChild->AddComponent(new CMonsterAIScript);
+		//pChild->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_SPHERE);
+		//pChild->Collider()->SetRadius(300.f);
+		//pObj->AddChild(pChild);
 	}
 
 	// ��Į ����

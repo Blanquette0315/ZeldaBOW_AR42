@@ -29,6 +29,7 @@ void TransformUI::update()
 		m_vRot = GetTarget()->Transform()->GetRelativeRotation();
 		m_bIgnorScale = GetTarget()->Transform()->GetIgnoreParentScale();
 		m_bTurnY180 = GetTarget()->Transform()->GetTurnY180();
+		m_bBase270Rot = GetTarget()->Transform()->GetBase270Rot();
 	}
 }
 
@@ -49,6 +50,8 @@ void TransformUI::render_update()
 
 	ImGui::Text("Ignore Parent Scale");	ImGui::SameLine();	ImGui::Checkbox("##IgnorParentScale", &m_bIgnorScale);
 	ImGui::Text("Turn Y-Axis 180");	ImGui::SameLine();	ImGui::Checkbox("##TurnY-Axis180", &m_bTurnY180);
+	ImGui::Text("Base 270 Rot   "); ImGui::SameLine(); ImGui::Checkbox("##Base270Rot", &m_bBase270Rot);
+
 
 	if (GetTarget())
 	{
@@ -61,6 +64,7 @@ void TransformUI::render_update()
 
 		GetTarget()->Transform()->SetIgnoreParentScale(m_bIgnorScale);
 		GetTarget()->Transform()->SetTurnY180(m_bTurnY180);
+		GetTarget()->Transform()->SetBase270Rot(m_bBase270Rot);
 	}
 
 	ImGui::Checkbox("Use-Gizmo", &m_bUseGizmo);

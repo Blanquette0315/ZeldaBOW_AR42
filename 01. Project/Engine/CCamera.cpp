@@ -268,7 +268,7 @@ void CCamera::SortObject()
 				if (vecObj[j]->IS_FrustumCul())
 				{
 					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
-					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 20.f))
+					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 40.f))
 					{
 						continue;
 					}
@@ -304,6 +304,16 @@ void CCamera::SortObject()
 								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
 								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
 							{
+								if (vecObj[j]->GetName() == L"Map")
+								{
+									int Testcount = vecObj[j]->GetTestCount();
+									if (Testcount != -1)
+									{
+										if (pMtrl->GetRelativePath() != pRenderCom->GetCurMaterial(Testcount)->GetRelativePath())
+											break;
+									}
+								}
+
 								pMap = &m_mapInstGroup_D;
 							}
 							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE

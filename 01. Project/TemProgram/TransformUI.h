@@ -14,6 +14,7 @@ private:
 
     bool                m_bIgnorScale;
     bool                m_bTurnY180;
+    bool                m_bBase270Rot;
 
     ImGuizmo::OPERATION m_eOperation;
     ImGuizmo::MODE      m_eMode;             

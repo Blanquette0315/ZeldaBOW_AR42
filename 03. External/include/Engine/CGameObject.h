@@ -39,6 +39,12 @@ private:
 
     Ptr<CPrefab>                m_OwnerPrefab;
 
+    int m_iTestCount = 0;
+
+public:
+    void SetTestCount(int _iCount) { m_iTestCount = _iCount; }
+    int GetTestCount() { return m_iTestCount; }
+
 protected:
     vector<CGameObject*>        m_vecChild;
 
