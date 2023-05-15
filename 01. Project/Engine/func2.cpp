@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "CLevelMgr.h"
+#include "CCollisionMgr.h"
 
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath)
 {
@@ -401,6 +402,7 @@ vector<string> ConvertWstrToStrVec(const vector<wstring>& _vecWstr)
 }
 
 #include "CCamera.h"
+#include "func2.h"
 
 bool PickingObj(CGameObject*& _pObjOut)
 {
@@ -422,6 +424,43 @@ bool PickingObj(CGameObject*& _pObjOut)
 		return true;
 	else
 		return false;
+}
+
+uint32_t GetLayerBitFromIdx(WORD _idx)
+{
+	return 1 << _idx;
+}
+
+uint32_t GetLayerMaskBitFromIdx(WORD _idx)
+{
+	return (uint32_t)CCollisionMgr::GetInst()->GetLayerMat(_idx);
+}
+
+
+
+DirectX::XMFLOAT3 GetEulerAngleFromDirection(const DirectX::XMVECTOR& direction)
+{
+	// Normalize the direction vector
+	DirectX::XMVECTOR normalizedDir = DirectX::XMVector3Normalize(direction);
+
+	// Calculate the pitch angle (rotation around x-axis)
+	float pitch = std::asinf(-DirectX::XMVectorGetY(normalizedDir));
+
+	// Calculate the yaw angle (rotation around y-axis)
+	float yaw = std::atan2f(
+		DirectX::XMVectorGetX(normalizedDir),
+		DirectX::XMVectorGetZ(normalizedDir)
+	);
+
+	// Calculate the roll angle (rotation around z-axis) - set to 0 if not needed
+	float roll = 0.0f;
+
+	// Convert the angles to degrees if desired
+	// float pitchDegrees = DirectX::XMConvertToDegrees(pitch);
+	// float yawDegrees = DirectX::XMConvertToDegrees(yaw);
+	// float rollDegrees = DirectX::XMConvertToDegrees(roll);
+
+	return DirectX::XMFLOAT3(pitch, yaw, roll);
 }
 
 

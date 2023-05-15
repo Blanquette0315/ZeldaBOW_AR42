@@ -6,7 +6,7 @@ class CAnimation3D;
 
 class tTransition
 {
-private:
+public:
     CAnimation3D*               pTargetAnim;
     wstring                     pTargetAnimKey;
 
@@ -26,7 +26,7 @@ public:
 
 class tAnimNode
 {
-private:
+public:
     CAnimation3D*           pAnim;
     wstring                 pAnimKey;
 

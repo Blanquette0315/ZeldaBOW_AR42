@@ -28,7 +28,6 @@ void BaseEventCallBack::onSleep(PxActor** actors, PxU32 count)
 
 void BaseEventCallBack::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
-	int num = 0;
 }
 
 void BaseEventCallBack::onTrigger(PxTriggerPair* pairs, PxU32 count)

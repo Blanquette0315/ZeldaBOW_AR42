@@ -88,6 +88,9 @@ void CRigidBody::begin()
 	// Update PhysData vector
 	UpdatePhysDataVec();
 
+	m_vecPhysData[0]->SetFilterData0(GetLayerBitFromIdx(GetOwner()->GetLayerIdx()));
+	m_vecPhysData[0]->SetFilterData1(GetLayerMaskBitFromIdx(GetOwner()->GetLayerIdx()));
+
 	CreateActor();
 }
 
@@ -230,7 +233,7 @@ void CRigidBody::LoadFromYAML(YAML::Node& _node)
 void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinematick, bool _bDinamic)
 {
 	// PhysData Position Setting
-	Vec3 vFinalPos = Transform()->GetRelativePos();
+	Vec3 vFinalPos = Transform()->GetWorldPos();
 	vFinalPos += m_vColOffSet;
 		
 	RigidBody()->SetWorldPosition(vFinalPos);
@@ -276,7 +279,7 @@ void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinema
 	}
 
 	// PhysData Rotation Setting
-	SetWorldRotation(Transform()->GetRelativeRotation());
+	SetWorldRotation(Transform()->GetWorldRotation());
 
 	// PhysData Kinematic Option Setting
 	if (_bKinematick)
@@ -358,7 +361,8 @@ void CRigidBody::UpdatePhysDataVec()
 		m_vecPhysData[i]->m_vPxLinearVelocity = m_vecPhysData[0]->m_vPxLinearVelocity;
 		m_vecPhysData[i]->Rotation = m_vecPhysData[0]->Rotation;
 		m_vecPhysData[i]->WorldPosition = m_vecPhysData[0]->WorldPosition;
-		m_vecPhysData[i]->SetFilterData0(m_vecPhysData[0]->GetFilterData0());
+		m_vecPhysData[i]->SetFilterData0(GetLayerBitFromIdx(GetOwner()->GetLayerIdx()));
+		m_vecPhysData[i]->SetFilterData1(GetLayerMaskBitFromIdx(GetOwner()->GetLayerIdx()));
 	}
 }
 

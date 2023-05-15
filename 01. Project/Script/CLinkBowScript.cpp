@@ -6,6 +6,7 @@
 #include "FSMNode.h"
 #include "CLinkAnimScript.h"
 #include "CBonesocketScript.h"
+#include "CLinkArrowScript.h"
 
 
 CLinkBowScript::CLinkBowScript()
@@ -14,8 +15,10 @@ CLinkBowScript::CLinkBowScript()
 	, m_pArrowObj(nullptr)
 	, m_bOnce(false)
 	, m_bOneFrameAfter(false)
+	, m_fForce(100.f)
 {
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "ArrowPref", &m_pArrowPref);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Force", &m_fForce);
 }
 
 CLinkBowScript::CLinkBowScript(const CLinkBowScript& _origin)
@@ -25,8 +28,10 @@ CLinkBowScript::CLinkBowScript(const CLinkBowScript& _origin)
 	, m_pArrowPref(_origin.m_pArrowPref)
 	, m_bOnce(false)
 	, m_bOneFrameAfter(false)
+	, m_fForce(_origin.m_fForce)
 {
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "ArrowPref", &m_pArrowPref);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Force", &m_fForce);
 }
 
 CLinkBowScript::~CLinkBowScript()
@@ -63,6 +68,12 @@ void CLinkBowScript::tick()
 			m_pArrowObj->Transform()->SetRelativeScale(m_vArrowWorldScale);
 			m_pArrowObj->Transform()->SetRelativeRotation(m_vArrowWorldRot);
 			m_pArrowObj->Transform()->SetRelativePos(m_vArrowWorldPos);
+			CGameObject* pLinkCam = m_pLinkAnimScr->GetLinkCam();
+			Vec3 vArrowToCam = pLinkCam->Transform()->GetRelativePos() - m_pArrowObj->Transform()->GetRelativePos();
+			Vec3 vEndPos = pLinkCam->Transform()->GetRelativeDir(DIR::FRONT) * 1000.f;
+			Vec3 vArrowDir = (vEndPos + vArrowToCam).Normalize();
+			m_pArrowObj->GetScript<CLinkArrowScript>()->SetDir(vArrowDir);
+
 			m_pArrowObj = nullptr;
 			m_bOneFrameAfter = false;
 		}
@@ -89,8 +100,6 @@ void CLinkBowScript::tick()
 			m_pArrowObj = nullptr;
 		}
 	}
-
-
 }
 
 void CLinkBowScript::BeginOverlap(CGameObject* _pOther)
@@ -109,12 +118,17 @@ void CLinkBowScript::SaveToYAML(YAML::Emitter& _emitter)
 {
 	CScript::SaveToYAML(_emitter);
 	SaveResourceRef(m_pArrowPref, _emitter);
+
+	_emitter << YAML::Key << "Force";
+	_emitter << YAML::Value << m_fForce;
 }
 
 void CLinkBowScript::LoadFromYAML(YAML::Node& _node)
 {
 	CScript::LoadFromYAML(_node);
 	LoadResourceRef(m_pArrowPref, _node);
+
+	SAFE_LOAD_FROM_YAML(float, m_fForce, _node["Force"]);
 }
 
 

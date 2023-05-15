@@ -18,6 +18,7 @@ private:
 
 public:
     CGameObject* GetLockOnTarget() { return m_pLockOnTarget; }
+    float GetColRadius() { return m_fColRadius; }
 
 public:
     void ClearTarget() { m_pLockOnTarget = nullptr; m_fDistFromTarget = m_fColRadius; }

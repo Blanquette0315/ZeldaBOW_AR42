@@ -65,6 +65,7 @@ public:
 
 public:
     CScript(int _iScriptType);
+    CScript(const CScript& _origin);
     ~CScript();
 };
 
