@@ -11,6 +11,7 @@ CLinkScript
 CLinkSwordScript
 CLockOnScript
 CMissileScript
+CMonHeadScript
 CMonsterAIScript
 CMonsterScript
 CMonWeaponScript

@@ -3,8 +3,11 @@
 #include "CScriptMgr.h"
 #include "CMonsterAIScript.h"
 #include "CMonWeaponScript.h"
+#include "CMonHeadScript.h"
 #define AI GetOwner()->GetChildObject()[0]->GetScript<CMonsterAIScript>()
 #define Weapon GetOwner()->GetChildObject()[1]->GetScript<CMonWeaponScript>()
+#define Head GetOwner()->GetChildObject()[2]->GetScript<CMonHeadScript>()
+
 enum class Monster_State
 {
     IDLE,
@@ -13,6 +16,9 @@ enum class Monster_State
     FIND,
     ATTACK,
     RETURN,
+    DAMAGED,
+    GROGGY,
+    MISS,
     DEAD,
 };
 
@@ -29,7 +35,8 @@ protected:
 
 public:
     void setState(Monster_State _eState) { m_eCurrentState = _eState; }
-    virtual void Damage(int _iNumber) {}
+    virtual void Damage(int _iNumber, Vec3 _vPos = Vec3(0.f,0.f,10000.f)) {}
+    void Parrying() { m_eCurrentState = Monster_State::MISS; AI->Done(false); m_fAcctime = 0.f; m_iMotion = 0; }
 
 public:
     virtual void tick() override {};

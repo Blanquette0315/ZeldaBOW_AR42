@@ -16,6 +16,7 @@ public:
     void Done(bool _done = true) { m_bActDone = _done; }
     Vec3 FindPlayerDir();
     Vec3 FindInitialPosDir();
+    float GetPlayerDistance();
 
 public:
     virtual void begin() override;
