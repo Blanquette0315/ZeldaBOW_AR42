@@ -354,15 +354,31 @@ void CLinkAnimScript::Func_ShieldGuard()
 	// 
 }
 
+void CLinkAnimScript::Func_ShieldJustStart()
+{
+	m_fParryingAccTime = 0.f;
+	m_bParryingOnce = false;
+}
+
 void CLinkAnimScript::Func_ShieldJust()
 {
 	// m_bShieldJust = true;
-	if (m_bShieldJust)
+	if (m_fParryingAccTime > m_fParryingAccTime)
 	{
-		// time slow
-		TimeSlow(true, 3.f);
+		return;
+	}
+	else
+	{
+		if (m_bShieldJust && m_pParryingObj && m_bParryingOnce == false)
+		{
+			// time slow
+			TimeSlow(true, 3.f);
+			m_bParryingOnce = true;
 
-		// monster stun
+			// monster stun
+		}
+
+		m_fParryingAccTime += FDT;
 	}
 }
 
@@ -370,5 +386,6 @@ void CLinkAnimScript::Func_ShieldJustEnd()
 {
 	m_bShieldJust = false;
 	m_bInvincible = false;
+	m_pParryingObj = false;
 	TimeSlow(false);
 }

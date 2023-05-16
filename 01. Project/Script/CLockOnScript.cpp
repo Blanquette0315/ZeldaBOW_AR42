@@ -35,7 +35,6 @@ void CLockOnScript::init()
 
 void CLockOnScript::begin()
 {
-
 }
 
 void CLockOnScript::tick()

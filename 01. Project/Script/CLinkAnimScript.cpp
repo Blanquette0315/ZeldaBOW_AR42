@@ -35,9 +35,13 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_pPrevAnimNode(nullptr)
 	, m_bLockOnRotFinish(false)
 	, m_bInvincible(false)
+	, m_pParryingObj(nullptr)
+	, m_fParryingAccTime(0.f)
+	, m_fParryingMaxTime(0.1f)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Time", &m_fParryingMaxTime, 0.f, 1.f);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -60,9 +64,13 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_pPrevAnimNode(nullptr)
 	, m_bLockOnRotFinish(false)
 	, m_bInvincible(false)
+	, m_pParryingObj(nullptr)
+	, m_fParryingAccTime(0.f)
+	, m_fParryingMaxTime(_origin.m_fParryingMaxTime)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Time", &m_fParryingMaxTime, 0.f, 1.f);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -298,6 +306,7 @@ void CLinkAnimScript::ClearData()
 {
 	m_bShieldGuard = false;
 	m_bShieldJust = false;
+	m_pParryingObj = nullptr;
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -631,6 +640,9 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "Link Status HP";
 	_emitter << YAML::Value << m_tLinkStatus.fHP;
+
+	_emitter << YAML::Key << "Parrying Max Time";
+	_emitter << YAML::Value << m_fParryingMaxTime;
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -645,6 +657,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	/*SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);*/
 	SAFE_LOAD_FROM_YAML(float, m_fComboMaxTime, _node["Link Combo Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_tLinkStatus.fHP, _node["Link Status HP"]);
+	SAFE_LOAD_FROM_YAML(float, m_fParryingMaxTime, _node["Parrying Max Time"]);
 }
 
 
