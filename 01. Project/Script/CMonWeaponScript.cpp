@@ -22,7 +22,9 @@ void CMonWeaponScript::BeginOverlap(CGameObject* _pOther)
 {
 	if (m_bReady)
 	{
-		//damage
+		// damage
+		// _pOther->getParent() == Real Link (_pOther == HitRigid)
+		// CLinkAnimScript* pLinkScr = _pOther->GetParent()->GetScript<CLinkAnimScript>();
 		CLinkAnimScript* pLinkScr = _pOther->GetScript<CLinkAnimScript>();
 		if (pLinkScr == nullptr)
 			return;
@@ -38,7 +40,9 @@ void CMonWeaponScript::Overlap(CGameObject* _pOther)
 {
 	if (m_bReady)
 	{
-		//damage
+		// damage
+		// _pOther->getParent() == Real Link (_pOther == HitRigid)
+		// CLinkAnimScript* pLinkScr = _pOther->GetParent()->GetScript<CLinkAnimScript>();
 		CLinkAnimScript* pLinkScr = _pOther->GetScript<CLinkAnimScript>();
 		if (pLinkScr == nullptr)
 			return;

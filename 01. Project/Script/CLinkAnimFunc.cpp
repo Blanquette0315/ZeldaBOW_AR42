@@ -324,8 +324,8 @@ void CLinkAnimScript::Func_SwordEquipOff()
 
 	pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
-	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
-	pBoneScr->setOffsetRot(Vec3(-0.2f, 0.08f, -0.04f));
+	pBoneScr->setOffsetPos(Vec3(-0.2f, 0.08f, -0.04f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 0.f));
 }
 
 void CLinkAnimScript::Func_BowChargeMove()
@@ -356,7 +356,7 @@ void CLinkAnimScript::Func_ShieldGuard()
 
 void CLinkAnimScript::Func_ShieldJust()
 {
-	m_bShieldJust = true;
+	// m_bShieldJust = true;
 	if (m_bShieldJust)
 	{
 		// time slow

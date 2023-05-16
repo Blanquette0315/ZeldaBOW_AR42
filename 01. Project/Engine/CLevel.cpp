@@ -106,8 +106,11 @@ void CLevel::ChangeObjectLayer(CGameObject* _pObject, int _Idx)
 {
 	if (_pObject->GetParent() == nullptr)
 	{
-		m_arrLayer[(UINT)_pObject->GetLayerIdx()].DeregisterObject(_pObject);
-		AddGameObject(_pObject, _Idx);
+		if (!_pObject->GetOwnerPrefab().Get())
+		{
+			m_arrLayer[(UINT)_pObject->GetLayerIdx()].DeregisterObject(_pObject);
+			AddGameObject(_pObject, _Idx);
+		}
 	}
 	_pObject->SetLayerIdx(_Idx);
 }

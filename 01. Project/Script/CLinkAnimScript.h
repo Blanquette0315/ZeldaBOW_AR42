@@ -93,7 +93,8 @@ private:
     void OperateAnimFuncAfter();
 
     void PlayNextAnim();
-    void OperateAnimFunc(); 
+    void OperateAnimFunc();
+    void ClearData();
 
     // anim function
 private:
@@ -158,6 +159,11 @@ public:
     void SetDamage(tLinkDamaged _tDamage) { m_tLinkDamaged = _tDamage; }
     void ApplyDamage();
 
+    bool IsGuardAnim() { return IsCurAnim(LAT_SWORD_GUARD_WAIT); }
+    void SetGuardSuccess(bool _bGuardSuccess) { m_bShieldGuard = _bGuardSuccess; }
+    
+    // bool IsGuardJustAnim() { return IsCurAnim(LAT_SWORD_GUARD_JUST); }
+    void SetGuardJustSuccess(bool _bJustSuccess) { m_bShieldJust = _bJustSuccess; }
 
 public:
     static void ClearAnimNode();

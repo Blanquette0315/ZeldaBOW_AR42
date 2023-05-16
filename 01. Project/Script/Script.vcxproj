@@ -177,6 +177,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CCamScript.h" />
     <ClInclude Include="CEquipableScript.h" />
     <ClInclude Include="CGroundCheckScript.h" />
+    <ClInclude Include="CLinkHitScript.h" />
     <ClInclude Include="CLinkSwordScript.h" />
     <ClInclude Include="CMonWeaponScript.h" />
     <ClInclude Include="CRayCastScript.h" />
@@ -208,6 +209,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CCamScript.cpp" />
     <ClCompile Include="CEquipableScript.cpp" />
     <ClCompile Include="CGroundCheckScript.cpp" />
+    <ClCompile Include="CLinkHitScript.cpp" />
     <ClCompile Include="CLinkSwordScript.cpp" />
     <ClCompile Include="CMonWeaponScript.cpp" />
     <ClCompile Include="CRayCastScript.cpp" />

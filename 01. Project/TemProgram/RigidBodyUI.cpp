@@ -86,6 +86,7 @@ void RigidBodyUI::update()
 		break;
 		}
 
+
 		m_bColScaleSize = GetTarget()->RigidBody()->GetColliderScaleSize();
 		m_vBoxSize = GetTarget()->RigidBody()->GetBoxSize();
 		m_fSphereSize = GetTarget()->RigidBody()->GetSphereSize();
@@ -138,6 +139,7 @@ void RigidBodyUI::render_update()
 	// ...
 
 	ImGui::Text("DebugDraw"); ImGui::SameLine(); ImGui::Checkbox("##DebugDrawCheckBox", &(GetTarget()->RigidBody()->GetDebugDraw()));
+	ImGui::Text("Following Rigid"); ImGui::SameLine(); ImGui::Checkbox("##FollowingRigid", &(GetTarget()->RigidBody()->GetFollowingRigid()));
 
 	//Mtrl Setting
 	ImGui::Text("== PhysData Setting ==");

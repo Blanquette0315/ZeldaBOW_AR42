@@ -247,8 +247,6 @@ void CLinkAnimScript::begin()
 	m_tLinkStatus.fHP = 7777.f;
 	m_tLinkDamaged.eType = LINK_DAMAGED_TYPE::NONE;
 	m_pAnyStateNode = m_mapAnimNode.find(LINK_STRING_WCHAR[LINK_STRING_ANYSTATE_NODE_KEY])->second;
-
-
 }
 
 void CLinkAnimScript::tick()
@@ -258,6 +256,7 @@ void CLinkAnimScript::tick()
 	OperateAnimFuncAfter();
 	PlayNextAnim();
 	OperateAnimFunc();
+	ClearData();
 }
 
 void CLinkAnimScript::OperateAnimFunc()
@@ -291,6 +290,12 @@ void CLinkAnimScript::OperateAnimFunc()
 		m_pCurAnimNodeLower = nullptr;
 		m_pAnimator->StopLowerAnim();
 	}
+}
+
+void CLinkAnimScript::ClearData()
+{
+	m_bShieldGuard = false;
+	m_bShieldJust = false;
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -426,45 +431,52 @@ void CLinkAnimScript::SetLinkCond()
 	}
 	RigidBody()->SetGround(IsGround());
 
+	// check wheter link guarded monster atk 
+	if (m_bShieldGuard)
+	{
+		AddBit(m_iCond, LAC_SHIELD_GUARD);
+		m_bShieldGuard = false;
+	}
+
 	// Check Damage
+	// link invincible
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_INVINCIBLE, BIT_LEAST_ONE) || m_bShieldGuard)
+	{
+		m_tLinkDamaged = {};
+	}
 	// link not invincible
-	if (!CalBit(m_pCurAnimNode->iPreferences, LAP_INVINCIBLE, BIT_LEAST_ONE))
+	else
 	{
 		if (m_tLinkDamaged.eType != LINK_DAMAGED_TYPE::NONE)
 		{
 			AddBit(m_iCond, LAC_DAMAGED_BACK);
 
-				switch (m_tLinkDamaged.eType)
-				{
-				case LINK_DAMAGED_TYPE::SMALL:
-				{
-					AddBit(m_iCond, LAC_DAMAGED_SMALL);
-				}
-				break;
+			switch (m_tLinkDamaged.eType)
+			{
+			case LINK_DAMAGED_TYPE::SMALL:
+			{
+				AddBit(m_iCond, LAC_DAMAGED_SMALL);
+			}
+			break;
 
-				case LINK_DAMAGED_TYPE::MEDIUM:
-				{
-					AddBit(m_iCond, LAC_DAMAGED_MEDIUM);
-				}
-				break;
+			case LINK_DAMAGED_TYPE::MEDIUM:
+			{
+				AddBit(m_iCond, LAC_DAMAGED_MEDIUM);
+			}
+			break;
 
-				case LINK_DAMAGED_TYPE::LARGE:
-				{
-					AddBit(m_iCond, LAC_DAMAGED_LARGE);
-				}
-				break;
-				}
+			case LINK_DAMAGED_TYPE::LARGE:
+			{
+				AddBit(m_iCond, LAC_DAMAGED_LARGE);
+			}
+			break;
+			}
 
 			// -- add code : sword guard hit
 			ApplyDamage();
 			if (m_tLinkStatus.fHP < 0.f)
 				AddBit(m_iCond, LAC_DEAD);
 		}
-	}
-	// link invincible
-	else
-	{
-		m_tLinkDamaged = {};
 	}
 
 	// check equipment
@@ -478,13 +490,6 @@ void CLinkAnimScript::SetLinkCond()
 		{
 			AddBit(m_iCond, LAC_EQUIP_BOW);
 		}
-	}
-
-	// check wheter link guarded monster atk 
-	if (m_bShieldGuard)
-	{
-		AddBit(m_iCond, LAC_SHIELD_GUARD);
-		m_bShieldGuard = false;
 	}
 }
 
