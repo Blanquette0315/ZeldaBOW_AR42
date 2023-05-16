@@ -362,8 +362,7 @@ void CLinkAnimScript::Func_ShieldJustStart()
 
 void CLinkAnimScript::Func_ShieldJust()
 {
-	// m_bShieldJust = true;
-	if (m_fParryingAccTime > m_fParryingAccTime)
+	if (m_fParryingMaxTime < m_fParryingAccTime)
 	{
 		return;
 	}

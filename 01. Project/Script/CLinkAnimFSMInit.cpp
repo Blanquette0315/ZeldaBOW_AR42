@@ -184,7 +184,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF, LAP_BLEND | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowEquipOff);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAP_REPEAT | LAP_EQUIP_BOW ); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_BowRun);
+	SetAnimNode(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAP_REPEAT | LAP_EQUIP_BOW); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_BowRun);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, 0, LAC_KEY_LBTN | LAC_KEY_WSAD);
 	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_KEY_LBTN);
 
@@ -196,34 +196,58 @@ void CLinkAnimScript::MakeFSM()
 
 	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT, LAP_EQUIP_BOW | LAP_KEEP_LOCKON);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_ANIM_FINISHED);
-		
+
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON_RUN);
 
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF_RUN);
 
 	// Sword Guard
-	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_WAIT, LAP_KEEP_LOCKON | LAP_BLEND | LAP_REPEAT);
+	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_WAIT, LAP_KEEP_LOCKON | LAP_BLEND | LAP_REPEAT | LAP_EQUIP_SHIELD);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_KEY_N3);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_HIT, LAC_SHIELD_GUARD);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_JUST, LAC_KEY_F);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_HIT, LAP_KEEP_LOCKON | LAP_INVINCIBLE);  
+	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_HIT, LAP_KEEP_LOCKON | LAP_INVINCIBLE | LAP_EQUIP_SHIELD);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_JUST, LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ShieldJustStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_ShieldJust); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_ShieldJustEnd);
+	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_JUST, LAP_KEEP_LOCKON | LAP_EQUIP_SHIELD); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ShieldJustStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_ShieldJust); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_ShieldJustEnd);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED);
-	
-	
+
+
 	// Damaged
 	SetAnimNode(pAnimNode, LAT_DAMAGE_S_B, LAP_KEEP_LOCKON | LAP_INVINCIBLE);
-	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED); 
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
-	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW);
+	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_EQUIP_SHIELD | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW | LAC_EQUIP_SHIELD);
 
 	SetAnimNode(pAnimNode, LAT_DAMAGE_M_B, LAP_KEEP_LOCKON | LAP_INVINCIBLE);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
-	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW);
+	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_EQUIP_SHIELD | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW | LAC_EQUIP_SHIELD);
+	
+
+	// Just Evasion
+	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ST);
+	SetAnimTran(pAnimNode, LAT_LOCKON_JUMP_B_ED, LAC_GROUNDED | LAC_ANIM_FINISHED);
+	//SetAnimTran()
+
+	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ED);
+	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_EQUIP_SHIELD | LAC_ANIM_FINISHED);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW | LAC_EQUIP_SHIELD);
+	
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH1);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH2);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH3);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH4);
+
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH5);
 
 	// Any State Node
 	tAnimNode* pAnyStateNode = new tAnimNode();

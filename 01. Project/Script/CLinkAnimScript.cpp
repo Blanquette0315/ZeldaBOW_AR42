@@ -507,6 +507,10 @@ void CLinkAnimScript::SetLinkCond()
 		{
 			AddBit(m_iCond, LAC_EQUIP_BOW);
 		}
+		else if (CalBit(m_pPrevAnimNode->iPreferences, LAP_EQUIP_SHIELD, BIT_LEAST_ONE))
+		{
+			AddBit(m_iCond, LAC_EQUIP_SHIELD);
+		}
 	}
 }
 

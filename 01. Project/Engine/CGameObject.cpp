@@ -22,6 +22,7 @@ CGameObject::CGameObject()
 	, m_bRender(true)
 	, m_bFrustumCul(true)
 	, m_OwnerPrefab(nullptr)
+	, m_bTimeSlow(true)
 {
 }
 
@@ -35,6 +36,7 @@ CGameObject::CGameObject(const CGameObject& _origin)
 	, m_bRender(true)
 	, m_bFrustumCul(_origin.m_bFrustumCul)
 	, m_OwnerPrefab(nullptr)
+	, m_bTimeSlow(true)
 {
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -88,6 +90,12 @@ void CGameObject::begin()
 
 void CGameObject::tick()
 {
+	if (!m_bTimeSlow)
+	{
+		m_fTimeRatioSave = g_timeslow.fRatio;
+		g_timeslow.fRatio = 1.f;
+	}
+		
 	// Component
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -106,10 +114,18 @@ void CGameObject::tick()
 	{
 		m_vecChild[i]->tick();
 	}
+
+	if (!m_bTimeSlow)
+		g_timeslow.fRatio = m_fTimeRatioSave;
 }
 
 void CGameObject::finaltick()
 {
+	if (!m_bTimeSlow)
+	{
+		m_fTimeRatioSave = g_timeslow.fRatio;
+		g_timeslow.fRatio = 1.f;
+	}
 	// Component
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -141,6 +157,9 @@ void CGameObject::finaltick()
 	//// Register Layer
 	//CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
 	//pCurLevel->GetLayer(m_iLayerIdx)->RegisterObject(this);
+
+	if (!m_bTimeSlow)
+		g_timeslow.fRatio = m_fTimeRatioSave;
 }
 
 void CGameObject::finaltick_module()
@@ -171,11 +190,22 @@ void CGameObject::finaltick_module()
 
 void CGameObject::render()
 {
+	if (!m_bTimeSlow)
+	{
+		m_fTimeRatioSave = g_timeslow.fRatio;
+		g_timeslow.fRatio = 1.f;
+	}
+
 	if (nullptr == m_pRenderComponent)
 		return;
 
 	if (m_bRender)
 		m_pRenderComponent->render();
+
+	if (!m_bTimeSlow)
+	{
+		g_timeslow.fRatio = m_fTimeRatioSave;
+	}
 }
 
 void CGameObject::ChangePrefab()
