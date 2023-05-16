@@ -2,6 +2,7 @@
 #include "CMonWeaponScript.h"
 
 #include "CLinkAnimScript.h"
+#include "CLinkHitScript.h"
 
 CMonWeaponScript::CMonWeaponScript()
 	: CScript(MONWEAPONSCRIPT)
@@ -22,17 +23,32 @@ void CMonWeaponScript::BeginOverlap(CGameObject* _pOther)
 {
 	if (m_bReady)
 	{
-		// damage
-		// _pOther->getParent() == Real Link (_pOther == HitRigid)
-		// CLinkAnimScript* pLinkScr = _pOther->GetParent()->GetScript<CLinkAnimScript>();
-		CLinkAnimScript* pLinkScr = _pOther->GetScript<CLinkAnimScript>();
-		if (pLinkScr == nullptr)
+		CLinkHitScript* pHitScr = _pOther->GetScript<CLinkHitScript>();
+		if (pHitScr == nullptr)
 			return;
-		tLinkDamaged damage;
-		damage.fDamage = m_iDamage;
-		damage.eType = LINK_DAMAGED_TYPE::SMALL;
-		pLinkScr->SetDamage(damage);
-		m_bReady = false;
+
+		CLinkAnimScript* pLinkScr = pHitScr->GetLink()->GetScript<CLinkAnimScript>();
+
+		if (pHitScr->IsThisType(LINK_HITSCR_TYPE::JUST))
+		{
+			pLinkScr->SetGuardJustSuccess(true, GetOwner()->GetParent());
+		}
+		else
+		{
+			if (pLinkScr->IsGuardAnim())
+			{
+				pLinkScr->SetGuardSuccess(true);
+				m_bReady = false;
+			}
+			else
+			{
+				tLinkDamaged damage;
+				damage.fDamage = m_iDamage;
+				damage.eType = LINK_DAMAGED_TYPE::SMALL;
+				pLinkScr->SetDamage(damage);
+				m_bReady = false;
+			}
+		}
 	}
 }
 
@@ -40,17 +56,32 @@ void CMonWeaponScript::Overlap(CGameObject* _pOther)
 {
 	if (m_bReady)
 	{
-		// damage
-		// _pOther->getParent() == Real Link (_pOther == HitRigid)
-		// CLinkAnimScript* pLinkScr = _pOther->GetParent()->GetScript<CLinkAnimScript>();
-		CLinkAnimScript* pLinkScr = _pOther->GetScript<CLinkAnimScript>();
-		if (pLinkScr == nullptr)
+		CLinkHitScript* pHitScr = _pOther->GetScript<CLinkHitScript>();
+		if (pHitScr == nullptr)
 			return;
-		tLinkDamaged damage;
-		damage.fDamage = m_iDamage;
-		damage.eType = LINK_DAMAGED_TYPE::SMALL;
-		pLinkScr->SetDamage(damage);
-		m_bReady = false;
+
+		CLinkAnimScript* pLinkScr = pHitScr->GetLink()->GetScript<CLinkAnimScript>();
+
+		if (pHitScr->IsThisType(LINK_HITSCR_TYPE::JUST))
+		{
+			pLinkScr->SetGuardJustSuccess(true, GetOwner()->GetParent());
+		}
+		else
+		{
+			if (pLinkScr->IsGuardAnim())
+			{
+				pLinkScr->SetGuardSuccess(true);
+				m_bReady = false;
+			}
+			else
+			{
+				tLinkDamaged damage;
+				damage.fDamage = m_iDamage;
+				damage.eType = LINK_DAMAGED_TYPE::SMALL;
+				pLinkScr->SetDamage(damage);
+				m_bReady = false;
+			}
+		}
 	}
 }
 

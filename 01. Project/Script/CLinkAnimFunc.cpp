@@ -9,7 +9,7 @@
 #include "CLockOnScript.h"
 #include "FSMNode.h"
 #include "CBonesocketScript.h"
-
+#include "CMonsterScript.h"
 
 
 bool CLinkAnimScript::MoveRotation(Vec3 _vDir)
@@ -374,8 +374,10 @@ void CLinkAnimScript::Func_ShieldJust()
 			// time slow
 			TimeSlow(true, 3.f);
 			m_bParryingOnce = true;
+			m_bInvincible = true;
 
 			// monster stun
+			m_pParryingObj->GetScript<CMonsterScript>()->Parrying();
 		}
 
 		m_fParryingAccTime += FDT;
@@ -386,6 +388,6 @@ void CLinkAnimScript::Func_ShieldJustEnd()
 {
 	m_bShieldJust = false;
 	m_bInvincible = false;
-	m_pParryingObj = false;
+	m_pParryingObj = nullptr;
 	TimeSlow(false);
 }

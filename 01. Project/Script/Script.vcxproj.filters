@@ -76,6 +76,12 @@
     <Filter Include="Scripts\Link\Hit">
       <UniqueIdentifier>{2b2da27e-a562-4ee3-9730-4d231ae1da97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Monster\Boss">
+      <UniqueIdentifier>{a3e04a27-85c4-45ea-be9a-873c1841f780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Monster\Boss\Fireball">
+      <UniqueIdentifier>{7be15779-2dd7-49bc-87f0-2659b0bc657b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -172,9 +178,17 @@
     <ClInclude Include="CLinkArrowScript.h">
       <Filter>Scripts\Link\Weapon\Bow\Arrow</Filter>
     </ClInclude>
-    <ClInclude Include="CLinkHitScript.h" />
     <ClInclude Include="CMonHeadScript.h">
       <Filter>Scripts\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossScript.h">
+      <Filter>Scripts\Monster\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossFireballScript.h">
+      <Filter>Scripts\Monster\Boss\Fireball</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkHitScript.h">
+      <Filter>Scripts\Link\Hit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +286,17 @@
     <ClCompile Include="CLinkArrowScript.cpp">
       <Filter>Scripts\Link\Weapon\Bow\Arrow</Filter>
     </ClCompile>
-    <ClCompile Include="CLinkHitScript.cpp" />
     <ClCompile Include="CMonHeadScript.cpp">
       <Filter>Scripts\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossScript.cpp">
+      <Filter>Scripts\Monster\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossFireballScript.cpp">
+      <Filter>Scripts\Monster\Boss\Fireball</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkHitScript.cpp">
+      <Filter>Scripts\Link\Hit</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -46,6 +46,7 @@ private:
     CGameObject*            m_pBowObj;
     CGameObject*            m_pShieldObj;
 
+    CGameObject*            m_pParryingObj;
 
     Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
 
@@ -63,7 +64,10 @@ private:
     bool                    m_bIsAnimChanged;
     bool                    m_bShieldGuard;
     bool                    m_bShieldJust;
+    bool                    m_bInvincible;
 
+    float                   m_fParryingAccTime;
+    bool                    m_bParryingOnce;
     // save
 private:
     float           m_fAnglePerSec;
@@ -75,6 +79,9 @@ private:
     float           m_fSelectedSpeed;
     tLinkStatus     m_tLinkStatus;
     tLinkDamaged    m_tLinkDamaged;
+
+    float           m_fParryingMaxTime;
+  
 
     // FSM function
 private:
@@ -117,6 +124,7 @@ private:
     void Func_SwordEquipOff();
     void Func_BowChargeMove();
     void Func_ShieldGuard();
+    void Func_ShieldJustStart();
     void Func_ShieldJust();
     void Func_ShieldJustEnd();
 
@@ -163,7 +171,7 @@ public:
     void SetGuardSuccess(bool _bGuardSuccess) { m_bShieldGuard = _bGuardSuccess; }
     
     // bool IsGuardJustAnim() { return IsCurAnim(LAT_SWORD_GUARD_JUST); }
-    void SetGuardJustSuccess(bool _bJustSuccess) { m_bShieldJust = _bJustSuccess; }
+    void SetGuardJustSuccess(bool _bJustSuccess, CGameObject* _pParryingObj) { m_bShieldJust = _bJustSuccess; m_pParryingObj = _pParryingObj; }
 
 public:
     static void ClearAnimNode();

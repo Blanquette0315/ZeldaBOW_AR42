@@ -36,7 +36,7 @@ protected:
 public:
     void setState(Monster_State _eState) { m_eCurrentState = _eState; }
     virtual void Damage(int _iNumber, Vec3 _vPos = Vec3(0.f,0.f,10000.f)) {}
-    void Parrying() { m_eCurrentState = Monster_State::MISS; AI->Done(false); m_fAcctime = 0.f; m_iMotion = 0; }
+    virtual void Parrying() { m_eCurrentState = Monster_State::MISS; AI->Done(false); Weapon->setReady(false); m_fAcctime = 0.f; m_iMotion = 0; }
 
 public:
     virtual void tick() override {};

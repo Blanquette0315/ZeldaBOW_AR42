@@ -89,9 +89,10 @@ void CBokoblinScript::tick()
 			else
 				m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 			Animator3D()->Play(L"attack_small", false);
+
 			++m_iMotion;
 		}
-		else if (m_fAcctime >= 1.7f && m_iMotion == 2)
+		else if (m_fAcctime >= 2.13333f && m_iMotion == 2)
 		{
 			Weapon->setReady(true);
 			++m_iMotion;
