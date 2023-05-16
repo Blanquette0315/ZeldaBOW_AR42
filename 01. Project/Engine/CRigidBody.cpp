@@ -56,6 +56,11 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 
 	m_vecPhysData[0]->Rotation = _origin.m_vecPhysData[0]->Rotation;
 	m_vecPhysData[0]->WorldPosition = _origin.m_vecPhysData[0]->WorldPosition;
+
+	Vec3 vLockAxisPos = _origin.m_vecPhysData[0]->GetLockAxis_Position();
+	Vec3 vLockAxisRot = _origin.m_vecPhysData[0]->GetLockAxis_Rotation();
+	m_vecPhysData[0]->SetLockAxis_Position(vLockAxisPos.x, vLockAxisPos.y, vLockAxisPos.z);
+	m_vecPhysData[0]->SetLockAxis_Rotation(vLockAxisRot.x, vLockAxisRot.y, vLockAxisRot.z);
 }
 
 CRigidBody::~CRigidBody()

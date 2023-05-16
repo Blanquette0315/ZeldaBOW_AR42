@@ -17,6 +17,7 @@ public:
     Vec3 FindPlayerDir();
     Vec3 FindInitialPosDir();
     float GetPlayerDistance();
+    Vec3 FindPlayerPos() { return m_pPlayer->Transform()->GetRelativePos(); }
 
 public:
     virtual void begin() override;

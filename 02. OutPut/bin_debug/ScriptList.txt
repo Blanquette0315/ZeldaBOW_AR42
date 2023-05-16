@@ -1,5 +1,7 @@
 CBokoblinScript
 CBonesocketScript
+CBossFireballScript
+CBossScript
 CCamScript
 CEquipableScript
 CGroundCheckScript
