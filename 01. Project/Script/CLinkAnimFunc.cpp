@@ -369,5 +369,6 @@ void CLinkAnimScript::Func_ShieldJust()
 void CLinkAnimScript::Func_ShieldJustEnd()
 {
 	m_bShieldJust = false;
+	m_bInvincible = false;
 	TimeSlow(false);
 }
