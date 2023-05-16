@@ -7,6 +7,7 @@
 #include "FSMNode.h"
 
 #include "CLinkCamScript.h"
+#include "CMonsterScript.h"
 
 CLockOnScript::CLockOnScript()
 	: CScript(SCRIPT_TYPE::LOCKONSCRIPT)
@@ -47,6 +48,9 @@ void CLockOnScript::BeginOverlap(CGameObject* _pOther)
 
 void CLockOnScript::Overlap(CGameObject* _pOther)
 {
+	if (_pOther->GetScript<CMonsterScript>() == nullptr)
+		return;
+
 	float fDistFromTarget = (m_pLink->Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos()).Length();
 	if (fDistFromTarget < m_fDistFromTarget)
 	{
@@ -57,6 +61,9 @@ void CLockOnScript::Overlap(CGameObject* _pOther)
 
 void CLockOnScript::EndOverlap(CGameObject* _pOther)
 {
+	if (_pOther->GetScript<CMonsterScript>() == nullptr)
+		return;
+
 	if (_pOther == m_pLockOnTarget)
 	{
 		ClearTarget();

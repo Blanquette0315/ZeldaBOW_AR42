@@ -34,6 +34,7 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_bIsAnimChanged(false)
 	, m_pPrevAnimNode(nullptr)
 	, m_bLockOnRotFinish(false)
+	, m_bInvincible(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -58,6 +59,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_bIsAnimChanged(false)
 	, m_pPrevAnimNode(nullptr)
 	, m_bLockOnRotFinish(false)
+	, m_bInvincible(false)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -322,8 +324,14 @@ void CLinkAnimScript::SetLinkCond()
 	if (KEY_TAP(KEY::N_3))
 		AddBit(m_iCond, LAC_KEY_N3);
 
-	if (KEY_PRESSED(KEY::F) || KEY_TAP(KEY::F))
+	if (KEY_TAP(KEY::F))
+	{
+		if (m_bShieldJust)
+		{
+			m_bInvincible = true;
+		}
 		AddBit(m_iCond, LAC_KEY_F);
+	}
 
 	if (KEY_PRESSED(KEY::LBTN) || KEY_TAP(KEY::LBTN))
 	{
@@ -440,7 +448,7 @@ void CLinkAnimScript::SetLinkCond()
 
 	// Check Damage
 	// link invincible
-	if (CalBit(m_pCurAnimNode->iPreferences, LAP_INVINCIBLE, BIT_LEAST_ONE) || m_bShieldGuard)
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_INVINCIBLE, BIT_LEAST_ONE) || m_bShieldGuard || m_bInvincible)
 	{
 		m_tLinkDamaged = {};
 	}

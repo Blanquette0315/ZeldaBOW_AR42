@@ -63,6 +63,7 @@ private:
     bool                    m_bIsAnimChanged;
     bool                    m_bShieldGuard;
     bool                    m_bShieldJust;
+    bool                    m_bInvincible;
 
     // save
 private:
