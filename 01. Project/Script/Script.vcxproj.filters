@@ -173,6 +173,9 @@
       <Filter>Scripts\Link\Weapon\Bow\Arrow</Filter>
     </ClInclude>
     <ClInclude Include="CLinkHitScript.h" />
+    <ClInclude Include="CMonHeadScript.h">
+      <Filter>Scripts\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -270,5 +273,8 @@
       <Filter>Scripts\Link\Weapon\Bow\Arrow</Filter>
     </ClCompile>
     <ClCompile Include="CLinkHitScript.cpp" />
+    <ClCompile Include="CMonHeadScript.cpp">
+      <Filter>Scripts\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

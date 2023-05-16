@@ -5,7 +5,7 @@ class CBokoblinScript :
     public CMonsterScript
 {
 public:
-    virtual void Damage(int _iNumber) override;
+    virtual void Damage(int _iNumber, Vec3 _vPos = Vec3(0.f, 0.f, 10000.f)) override;
 
 public:
     virtual void begin() override;

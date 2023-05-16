@@ -10,7 +10,7 @@ CBokoblinScript::~CBokoblinScript()
 {
 }
 
-void CBokoblinScript::Damage(int _iNumber)
+void CBokoblinScript::Damage(int _iNumber, Vec3 _vPos)
 {
 	if (m_iHP <= 0)
 		return;
@@ -177,6 +177,34 @@ void CBokoblinScript::tick()
 				Ptr<CMaterial> pMaterial = MeshRender()->GetCurMaterial(i);
 				pMaterial->SetScalarParam(FLOAT_1, &m_fAcctime);
 			}
+		}
+	}
+	else if (m_eCurrentState == Monster_State::MISS)
+	{
+		m_fAcctime += FDT;
+		Transform()->SetRelativeRotation(m_vFront);
+		if (m_iMotion == 0)
+		{
+			Vec3 vPlayerDir = AI->FindPlayerDir();
+			Vec3 vDir = Vec3(vPlayerDir.x, 0, vPlayerDir.z).Normalize();
+			if (vDir.x >= 0)
+				m_vFront = Vec3(0.f, acosf(vDir.z) + XM_PI, 0.f);
+			else
+				m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
+
+			Animator3D()->Play(L"rebound", false);
+			++m_iMotion;
+		}
+		else if (m_fAcctime >= 1.f && m_iMotion == 1)
+		{
+			Animator3D()->Play(L"wait", true);
+			++m_iMotion;
+		}
+		else if (m_fAcctime >= 2.f)
+		{
+			AI->Done();
+			m_iMotion = 0;
+			m_fAcctime = 0;
 		}
 	}
 }

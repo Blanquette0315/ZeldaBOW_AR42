@@ -87,6 +87,16 @@ Vec3 CMonsterAIScript::FindInitialPosDir()
 	return vDir;
 }
 
+float CMonsterAIScript::GetPlayerDistance()
+{
+	if (m_pPlayer == nullptr)
+		return -1;
+
+	Vec3 MonsterPos = GetOwner()->GetParent()->Transform()->GetRelativePos();
+	Vec3 PlayerPos = m_pPlayer->Transform()->GetRelativePos();
+	return Vec3::Distance(MonsterPos, PlayerPos);
+}
+
 void CMonsterAIScript::BeginOverlap(CGameObject* _pOther)
 {
 	if (_pOther->GetName() == L"Link")

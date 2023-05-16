@@ -15,6 +15,7 @@
 #include "CLinkSwordScript.h"
 #include "CLockOnScript.h"
 #include "CMissileScript.h"
+#include "CMonHeadScript.h"
 #include "CMonsterAIScript.h"
 #include "CMonsterScript.h"
 #include "CMonWeaponScript.h"
@@ -39,6 +40,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CLinkSwordScript");
 	_vec.push_back(L"CLockOnScript");
 	_vec.push_back(L"CMissileScript");
+	_vec.push_back(L"CMonHeadScript");
 	_vec.push_back(L"CMonsterAIScript");
 	_vec.push_back(L"CMonsterScript");
 	_vec.push_back(L"CMonWeaponScript");
@@ -78,6 +80,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CLockOnScript;
 	if (L"CMissileScript" == _strScriptName)
 		return new CMissileScript;
+	if (L"CMonHeadScript" == _strScriptName)
+		return new CMonHeadScript;
 	if (L"CMonsterAIScript" == _strScriptName)
 		return new CMonsterAIScript;
 	if (L"CMonsterScript" == _strScriptName)
@@ -140,6 +144,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::MISSILESCRIPT:
 		return new CMissileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::MONHEADSCRIPT:
+		return new CMonHeadScript;
 		break;
 	case (UINT)SCRIPT_TYPE::MONSTERAISCRIPT:
 		return new CMonsterAIScript;
@@ -224,6 +231,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::MISSILESCRIPT:
 		return L"CMissileScript";
+		break;
+
+	case SCRIPT_TYPE::MONHEADSCRIPT:
+		return L"CMonHeadScript";
 		break;
 
 	case SCRIPT_TYPE::MONSTERAISCRIPT:
