@@ -522,7 +522,7 @@ void InspectorUI::InstantiatePrefab(CGameObject* _pParentObj)
 		Ptr<CPrefab> pOwnerPref = pParentObj->GetOwnerPrefab();
 
 		CGameObject* pNewObj = pOwnerPref->Instantiate();
-		Instantiate(pNewObj, Vec3(0.f, 0.f, 990.f), 0);
+		Instantiate(pNewObj, Vec3(0.f, 0.f, 990.f), pNewObj->GetLayerIdx());
 	}
 }
 

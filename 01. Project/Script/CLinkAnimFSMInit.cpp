@@ -210,7 +210,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_HIT, LAP_KEEP_LOCKON | LAP_INVINCIBLE);  
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_JUST, LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ShieldJust); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_ShieldJustEnd);
+	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_JUST, LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ShieldJustStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_ShieldJust); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_ShieldJustEnd);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED);
 	
 	
