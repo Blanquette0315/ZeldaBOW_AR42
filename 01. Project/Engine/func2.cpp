@@ -310,6 +310,15 @@ void AddComponent(CGameObject* _pObj, COMPONENT_TYPE _eType)
 	CEventMgr::GetInst()->AddEvent(evn);
 }
 
+void TimeSlow(bool _bActive, float _fRatio)
+{
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::SLOWTIME;
+	evn.wParam = (DWORD_PTR)_bActive;
+	evn.lParam = (DWORD_PTR)_fRatio;
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
 #include "CRenderMgr.h"
 
 // 나중에 UI에서 RECT를 고르면 반지름을 넣어주지 못하도록 막아줄 것이다.

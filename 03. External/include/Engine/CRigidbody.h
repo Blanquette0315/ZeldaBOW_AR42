@@ -24,8 +24,12 @@ private:
     bool m_bUsePhysRot;
     bool m_bDebugDraw;
 
+    // not doing physics calculation
+    bool m_bFollowingRigid;
+
 public:
     bool& GetDebugDraw() { return m_bDebugDraw; }
+    bool& GetFollowingRigid() { return m_bFollowingRigid; }
 
 public:
     vector<PhysData*> GetRigidData() { return m_vecPhysData; }

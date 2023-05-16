@@ -84,6 +84,7 @@ extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_END] =
 	L"Link_LockOnRadar",
 	L"Link_Sword",
 	L"Link_Bow",
+	L"Link_Shield",
 	L"Link_AnyState",
 };
 

@@ -10,16 +10,19 @@ class CLinkArrowScript :
 {
     float m_fGravity;
     float m_vVelocity;
+
+    float m_fMaxGravity;
+
+    float m_fLifeMaxTime;
+    
+
+    // not save
+private:
+    Vec3 m_vPrevPos;
     Vec3  m_vDir;
 
     float m_fCurGravity;
-    float m_fMaxGravity;
-
-    Vec3 m_vPrevPos;
-    
-    // not save
-private:
-
+    float m_fLifeAccTime;
 
 public:
     void SetDir(Vec3 _vDir) { m_vDir = _vDir; }

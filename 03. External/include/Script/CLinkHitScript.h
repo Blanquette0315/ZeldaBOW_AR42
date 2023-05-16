@@ -1,31 +1,27 @@
 #pragma once
+#include <Engine/CScript.h>
 
-#include <Engine\CScript.h>
+enum class LINK_HITSCR_TYPE
+{
+    HIT,
+    JUST,
+    END,
+};
 
-class CRigidBody;
-class CCollider;
-
-class CLinkArrowScript :
+class CLinkHitScript :
     public CScript
 {
-    float m_fGravity;
-    float m_vVelocity;
-
-    float m_fMaxGravity;
-
-    float m_fLifeMaxTime;
-    
+    // save
+private:
+    int m_eType;
 
     // not save
 private:
-    Vec3 m_vPrevPos;
-    Vec3  m_vDir;
 
-    float m_fCurGravity;
-    float m_fLifeAccTime;
 
 public:
-    void SetDir(Vec3 _vDir) { m_vDir = _vDir; }
+    bool IsThisType(LINK_HITSCR_TYPE _eType) { return _eType == (LINK_HITSCR_TYPE)m_eType; }
+    CGameObject* GetLink() { return GetOwner()->GetParent(); }
 
 public:
     virtual void begin() override;
@@ -39,11 +35,11 @@ public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
     virtual void LoadFromYAML(YAML::Node& _node) override;
 
-    CLONE(CLinkArrowScript)
+    CLONE(CLinkHitScript)
 
 public:
-    CLinkArrowScript();
-    CLinkArrowScript(const CLinkArrowScript& _origin);
-    ~CLinkArrowScript();
+    CLinkHitScript();
+    CLinkHitScript(const CLinkHitScript& _origin);
+    ~CLinkHitScript();
 };
 

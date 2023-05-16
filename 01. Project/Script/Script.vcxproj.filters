@@ -73,6 +73,9 @@
     <Filter Include="Scripts\Link\Weapon\Bow\Arrow">
       <UniqueIdentifier>{7aff41c9-d248-4208-8be6-36abe681fcc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Link\Hit">
+      <UniqueIdentifier>{2b2da27e-a562-4ee3-9730-4d231ae1da97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -169,6 +172,7 @@
     <ClInclude Include="CLinkArrowScript.h">
       <Filter>Scripts\Link\Weapon\Bow\Arrow</Filter>
     </ClInclude>
+    <ClInclude Include="CLinkHitScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -265,5 +269,6 @@
     <ClCompile Include="CLinkArrowScript.cpp">
       <Filter>Scripts\Link\Weapon\Bow\Arrow</Filter>
     </ClCompile>
+    <ClCompile Include="CLinkHitScript.cpp" />
   </ItemGroup>
 </Project>

@@ -303,3 +303,11 @@ struct tBGRA
 	unsigned char r;
 	unsigned char a;
 };
+
+struct tTimeSlow
+{
+	bool bActive;
+	float fRatio;
+};
+
+extern tTimeSlow g_timeslow;

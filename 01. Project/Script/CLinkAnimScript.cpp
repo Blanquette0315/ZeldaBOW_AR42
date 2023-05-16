@@ -236,6 +236,8 @@ void CLinkAnimScript::begin()
 
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
+	m_pShieldObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SHIELD]);
+	m_pShieldObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SHIELD]);
 	Func_SwordEquipOff();
 
 	m_pBowObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_BOW]);
@@ -254,6 +256,7 @@ void CLinkAnimScript::tick()
 	OperateAnimFuncAfter();
 	PlayNextAnim();
 	OperateAnimFunc();
+	ClearData();
 }
 
 void CLinkAnimScript::OperateAnimFunc()
@@ -289,6 +292,12 @@ void CLinkAnimScript::OperateAnimFunc()
 	}
 }
 
+void CLinkAnimScript::ClearData()
+{
+	m_bShieldGuard = false;
+	m_bShieldJust = false;
+}
+
 void CLinkAnimScript::SetLinkCond()
 {
 	m_iCond = 0;
@@ -310,6 +319,12 @@ void CLinkAnimScript::SetLinkCond()
 	if (KEY_PRESSED(KEY::N_2) || KEY_TAP(KEY::N_2))
 		AddBit(m_iCond, LAC_KEY_N2);
 
+	if (KEY_TAP(KEY::N_3))
+		AddBit(m_iCond, LAC_KEY_N3);
+
+	if (KEY_PRESSED(KEY::F) || KEY_TAP(KEY::F))
+		AddBit(m_iCond, LAC_KEY_F);
+
 	if (KEY_PRESSED(KEY::LBTN) || KEY_TAP(KEY::LBTN))
 	{
 		if (CalBit(m_pCurAnimNode->iPreferences, LAP_COMBO, BIT_LEAST_ONE))
@@ -320,6 +335,7 @@ void CLinkAnimScript::SetLinkCond()
 			
 		AddBit(m_iCond, LAC_KEY_LBTN);
 	}
+
 
 	// check combo progress with expanded time
 	if (m_bComboProgress)
@@ -388,9 +404,6 @@ void CLinkAnimScript::SetLinkCond()
 		}
 	}
 
-
-
-
 	if(CalBit(m_iMode, (UINT)LINK_MODE::LINK_MODE_RUN, BIT_LEAST_ONE))
 		AddBit(m_iCond, LAC_MODE_RUN);
 	else if (CalBit(m_iMode, (UINT)LINK_MODE::LINK_MODE_WALK, BIT_LEAST_ONE))
@@ -418,20 +431,28 @@ void CLinkAnimScript::SetLinkCond()
 	}
 	RigidBody()->SetGround(IsGround());
 
-	if (KEY_TAP(KEY::Z))
+	// check wheter link guarded monster atk 
+	if (m_bShieldGuard)
 	{
-		tLinkDamaged test;
-		test.eType = LINK_DAMAGED_TYPE::SMALL;
-		test.fDamage = 1.f;
-		SetDamage(test);
+		AddBit(m_iCond, LAC_SHIELD_GUARD);
+		m_bShieldGuard = false;
 	}
-	// Check Damage
-	if (m_tLinkDamaged.eType != LINK_DAMAGED_TYPE::NONE)
-	{
-		AddBit(m_iCond, LAC_DAMAGED_BACK);
 
-		switch (m_tLinkDamaged.eType)
+	// Check Damage
+	// link invincible
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_INVINCIBLE, BIT_LEAST_ONE) || m_bShieldGuard)
+	{
+		m_tLinkDamaged = {};
+	}
+	// link not invincible
+	else
+	{
+		if (m_tLinkDamaged.eType != LINK_DAMAGED_TYPE::NONE)
 		{
+			AddBit(m_iCond, LAC_DAMAGED_BACK);
+
+			switch (m_tLinkDamaged.eType)
+			{
 			case LINK_DAMAGED_TYPE::SMALL:
 			{
 				AddBit(m_iCond, LAC_DAMAGED_SMALL);
@@ -449,13 +470,13 @@ void CLinkAnimScript::SetLinkCond()
 				AddBit(m_iCond, LAC_DAMAGED_LARGE);
 			}
 			break;
+			}
+
+			// -- add code : sword guard hit
+			ApplyDamage();
+			if (m_tLinkStatus.fHP < 0.f)
+				AddBit(m_iCond, LAC_DEAD);
 		}
-
-		// -- add code : sword guard hit
-
-		ApplyDamage();
-		if(m_tLinkStatus.fHP < 0.f)
-			AddBit(m_iCond, LAC_DEAD);
 	}
 
 	// check equipment

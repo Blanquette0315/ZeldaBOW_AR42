@@ -61,6 +61,8 @@ private:
     bool                    m_bLockOn;
     bool                    m_bLockOnRotFinish;
     bool                    m_bIsAnimChanged;
+    bool                    m_bShieldGuard;
+    bool                    m_bShieldJust;
 
     // save
 private:
@@ -91,7 +93,8 @@ private:
     void OperateAnimFuncAfter();
 
     void PlayNextAnim();
-    void OperateAnimFunc(); 
+    void OperateAnimFunc();
+    void ClearData();
 
     // anim function
 private:
@@ -113,6 +116,9 @@ private:
     void Func_SwordEquipOn();
     void Func_SwordEquipOff();
     void Func_BowChargeMove();
+    void Func_ShieldGuard();
+    void Func_ShieldJust();
+    void Func_ShieldJustEnd();
 
     // convenience function
 private:
@@ -152,6 +158,12 @@ public:
 public:
     void SetDamage(tLinkDamaged _tDamage) { m_tLinkDamaged = _tDamage; }
     void ApplyDamage();
+
+    bool IsGuardAnim() { return IsCurAnim(LAT_SWORD_GUARD_WAIT); }
+    void SetGuardSuccess(bool _bGuardSuccess) { m_bShieldGuard = _bGuardSuccess; }
+    
+    // bool IsGuardJustAnim() { return IsCurAnim(LAT_SWORD_GUARD_JUST); }
+    void SetGuardJustSuccess(bool _bJustSuccess) { m_bShieldJust = _bJustSuccess; }
 
 public:
     static void ClearAnimNode();

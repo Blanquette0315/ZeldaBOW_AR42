@@ -245,7 +245,7 @@ PxFilterFlags CustomLayerShader
 		}
 
 	// Trigger only collides with non-trigger, non-trigger only collides with non-trigger
-	bool b = filterData0.word0 & filterData1.word1;
+	// bool b = filterData0.word0 & filterData1.word1;
 	return (filterData0.word0 & filterData1.word1) ? PxFilterFlag::eDEFAULT : PxFilterFlag::eSUPPRESS;
 	// return PxFilterFlag::eDEFAULT;
 }
