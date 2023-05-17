@@ -495,7 +495,7 @@ void CRigidBody::SetTerrainCollider(int _iVertexSize, Vector3* _vecVertexList, V
 	PxSize.z /= 100.f;
 
 	// 230400 is FaceCount(100) VertexCount
-	int iFacePerCount = 230400;
+	int iFacePerCount = 2304;
 	int iforCount = (int)ceil((float)_iVertexSize / iFacePerCount);
 
 	UINT* arrIndex = new UINT[iFacePerCount];

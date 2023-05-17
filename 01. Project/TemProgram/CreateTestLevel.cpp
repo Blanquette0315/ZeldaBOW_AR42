@@ -39,20 +39,7 @@ void CreateTestLevel()
 	Ptr<CMeshData> pMeshData = nullptr;
 	CGameObject* pObj = nullptr;
 
-	// DgnObj_FallDownPillar_A
-	pMeshData = nullptr;
-	pObj = nullptr;
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_FallDownPillar_A.fbx");
-	pMeshData->Save(pMeshData->GetRelativePath());
-
-	pObj = pMeshData->Instantiate();
-	pObj->SetFrustumCul(false);
-	pObj->SetName(L"DgnObj_FallDownPillar_A");
-	pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-
-	pLevel->AddGameObject(pObj, 0);
-
-	return;
+	
 
 	// Layer �̸� ����
 	pLevel->GetLayer(1)->SetName(L"Player");
@@ -155,39 +142,39 @@ void CreateTestLevel()
 	// GameObject �ʱ�ȭ
 	CGameObject* pObject = nullptr;
 
-	pObject = new CGameObject;
-	pObject->SetName(L"Player");
+	//pObject = new CGameObject;
+	//pObject->SetName(L"Player");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CRigidBody);
-	pObject->AddComponent(new CCollider);
-	pObject->AddComponent(new CPlayerScript);
-	//Sphere
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 50.f, 0.f));
-	pObject->Transform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender);
+	//pObject->AddComponent(new CRigidBody);
+	//pObject->AddComponent(new CCollider);
+	//pObject->AddComponent(new CPlayerScript);
+	////Sphere
+	//pObject->Transform()->SetRelativePos(Vec3(0.f, 50.f, 0.f));
+	//pObject->Transform()->SetRelativeScale(Vec3(25.f, 25.f, 25.f));
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 
-	pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
-	pObject->RigidBody()->SetCapsuleSize(6.4f, 12.8f);
-	//pObject->RigidBody()->SetSphereSize(128.f);
-	pObject->RigidBody()->SetMass(10.f);
-	pObject->RigidBody()->SetRestitution(0.f);
-	pObject->RigidBody()->SetStaticFriction(0.6f);
-	pObject->RigidBody()->SetDynamicFriction(0.6f);
-	pObject->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
-	pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
-	pObject->RigidBody()->SetGravityOption(true);
+	//pObject->RigidBody()->UpdateTransformData(COLLIDER_TYPE::COLLIDER_CAPSULE, false, true);
+	//pObject->RigidBody()->SetCapsuleSize(6.4f, 12.8f);
+	////pObject->RigidBody()->SetSphereSize(128.f);
+	//pObject->RigidBody()->SetMass(10.f);
+	//pObject->RigidBody()->SetRestitution(0.f);
+	//pObject->RigidBody()->SetStaticFriction(0.6f);
+	//pObject->RigidBody()->SetDynamicFriction(0.6f);
+	//pObject->RigidBody()->SetCenterPoint(Vec3(0.f, 0.f, 1.f));
+	//pObject->RigidBody()->SetLockAxis_Rot(true, true, true);
+	//pObject->RigidBody()->SetGravityOption(true);
 
-	pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_CUBE);
-	pObject->Collider()->SetScale(Vec3(5.f, 2.f, 5.f));
-	pObject->Collider()->SetOffsetPos(Vec3(0.f, -12.8f, 0.f));
-	//pObject->Collider()->SetCapsuleSize(65.f, 130.f);
+	//pObject->Collider()->SetColliderType(COLLIDER_TYPE::COLLIDER_CUBE);
+	//pObject->Collider()->SetScale(Vec3(5.f, 2.f, 5.f));
+	//pObject->Collider()->SetOffsetPos(Vec3(0.f, -12.8f, 0.f));
+	////pObject->Collider()->SetCapsuleSize(65.f, 130.f);
 
-	pLevel->AddGameObject(pObject, 0);
+	//pLevel->AddGameObject(pObject, 0);
 
 	// LandScape �߰�
 	CGameObject* pLandScape = new CGameObject;
@@ -216,6 +203,7 @@ void CreateTestLevel()
 	
 	pLevel->AddGameObject(pLandScape, 0);
 
+	return;
 
 	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
 	//pSound->Play(1, 0.3f, true, pObject);//Vec3(0.f, 500.f, 400.f));

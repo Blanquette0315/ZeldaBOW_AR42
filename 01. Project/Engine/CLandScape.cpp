@@ -63,6 +63,8 @@ CLandScape::~CLandScape()
 void CLandScape::begin()
 {
 	// LandStreamOut();
+
+	// CreateTexture();
 }
 
 void CLandScape::finaltick()
@@ -301,6 +303,21 @@ void CLandScape::SaveHeightImage()
 	hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
 }
 
+void CLandScape::LoadHeightImage()
+{
+	m_pHeightMap = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\landscape\\TempHight.dds");
+	
+	Ptr<CTexture> pHightCopyTex = CResMgr::GetInst()->CreateTexture(L"HightMapCopyTex"
+		, (UINT)m_pHeightMap->GetWidth() , m_pHeightMap->GetHeight()
+		, DXGI_FORMAT_R32_FLOAT
+		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
+
+	CONTEXT->CopyResource(pHightCopyTex->GetTex2D().Get(), m_pHeightMap->GetTex2D().Get());
+	m_pHeightMap = pHightCopyTex;
+	m_LandScapeMtrl->SetTexParam(TEX_0, pHightCopyTex);
+}
+
 void CLandScape::SaveWeightData()
 {
 	// 가중치 맵을 파일로 세이브
@@ -311,6 +328,7 @@ void CLandScape::SaveWeightData()
 	
 	// 경로
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+
 	wstring RelativePath = L"texture\\landscape\\TestWieghtMapData.buf";
 	strFilePath += RelativePath;
 
@@ -457,4 +475,32 @@ void CLandScape::LandStreamOut()
 
 	// Clear
 	CMaterial::Clear();
+}
+
+
+void CLandScape::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "LANDSCAPE";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "XFaceCount";
+	_emitter << YAML::Value << m_iXFaceCount;
+	_emitter << YAML::Key << "ZFaceCount";
+	_emitter << YAML::Value << m_iZFaceCount;
+
+	CRenderComponent::SaveToYAML(_emitter);
+	_emitter << YAML::EndMap;
+}
+
+void CLandScape::LoadFromYAML(YAML::Node& _node)
+{
+	YAML::Node node = _node["LANDSCAPE"];
+	SAFE_LOAD_FROM_YAML(UINT, m_iXFaceCount, _node["LANDSCAPE"]["XFaceCount"]);
+	SAFE_LOAD_FROM_YAML(UINT, m_iZFaceCount, _node["LANDSCAPE"]["ZFaceCount"]);
+
+	CRenderComponent::LoadFromYAML(node);
+	SetFaceCount(m_iXFaceCount, m_iZFaceCount);
+
+	LoadWeightData();
+	LoadHeightImage();
 }

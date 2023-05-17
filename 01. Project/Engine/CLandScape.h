@@ -76,6 +76,7 @@ public:
     bool IsCurDataCooking() { return m_bCurDataCooking; }
 
     void SaveHeightImage();
+    void LoadHeightImage();
 
     void SaveWeightData();
     void LoadWeightData();
@@ -98,6 +99,10 @@ private:
 
     void CreateCpBuffer(UINT _byteWidth);
     void CreateSOBuffer();
+
+public:
+    virtual void SaveToYAML(YAML::Emitter& _emitter) override;
+    virtual void LoadFromYAML(YAML::Node& _node) override;
 
     CLONE(CLandScape);
 public:
