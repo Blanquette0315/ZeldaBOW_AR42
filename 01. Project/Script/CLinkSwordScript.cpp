@@ -96,7 +96,6 @@ void CLinkSwordScript::Overlap(CGameObject* _pOther)
 
 void CLinkSwordScript::EndOverlap(CGameObject* _pOther)
 {
-
 }
 
 void CLinkSwordScript::SaveToYAML(YAML::Emitter& _emitter)

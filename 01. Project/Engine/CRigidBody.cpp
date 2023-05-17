@@ -18,7 +18,7 @@ CRigidBody::CRigidBody()
 	, m_bMeshCollider(false)
 	, m_bCreateActor(false)
 	, m_bUsePhysRot(true)
-	, m_bDebugDraw(true)
+	, m_bDebugDraw(false)
 	, m_bFollowingRigid(false)
 {
 	// base is m_vecPhysData[0]
@@ -38,7 +38,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_bCreateActor(false)
 	, m_bUsePhysRot(_origin.m_bUsePhysRot)
 	, m_vBoxSize(_origin.m_vBoxSize)
-	, m_bDebugDraw(true)
+	, m_bDebugDraw(false)
 	, m_bFollowingRigid(_origin.m_bFollowingRigid)
 {
 	// base is m_vecPhysData[0]
@@ -148,6 +148,7 @@ void CRigidBody::finaltick()
 		// will be added Force
 		m_vecPhysData[0]->AddForce(m_vForce.x, m_vForce.y, m_vForce.z);
 		m_vForce = Vec3(0.f, 0.f, 0.f);
+		
 		// ...
 	}
 
@@ -358,7 +359,7 @@ void CRigidBody::UpdatePhysResult()
 			else
 				Transform()->SetWorldRotation(vRot + Vec3(0.f, 0.f, -XM_PI * 0.5f));
 		}
-
+		
 		m_vVelocity = m_vecPhysData[0]->m_vPxLinearVelocity;
 	}
 }

@@ -35,13 +35,24 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_pPrevAnimNode(nullptr)
 	, m_bLockOnRotFinish(false)
 	, m_bInvincible(false)
-	, m_pParryingObj(nullptr)
+	, m_pInJustRigidObj(nullptr)
 	, m_fParryingAccTime(0.f)
 	, m_fParryingMaxTime(0.1f)
+	, m_fEvasionAccTime(0.f)
+	, m_fEvasionMaxTime(0.1f)
+	, m_bParryingOnce(false)
+	, m_bEvasionOnce(false)
+	, m_bArrEquip{}
+	, m_bCanJustAttackStart(false)
+	, m_fJustAtkAccTime(0.f)
+	, m_fJustAtkMaxTime(2.f)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Time", &m_fParryingMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Evasion Time", &m_fEvasionMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustAtk Time", &m_fJustAtkMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustMove Force", &m_fJustMoveForce, 0.f, 20.f);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -64,13 +75,25 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_pPrevAnimNode(nullptr)
 	, m_bLockOnRotFinish(false)
 	, m_bInvincible(false)
-	, m_pParryingObj(nullptr)
+	, m_pInJustRigidObj(nullptr)
 	, m_fParryingAccTime(0.f)
 	, m_fParryingMaxTime(_origin.m_fParryingMaxTime)
+	, m_fEvasionAccTime(0.f)
+	, m_fEvasionMaxTime(_origin.m_fEvasionMaxTime)
+	, m_bParryingOnce(false)
+	, m_bEvasionOnce(false)
+	, m_bArrEquip{}
+	, m_bCanJustAttackStart(false)
+	, m_fJustAtkAccTime(0.f)
+	, m_fJustAtkMaxTime(_origin.m_fJustAtkMaxTime)
+	, m_fJustMoveForce(_origin.m_fJustMoveForce)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Time", &m_fParryingMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Evasion Time", &m_fEvasionMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustAtk Time", &m_fJustAtkMaxTime, 0.f, 1.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustMove Force", &m_fJustMoveForce, 0.f, 20.f);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -201,10 +224,41 @@ bool CLinkAnimScript::IsGround()
 	return m_pGroundChecker->IsGround();
 }
 
+void CLinkAnimScript::MoveByForce(Vec3 _vDirXZ, float _fForce)
+{
+	_vDirXZ.y = 0.f;
+	_vDirXZ.Normalize();
+	_vDirXZ *= 5.f;
+	_vDirXZ += Transform()->GetRelativeDir(DIR::UP);
+	_vDirXZ.Normalize();
+
+	RigidBody()->AddForce(_vDirXZ * 0.01f * _fForce);
+}
+
 void CLinkAnimScript::ApplyDamage()
 {
 	m_tLinkStatus.fHP -= m_tLinkDamaged.fDamage;
 	m_tLinkDamaged = {};
+}
+
+void CLinkAnimScript::JustAttackTimer()
+{
+	if (m_bCanJustAttackStart)
+	{
+		if (m_fJustAtkMaxTime < m_fJustAtkAccTime)
+		{
+			m_bCanJustAttackStart = false;
+			m_fJustAtkAccTime = 0.f;
+		}
+		else
+		{
+			m_fJustAtkAccTime += FDT;
+		}
+	}
+	else
+	{
+		m_fJustAtkAccTime = 0.f;
+	}
 }
 
 void CLinkAnimScript::ClearAnimNode()
@@ -257,12 +311,16 @@ void CLinkAnimScript::begin()
 	m_tLinkStatus.fHP = 7777.f;
 	m_tLinkDamaged.eType = LINK_DAMAGED_TYPE::NONE;
 	m_pAnyStateNode = m_mapAnimNode.find(LINK_STRING_WCHAR[LINK_STRING_ANYSTATE_NODE_KEY])->second;
+	
+	m_pCurAnimNode = m_mapAnimNode.find(LINK_ANIM_WCHAR[LAT_WAIT])->second;
+	m_pAnimator->Play(m_pCurAnimNode->pAnimKey, true);
 }
 
 void CLinkAnimScript::tick()
 {
 	// PlayNextAnim();
 	SetLinkCond();
+	Timer();
 	OperateAnimFuncAfter();
 	PlayNextAnim();
 	OperateAnimFunc();
@@ -302,11 +360,38 @@ void CLinkAnimScript::OperateAnimFunc()
 	}
 }
 
+void CLinkAnimScript::Timer()
+{
+	if (m_bIsAnimChanged && CalBit(m_pCurAnimNode->iPreferences, LAP_JUST_ATK, BIT_LEAST_ONE))
+	{
+		// reset
+		m_fJustAtkAccTime = 0.f;
+		m_bJustAtkEndOnce = true;
+	}
+	
+	// timer each attack
+	if (m_bJustAtkEndOnce)
+	{
+		if (m_fJustAtkAccTime > m_fJustAtkMaxTime)
+		{
+			Func_JustAtkEnd();
+			m_bJustAtkEndOnce = false;
+			RemoveBit(m_iCond, LAC_KEY_LBTN_COMBO);
+		}
+		else
+		{
+			m_fJustAtkAccTime += FDT;
+		}
+	}
+	
+	// JustAttackTimer();
+}
+
 void CLinkAnimScript::ClearData()
 {
 	m_bShieldGuard = false;
-	m_bShieldJust = false;
-	m_pParryingObj = nullptr;
+	m_bInJustRigid = false;
+	m_pInJustRigidObj = nullptr;
 }
 
 void CLinkAnimScript::SetLinkCond()
@@ -335,7 +420,7 @@ void CLinkAnimScript::SetLinkCond()
 
 	if (KEY_TAP(KEY::F))
 	{
-		if (m_bShieldJust)
+		if (m_bInJustRigid)
 		{
 			m_bInvincible = true;
 		}
@@ -466,7 +551,7 @@ void CLinkAnimScript::SetLinkCond()
 	{
 		if (m_tLinkDamaged.eType != LINK_DAMAGED_TYPE::NONE)
 		{
-			AddBit(m_iCond, LAC_DAMAGED_BACK);
+			AddBit(m_iCond, LAC_DAMAGED_BACK);	
 
 			switch (m_tLinkDamaged.eType)
 			{
@@ -497,20 +582,23 @@ void CLinkAnimScript::SetLinkCond()
 	}
 
 	// check equipment
-	if (m_pPrevAnimNode)
+	if (m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD])
 	{
-		if (CalBit(m_pPrevAnimNode->iPreferences, LAP_EQUIP_SWORD, BIT_LEAST_ONE))
-		{
-			AddBit(m_iCond, LAC_EQUIP_SWORD);
-		}
-		else if (CalBit(m_pPrevAnimNode->iPreferences, LAP_EQUIP_BOW, BIT_LEAST_ONE))
-		{
-			AddBit(m_iCond, LAC_EQUIP_BOW);
-		}
-		else if (CalBit(m_pPrevAnimNode->iPreferences, LAP_EQUIP_SHIELD, BIT_LEAST_ONE))
-		{
-			AddBit(m_iCond, LAC_EQUIP_SHIELD);
-		}
+		AddBit(m_iCond, LAC_EQUIP_SWORD);
+	}
+	else if (m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW])
+	{
+		AddBit(m_iCond, LAC_EQUIP_BOW);
+	}
+	else if (m_bArrEquip[(UINT)EQUIPMENT_STATE::SHIELD])
+	{
+		AddBit(m_iCond, LAC_EQUIP_SHIELD);
+	}
+
+
+	if (m_bCanJustAttackStart)
+	{
+		AddBit(m_iCond, LAC_CAN_JUST_ATTACK_START);
 	}
 }
 
@@ -537,6 +625,10 @@ void CLinkAnimScript::PlayNextAnim()
 
 		if (CalBit(iCmpBit, m_pAnyStateNode->vecTranAnim[i]->iTranCond, BIT_EQUAL))
 		{
+			tAnimNode* pNextNode = m_mapAnimNode.find(m_pAnyStateNode->vecTranAnim[i]->pTargetAnimKey)->second;
+			if (pNextNode == m_pCurAnimNode)
+				break;
+
 			m_pPrevAnimNode = m_pCurAnimNode;
 			m_pCurAnimNode = m_mapAnimNode.find(m_pAnyStateNode->vecTranAnim[i]->pTargetAnimKey)->second;
 			//return;
@@ -558,14 +650,7 @@ void CLinkAnimScript::PlayNextAnim()
 				return;
 			}
 		}
-		else
-		{
-			m_bIsAnimChanged = false;
-		}
 	}
-
-	if (m_bIsAnimChanged)
-		return;
 
 	iTranCount = m_pCurAnimNode->vecTranAnim.size();
 
@@ -598,11 +683,9 @@ void CLinkAnimScript::PlayNextAnim()
 				return;
 			}
 		}
-		else
-		{
-			m_bIsAnimChanged = false;
-		}
 	}
+
+	m_bIsAnimChanged = false;
 }
 
 void CLinkAnimScript::BeginOverlap(CGameObject* _pOther)
@@ -647,6 +730,15 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "Parrying Max Time";
 	_emitter << YAML::Value << m_fParryingMaxTime;
+
+	_emitter << YAML::Key << "Evasion Max Time";
+	_emitter << YAML::Value << m_fEvasionMaxTime;
+
+	_emitter << YAML::Key << "JustATK Max Time";
+	_emitter << YAML::Value << m_fJustAtkMaxTime;
+
+	_emitter << YAML::Key << "Just Move Force";
+	_emitter << YAML::Value << m_fJustMoveForce;
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -662,6 +754,9 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fComboMaxTime, _node["Link Combo Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_tLinkStatus.fHP, _node["Link Status HP"]);
 	SAFE_LOAD_FROM_YAML(float, m_fParryingMaxTime, _node["Parrying Max Time"]);
+	SAFE_LOAD_FROM_YAML(float, m_fEvasionMaxTime, _node["Evasion Max Time"]);
+	SAFE_LOAD_FROM_YAML(float, m_fJustAtkMaxTime, _node["JustATK Max Time"]);
+	SAFE_LOAD_FROM_YAML(float, m_fJustMoveForce, _node["Just Move Force"]);
 }
 
 

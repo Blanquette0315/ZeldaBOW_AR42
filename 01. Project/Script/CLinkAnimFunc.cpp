@@ -4,6 +4,7 @@
 #include <Engine/CTransform.h>
 #include <Engine/CRigidbody.h>
 #include <Engine/CAnimation3D.h>
+#include <Engine/CPhysMgr.h>
 
 #include "CLinkScript.h"
 #include "CLockOnScript.h"
@@ -288,6 +289,8 @@ void CLinkAnimScript::Func_BowEquipOn()
 	CBonesocketScript* pBoneScr = m_pBowObj->GetScript<CBonesocketScript>();
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_L);
 	pBoneScr->ClearOffset();
+
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW] = true;
 }
 
 void CLinkAnimScript::Func_BowEquipOff()
@@ -296,6 +299,8 @@ void CLinkAnimScript::Func_BowEquipOff()
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
 	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, -0.07f));
 	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -45.f));
+
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW] = false;
 }
 
 void CLinkAnimScript::Func_SwordAttackMove()
@@ -309,6 +314,8 @@ void CLinkAnimScript::Func_SwordEquipOn()
 	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_R);
 	pBoneScr->ClearOffset();
+	
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = true;
 
 	pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_L);
@@ -321,6 +328,8 @@ void CLinkAnimScript::Func_SwordEquipOff()
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
 	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
 	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 60.f));
+
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = false;
 
 	pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
@@ -349,10 +358,7 @@ void CLinkAnimScript::Func_BowChargeMove()
 	}
 }
 
-void CLinkAnimScript::Func_ShieldGuard()
-{
-	// 
-}
+
 
 void CLinkAnimScript::Func_ShieldJustStart()
 {
@@ -368,7 +374,7 @@ void CLinkAnimScript::Func_ShieldJust()
 	}
 	else
 	{
-		if (m_bShieldJust && m_pParryingObj && m_bParryingOnce == false)
+		if (m_bInJustRigid && m_pInJustRigidObj && m_bParryingOnce == false)
 		{
 			// time slow
 			TimeSlow(true, 3.f);
@@ -376,7 +382,7 @@ void CLinkAnimScript::Func_ShieldJust()
 			m_bInvincible = true;
 
 			// monster stun
-			m_pParryingObj->GetScript<CMonsterScript>()->Parrying();
+			m_pInJustRigidObj->GetScript<CMonsterScript>()->Parrying();
 		}
 
 		m_fParryingAccTime += FDT;
@@ -385,8 +391,106 @@ void CLinkAnimScript::Func_ShieldJust()
 
 void CLinkAnimScript::Func_ShieldJustEnd()
 {
-	m_bShieldJust = false;
+	// m_bInJustRigid = false;
 	m_bInvincible = false;
-	m_pParryingObj = nullptr;
+	// m_pInJustRigidObj = nullptr;
 	TimeSlow(false);
+}
+
+void CLinkAnimScript::Func_ShieldGuard()
+{
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SHIELD] = true;
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = false;
+}
+
+void CLinkAnimScript::Func_SwordLockOnWait()
+{
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = true;
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SHIELD] = false;
+}
+
+void CLinkAnimScript::Func_JustEvasionStart()
+{
+	// jump back
+	Vec3 vDir = -Transform()->GetRelativeDir(DIR::FRONT);
+	vDir *= 0.5f;
+	vDir.y = m_fJumpSpeed;
+	RigidBody()->SetVelocity(vDir);
+
+	m_fEvasionAccTime = 0.f;
+	m_bEvasionOnce = false;
+}
+
+void CLinkAnimScript::Func_JustEvasion()
+{
+	if (m_fEvasionMaxTime < m_fEvasionAccTime)
+	{
+	}
+	else
+	{
+		if (m_bInJustRigid && m_pInJustRigidObj && m_bEvasionOnce == false)
+		{
+			// time slow
+			TimeSlow(true, 3.f);
+			CPhysMgr::GetInst()->SetPhysSlow(true);
+			m_bEvasionOnce = true;
+			m_bInvincible = true;	
+			m_bCanJustAttackStart = true;
+		}
+		else
+		{
+			m_fEvasionAccTime += FDT;
+		}
+	}
+	int i = m_pCurAnimNode->pAnim->GetCurFrame();
+	if (m_bEvasionOnce && m_pCurAnimNode->pAnim->GetCurFrame() > 1367 )
+	{
+		TimeSlowAffectedObj(false, GetOwner());
+		CPhysMgr::GetInst()->SetPhysSlow(false);
+	}
+}
+
+void CLinkAnimScript::Func_JustEvasionEnd()
+{
+	if (m_bEvasionOnce)
+	{
+
+	}
+}
+
+void CLinkAnimScript::Func_JustAtkStart()
+{
+
+}
+
+void CLinkAnimScript::Func_JustAtkDash()
+{
+	CGameObject* pLockOnObj = m_pLockOnRadar->GetLockOnTarget();
+	if (pLockOnObj && CalBit(m_iMode, LINK_MODE_LOCKON, BIT_LEAST_ONE))
+	{
+		Vec3 vTargetPos = pLockOnObj->Transform()->GetRelativePos();
+		Vec3 vPos = Transform()->GetRelativePos();
+		float fLength = (vTargetPos - vPos).Length();
+		Vec3 vDir = (vTargetPos - vPos);
+		vDir.y = 0.f;
+		vDir.Normalize();
+
+		RigidBody()->SetVelocity(vDir * fLength);
+	}
+}
+
+void CLinkAnimScript::Func_DisableCanJust()
+{
+	m_bCanJustAttackStart = false;
+}
+
+void CLinkAnimScript::Func_JustAtkEnd()
+{
+	TimeSlowAffectedObj(true, GetOwner());
+	TimeSlow(false);
+	m_bInvincible = false;
+
+	// monster set state 
+	if(m_pLockOnRadar->GetLockOnTarget())
+		m_pLockOnRadar->GetLockOnTarget()->GetScript<CMonsterScript>()->Parrying();
 }

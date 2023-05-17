@@ -232,6 +232,14 @@ void CEventMgr::tick()
 		}
 		break;
 
+		case EVENT_TYPE::SLOWTIME_AFFECTED:
+		{
+			bool bIsAffected = (bool)m_vecEvent[i].wParam;
+			CGameObject* pObj = (CGameObject*)m_vecEvent[i].lParam;
+			pObj->SetAffetedByTimeSlow(bIsAffected);
+		}
+		break;
+
 		default:
 			break;
 		}
