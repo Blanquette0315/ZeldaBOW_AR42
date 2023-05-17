@@ -6,7 +6,7 @@ tTransform g_transform = {};
 tGlobalData g_global = {};
 tTimeSlow g_timeslow = { false, 2.f };
 
-const Vector3 Vector3::Zero = Vector3(0.f, 0.f, 0.f);
+// const Vector3 Vector3::Zero = Vector3(0.f, 0.f, 0.f);
 
 extern const char* RES_TYPE_CHAR[(UINT)RES_TYPE::END]
 {
