@@ -38,6 +38,8 @@ private:
     bool                        m_bFrustumCul; // CameraFrustum Culling을 할지 말지
 
     Ptr<CPrefab>                m_OwnerPrefab;
+    bool                        m_bTimeSlow;
+    float                       m_fTimeRatioSave;
 
 protected:
     vector<CGameObject*>        m_vecChild;
@@ -60,6 +62,10 @@ public:
     
     // 랜더링을 할지 안할지 정해준다.
     void SetRender(bool _render) { m_bRender = _render; }
+
+public:
+    bool IsAffectedByTimeSlow() { return m_bTimeSlow; }
+    void SetAffetedByTimeSlow(bool _b) { m_bTimeSlow = _b; }
 
 public:
     void AddComponent(CComponent* _pComponent);

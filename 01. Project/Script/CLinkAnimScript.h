@@ -12,6 +12,13 @@ struct tLinkDamaged
     LINK_DAMAGED_TYPE eType;
 };
 
+enum class EQUIPMENT_STATE
+{
+    SWORD,
+    BOW,
+    SHIELD,
+    END
+};
 
 class CAnimator3D;
 class CAnimation3D;
@@ -46,7 +53,7 @@ private:
     CGameObject*            m_pBowObj;
     CGameObject*            m_pShieldObj;
 
-    CGameObject*            m_pParryingObj;
+    CGameObject*            m_pInJustRigidObj;
 
     Vec3                    m_vDir[(UINT)LINK_DIRECTION::END];
 
@@ -63,11 +70,25 @@ private:
     bool                    m_bLockOnRotFinish;
     bool                    m_bIsAnimChanged;
     bool                    m_bShieldGuard;
-    bool                    m_bShieldJust;
+    bool                    m_bInJustRigid;
+    bool                    m_bEvasionJust;
     bool                    m_bInvincible;
 
     float                   m_fParryingAccTime;
     bool                    m_bParryingOnce;
+
+    float                   m_fEvasionAccTime;
+    bool                    m_bEvasionOnce;
+
+    float                   m_fJustAtkAccTime;
+
+    bool                    m_bArrEquip[(UINT)EQUIPMENT_STATE::END];
+
+    bool                    m_bCanJustAttackStart;
+    bool                    m_bCanJustAttack;
+
+    bool                    m_bJustAtkEndOnce;
+    bool                    m_bOFA;
     // save
 private:
     float           m_fAnglePerSec;
@@ -81,7 +102,10 @@ private:
     tLinkDamaged    m_tLinkDamaged;
 
     float           m_fParryingMaxTime;
-  
+    float           m_fEvasionMaxTime;
+    float           m_fJustAtkMaxTime;
+    
+    float           m_fJustMoveForce;
 
     // FSM function
 private:
@@ -98,9 +122,9 @@ private:
 
     // This Func can use anim finished member 
     void OperateAnimFuncAfter();
-
     void PlayNextAnim();
     void OperateAnimFunc();
+    void Timer();
     void ClearData();
 
     // anim function
@@ -127,6 +151,14 @@ private:
     void Func_ShieldJustStart();
     void Func_ShieldJust();
     void Func_ShieldJustEnd();
+    void Func_SwordLockOnWait();
+    void Func_JustEvasionStart();
+    void Func_JustEvasion();
+    void Func_JustEvasionEnd();
+    void Func_JustAtkStart();
+    void Func_JustAtkDash();
+    void Func_DisableCanJust();
+    void Func_JustAtkEnd();
 
     // convenience function
 private:
@@ -152,6 +184,9 @@ private:
     // get ground from child ground checker
     bool IsGround();
 
+    void MoveByForce(Vec3 _vDirXZ, float _fForce);
+
+    // getter setter
 public:
     tAnimNode* GetCurAnimNode() { return m_pCurAnimNode; }
     bool IsAnimChanged() { return m_bIsAnimChanged; }
@@ -171,7 +206,11 @@ public:
     void SetGuardSuccess(bool _bGuardSuccess) { m_bShieldGuard = _bGuardSuccess; }
     
     // bool IsGuardJustAnim() { return IsCurAnim(LAT_SWORD_GUARD_JUST); }
-    void SetGuardJustSuccess(bool _bJustSuccess, CGameObject* _pParryingObj) { m_bShieldJust = _bJustSuccess; m_pParryingObj = _pParryingObj; }
+    void SetGuardJustSuccess(bool _bJustSuccess, CGameObject* _pParryingObj) { m_bInJustRigid = _bJustSuccess; m_pInJustRigidObj = _pParryingObj; }
+
+    // Timer Function
+public:
+    void JustAttackTimer();
 
 public:
     static void ClearAnimNode();

@@ -30,7 +30,14 @@ void CPhysMgr::init()
 
 void CPhysMgr::tick()
 {
-	PhysX_Update(FDT);
+	if (m_bPhysSlow)
+	{
+		PhysX_Update(FDT);
+	}
+	else
+	{
+		PhysX_Update(FDT_TICK);
+	}
 	vector<CGameObject*> vecGameObj = CLevelMgr::GetInst()->GetCurLevel()->GetGameObjects();
 
 	for (size_t i = 0; i < vecGameObj.size(); ++i)
