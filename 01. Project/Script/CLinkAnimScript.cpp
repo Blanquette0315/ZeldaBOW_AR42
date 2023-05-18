@@ -53,6 +53,7 @@ CLinkAnimScript::CLinkAnimScript()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Evasion Time", &m_fEvasionMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustAtk Time", &m_fJustAtkMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustMove Force", &m_fJustMoveForce, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Bomb Prefab", &m_pBombPref);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -87,6 +88,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_fJustAtkAccTime(0.f)
 	, m_fJustAtkMaxTime(_origin.m_fJustAtkMaxTime)
 	, m_fJustMoveForce(_origin.m_fJustMoveForce)
+	, m_pBombPref(_origin.m_pBombPref)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
@@ -94,6 +96,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Evasion Time", &m_fEvasionMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustAtk Time", &m_fJustAtkMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustMove Force", &m_fJustMoveForce, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Bomb Prefab", &m_pBombPref);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -739,6 +742,8 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "Just Move Force";
 	_emitter << YAML::Value << m_fJustMoveForce;
+
+	SaveResourceRef(m_pBombPref, _emitter);
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -757,6 +762,8 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fEvasionMaxTime, _node["Evasion Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_fJustAtkMaxTime, _node["JustATK Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_fJustMoveForce, _node["Just Move Force"]);
+
+	LoadResourceRef(m_pBombPref, _node);
 }
 
 

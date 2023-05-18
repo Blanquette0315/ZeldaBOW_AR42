@@ -27,9 +27,13 @@ private:
     // not doing physics calculation
     bool m_bFollowingRigid;
 
+    // ui function
 public:
     bool& GetDebugDraw() { return m_bDebugDraw; }
     bool& GetFollowingRigid() { return m_bFollowingRigid; }
+
+public:
+    void SetFollowingRigid(bool _b) { m_bFollowingRigid = _b; }
 
 public:
     vector<PhysData*> GetRigidData() { return m_vecPhysData; }

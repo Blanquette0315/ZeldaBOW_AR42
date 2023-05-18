@@ -189,6 +189,7 @@ void ChangeLevel(CLevel* _NextLevel);
 void ChangeLevelAndPlay(CLevel* _NextLevel);
 
 void MakeParent(CGameObject* _pChildObj);
+void MakeParentReserve(CGameObject* _pChildObj);
 void AddComponent(CGameObject* _pObj, COMPONENT_TYPE _eType);
 void TimeSlow(bool _bActive, float _fRatio = 2.f);
 void TimeSlowAffectedObj(bool _bActive, CGameObject* _pObj);

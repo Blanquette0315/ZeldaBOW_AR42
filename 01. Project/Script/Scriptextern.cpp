@@ -74,7 +74,10 @@ extern const wchar_t* LINK_ANIM_WCHAR[(UINT)LINK_ANIM_TYPE::LAT_END] =
 	L"Warp",
 	L"Die",
 	L"Die_Run",
-	L"Bow_Move_Run_Upper"
+	L"Bow_Move_Run_Upper",
+	L"Create_Bomb",
+	L"Bomb_Throw_Sphere",
+	L"Bomb_Throw_Cube",
 };
 
 extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_END] =

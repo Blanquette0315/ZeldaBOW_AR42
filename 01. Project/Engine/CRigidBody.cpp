@@ -38,7 +38,7 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	, m_bCreateActor(false)
 	, m_bUsePhysRot(_origin.m_bUsePhysRot)
 	, m_vBoxSize(_origin.m_vBoxSize)
-	, m_bDebugDraw(false)
+	, m_bDebugDraw(_origin.m_bDebugDraw)
 	, m_bFollowingRigid(_origin.m_bFollowingRigid)
 {
 	// base is m_vecPhysData[0]
@@ -246,7 +246,8 @@ void CRigidBody::UpdateTransformData(COLLIDER_TYPE _eColliderType, bool _bKinema
 {
 	// PhysData Position Setting
 	Vec3 vFinalPos = Transform()->GetWorldPos();
-	vFinalPos += m_vColOffSet;
+	Vec3 vColOffsetConverted = XMVector3TransformCoord(m_vColOffSet, Transform()->GetWorldRotMat());
+	vFinalPos += vColOffsetConverted;
 		
 	RigidBody()->SetWorldPosition(vFinalPos);
 
@@ -335,7 +336,8 @@ void CRigidBody::UpdatePhysResult()
 	if (m_bFollowingRigid)
 	{
 		Vec3 vPos = Transform()->GetWorldPos();
-		vPos += m_vColOffSet;
+		Vec3 vColOffsetConverted = XMVector3TransformCoord(m_vColOffSet, Transform()->GetWorldRotMat());
+		vPos += vColOffsetConverted;
 		SetWorldPosition(vPos);
 		PhysX_Update_Actor(m_vecPhysData[0]);
 	}
@@ -345,7 +347,8 @@ void CRigidBody::UpdatePhysResult()
 
 		// Reflect simulation results to Transform
 		Vec3 vPos = GetWorldPosition();
-		vPos -= m_vColOffSet;
+		Vec3 vColOffsetConverted = XMVector3TransformCoord(m_vColOffSet, Transform()->GetWorldRotMat());
+		vPos -= vColOffsetConverted;
 		Transform()->SetWorldPos(vPos);
 
 		if (m_bUsePhysRot)
