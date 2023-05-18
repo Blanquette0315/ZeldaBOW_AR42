@@ -174,6 +174,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CBossFireballScript.h" />
     <ClInclude Include="CBossScript.h" />
     <ClInclude Include="CLinkArrowScript.h" />
+    <ClInclude Include="CLinkBombScript.h" />
     <ClInclude Include="CLinkBowScript.h" />
     <ClInclude Include="CCameraMgr.h" />
     <ClInclude Include="CCamScript.h" />
@@ -209,6 +210,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CBossFireballScript.cpp" />
     <ClCompile Include="CBossScript.cpp" />
     <ClCompile Include="CLinkArrowScript.cpp" />
+    <ClCompile Include="CLinkBombScript.cpp" />
     <ClCompile Include="CLinkBowScript.cpp" />
     <ClCompile Include="CCameraMgr.cpp" />
     <ClCompile Include="CCamScript.cpp" />

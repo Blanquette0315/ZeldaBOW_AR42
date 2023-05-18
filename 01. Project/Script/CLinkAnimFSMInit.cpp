@@ -59,6 +59,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_JUMP_R, LAC_KEY_SPACE, LAC_TOE_L_FRONT);
 	SetAnimTran(pAnimNode, LAT_SWORD_EQUIP_ON, LAC_KEY_N1);
 	SetAnimTran(pAnimNode, LAT_BOW_EQUIP_ON, LAC_KEY_N2);
+	SetAnimTran(pAnimNode, LAT_CREATE_BOMB, LAC_KEY_F);
 
 	// Walk
 	SetAnimNode(pAnimNode, LAT_WALK, LAP_REPEAT); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_WalkRunDash);
@@ -259,6 +260,18 @@ void CLinkAnimScript::MakeFSM()
 
 	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH5, LAP_ATTACK | LAP_JUST_ATK_FINISH | LAP_INVINCIBLE | LAP_KEEP_LOCKON | LAP_JUST_ATK); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_JustAtkEnd);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED);
+
+	// Bomb
+	SetAnimNode(pAnimNode, LAT_CREATE_BOMB, LAP_BLEND); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_CreateBomb);
+	SetAnimTran(pAnimNode, LAT_BOMB_THROW_SPHERE, LAC_KEY_F);
+	// SetAnimTran(pAnimNode, LAT_BOMB_THROW_SPHERE, LAC_BOMB_SPHERE);
+
+	SetAnimNode(pAnimNode, LAT_BOMB_THROW_CUBE);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
+
+	SetAnimNode(pAnimNode, LAT_BOMB_THROW_SPHERE); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ThrowBombStart);
+	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
+
 
 	// Any State Node
 	tAnimNode* pAnyStateNode = new tAnimNode();

@@ -87,7 +87,7 @@ void CBonesocketScript::finaltick()
 
 		Vec3 vFinalOffset = XMVector3TransformCoord(m_vOffsetPos, matRot);
 
-		// Transform()->SetRelativeScale(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vScale, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vScale, fRatio));
+		Transform()->SetRelativeScale(Vector3::Lerp(vecBones->at(m_iBoneIdx).vecKeyFrame[iCurFrame].vScale, vecBones->at(m_iBoneIdx).vecKeyFrame[iNextFrame].vScale, fRatio));
 		if (GetOwner()->GetParent()->Animator3D() && GetOwner()->GetParent()->Animator3D()->GetCurAnimationLower())
 		{
 			CAnimator3D* pAnimator = GetOwner()->GetParent()->Animator3D();

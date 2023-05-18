@@ -11,6 +11,7 @@
 #include "FSMNode.h"
 #include "CBonesocketScript.h"
 #include "CMonsterScript.h"
+#include "CLinkBombScript.h"
 
 
 bool CLinkAnimScript::MoveRotation(Vec3 _vDir)
@@ -493,4 +494,31 @@ void CLinkAnimScript::Func_JustAtkEnd()
 	// monster set state 
 	if(m_pLockOnRadar->GetLockOnTarget())
 		m_pLockOnRadar->GetLockOnTarget()->GetScript<CMonsterScript>()->Parrying();
+}
+
+void CLinkAnimScript::Func_CreateBomb()
+{
+	if (m_pBombPref.Get() == nullptr)
+		return;
+
+	if (m_pBombObj)
+	{
+		m_pBombObj->Destroy();
+		m_pBombObj = nullptr;
+	}
+
+	m_pBombObj = m_pBombPref->Instantiate();
+	m_pBombObj->GetScript<CBonesocketScript>()->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_R);
+	AddChild(GetOwner(), m_pBombObj);
+}
+
+void CLinkAnimScript::Func_ThrowBombStart()
+{
+	MakeParentReserve(m_pBombObj);
+	m_pBombObj->GetScript<CBonesocketScript>()->SetDisable(true);
+	Vec3 vDir = Transform()->GetRelativeDir(DIR::FRONT);
+	vDir.y = tanf(XM_PI / 6.f);
+	vDir.Normalize();
+	m_pBombObj->GetScript<CLinkBombScript>()->SetDir(vDir);
+	m_pBombObj = nullptr;
 }

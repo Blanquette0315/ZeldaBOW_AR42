@@ -9,6 +9,12 @@
 #pragma comment(lib, "DirectXTex/DirectXTex")
 #endif
 
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTK/DirectXTK_debug")
+#else
+#pragma comment(lib, "DirectXTK/DirectXTK")
+#endif
+
 // Texture Class를 직접 만들어서 GPU메모리에 직접 Texture를 생성 할 수도 있도록 구조를 잡아주었다.
 // 해당 Texture는 여러가지 용도로 만들어질 수 있기 때문에 각각의 View를 멤버로 지닐 수 있도록 만들었다.
 

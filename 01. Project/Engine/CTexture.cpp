@@ -3,6 +3,9 @@
 
 #include "CDevice.h"
 
+#include <DirectXTK/DDSTextureLoader.h>
+
+
 CTexture::CTexture(bool _bEngineRes)
 	: CRes(RES_TYPE::TEXTURE, _bEngineRes)
 	, m_Desc{}
@@ -76,7 +79,7 @@ int CTexture::Load(const wstring& _strFilePath, int _iMipLevel)
 	if (strExt == L".dds" || strExt == L".DDS")
 	{
 		// .dds .DDS
-		hRet = LoadFromDDSFile(_strFilePath.c_str(), DDS_FLAGS_FORCE_RGB, nullptr, m_Image);
+		hRet = LoadFromDDSFile(_strFilePath.c_str(), DirectX::DDS_FLAGS_FORCE_RGB, nullptr, m_Image);
 	}
 	else if (strExt == L".tga" || strExt == L".TGA")
 	{
@@ -94,6 +97,12 @@ int CTexture::Load(const wstring& _strFilePath, int _iMipLevel)
 		wsprintf(strBuff, L"에러코드 : %d", hRet);
 		MessageBox(nullptr, strBuff, L"텍스쳐 로딩 실패", MB_OK);
 		return hRet;
+	}
+
+	if (m_Image.GetMetadata().format == DXGI_FORMAT_BC3_UNORM)
+	{
+		hRet = CreateDDSTextureFromFile(DEVICE, _strFilePath.c_str(), (ID3D11Resource**)m_Tex2D.GetAddressOf(), m_SRV.GetAddressOf());
+		return hRet; 
 	}
 
 	// Texture2D 생성
@@ -117,7 +126,7 @@ int CTexture::Load(const wstring& _strFilePath, int _iMipLevel)
 	m_Desc.SampleDesc.Count = 1;
 	m_Desc.SampleDesc.Quality = 0;
 
-	m_Desc.Usage = D3D11_USAGE_DEFAULT;
+	m_Desc.Usage = D3D11_USAGE_DEFAULT;		
 	m_Desc.CPUAccessFlags = 0;
 
 	m_Desc.Width = m_Image.GetMetadata().width;

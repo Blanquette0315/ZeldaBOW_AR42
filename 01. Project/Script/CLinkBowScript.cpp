@@ -53,7 +53,7 @@ void CLinkBowScript::tick()
 		if (!IsValid(m_pArrowObj))
 		{
 			m_pArrowObj = m_pArrowPref->Instantiate();
-			Instantiate(m_pArrowObj, Vec3::Zero, 0);
+			// Instantiate(m_pArrowObj, Vec3::Zero, 0);
 			AddChild(GetOwner()->GetParent(), m_pArrowObj);
 			m_pArrowObj->GetScript<CBonesocketScript>()->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_R);
 			m_bOnce = true;
@@ -65,9 +65,9 @@ void CLinkBowScript::tick()
 	{
 		if (m_bOneFrameAfter)
 		{
-			m_pArrowObj->Transform()->SetRelativeScale(m_vArrowWorldScale);
-			m_pArrowObj->Transform()->SetRelativeRotation(m_vArrowWorldRot);
-			m_pArrowObj->Transform()->SetRelativePos(m_vArrowWorldPos);
+			// m_pArrowObj->Transform()->SetRelativeScale(m_vArrowWorldScale);
+			// m_pArrowObj->Transform()->SetRelativeRotation(m_vArrowWorldRot);
+			// m_pArrowObj->Transform()->SetRelativePos(m_vArrowWorldPos);
 			CGameObject* pLinkCam = m_pLinkAnimScr->GetLinkCam();
 			Vec3 vArrowToCam = pLinkCam->Transform()->GetRelativePos() - m_pArrowObj->Transform()->GetRelativePos();
 			Vec3 vEndPos = pLinkCam->Transform()->GetRelativeDir(DIR::FRONT) * 1000.f;
@@ -81,10 +81,10 @@ void CLinkBowScript::tick()
 		if (m_bOnce)
 		{
 			m_pArrowObj->GetScript<CBonesocketScript>()->SetDisable(true);
-			m_vArrowWorldScale = m_pArrowObj->Transform()->GetWorldScale();
-			m_vArrowWorldRot = m_pArrowObj->Transform()->GetWorldRotation();
-			m_vArrowWorldPos = m_pArrowObj->Transform()->GetWorldPos();
-			MakeParent(m_pArrowObj);
+			// m_vArrowWorldScale = m_pArrowObj->Transform()->GetWorldScale();
+			// m_vArrowWorldRot = m_pArrowObj->Transform()->GetWorldRotation();
+			// m_vArrowWorldPos = m_pArrowObj->Transform()->GetWorldPos();
+			MakeParentReserve(m_pArrowObj);
 			
 			m_bOnce = false;
 			m_bOneFrameAfter = true;

@@ -10,6 +10,7 @@
 #include "CGroundCheckScript.h"
 #include "CLinkAnimScript.h"
 #include "CLinkArrowScript.h"
+#include "CLinkBombScript.h"
 #include "CLinkBowScript.h"
 #include "CLinkCamScript.h"
 #include "CLinkHitScript.h"
@@ -37,6 +38,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CGroundCheckScript");
 	_vec.push_back(L"CLinkAnimScript");
 	_vec.push_back(L"CLinkArrowScript");
+	_vec.push_back(L"CLinkBombScript");
 	_vec.push_back(L"CLinkBowScript");
 	_vec.push_back(L"CLinkCamScript");
 	_vec.push_back(L"CLinkHitScript");
@@ -74,6 +76,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CLinkAnimScript;
 	if (L"CLinkArrowScript" == _strScriptName)
 		return new CLinkArrowScript;
+	if (L"CLinkBombScript" == _strScriptName)
+		return new CLinkBombScript;
 	if (L"CLinkBowScript" == _strScriptName)
 		return new CLinkBowScript;
 	if (L"CLinkCamScript" == _strScriptName)
@@ -137,6 +141,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::LINKARROWSCRIPT:
 		return new CLinkArrowScript;
+		break;
+	case (UINT)SCRIPT_TYPE::LINKBOMBSCRIPT:
+		return new CLinkBombScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LINKBOWSCRIPT:
 		return new CLinkBowScript;
@@ -225,6 +232,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::LINKARROWSCRIPT:
 		return L"CLinkArrowScript";
+		break;
+
+	case SCRIPT_TYPE::LINKBOMBSCRIPT:
+		return L"CLinkBombScript";
 		break;
 
 	case SCRIPT_TYPE::LINKBOWSCRIPT:

@@ -1,6 +1,8 @@
 #pragma once
 #include <Engine/CScript.h>
 
+class CPrefab;
+
 struct tLinkStatus
 {
     float fHP;
@@ -52,6 +54,9 @@ private:
     CGameObject*            m_pSwordObj;
     CGameObject*            m_pBowObj;
     CGameObject*            m_pShieldObj;
+
+    Ptr<CPrefab>            m_pBombPref;
+    CGameObject*            m_pBombObj;
 
     CGameObject*            m_pInJustRigidObj;
 
@@ -159,6 +164,8 @@ private:
     void Func_JustAtkDash();
     void Func_DisableCanJust();
     void Func_JustAtkEnd();
+    void Func_CreateBomb();
+    void Func_ThrowBombStart();
 
     // convenience function
 private:

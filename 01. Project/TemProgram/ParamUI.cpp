@@ -180,23 +180,23 @@ bool ParamUI::Param_Prefab(const string& _ParamName, Ptr<CPrefab>& _Prefab, UI* 
 {
 	 //void *p = _Prefab.Get();
 
+
+		// 키를 텍스트로 띄워준다.
+	ImGui::Text(_ParamName.c_str());
+
+	ImGui::SameLine();
+
+	// Prafab의 이름을 띄워준다.
+	ImGui::PushItemWidth(250.f);
+	char PrefabNameID[50] = "";
+	sprintf_s(PrefabNameID, 50, "##PrefabName%d", ParamCount++);
+	char PrefabName[50] = {};
 	if (_Prefab.Get())
 	{
-		// 키를 텍스트로 띄워준다.
-		ImGui::Text(_ParamName.c_str());
-
-		ImGui::SameLine();
-
-		// Prafab의 이름을 띄워준다.
-		ImGui::PushItemWidth(250.f);
-		char PrefabNameID[50] = "";
-		sprintf_s(PrefabNameID, 50, "##PrefabName%d", ParamCount++);
-		char PrefabName[50] = {};
-
 		sprintf_s(PrefabName, 50, WStringToString(_Prefab->GetKey()).c_str());
-		ImGui::InputText(PrefabNameID, PrefabName, 50, ImGuiInputTextFlags_ReadOnly);
-		ImGui::PopItemWidth();
 	}
+	ImGui::InputText(PrefabNameID, PrefabName, 50, ImGuiInputTextFlags_ReadOnly);
+	ImGui::PopItemWidth();
 
 	// 버튼의 이름이 겹치지 안도록 만들기 위해 추가함.
 	char szName[50] = "";

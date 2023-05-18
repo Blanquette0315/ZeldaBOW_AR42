@@ -82,6 +82,9 @@
     <Filter Include="Scripts\Monster\Boss\Fireball">
       <UniqueIdentifier>{7be15779-2dd7-49bc-87f0-2659b0bc657b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Link\Bomb">
+      <UniqueIdentifier>{d5b92c60-114f-4516-b2ab-d0e1dd686ff2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -190,6 +193,7 @@
     <ClInclude Include="CLinkHitScript.h">
       <Filter>Scripts\Link\Hit</Filter>
     </ClInclude>
+    <ClInclude Include="CLinkBombScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -298,5 +302,6 @@
     <ClCompile Include="CLinkHitScript.cpp">
       <Filter>Scripts\Link\Hit</Filter>
     </ClCompile>
+    <ClCompile Include="CLinkBombScript.cpp" />
   </ItemGroup>
 </Project>

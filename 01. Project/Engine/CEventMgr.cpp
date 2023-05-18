@@ -187,6 +187,25 @@ void CEventMgr::tick()
 		}
 		break;
 
+		case EVENT_TYPE::MAKE_PARENT_RESERVE:
+		{
+			CGameObject* pChildObj = (CGameObject*)m_vecEvent[i].wParam;
+			CGameObject* pParentObj = pChildObj->GetParent();
+			if (pParentObj)
+			{
+				
+				pChildObj->Transform()->SetRelativeScale(pChildObj->Transform()->GetWorldScale());
+				pChildObj->Transform()->SetRelativeRotation(pChildObj->Transform()->GetWorldRotation());
+				pChildObj->Transform()->SetRelativePos(pChildObj->Transform()->GetWorldPos());
+
+				pChildObj->DisconnectFromParent();
+				CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
+				pLevel->AddGameObject(pChildObj, pChildObj->GetLayerIdx());
+				m_bLevelChanged = true;
+			}
+		}
+		break;
+
 		case EVENT_TYPE::ADD_COMPONENT:
 		{
 			CGameObject* pObj = (CGameObject*)m_vecEvent[i].wParam;

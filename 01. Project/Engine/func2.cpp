@@ -301,6 +301,14 @@ void MakeParent(CGameObject* _pChildObj)
 	CEventMgr::GetInst()->AddEvent(evn);
 }
 
+void MakeParentReserve(CGameObject* _pChildObj)
+{
+	tEvent evn = {};
+	evn.eType = EVENT_TYPE::MAKE_PARENT_RESERVE;
+	evn.wParam = (DWORD_PTR)_pChildObj;
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
 void AddComponent(CGameObject* _pObj, COMPONENT_TYPE _eType)
 {
 	tEvent evn = {};
