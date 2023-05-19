@@ -26,6 +26,8 @@
 #include "CPlayerScript.h"
 #include "CRayCastScript.h"
 #include "CTestSCR.h"
+#include "CUIHeartScript.h"
+#include "CUIScript.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
@@ -54,6 +56,8 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPlayerScript");
 	_vec.push_back(L"CRayCastScript");
 	_vec.push_back(L"CTestSCR");
+	_vec.push_back(L"CUIHeartScript");
+	_vec.push_back(L"CUIScript");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
@@ -108,6 +112,10 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CRayCastScript;
 	if (L"CTestSCR" == _strScriptName)
 		return new CTestSCR;
+	if (L"CUIHeartScript" == _strScriptName)
+		return new CUIHeartScript;
+	if (L"CUIScript" == _strScriptName)
+		return new CUIScript;
 	return nullptr;
 }
 
@@ -189,6 +197,12 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::TESTSCR:
 		return new CTestSCR;
+		break;
+	case (UINT)SCRIPT_TYPE::UIHEARTSCRIPT:
+		return new CUIHeartScript;
+		break;
+	case (UINT)SCRIPT_TYPE::UISCRIPT:
+		return new CUIScript;
 		break;
 	}
 	return nullptr;
@@ -296,6 +310,14 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TESTSCR:
 		return L"CTestSCR";
+		break;
+
+	case SCRIPT_TYPE::UIHEARTSCRIPT:
+		return L"CUIHeartScript";
+		break;
+
+	case SCRIPT_TYPE::UISCRIPT:
+		return L"CUIScript";
 		break;
 
 	}

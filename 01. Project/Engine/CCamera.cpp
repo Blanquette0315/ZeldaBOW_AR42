@@ -34,6 +34,7 @@ CCamera::CCamera()
 	, m_iLayerMask(0)
 	, m_iCamIdx(0)
 	, m_ray{}
+	, m_bUseDeferred(true)
 {
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
@@ -160,32 +161,35 @@ void CCamera::render()
 	// Shader Domain�� ���� ��ü �з�
 	SortObject();
 
-	// Domain �з��� ���� ���� ȣ��
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet();
-	render_deferred();
-
-	render_deferreddecal();
-
-	// Deferred ���� ó��
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::LIGHT)->OMSet();
-	const vector<CLight3D*>& vecLight3D = CRenderMgr::GetInst()->GetLight3D();
-	
-	for (size_t i = 0; i < vecLight3D.size(); ++i)
+	if (m_bUseDeferred)
 	{
-		vecLight3D[i]->render();
+		// Domain �з��� ���� ���� ȣ��
+		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet();
+		render_deferred();
+
+		render_deferreddecal();
+
+		// Deferred ���� ó��
+		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::LIGHT)->OMSet();
+		const vector<CLight3D*>& vecLight3D = CRenderMgr::GetInst()->GetLight3D();
+
+		for (size_t i = 0; i < vecLight3D.size(); ++i)
+		{
+			vecLight3D[i]->render();
+		}
+
+		// Bloom Effect
+		//render_Bloom();
+
+		// SwapChainMRT�� ����
+		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
+
+		// DeferredMrt -> SwapChainMRT�� ����
+		static Ptr<CMaterial> pMergeMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_MergeMtrl");
+		static Ptr<CMesh> pMergeMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+		pMergeMtrl->UpdateData();
+		pMergeMesh->render();
 	}
-
-	// Bloom Effect
-	//render_Bloom();
-
-	// SwapChainMRT�� ����
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
-
-	// DeferredMrt -> SwapChainMRT�� ����
-	static Ptr<CMaterial> pMergeMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_MergeMtrl");
-	static Ptr<CMesh> pMergeMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
-	pMergeMtrl->UpdateData();
-	pMergeMesh->render();
 
 	// Forward Rendering
 	render_Forward();
@@ -194,6 +198,8 @@ void CCamera::render()
 
 	render_transparent();
 	render_postprocess();
+
+	render_UI();
 }
 
 void CCamera::SetLayerMask(const wstring& _strLayerName)
@@ -239,6 +245,7 @@ void CCamera::SortObject()
 	m_vecDecal.clear();
 	m_vecTransparent.clear();
 	m_vecPostProcess.clear();
+	m_vecUI.clear();
 
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
 
@@ -257,7 +264,8 @@ void CCamera::SortObject()
 				if (nullptr == pRenderCom
 					|| nullptr == pRenderCom->GetMesh()
 					|| nullptr == pRenderCom->GetCurMaterial()
-					|| nullptr == pRenderCom->GetCurMaterial()->GetShader())
+					|| nullptr == pRenderCom->GetCurMaterial()->GetShader()
+					|| false == pRenderCom->IsRender())
 				{
 					continue;
 				}
@@ -269,8 +277,10 @@ void CCamera::SortObject()
 						continue;
 					}
 				}
+
 				// pushback for picking
-				CFrustum::PushBackInFrustumObjs(vecObj[j]);
+				if(CLevelMgr::GetInst()->GetCurLevel()->GetState()== LEVEL_STATE::PLAY == false)
+					CFrustum::PushBackInFrustumObjs(vecObj[j]);
 
 				UINT iMtrlCount = pRenderCom->GetMtrlCount();
 
@@ -348,6 +358,11 @@ void CCamera::SortObject()
 							m_vecPostProcess.push_back(vecObj[j]);
 						}
 							break;
+						case SHADER_DOMAIN::DOMAIN_UI:
+						{
+							m_vecUI.push_back(vecObj[j]);
+						}
+						break;
 						}
 					}
 				}
@@ -730,6 +745,14 @@ void CCamera::render_depthmap()
 	}
 }
 
+void CCamera::render_UI()
+{
+	for (size_t i = 0; i < m_vecUI.size(); ++i)
+	{
+		m_vecUI[i]->render();
+	}
+}
+
 void CCamera::SaveToYAML(YAML::Emitter& _emitter)
 {
 	_emitter << YAML::Key << "CAMERA";
@@ -747,6 +770,8 @@ void CCamera::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_iLayerMask;
 	_emitter << YAML::Key << "CamIdx";
 	_emitter << YAML::Value << m_iCamIdx;
+	_emitter << YAML::Key << "UseDeferred";
+	_emitter << YAML::Value << m_bUseDeferred;
 
 	_emitter << YAML::EndMap;
 }
@@ -759,4 +784,5 @@ void CCamera::LoadFromYAML(YAML::Node& _node)
 	m_fScale = _node["CAMERA"]["Scale"].as<float>();
 	m_iLayerMask = _node["CAMERA"]["LayerMask"].as<UINT>();
 	m_iCamIdx = _node["CAMERA"]["CamIdx"].as<int>();
+	SAFE_LOAD_FROM_YAML(bool, m_bUseDeferred, _node["CAMERA"]["UseDeferred"]);
 }

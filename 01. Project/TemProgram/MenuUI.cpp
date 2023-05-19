@@ -11,7 +11,8 @@
 #include "InspectorUI.h"
 #include "ContentUI.h"
 #include "CSaveLoadMgr.h"
-
+#include "CEditor.h"
+#include "CGameObjectEX.h"
 
 
 MenuUI::MenuUI()
@@ -47,9 +48,35 @@ void MenuUI::render()
         // 단축키를 눌러도 아무런 동작을 하지 않는다.
         if (ImGui::BeginMenu("Edit"))
         {
-            if (ImGui::MenuItem("Undo", "CTRL+Z"))
+            if (ImGui::MenuItem("UICamera-orthographic"))
             {
-
+                const vector<CGameObjectEX*> vecObj = CEditor::GetInst()->GetEditorObjVec();
+                for (int i = 0; i < vecObj.size(); ++i)
+                {
+                    if (vecObj[i]->Camera())
+                        vecObj[i]->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHICS);
+                }
+            }
+            if (ImGui::MenuItem("UICamera-perspective"))
+            {
+                const vector<CGameObjectEX*> vecObj = CEditor::GetInst()->GetEditorObjVec();
+                for (int i = 0; i < vecObj.size(); ++i)
+                {
+                    if (vecObj[i]->Camera())
+                        vecObj[i]->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+                }
+            }
+            if (ImGui::MenuItem("UICamera-Set 0 0 0"))
+            {
+                const vector<CGameObjectEX*> vecObj = CEditor::GetInst()->GetEditorObjVec();
+                for (int i = 0; i < vecObj.size(); ++i)
+                {
+                    if (vecObj[i]->Camera())
+                    {
+                        vecObj[i]->Transform()->SetRelativePos(Vec3::Zero);
+                        vecObj[i]->Transform()->SetRelativeRotation(Vec3::Zero);
+                    }
+                }
             }
             if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
             ImGui::Separator();

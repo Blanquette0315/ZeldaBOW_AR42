@@ -35,6 +35,8 @@
 #include "SoundUI.h"
 
 #include <Engine/CDevice.h>
+#include <Engine/CLevelMgr.h>
+#include <Engine/CLevel.h>
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
@@ -161,16 +163,20 @@ InspectorUI::~InspectorUI()
 
 void InspectorUI::update()
 {
-	if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered())
+	if (CLevelMgr::GetInst()->GetCurLevel()->GetState() == LEVEL_STATE::PLAY == false)
 	{
-		if (GetActiveWindow() == CDevice::GetInst()->GetMainHWND())
+		if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered())
 		{
-			if (!ImGui::IsWindowFocused())
+			if (GetActiveWindow() == CDevice::GetInst()->GetMainHWND())
 			{
-				CGameObject* pObjPicked = nullptr;
-				if (PickingObj(pObjPicked))
+				if (!ImGui::IsWindowFocused())
 				{
-					SetTargetObject(pObjPicked);
+
+					CGameObject* pObjPicked = nullptr;
+					if (PickingObj(pObjPicked))
+					{
+						SetTargetObject(pObjPicked);
+					}
 				}
 			}
 		}
@@ -522,7 +528,7 @@ void InspectorUI::InstantiatePrefab(CGameObject* _pParentObj)
 		Ptr<CPrefab> pOwnerPref = pParentObj->GetOwnerPrefab();
 
 		CGameObject* pNewObj = pOwnerPref->Instantiate();
-		Instantiate(pNewObj, Vec3(0.f, 0.f, 990.f), pNewObj->GetLayerIdx());
+		Instantiate(pNewObj, pNewObj->Transform()->GetRelativePos(), pNewObj->GetLayerIdx());
 	}
 }
 

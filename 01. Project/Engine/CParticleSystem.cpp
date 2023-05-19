@@ -96,10 +96,10 @@ void CParticleSystem::finaltick()
 		// 0.5초당 하나의 파티클이 생성되어야 하고, 지금 누적시간이 1.2초 일때, iAliveCount
 		// 이번 프레임에 생성되어야 하는 파티클 수는 2개가 되고, 1.2 / 0.5의 결과 2.4가 floor로 인해 f - floor(f)가 0.4가 된다.
 		// 즉, 나머지 누적시간을 다시 셋팅해주어 그 시간에서부터 다시 DT를 누적해나가는 것이다.
-		m_fAccTime = f - floor(f);
+		m_fAccTime = fAliveTime * (f - floor(f));
 
 		//tParticleShare share = { iAliveCount, };
-		tParticleShare share = { 10, };
+		tParticleShare share = { m_iAliveCount, };
 		m_ParticleShare->SetData(&share, 1);
 	}
 

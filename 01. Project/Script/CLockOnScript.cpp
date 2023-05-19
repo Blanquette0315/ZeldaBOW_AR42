@@ -13,12 +13,14 @@ CLockOnScript::CLockOnScript()
 	: CScript(SCRIPT_TYPE::LOCKONSCRIPT)
 	, m_fColRadius(400.f)
 {
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Collider Radius", &m_fColRadius, 0.f, 1000.f, 1.f);
 }
 
 CLockOnScript::CLockOnScript(const CLockOnScript& _origin)
 	: CScript(_origin)
 	, m_fColRadius(_origin.m_fColRadius)
 {
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Collider Radius", &m_fColRadius, 0.f, 1000.f, 1.f);
 }
 
 CLockOnScript::~CLockOnScript()

@@ -17,6 +17,9 @@ public:
 	void init();
 	void progress();
 
+public:
+	const vector<CGameObjectEX*>& GetEditorObjVec() { return m_vecEditorObj; }
+
 private:
 	void tick();
 	void render();

@@ -80,8 +80,12 @@ void CLinkArrowScript::BeginOverlap(CGameObject* _pOther)
 {
 	CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
 
-	if(pMonsterScr)
+	if (pMonsterScr)
+	{
 		_pOther->GetScript<CMonsterScript>()->Damage(2.f);
+		if(IsValid(GetOwner()))
+			Destroy();
+	}
 }
 
 void CLinkArrowScript::Overlap(CGameObject* _pOther)

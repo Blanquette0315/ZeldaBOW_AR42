@@ -91,6 +91,9 @@
     <FxCompile Include="postprocess.fx">
       <Filter>HLSL\Render</Filter>
     </FxCompile>
+    <FxCompile Include="UI.fx">
+      <Filter>HLSL\Render\3D</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">

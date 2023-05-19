@@ -73,7 +73,7 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 
 	m_pDeviceContext->RSSetViewports(1, &m_tViewPort);
 
-	// Sampler 생성 및 바인딩
+	// 	생성 및 바인딩
 	if (FAILED(CreateSampler()))
 	{
 		MessageBox(nullptr, L"샘플러 생성 실패", L"Device 초기화 실패", MB_OK);

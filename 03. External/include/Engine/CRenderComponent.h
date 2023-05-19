@@ -21,6 +21,8 @@ private:
     bool                    m_bIsDynamicMtrl;
     bool                    m_bDynamicShadow;
 
+    bool                    m_bIsRender;
+
 public:
     virtual void render() = 0;
     virtual void render(UINT _iSubset) = 0;
@@ -44,6 +46,9 @@ public:
     bool IsDynamicShadow() { return m_bDynamicShadow; }
 
     ULONG64 GetInstID(UINT _iMtrlIdx);
+
+    void SetRender(bool _b) { m_bIsRender = _b; }
+    bool IsRender() { return m_bIsRender; }
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
