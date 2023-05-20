@@ -1,5 +1,5 @@
-#ifndef _PARTICLEUPDATE
-#define _PARTICLEUPDATE
+#ifndef _PARTICLE_SPARK
+#define _PARTICLE_SPARK
 
 #include "register.fx"
 #include "func.fx"
@@ -28,14 +28,14 @@ RWStructuredBuffer<tParticleShare> ParticleShare : register(u1);
 // 만약 더 많은 갯수가 필요하다면, 그룹을 추가로 할당 받으면 된다.
 // 이렇게 단위를 적게 만든 이유는 1024로 배정해두었다가 1개가 부족해서 그룹을 하나 더 할당 받을 떄,
 // 사용하지 않는 1023개가 비기 떄문에 이 수를 줄이기 위해 단위를 낮게 설정한 것이다.
-[numthreads(128,1,1)]
+[numthreads(128, 1, 1)]
 void CS_ParticleUpdate(uint3 _id : SV_DispatchThreadID)
 {
     // 지금 스레드를 1차원으로 사용중이기 때문에 x만 증가한다.
     if ((uint) PARTICLE_MAX <= _id.x)
         return;
     
-    if(0 == Particle.iActive)
+    if (0 == Particle.iActive)
     {
         while (0 < ShareData.iAliveCount)
         {
@@ -66,7 +66,7 @@ void CS_ParticleUpdate(uint3 _id : SV_DispatchThreadID)
             }
         }
         
-        if(Particle.iActive)
+        if (Particle.iActive)
         {
             // 랜덤값으로 위치와 방향을 설정한다.
             // 샘플링을 시도할 UV를 계산한다.
@@ -119,7 +119,7 @@ void CS_ParticleUpdate(uint3 _id : SV_DispatchThreadID)
             // 파티클 시스템 오브젝트의 월드포즈를 따라가며 생성
             if (IsWorldSpawn)
             {
-                if(Is3DParticle == 0)
+                if (Is3DParticle == 0)
                 {
                     Particle.vRelativePos.xyz += ObjectWorldPos.xyz;
                 }

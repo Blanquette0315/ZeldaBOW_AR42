@@ -173,6 +173,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CBonesocketScript.h" />
     <ClInclude Include="CBossFireballScript.h" />
     <ClInclude Include="CBossScript.h" />
+    <ClInclude Include="CEffectScaler.h" />
     <ClInclude Include="CLinkArrowScript.h" />
     <ClInclude Include="CLinkBombScript.h" />
     <ClInclude Include="CLinkBowScript.h" />
@@ -211,6 +212,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CBonesocketScript.cpp" />
     <ClCompile Include="CBossFireballScript.cpp" />
     <ClCompile Include="CBossScript.cpp" />
+    <ClCompile Include="CEffectScaler.cpp" />
     <ClCompile Include="CLinkArrowScript.cpp" />
     <ClCompile Include="CLinkBombScript.cpp" />
     <ClCompile Include="CLinkBowScript.cpp" />

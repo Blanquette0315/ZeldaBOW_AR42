@@ -6,6 +6,7 @@
 #include "CBossFireballScript.h"
 #include "CBossScript.h"
 #include "CCamScript.h"
+#include "CEffectScaler.h"
 #include "CEquipableScript.h"
 #include "CGroundCheckScript.h"
 #include "CLinkAnimScript.h"
@@ -36,6 +37,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CBossFireballScript");
 	_vec.push_back(L"CBossScript");
 	_vec.push_back(L"CCamScript");
+	_vec.push_back(L"CEffectScaler");
 	_vec.push_back(L"CEquipableScript");
 	_vec.push_back(L"CGroundCheckScript");
 	_vec.push_back(L"CLinkAnimScript");
@@ -72,6 +74,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CBossScript;
 	if (L"CCamScript" == _strScriptName)
 		return new CCamScript;
+	if (L"CEffectScaler" == _strScriptName)
+		return new CEffectScaler;
 	if (L"CEquipableScript" == _strScriptName)
 		return new CEquipableScript;
 	if (L"CGroundCheckScript" == _strScriptName)
@@ -137,6 +141,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
 		return new CCamScript;
+		break;
+	case (UINT)SCRIPT_TYPE::EFFECTSCALER:
+		return new CEffectScaler;
 		break;
 	case (UINT)SCRIPT_TYPE::EQUIPABLESCRIPT:
 		return new CEquipableScript;
@@ -230,6 +237,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::CAMSCRIPT:
 		return L"CCamScript";
+		break;
+
+	case SCRIPT_TYPE::EFFECTSCALER:
+		return L"CEffectScaler";
 		break;
 
 	case SCRIPT_TYPE::EQUIPABLESCRIPT:

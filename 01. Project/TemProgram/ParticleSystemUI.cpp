@@ -49,7 +49,13 @@ void ParticleSystemUI::update()
 void ParticleSystemUI::render_update()
 {
     ComponentUI::render_update();
-
+    bool b = GetTarget()->ParticleSystem()->Get3DParticle();
+    ImGui::Text("3DParticle"); ImGui::SameLine(); ImGui::Checkbox("##3DParticle", &b);
+    if (b)
+        GetTarget()->ParticleSystem()->Set3DParticle(true);
+    else
+        GetTarget()->ParticleSystem()->Set3DParticle(false);
+    
     // 키 값 가져오기.
     string MtrlName;
     if (nullptr != m_Material)
@@ -165,6 +171,7 @@ void ParticleSystemUI::render_update()
     if (GetTarget())
     {
         GetTarget()->ParticleSystem()->SetMaxCount(m_iMaxCount);
+        GetTarget()->ParticleSystem()->SetAliveCount(m_iAliveCount);
         GetTarget()->ParticleSystem()->Set_SE_Color(m_vStartColor, m_vEndColor);
         GetTarget()->ParticleSystem()->Set_SE_Scale(m_vStartScale, m_vEndScale);
         GetTarget()->ParticleSystem()->SetMinMaxSpeed(m_vMinMaxSpeed);

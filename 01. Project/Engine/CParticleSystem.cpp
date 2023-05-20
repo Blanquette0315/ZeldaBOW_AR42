@@ -25,6 +25,7 @@ CParticleSystem::CParticleSystem()
 	, m_ParticleBuffer(nullptr)
 	, m_ParticleShare(nullptr)
 	, m_WorldSpawn(0)
+	, m_Is3DParticle(0)
 {
 	// 해당 파티클 시스템 랜더링은 무조건 재질을 파티클을 사용하기 때문에 이곳에서 메시와 재질을 그냥 지정해주는 것이다.
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
@@ -45,7 +46,7 @@ CParticleSystem::CParticleSystem()
 CParticleSystem::CParticleSystem(const CParticleSystem& _origin)
 	: CRenderComponent(_origin)
 	, m_iMaxCount(_origin.m_iMaxCount)
-	, m_iAliveCount(0)
+	, m_iAliveCount(_origin.m_iAliveCount)
 	, m_vStartScale(_origin.m_vStartScale)
 	, m_vEndScale(_origin.m_vEndScale)
 	, m_vStartColor(_origin.m_vStartColor)
@@ -58,6 +59,7 @@ CParticleSystem::CParticleSystem(const CParticleSystem& _origin)
 	, m_ParticleBuffer(nullptr)
 	, m_ParticleShare(nullptr)
 	, m_WorldSpawn(_origin.m_WorldSpawn)
+	, m_Is3DParticle(_origin.m_Is3DParticle)
 	, m_UpdateCS (_origin.m_UpdateCS)
 {
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
@@ -99,7 +101,7 @@ void CParticleSystem::finaltick()
 		m_fAccTime = fAliveTime * (f - floor(f));
 
 		//tParticleShare share = { iAliveCount, };
-		tParticleShare share = { m_iAliveCount, };
+		tParticleShare share = { m_iAliveCount * iAliveCount, };
 		m_ParticleShare->SetData(&share, 1);
 	}
 
@@ -117,6 +119,8 @@ void CParticleSystem::finaltick()
 	m_UpdateCS->SetSpawnRange(m_fSpawnRange);
 	m_UpdateCS->SetMinMaxSpeed(m_vMinMaxSpeed);
 	m_UpdateCS->SetMinMaxLifeTime(m_vMinMaxLifeTime);
+	m_UpdateCS->Set3DParticle(m_Is3DParticle);
+	m_UpdateCS->SetWorldMat(Transform()->GetWorldMat());
 	m_UpdateCS->Execute();
 }
 
@@ -145,6 +149,7 @@ void CParticleSystem::render()
 	GetCurMaterial()->SetScalarParam(VEC4_1, &m_vEndScale);
 	GetCurMaterial()->SetScalarParam(VEC4_2, &m_vStartColor);
 	GetCurMaterial()->SetScalarParam(VEC4_3, &m_vEndColor);
+	GetCurMaterial()->SetScalarParam(INT_2, &m_Is3DParticle);
 
 	GetCurMaterial()->UpdateData();
 	GetMesh()->render_particle(m_iMaxCount);
@@ -205,6 +210,8 @@ void CParticleSystem::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_fAccTime;
 	_emitter << YAML::Key << "WorldSpawn";
 	_emitter << YAML::Value << m_WorldSpawn;
+	_emitter << YAML::Key << "Is3DParticle";
+	_emitter << YAML::Value << m_Is3DParticle;
 
 	_emitter << YAML::EndMap;
 }
@@ -233,4 +240,5 @@ void CParticleSystem::LoadFromYAML(YAML::Node& _node)
 	m_Frequency = node["Frequency"].as<float>();
 	m_fAccTime = node["AccTime"].as<float>();
 	m_WorldSpawn = node["WorldSpawn"].as<int>();
+	SAFE_LOAD_FROM_YAML(int, m_Is3DParticle, node["Is3DParticle"]);
 }

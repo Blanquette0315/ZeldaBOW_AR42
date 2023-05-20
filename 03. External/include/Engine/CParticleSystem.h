@@ -44,6 +44,13 @@ private:
     CStructuredBuffer*          m_ParticleShare;    // 파티클 공용 구조화 버퍼 
     Ptr<CParticleUpdateShader>  m_UpdateCS;
 
+    int                         m_Is3DParticle;
+
+    // UI
+public:
+    bool Get3DParticle() { return m_Is3DParticle; }
+    void Set3DParticle(bool _b) { m_Is3DParticle = _b; }
+
 public:
     virtual void finaltick() override;
     virtual void render() override;
@@ -61,6 +68,7 @@ public:
     void SetMinMaxLifeTime(Vec2 _MinMaxTime) { m_vMinMaxLifeTime = _MinMaxTime; }
     void SetMinMaxSpeed(Vec2 _MinMaxSpeed) { m_vMinMaxSpeed = _MinMaxSpeed; }
     void SetWorldSpawn(bool _WorldSpwan) { m_WorldSpawn = (int)_WorldSpwan; }
+    void SetAliveCount(UINT _iAliveCount) { m_iAliveCount = _iAliveCount; }
 
 public:
     UINT GetMaxCount() { return m_iMaxCount; }

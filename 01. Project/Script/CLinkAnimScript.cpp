@@ -311,16 +311,20 @@ void CLinkAnimScript::begin()
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
 
 	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
-	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
+	if(pGroundCheckObj)
+		m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
 
 	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
-	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
+	if(pLockOnRadarObj)
+		m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
 
 	CGameObject* pHPUI = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(LINK_STRING_WCHAR[LINK_STRING_UI_HP]);
-	m_pHPUI = pHPUI->GetScript<CUIHeartScript>();
+	if(pHPUI)
+		m_pHPUI = pHPUI->GetScript<CUIHeartScript>();
 
 	CGameObject* pCrosshairUI = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(LINK_STRING_WCHAR[LINK_STRING_UI_CROSSHAIR]);
-	m_pCrosshairUI = pCrosshairUI->GetScript<CUIScript>();
+	if(pCrosshairUI)
+		m_pCrosshairUI = pCrosshairUI->GetScript<CUIScript>();
 
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);

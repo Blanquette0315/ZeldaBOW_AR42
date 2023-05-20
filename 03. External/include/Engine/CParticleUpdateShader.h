@@ -19,6 +19,8 @@ public:
     void SetSpawnRange(float _Range) { m_Param.fArr[0] = _Range; }
     void SetMinMaxSpeed(Vec2 _vSpeed) { m_Param.v2Arr[0] = _vSpeed; }
     void SetMinMaxLifeTime(Vec2 _vLifeTime) { m_Param.v2Arr[1] = _vLifeTime; }
+    void Set3DParticle(int _iOption) { m_Param.iArr[2] = _iOption; }
+    void SetWorldMat(const Matrix& _mat) { m_Param.matArr[0] = _mat; }
 
 public:
     virtual void UpdateData() override;

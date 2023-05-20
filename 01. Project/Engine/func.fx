@@ -433,4 +433,100 @@ void Skinning(inout float3 _vPos, inout float4 _vWeight, inout float4 _vIndices,
     _vPos = info.vPos;
 }
 
+float4x4 CreateMatrixScale(float3 _scale)
+{
+    float4x4 matScale =
+    {
+        _scale.x, 0.f, 0.f, 0.f,
+        0.f, _scale.y, 0.f, 0.f,
+        0.f, 0.f, _scale.z, 0.f,
+        0.f, 0.f, 0.f, 1.f
+    };
+    return matScale;
+}
+
+float4x4 CreateMatrixRotZ(float2 _vector)
+{
+    float4x4 matRot =
+    {
+        _vector.x, -_vector.y, 0.f, 0.f,
+        _vector.y, _vector.x, 0.f, 0.f,
+        0.f, 0.f, 1.f, 0.f,
+        0.f, 0.f, 0.f, 1.f
+    };
+    return matRot;
+}
+
+float4x4 CreateMatrixRot(float3 _dir)
+{
+    // 주어진 방향 벡터
+    float3 direction = normalize(_dir);
+
+    
+    if (direction.x == 1 && direction.y == 0 && direction.z == 0)
+    {
+        float4x4 matReturn = float4x4(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+
+        
+        return matReturn;
+    }
+    
+    if (direction.x == -1 && direction.y == 0 && direction.z == 0)
+    {
+        
+        float4x4 matReturn = float4x4(
+            -1, 0, 0, 0,
+            0, -1, 0, 0,
+            0, 0, -1, 0,
+            0, 0, 0, 1
+        );
+ 
+        return matReturn;
+    }
+
+
+// 기준 벡터 (x축을 사용)
+    float3 basis = float3(1, 0, 0);
+
+// 회전 축 계산 (두 벡터의 외적)
+    float3 rotationAxis = -cross(basis, direction);
+
+// 회전 각도 계산
+    float cosTheta = dot(basis, direction); // 이미 벡터를 정규화했으므로, 길이는 1입니다.
+    float angle = acos(cosTheta);
+
+// sin와 cos 계산
+    float s = sin(angle);
+    float c = cos(angle);
+    float t = 1.0f - c;
+
+// 회전 축 벡터 성분
+    float x = rotationAxis.x, y = rotationAxis.y, z = rotationAxis.z;
+
+// 회전 매트릭스 생성
+    float4x4 rotationMatrix = float4x4(
+    t * x * x + c, t * x * y - z * s, t * x * z + y * s, 0,
+    t * x * y + z * s, t * y * y + c, t * y * z - x * s, 0,
+    t * x * z - y * s, t * y * z + x * s, t * z * z + c, 0,
+    0, 0, 0, 1
+    );
+    
+    return rotationMatrix;
+}
+
+float4x4 CreateMatrixTrans(float3 _pos)
+{
+    float4x4 translationMatrix = float4x4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    _pos.x, _pos.y, _pos.z, 1);
+    return translationMatrix;
+}
+
 #endif
