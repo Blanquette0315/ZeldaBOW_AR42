@@ -162,6 +162,11 @@ void CParticleSystem::render(UINT _iSubset)
 	render();
 }
 
+void CParticleSystem::SetMesh(Ptr<CMesh> _pMesh)
+{
+	m_pMesh = _pMesh;
+}
+
 void CParticleSystem::SetMaxCount(UINT _MaxCount)
 {
 	if (m_iMaxCount != _MaxCount)

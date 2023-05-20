@@ -14,7 +14,7 @@ struct tMtrlSet
 class CRenderComponent :
     public CComponent
 {
-private:
+protected:
     Ptr<CMesh>              m_pMesh;
     vector<tMtrlSet>        m_vecMtrls;
 
@@ -29,7 +29,7 @@ public:
     virtual void render_depthmap();
 
 public:
-    void SetMesh(Ptr<CMesh> _pMesh);
+    virtual void SetMesh(Ptr<CMesh> _pMesh);
     Ptr<CMesh> GetMesh() { return m_pMesh; }
 
     UINT GetMtrlCount() { return (UINT)m_vecMtrls.size(); }

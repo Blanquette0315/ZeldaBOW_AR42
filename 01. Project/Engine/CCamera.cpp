@@ -408,10 +408,10 @@ void CCamera::SortShadowObject()
 
 void CCamera::render_deferred()
 {
-	for (size_t i = 0; i < m_vecDeferred.size(); ++i)
-	{
-		m_vecDeferred[i]->render();
-	}
+	//for (size_t i = 0; i < m_vecDeferred.size(); ++i)
+	//{
+	//	m_vecDeferred[i]->render();
+	//}
 
 	for (auto& pair : m_mapSingleObj)
 	{

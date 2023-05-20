@@ -4,6 +4,10 @@
 #include "register.fx"
 #include "func.fx"
 
+#define ALPHA g_vec4_0.a
+#define Color g_vec4_0.rgb
+
+
 // HLSL로 VertexShader 작성하기
 struct VTX_IN
 {
@@ -84,8 +88,6 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
 	return vOutColor;
 }
 
-
-
 float4 PS_Std2D_AlphaBlend(VTX_OUT _in) : SV_Target
 {
 	float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
@@ -108,6 +110,22 @@ float4 PS_Std2D_AlphaBlend(VTX_OUT _in) : SV_Target
     vOutColor *= color.vDiff;
 
 	return vOutColor;
+}
+
+float4 PS_Std2D_Only_Alphablend(VTX_OUT _in) : SV_Target
+{
+    float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
+
+    vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+	
+    if (vOutColor.a == 0)
+        discard;
+        
+    vOutColor.rgb += Color;
+    vOutColor.a *= ALPHA;
+	
+
+    return vOutColor;
 }
 
 #endif

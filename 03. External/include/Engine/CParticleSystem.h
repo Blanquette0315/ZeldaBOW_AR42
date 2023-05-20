@@ -57,6 +57,9 @@ public:
     virtual void render(UINT _iSubset) override;
 
 public:
+    virtual void SetMesh(Ptr<CMesh> _pMesh) override;
+
+public:
     void SetFrequency(float _Frequency) { m_Frequency = _Frequency; }
     void SetSpawnRange(float _SpawnRange) { m_fSpawnRange = _SpawnRange; }
     void SetCS(CParticleUpdateShader* _CS) { m_UpdateCS = _CS; }

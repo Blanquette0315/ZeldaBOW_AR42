@@ -777,6 +777,19 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
 
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D_Only_Alphablend");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	pShader->AddScalarParam(VEC4_0, "Color management");
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+
+	AddRes<CGraphicsShader>(L"Effect2DShader", pShader);
+
 	// std2DAlphaBlend Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
