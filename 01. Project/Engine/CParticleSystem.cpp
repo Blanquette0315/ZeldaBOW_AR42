@@ -241,4 +241,10 @@ void CParticleSystem::LoadFromYAML(YAML::Node& _node)
 	m_fAccTime = node["AccTime"].as<float>();
 	m_WorldSpawn = node["WorldSpawn"].as<int>();
 	SAFE_LOAD_FROM_YAML(int, m_Is3DParticle, node["Is3DParticle"]);
+
+	if (m_ParticleBuffer)
+		delete m_ParticleBuffer;
+
+	m_ParticleBuffer = new CStructuredBuffer;
+	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::UAV_INC, nullptr);
 }
