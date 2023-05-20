@@ -89,6 +89,8 @@ extern const wchar_t* LINK_STRING_WCHAR[(UINT)LINK_STRING::LINK_STRING_END] =
 	L"Link_Bow",
 	L"Link_Shield",
 	L"Link_AnyState",
+	L"UI_Heart_Set",
+	L"UI_CrossHair",
 };
 
 extern const wchar_t* LINK_BONE_WCHAR[(UINT)LINK_BONE_STRING::END] =

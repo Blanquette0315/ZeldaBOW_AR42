@@ -3,13 +3,13 @@
 
 enum class LINK_CAM_MODE
 {
+    NONE,
     GENERAL,
-    GENERAL_START,
     LOCKON,
+    BOW_CHARGE,
+    GENERAL_START,
     LOCKON_START,
     BOW_CHARGE_START,
-    BOW_CHARGE,
-    END,
 };
 
 class CGameObject;
@@ -23,6 +23,7 @@ class CLinkCamScript :
 private:
     float               m_fCameraRadiusMax;    // camera radius
     float               m_fCameraRadiusMin;    // camera radius min
+    float               m_fCameraRadiusChargeMin;
 
     float               m_fMaxDistLockOn;      // begin : take LockOnObj's collider radius
 
@@ -39,6 +40,8 @@ private:
     CGameObject*        m_pLockOnObj;
 
     LINK_CAM_MODE       m_eMode;
+    LINK_CAM_MODE       m_ePrevMode;
+
     float               m_fDistLockonFromLink;
 
     bool                m_bLockOn;

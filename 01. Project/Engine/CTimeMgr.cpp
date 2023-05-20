@@ -50,7 +50,7 @@ void CTimeMgr::tick()
 	}*/
 
 	g_global.fDT = FDT;
-	g_global.fAccTime += m_fDeltaTime;
+	g_global.fAccTime += FDT;
 	
 	
 

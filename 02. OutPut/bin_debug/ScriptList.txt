@@ -3,6 +3,7 @@ CBonesocketScript
 CBossFireballScript
 CBossScript
 CCamScript
+CEffectScaler
 CEquipableScript
 CGroundCheckScript
 CLinkAnimScript
@@ -23,3 +24,5 @@ CNavTestSCR
 CPlayerScript
 CRayCastScript
 CTestSCR
+CUIHeartScript
+CUIScript

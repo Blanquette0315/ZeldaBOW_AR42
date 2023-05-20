@@ -43,7 +43,7 @@ void CMonWeaponScript::BeginOverlap(CGameObject* _pOther)
 			else
 			{
 				tLinkDamaged damage;
-				damage.fDamage = m_iDamage;
+				damage.iDamage = m_iDamage;
 				damage.eType = LINK_DAMAGED_TYPE::SMALL;
 				pLinkScr->SetDamage(damage);
 				m_bReady = false;
@@ -76,7 +76,7 @@ void CMonWeaponScript::Overlap(CGameObject* _pOther)
 			else
 			{
 				tLinkDamaged damage;
-				damage.fDamage = m_iDamage;
+				damage.iDamage = m_iDamage;
 				damage.eType = LINK_DAMAGED_TYPE::SMALL;
 				pLinkScr->SetDamage(damage);
 				m_bReady = false;

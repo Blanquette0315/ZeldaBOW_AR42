@@ -60,6 +60,7 @@ void CameraUI::render_update()
 {
 	ComponentUI::render_update();
 
+	ImGui::Text("Use Deferred"); ImGui::SameLine(); ImGui::Checkbox("##Use deferred", &GetTarget()->Camera()->GetUseDeferred());
 	ImGui::Text("Show Frustum"); ImGui::SameLine(); ImGui::Checkbox("##CameraFrustum", &m_bShowDebugDraw);
 	GetTarget()->Camera()->ShowDebugDraw(m_bShowDebugDraw);
 

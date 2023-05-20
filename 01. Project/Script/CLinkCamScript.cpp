@@ -28,6 +28,7 @@ CLinkCamScript::CLinkCamScript()
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fCameraRadiusMax, 0.f, 1000.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance Min", &m_fCameraRadiusMin, 0.f, 1000.f, 0.5f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance Charge Min", &m_fCameraRadiusChargeMin, 0.f, 1000.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Front Distance", &m_fFrontDistFromLink, 0.f, 1000.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Lock On Time", &m_fLockOnMaxTime, 0.1f, 10.f, 0.01f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "General Time", &m_fGeneralMaxTime, 0.1f, 10.f, 0.01f);
@@ -57,6 +58,7 @@ CLinkCamScript::CLinkCamScript(const CLinkCamScript& _origin)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance", &m_fCameraRadiusMax, 0.f, 200.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance Min", &m_fCameraRadiusMin, 0.f, 1000.f, 0.5f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Distance Charge Min", &m_fCameraRadiusChargeMin, 0.f, 1000.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Front Distance", &m_fFrontDistFromLink, 0.f, 200.f, 0.5f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Lock On Time", &m_fLockOnMaxTime, 0.1f, 10.f, 0.01f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "General Time", &m_fGeneralMaxTime, 0.1f, 10.f, 0.01f);
@@ -174,7 +176,7 @@ void CLinkCamScript::init()
 
 void CLinkCamScript::begin()
 {
-
+	m_ePrevMode = LINK_CAM_MODE::NONE;
 }
 
 void CLinkCamScript::tick()
@@ -200,6 +202,11 @@ void CLinkCamScript::tick()
 		{
 			m_eMode = LINK_CAM_MODE::GENERAL_START;
 		}
+	}
+
+	if (m_eMode != m_ePrevMode)
+	{
+		m_bOnce = true;
 	}
 
 	switch (m_eMode)
@@ -235,6 +242,8 @@ void CLinkCamScript::tick()
 	}
 	break;
 	}
+
+	m_ePrevMode = m_eMode;
 }
 
 void CLinkCamScript::GeneralMove()
@@ -255,6 +264,7 @@ void CLinkCamScript::GeneralStartMove()
 {
 	if (m_bOnce)
 	{
+		m_vLerpStartPos = Transform()->GetRelativePos();
 		m_fLerpStartRadius = m_fCameraRadiusCur;
 		m_vLerpStartRot = Transform()->GetRelativeRotation();
 		m_vLerpEndRot = m_vLerpStartRot - m_vAddRot;
@@ -264,7 +274,7 @@ void CLinkCamScript::GeneralStartMove()
 		m_bOnce = false;
 	}
 
-	RBTNMove();
+	// RBTNMove();
 
 	if (m_fGeneralMaxTime > m_fGeneralAccTime)
 	{
@@ -283,6 +293,8 @@ void CLinkCamScript::GeneralStartMove()
 
 	Vec3 vCamPos = m_pLinkScr->GetOwner()->Transform()->GetRelativePos() + vDirToObjFromCamXZ * m_fFrontDistFromLink + vDirToCamFromObj * m_fCameraRadiusCur;
 	vCamPos.y += m_fPosUp;
+	vCamPos = Vec3::Lerp(m_vLerpStartPos, vCamPos, fRatio);
+
 	Transform()->SetRelativePos(vCamPos);
 	Vec3 vLerpStartRot;
 	Vec3 vLerpEndRot;
@@ -314,7 +326,7 @@ void CLinkCamScript::LockOnMove()
 	Vec3 vDirToObjFromCamXZ = Vec3(-vDirToCamFromObj.x, 0.f, -vDirToCamFromObj.z).Normalize();
 
 	float fDist = (m_pLinkScr->GetOwner()->Transform()->GetRelativePos() - m_pLockOnObj->Transform()->GetRelativePos()).Length();
-	m_fCameraRadiusCur = lerp<float>(m_fCameraRadiusMin, m_fCameraRadiusMax, fDist / m_pLinkScr->GetLockOnRadar()->GetColRadius());
+	m_fCameraRadiusCur = lerp<float>(m_fCameraRadiusMin, m_fCameraRadiusMax, LerpCos(fDist / m_pLinkScr->GetLockOnRadar()->GetColRadius()));
 
 	Vec3 vFinalPos = m_pLinkScr->GetOwner()->Transform()->GetRelativePos() + vDirToObjFromCamXZ * m_fFrontDistFromLink + vDirToCamFromObj * m_fCameraRadiusCur;
 	vFinalPos.y += m_fPosUp;
@@ -356,12 +368,12 @@ void CLinkCamScript::LockOnStartMove()
 	// rotate
 	Vec3 vDirToCamFromObj = (m_pLinkScr->GetOwner()->Transform()->GetRelativePos() - m_pLockOnObj->Transform()->GetRelativePos()).Normalize();
 	Vec3 vDirToObjFromCamXZ = Vec3(-vDirToCamFromObj.x, 0.f, -vDirToCamFromObj.z).Normalize();
-	vDirToCamFromObj.y = 1.f; // 45 degree
+	vDirToCamFromObj.y = tanf(XM_PI / 12.f); // 15 degree
 	vDirToCamFromObj.Normalize();
 
 	// zoom in 
 	float fDist = (m_pLinkScr->GetOwner()->Transform()->GetRelativePos() - m_pLockOnObj->Transform()->GetRelativePos()).Length();
-	float fRadius = lerp<float>(m_fCameraRadiusMin, m_fCameraRadiusMax, fDist / m_pLinkScr->GetLockOnRadar()->GetColRadius());
+	float fRadius = lerp<float>(m_fCameraRadiusMin, m_fCameraRadiusMax, LerpCos(fDist / m_pLinkScr->GetLockOnRadar()->GetColRadius()));
 
 	m_fCameraRadiusCur = lerp<float>(m_fLerpStartRadius, fRadius, fRatio);
 	Vec3 vFinalPos = m_pLinkScr->GetOwner()->Transform()->GetRelativePos() + vDirToObjFromCamXZ * m_fFrontDistFromLink + vDirToCamFromObj * m_fCameraRadiusCur;
@@ -391,6 +403,10 @@ void CLinkCamScript::LockOnStartMove()
 void CLinkCamScript::BowChargeMove()
 {
 	CGameObject* pArrowObj = m_pLinkScr->GetLinkBow()->GetScript<CLinkBowScript>()->GetArrow();
+
+	if (pArrowObj == nullptr || pArrowObj->GetParent() == nullptr)
+		return;
+
 	Vec3 vArrowPos = pArrowObj->Transform()->GetWorldPos();
 	Vec3 vDir = m_pLinkScr->Transform()->GetRelativeDir(DIR::FRONT);
 	Vec3 vRot = GetEulerAngleFromDirection(vDir);
@@ -410,6 +426,11 @@ void CLinkCamScript::BowChargeMove()
 
 void CLinkCamScript::BowChargeStartMove()
 {
+	CGameObject* pArrowObj = m_pLinkScr->GetLinkBow()->GetScript<CLinkBowScript>()->GetArrow();
+
+	if (pArrowObj == nullptr || pArrowObj->GetParent() == nullptr)
+		return;
+
 	if (m_bOnce)
 	{
 		m_vLerpStartPos = Transform()->GetRelativePos();
@@ -437,11 +458,11 @@ void CLinkCamScript::BowChargeStartMove()
 	Vec3 vDirToObjFromCamXZ = Vec3(vDir.x, 0.f, vDir.z).Normalize();
 	vDir *= -1.f;
 
-	m_fCameraRadiusCur = lerp<float>(m_fLerpStartRadius, m_fCameraRadiusMin, fRatio);
-	CGameObject* pArrowObj = m_pLinkScr->GetLinkBow()->GetScript<CLinkBowScript>()->GetArrow();
+	m_fCameraRadiusCur = lerp<float>(m_fLerpStartRadius, m_fCameraRadiusChargeMin, fRatio);
 	Vec3 vFinalPos = pArrowObj->Transform()->GetWorldPos() + vDirToObjFromCamXZ * m_fFrontDistFromLink + vDir * m_fCameraRadiusCur;
-	vFinalPos = Vec3::Lerp(m_vLerpStartPos, vFinalPos, fRatio);
 	vFinalPos.y += m_fPosUp;
+	vFinalPos = Vec3::Lerp(m_vLerpStartPos, vFinalPos, fRatio);
+
 
 	Vec3 vLerpStartRot;
 	Vec3 vLerpEndRot;
@@ -502,6 +523,9 @@ void CLinkCamScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "PosUp";
 	_emitter << YAML::Value << m_fPosUp;
+
+	_emitter << YAML::Key << "DistFromLinkChargeMin";
+	_emitter << YAML::Value << m_fCameraRadiusChargeMin;
 }
 
 void CLinkCamScript::LoadFromYAML(YAML::Node& _node)
@@ -510,6 +534,7 @@ void CLinkCamScript::LoadFromYAML(YAML::Node& _node)
 
 	SAFE_LOAD_FROM_YAML(float, m_fCameraRadiusMax, _node["DistFromLink"]);
 	SAFE_LOAD_FROM_YAML(float, m_fCameraRadiusMin, _node["DistFromLinkMin"]);
+	SAFE_LOAD_FROM_YAML(float, m_fCameraRadiusChargeMin, _node["DistFromLinkChargeMin"]);
 	SAFE_LOAD_FROM_YAML(float, m_fFrontDistFromLink, _node["FrontDistFromLink"]);
 	SAFE_LOAD_FROM_YAML(float, m_fMaxDistLockOn, _node["MaxDistFromLockOnObj"]);
 	SAFE_LOAD_FROM_YAML(float, m_fLockOnMaxTime, _node["LockOnMaxTime"]);

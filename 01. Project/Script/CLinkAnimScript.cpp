@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CLinkAnimScript.h"
 
+#include <Engine/CLevelMgr.h>
+#include <Engine/CLevel.h>
 #include <Engine/CAnimator3D.h>
 #include <Engine/CAnimation3D.h>
 #include <Engine/CGameObject.h>
@@ -11,6 +13,7 @@
 #include "CLockOnScript.h"
 #include "CBonesocketScript.h"
 #include "CLinkCamScript.h"
+#include "CUIHeartScript.h"
 
 map<wstring, CAnimation3D*> CLinkAnimScript::m_mapAnim = {};
 map<wstring, tAnimNode*> CLinkAnimScript::m_mapAnimNode = {};
@@ -47,7 +50,12 @@ CLinkAnimScript::CLinkAnimScript()
 	, m_fJustAtkAccTime(0.f)
 	, m_fJustAtkMaxTime(2.f)
 {
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Walk Speed", &m_fWalkSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Run Speed", &m_fRunSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Dash Speed", &m_fDashSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Angle/s Speed", &m_fAnglePerSec, 0.f, 20.f);
+
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Time", &m_fParryingMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Evasion Time", &m_fEvasionMaxTime, 0.f, 1.f);
@@ -90,7 +98,12 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_fJustMoveForce(_origin.m_fJustMoveForce)
 	, m_pBombPref(_origin.m_pBombPref)
 {
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Walk Speed", &m_fWalkSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Run Speed", &m_fRunSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Dash Speed", &m_fDashSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Jump Speed", &m_fJumpSpeed, 0.f, 20.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Angle/s Speed", &m_fAnglePerSec, 0.f, 20.f);
+	
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Combo Time", &m_fComboMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Time", &m_fParryingMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Evasion Time", &m_fEvasionMaxTime, 0.f, 1.f);
@@ -240,7 +253,9 @@ void CLinkAnimScript::MoveByForce(Vec3 _vDirXZ, float _fForce)
 
 void CLinkAnimScript::ApplyDamage()
 {
-	m_tLinkStatus.fHP -= m_tLinkDamaged.fDamage;
+	m_tLinkStatus.iHP -= m_tLinkDamaged.iDamage;
+	m_pHPUI->SetReflect(true);
+
 	m_tLinkDamaged = {};
 }
 
@@ -276,9 +291,9 @@ void CLinkAnimScript::init()
 	m_pAnimator->SetBoneUpperAndElseLower(0, LinkBodyDivPoint);
 	m_pAnimator->CreateBoneCheckBuffer();
 	m_mapAnim = m_pAnimator->GetMapAnimation();
-	
+
 	if (m_bIsAnimNodeLoaded == false)
-	{	
+	{
 		CreateAnimNode();
 		MakeFSM();
 
@@ -296,10 +311,20 @@ void CLinkAnimScript::begin()
 	m_pLinkCamObj = CCameraMgr::GetInst()->GetCameraObj(CAMERA_SELECTION::LINK);
 
 	CGameObject* pGroundCheckObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_GROUND_CHECKER]);
-	m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
+	if(pGroundCheckObj)
+		m_pGroundChecker = pGroundCheckObj->GetScript<CGroundCheckScript>();
 
 	CGameObject* pLockOnRadarObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_LOCKON_RADAR]);
-	m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
+	if(pLockOnRadarObj)
+		m_pLockOnRadar = pLockOnRadarObj->GetScript<CLockOnScript>();
+
+	CGameObject* pHPUI = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(LINK_STRING_WCHAR[LINK_STRING_UI_HP]);
+	if(pHPUI)
+		m_pHPUI = pHPUI->GetScript<CUIHeartScript>();
+
+	CGameObject* pCrosshairUI = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(LINK_STRING_WCHAR[LINK_STRING_UI_CROSSHAIR]);
+	if(pCrosshairUI)
+		m_pCrosshairUI = pCrosshairUI->GetScript<CUIScript>();
 
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
@@ -311,10 +336,10 @@ void CLinkAnimScript::begin()
 	m_pBowObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_BOW]);
 	Func_BowEquipOff();
 
-	m_tLinkStatus.fHP = 7777.f;
+	m_tLinkStatus.iHP = 16;
 	m_tLinkDamaged.eType = LINK_DAMAGED_TYPE::NONE;
 	m_pAnyStateNode = m_mapAnimNode.find(LINK_STRING_WCHAR[LINK_STRING_ANYSTATE_NODE_KEY])->second;
-	
+
 	m_pCurAnimNode = m_mapAnimNode.find(LINK_ANIM_WCHAR[LAT_WAIT])->second;
 	m_pAnimator->Play(m_pCurAnimNode->pAnimKey, true);
 }
@@ -327,6 +352,7 @@ void CLinkAnimScript::tick()
 	OperateAnimFuncAfter();
 	PlayNextAnim();
 	OperateAnimFunc();
+	ControlUI();
 	ClearData();
 }
 
@@ -360,6 +386,18 @@ void CLinkAnimScript::OperateAnimFunc()
 	{
 		m_pCurAnimNodeLower = nullptr;
 		m_pAnimator->StopLowerAnim();
+	}
+}
+
+void CLinkAnimScript::ControlUI()
+{
+	if (CalBit(m_pCurAnimNode->iPreferences, LAP_BOW_CHARGE, BIT_LEAST_ONE))
+	{
+		m_pCrosshairUI->Show();
+	}
+	else
+	{
+		m_pCrosshairUI->Hide();
 	}
 }
 
@@ -579,7 +617,7 @@ void CLinkAnimScript::SetLinkCond()
 
 			// -- add code : sword guard hit
 			ApplyDamage();
-			if (m_tLinkStatus.fHP < 0.f)
+			if (m_tLinkStatus.iHP <= 0)
 				AddBit(m_iCond, LAC_DEAD);
 		}
 	}
@@ -729,7 +767,7 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_fComboMaxTime;
 
 	_emitter << YAML::Key << "Link Status HP";
-	_emitter << YAML::Value << m_tLinkStatus.fHP;
+	_emitter << YAML::Value << m_tLinkStatus.iHP;
 
 	_emitter << YAML::Key << "Parrying Max Time";
 	_emitter << YAML::Value << m_fParryingMaxTime;
@@ -757,7 +795,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fAnglePerSec, _node["Link Angle Per Sec"]);
 	/*SAFE_LOAD_FROM_YAML(float, m_iMode, _node["Link Mode"]);*/
 	SAFE_LOAD_FROM_YAML(float, m_fComboMaxTime, _node["Link Combo Max Time"]);
-	SAFE_LOAD_FROM_YAML(float, m_tLinkStatus.fHP, _node["Link Status HP"]);
+	SAFE_LOAD_FROM_YAML(int, m_tLinkStatus.iHP, _node["Link Status HP"]);
 	SAFE_LOAD_FROM_YAML(float, m_fParryingMaxTime, _node["Parrying Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_fEvasionMaxTime, _node["Evasion Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_fJustAtkMaxTime, _node["JustATK Max Time"]);

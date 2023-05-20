@@ -173,6 +173,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CBonesocketScript.h" />
     <ClInclude Include="CBossFireballScript.h" />
     <ClInclude Include="CBossScript.h" />
+    <ClInclude Include="CEffectScaler.h" />
     <ClInclude Include="CLinkArrowScript.h" />
     <ClInclude Include="CLinkBombScript.h" />
     <ClInclude Include="CLinkBowScript.h" />
@@ -196,6 +197,8 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CScriptMgr.h" />
     <ClInclude Include="CTestSCR.h" />
+    <ClInclude Include="CUIHeartScript.h" />
+    <ClInclude Include="CUIScript.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="CNavTestSCR.h" />
     <ClInclude Include="FSMNode.h" />
@@ -209,6 +212,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CBonesocketScript.cpp" />
     <ClCompile Include="CBossFireballScript.cpp" />
     <ClCompile Include="CBossScript.cpp" />
+    <ClCompile Include="CEffectScaler.cpp" />
     <ClCompile Include="CLinkArrowScript.cpp" />
     <ClCompile Include="CLinkBombScript.cpp" />
     <ClCompile Include="CLinkBowScript.cpp" />
@@ -235,6 +239,8 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CScriptMgr.cpp" />
     <ClCompile Include="CNavTestSCR.cpp" />
     <ClCompile Include="CTestSCR.cpp" />
+    <ClCompile Include="CUIHeartScript.cpp" />
+    <ClCompile Include="CUIScript.cpp" />
     <ClCompile Include="FSMNode.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

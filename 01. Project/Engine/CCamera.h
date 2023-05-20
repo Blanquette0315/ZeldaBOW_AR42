@@ -26,6 +26,8 @@ private:
 
     UINT        m_iLayerMask;
 
+    bool        m_bUseDeferred;
+
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_D;	    // Deferred
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_F;	    // Foward ( Opaque, Mask )
     map<INT_PTR, vector<tInstObj>>		m_mapSingleObj;		    // Single Object
@@ -39,8 +41,13 @@ private:
     vector<CGameObject*>    m_vecTransparent;
     vector<CGameObject*>    m_vecPostProcess;
     vector<CGameObject*>    m_vecDynamicShadow;
+    vector<CGameObject*>    m_vecUI;
 
     int                     m_iCamIdx;
+
+    // ui method
+public:
+    bool& GetUseDeferred() { return m_bUseDeferred; }
 
 public:
     float GetOrthographicScale() { return m_fScale; }
@@ -105,6 +112,7 @@ public:
     void render_transparent();
     void render_postprocess();
     void render_depthmap();
+    void render_UI();
 
 public:
     virtual void finaltick();

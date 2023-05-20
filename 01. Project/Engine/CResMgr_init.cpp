@@ -1143,6 +1143,23 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddScalarParam(INT_0, "Bloom Pow");
 
 	AddRes<CGraphicsShader>(L"BloomShader", pShader);
+
+	// UIShader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\UI.fx", "VS_UI");
+	pShader->CreatePixelShader(L"shader\\UI.fx", "PS_UI");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_UI);
+
+	pShader->AddTexureParam(TEX_0, "Output Texture");
+	pShader->AddScalarParam(SCALAR_PARAM::VEC4_0, "Color");
+	pShader->AddScalarParam(SCALAR_PARAM::VEC4_1, "Color_Damage");
+	pShader->AddScalarParam(SCALAR_PARAM::INT_0, "Damage");
+
+	AddRes<CGraphicsShader>(L"UIShader", pShader);
 }
 
 #include "CPaintShader.h"

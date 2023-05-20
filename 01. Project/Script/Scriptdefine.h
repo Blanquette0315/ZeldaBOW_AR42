@@ -1,6 +1,7 @@
 #pragma once
 
 #define LinkBodyDivPoint (UINT)LINK_BONE_STRING::Ponytail_A_1
+#define LerpCos(ratio)  (1.f - cosf(ratio * XM_PI)) / 2.f
 
 enum class CAMERA_SELECTION
 {
@@ -200,6 +201,8 @@ enum LINK_STRING
 	LINK_STRING_BOW,
 	LINK_STRING_SHIELD,
 	LINK_STRING_ANYSTATE_NODE_KEY,
+	LINK_STRING_UI_HP,
+	LINK_STRING_UI_CROSSHAIR,
     LINK_STRING_END,
 };
 

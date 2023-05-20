@@ -2,6 +2,7 @@
 #define _PARTICLERENDER
 
 #include "register.fx"
+#include "func.fx"
 
 // ========================
 // Particle Render Shader
@@ -12,12 +13,15 @@
 StructuredBuffer<tParticle> ParticleBuffer : register(t16);
 #define ParticleIndex   g_int_0
 #define IsWorldSpawn    g_int_1
+#define Is3DParticle    g_int_2
 
 #define StartScale      g_vec4_0
 #define EndScale        g_vec4_1
 #define StartColor      g_vec4_2
 #define EndColor        g_vec4_3
 // ========================
+
+#define Particle ParticleBuffer[_in[0].iInstance]
 
 struct VS_IN
 {
@@ -88,16 +92,18 @@ void GS_ParticleRender(point VS_OUT _in[1], inout TriangleStream<GS_OUT> _OutStr
     
     float3 vWorldPos = _in[0].vLocalPos + ParticleBuffer[_in[0].iInstance].vRelativePos.xyz;
     
-    if (0 == IsWorldSpawn)
+    if (Is3DParticle == 0)
     {
-        vWorldPos += g_matWorld._41_42_43;
-    }
+        if (0 == IsWorldSpawn)
+        {
+            vWorldPos += g_matWorld._41_42_43;
+        }
     
-    float3 vViewPos = mul(float4(vWorldPos, 1.f), g_matView).xyz;
+        float3 vViewPos = mul(float4(vWorldPos, 1.f), g_matView).xyz;
     
     // 수명 비율
-    float fRatio = ParticleBuffer[_in[0].iInstance].fCurTime / ParticleBuffer[_in[0].iInstance].fMaxTime;
-    float3 vScale = lerp(StartScale.xyz, EndScale.xyz, fRatio);
+        float fRatio = ParticleBuffer[_in[0].iInstance].fCurTime / ParticleBuffer[_in[0].iInstance].fMaxTime;
+        float3 vScale = lerp(StartScale.xyz, EndScale.xyz, fRatio);
     
     // ViewSpace 특징 : 카메라가 원점이고, z축을 바라보는 공간이다.
     // 따라서 Local을 World로 변환하고, ViewSpace에서 사각형으로 확장하면, 항상 카메라 원점을 기준으로 확장되며,
@@ -105,19 +111,68 @@ void GS_ParticleRender(point VS_OUT _in[1], inout TriangleStream<GS_OUT> _OutStr
     // 크기도 이곳에서 결정을 해주면, 점 메시가 월드로 배치되고, ViewSpace로 전환되어 그곳을 기준으로 사각형 확장이된다.
     // 이때, 크기가 커지면 해당 크기만큼의 사각형 정점이 생성되게 된다.
     // 이런 이유 때문에 ViewSpace에서 점을 분할해준다.
-    float3 NewPos[4] =
-    {
-        vViewPos - float3(-0.5f, 0.5f, 0.f) * vScale,
-        vViewPos - float3(0.5f, 0.5f, 0.f) * vScale,
-        vViewPos - float3(0.5f, -0.5f, 0.f) * vScale,
-        vViewPos - float3(-0.5f, -0.5f, 0.f) * vScale
-    };
+    
+    
+    
+        float3 NewPos[4] =
+        {
+            vViewPos - float3(-0.5f, 0.5f, 0.f) * vScale,
+            vViewPos - float3(0.5f, 0.5f, 0.f) * vScale,
+            vViewPos - float3(0.5f, -0.5f, 0.f) * vScale,
+            vViewPos - float3(-0.5f, -0.5f, 0.f) * vScale
+        };
 
-    for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
+        {
+            output[i].vPosition = mul(float4(NewPos[i], 1.f), g_matProj);
+            output[i].iInstance = _in[0].iInstance;
+        }
+    }
+    else
     {
-        output[i].vPosition = mul(float4(NewPos[i], 1.f), g_matProj);
-        output[i].iInstance = _in[0].iInstance;
-
+        float3 vLocalPos = _in[0].vLocalPos;
+        
+        // scale
+        float fRatio = Particle.fCurTime / Particle.fMaxTime;
+        float3 vScale = lerp(StartScale.xyz, EndScale.xyz, fRatio);
+     
+        float3 NewPos[4] =
+        {
+            vLocalPos + float3(-0.5f, 0.5f, 0.f),
+            vLocalPos + float3(0.5f, 0.5f, 0.f),
+            vLocalPos + float3(0.5f, -0.5f, 0.f),
+            vLocalPos + float3(-0.5f, -0.5f, 0.f)
+        };  
+        
+        float4x4 matSRT = CreateMatrixScale(vScale);
+        matSRT = mul(matSRT, CreateMatrixRot(Particle.vDir.xyz));
+        matSRT = mul(matSRT, CreateMatrixTrans(Particle.vRelativePos.xyz));
+        
+        for (int i = 0; i < 4; i++)
+        {
+            NewPos[i] = mul(float4(NewPos[i], 1.f), matSRT).xyz;
+        }
+        
+        float4x4 matWVP = (float4x4) 0.f;
+        
+        if(IsWorldSpawn)
+        {
+            matWVP = mul(mul(Particle.matWorld, g_matView), g_matProj);
+        }
+        
+        for (int j = 0; j < 4; j++)
+        {
+            if(IsWorldSpawn)
+            {
+                output[j].vPosition = mul(float4(NewPos[j], 1.f), matWVP);
+                output[j].iInstance = _in[0].iInstance;
+            }
+            else
+            {
+                output[j].vPosition = mul(float4(NewPos[j], 1.f), g_matWVP);
+                output[j].iInstance = _in[0].iInstance;
+            }
+        }
     }
     
     output[0].vUV = float2(0.f, 0.f);

@@ -1,16 +1,16 @@
 #pragma once
 #include <Engine/CScript.h>
 
-class CPrefab;
+
 
 struct tLinkStatus
 {
-    float fHP;
+    int iHP;
 };
 
 struct tLinkDamaged
 {
-    float fDamage;
+    int iDamage;
     LINK_DAMAGED_TYPE eType;
 };
 
@@ -22,11 +22,14 @@ enum class EQUIPMENT_STATE
     END
 };
 
+class CPrefab;
 class CAnimator3D;
 class CAnimation3D;
 class tAnimNode;
 class CGroundCheckScript;
 class CLockOnScript;
+class CUIHeartScript;
+class CUIScript;
 
 class CLinkAnimScript :
     public CScript
@@ -50,10 +53,13 @@ private:
     CGameObject*            m_pLinkCamObj;
     CGroundCheckScript*     m_pGroundChecker;
     CLockOnScript*          m_pLockOnRadar;
+    CUIHeartScript*         m_pHPUI;
+    CUIScript*              m_pCrosshairUI;
 
     CGameObject*            m_pSwordObj;
     CGameObject*            m_pBowObj;
     CGameObject*            m_pShieldObj;
+    
 
     Ptr<CPrefab>            m_pBombPref;
     CGameObject*            m_pBombObj;
@@ -94,6 +100,7 @@ private:
 
     bool                    m_bJustAtkEndOnce;
     bool                    m_bOFA;
+
     // save
 private:
     float           m_fAnglePerSec;
@@ -124,12 +131,14 @@ private:
 private:
     // set link condition
     void SetLinkCond();
+    void Timer();
 
     // This Func can use anim finished member 
     void OperateAnimFuncAfter();
     void PlayNextAnim();
     void OperateAnimFunc();
-    void Timer();
+    void ControlUI();
+
     void ClearData();
 
     // anim function
@@ -203,6 +212,7 @@ public:
     CLockOnScript* GetLockOnRadar() { return m_pLockOnRadar; }
     CGameObject* GetLinkCam() { return m_pLinkCamObj; }
     CGameObject* GetLinkBow() { return m_pBowObj; }
+    const tLinkStatus& GetLinkStatus() { return m_tLinkStatus; }
 
     // Interaction with monster function
 public:

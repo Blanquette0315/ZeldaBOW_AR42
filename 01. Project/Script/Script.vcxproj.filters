@@ -85,6 +85,15 @@
     <Filter Include="Scripts\Link\Bomb">
       <UniqueIdentifier>{d5b92c60-114f-4516-b2ab-d0e1dd686ff2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\UI">
+      <UniqueIdentifier>{6a73a8ee-331d-419f-87cc-4088a0396ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\UI\Heart">
+      <UniqueIdentifier>{882cba08-1191-4397-a212-07d64b5152ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Effect">
+      <UniqueIdentifier>{1cc0432d-6ced-427f-9141-175394fa5303}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -193,7 +202,16 @@
     <ClInclude Include="CLinkHitScript.h">
       <Filter>Scripts\Link\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="CLinkBombScript.h" />
+    <ClInclude Include="CUIScript.h">
+      <Filter>Scripts\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkBombScript.h">
+      <Filter>Scripts\Link\Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="CUIHeartScript.h" />
+    <ClInclude Include="CEffectScaler.h">
+      <Filter>Scripts\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -302,6 +320,15 @@
     <ClCompile Include="CLinkHitScript.cpp">
       <Filter>Scripts\Link\Hit</Filter>
     </ClCompile>
-    <ClCompile Include="CLinkBombScript.cpp" />
+    <ClCompile Include="CUIScript.cpp">
+      <Filter>Scripts\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLinkBombScript.cpp">
+      <Filter>Scripts\Link\Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIHeartScript.cpp" />
+    <ClCompile Include="CEffectScaler.cpp">
+      <Filter>Scripts\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
