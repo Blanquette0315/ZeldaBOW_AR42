@@ -183,7 +183,7 @@ struct tParticle
 	Vec4 vRelativePos;	// 파티클의 상대 위치
 	Vec4 vDir;			// 파티클의 방향
 	Matrix vWorldMat;
-
+	Vec4 vSpeed;
 	float fMaxTime;		// 최대 파티클 생존시간
 	float fCurTime;		// 현재 파티클 생존시간
 	float fSpeed;		// 파티클의 속도

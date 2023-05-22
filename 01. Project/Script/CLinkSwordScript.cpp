@@ -9,6 +9,14 @@ CLinkSwordScript::CLinkSwordScript()
 	: CScript(SCRIPT_TYPE::LINKSWORDSCRIPT)
 	, m_pLinkAnimScr(nullptr)
 {
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Attack Effect", &m_AttackEffectPref);
+}
+
+CLinkSwordScript::CLinkSwordScript(const CLinkSwordScript& _origin)
+	: CScript(_origin)
+	, m_AttackEffectPref(_origin.m_AttackEffectPref)
+{
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Attack Effect", &m_AttackEffectPref);
 }
 
 CLinkSwordScript::~CLinkSwordScript()
@@ -18,6 +26,20 @@ CLinkSwordScript::~CLinkSwordScript()
 bool CLinkSwordScript::IsAttackAnim()
 {
 	return CalBit(m_pLinkAnimScr->GetCurAnimNode()->GetPreference(), LAP_ATTACK, BIT_LEAST_ONE);
+}
+
+void CLinkSwordScript::AttackEffect(CMonsterScript* _pMonsterScr)
+{
+	if (m_AttackEffectPref.Get())
+	{
+		CTransform* pMonsterTrans = _pMonsterScr->GetOwner()->Transform();
+		CGameObject* pEffectObj = m_AttackEffectPref->Instantiate();
+
+		CTransform* pLinkTrans = GetOwner()->GetParent()->Transform();
+		Vec3 vRot = pLinkTrans->GetRelativeRotation();
+		Vec3 vDir = -pLinkTrans->GetRelativeDir(DIR::FRONT);
+		// pEffectObj->
+	}
 }
 
 void CLinkSwordScript::begin()
@@ -101,11 +123,13 @@ void CLinkSwordScript::EndOverlap(CGameObject* _pOther)
 void CLinkSwordScript::SaveToYAML(YAML::Emitter& _emitter)
 {
 	CScript::SaveToYAML(_emitter);
+	SaveResourceRefEX(m_AttackEffectPref, _emitter, "AttackEffect");
 }
 
 void CLinkSwordScript::LoadFromYAML(YAML::Node& _node)
 {
 	CScript::LoadFromYAML(_node);
+	LoadResourceRefEX(m_AttackEffectPref, _node, "AttackEffect");
 }
 
 

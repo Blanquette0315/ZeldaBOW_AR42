@@ -151,6 +151,24 @@ void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 }
 
 template<typename T>
+void SaveResourceRefEX(Ptr<T> _res, YAML::Emitter& _emitter, const string& _markingName)
+{
+	//// 참조중인 리소스가 없었다면 없는대로 nullptr이 들어갈 것이다.
+	//int bExist = !!_res.Get();
+	//_emitter << YAML::Key << "Exist";
+	//_emitter << YAML::Value << bExist;
+	//// 참조중인 리소스가 있었다면, 어떤 리소스를 가지고 있었는지 키와 경로를 저장한다.
+
+	if (_res.Get())
+	{
+		_emitter << YAML::Key << _markingName + "ResKey";
+		_emitter << YAML::Value << WStringToString(_res->GetKey());
+		_emitter << YAML::Key << _markingName + "ResRelativePath";
+		_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
+	}
+}
+
+template<typename T>
 void LoadResourceRef(Ptr<T>& _Res, YAML::Node& _node)
 {
 	wstring strKey, strRelativePath;
@@ -163,6 +181,27 @@ void LoadResourceRef(Ptr<T>& _Res, YAML::Node& _node)
 	if (_node["ResRelativePath"].IsDefined())
 	{
 		strRelativePath = StringToWString(_node["ResRelativePath"].as<string>());
+	}
+
+	if (!strKey.empty())
+	{
+		_Res = CResMgr::GetInst()->Load<T>(strKey, strRelativePath);
+	}
+}
+
+template<typename T>
+void LoadResourceRefEX(Ptr<T>& _Res, YAML::Node& _node, const string& _markingName)
+{
+	wstring strKey, strRelativePath;
+
+	if (_node[_markingName + "ResKey"].IsDefined())
+	{
+		strKey = StringToWString(_node[_markingName + "ResKey"].as<string>());
+	}
+
+	if (_node[_markingName + "ResRelativePath"].IsDefined())
+	{
+		strRelativePath = StringToWString(_node[_markingName + "ResRelativePath"].as<string>());
 	}
 
 	if (!strKey.empty())

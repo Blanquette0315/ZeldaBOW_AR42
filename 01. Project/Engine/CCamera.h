@@ -30,6 +30,7 @@ private:
 
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_D;	    // Deferred
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_F;	    // Foward ( Opaque, Mask )
+    map<ULONG64, vector<tInstObj>>      m_mapInstGroup_FT;      // Forward (Transparent)
     map<INT_PTR, vector<tInstObj>>		m_mapSingleObj;		    // Single Object
 
     vector<CGameObject*>    m_vecDeferred;
@@ -106,6 +107,7 @@ public:
     void render_Bloom();
 
     void render_Forward();
+    void render_Forward_T();
     void render_opaque();
     void render_mask();
     void render_decal();

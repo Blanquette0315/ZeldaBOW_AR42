@@ -529,4 +529,20 @@ float4x4 CreateMatrixTrans(float3 _pos)
     return translationMatrix;
 }
 
+float4 Blur(in Texture2D _Tex, float2 _vUV)
+{
+    float4 vOutColor = (float4) 0.f;
+    float2 vUV = (float2) 0.f;
+    for (int x = -2; x < 2; ++x)
+    {
+        for (int y = -2; y < 2; ++y)
+        {
+            vUV = _vUV + (1.f / 256.f) * float2(x, y);
+            vOutColor += _Tex.Sample(g_sam_0, vUV) * GaussianFilter[2 + x][2 + y];
+        }
+    }
+    return vOutColor;
+}
+
+
 #endif

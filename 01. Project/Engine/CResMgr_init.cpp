@@ -777,19 +777,6 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
 
-	pShader = new CGraphicsShader;
-	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
-	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D_Only_Alphablend");
-	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);
-
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
-
-	pShader->AddScalarParam(VEC4_0, "Color management");
-	pShader->AddTexureParam(TEX_0, "Output Texture 1");
-
-	AddRes<CGraphicsShader>(L"Effect2DShader", pShader);
-
 	// std2DAlphaBlend Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
@@ -1173,6 +1160,34 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddScalarParam(SCALAR_PARAM::INT_0, "Damage");
 
 	AddRes<CGraphicsShader>(L"UIShader", pShader);
+
+	// std2d effect
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2deffect.fx", "VS_Std2D_Effect");
+	pShader->CreatePixelShader(L"shader\\std2deffect.fx", "PS_Std2D_Effect");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	pShader->AddScalarParam(INT_0, "Option");
+	pShader->AddScalarParam(VEC4_0, "Color management");
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+
+	AddRes<CGraphicsShader>(L"Effect2DShader", pShader);
+
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_PostProcess_ExtraFullScreen");
+	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_PostProcess_Flash");
+
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POST_PROCESS);
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+	pShader->AddScalarParam(VEC4_0, "Color management");
+
+	AddRes<CGraphicsShader>(L"PostProcessFlashShader", pShader);
 }
 
 #include "CPaintShader.h"
@@ -1192,8 +1207,12 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader->CreateComputeShader(L"shader\\particleupdate.fx", "CS_ParticleUpdate");
 	AddRes<CComputeShader>(L"ParticleUpdateShader", pShader);
 
+	//pShader = new CParticleUpdateShader;
+	//pShader->CreateComputeShader(L"shader\\particle_spark_CS.fx", "CS_ParticleSpark");
+	//AddRes<CComputeShader>(L"ParticleSparkShader", pShader);
+
 	pShader = new CParticleUpdateShader;
-	pShader->CreateComputeShader(L"shader\\particle_spark_CS.fx", "CS_ParticleSpark");
+	pShader->CreateComputeShader(L"shader\\link_particle_spark_CS.fx", "CS_ParticleSpark");
 	AddRes<CComputeShader>(L"ParticleSparkShader", pShader);
 
 	// Animation3D Update Shader	

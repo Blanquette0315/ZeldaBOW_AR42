@@ -232,7 +232,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ST, LAP_INVINCIBLE | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_JustEvasionStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_JustEvasion); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_JustEvasionEnd);
 	SetAnimTran(pAnimNode, LAT_LOCKON_JUMP_B_ED, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ED, LAP_INVINCIBLE | LAP_KEEP_LOCKON);
+	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ED, LAP_INVINCIBLE | LAP_KEEP_LOCKON | LAP_JUST_ATK);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_EQUIP_SWORD | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_EQUIP_BOW | LAC_ANIM_FINISHED);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_EQUIP_SHIELD | LAC_ANIM_FINISHED);

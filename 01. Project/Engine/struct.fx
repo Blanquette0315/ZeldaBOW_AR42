@@ -26,6 +26,7 @@ struct tParticle
     float4	vRelativePos;
     float4	vDir;
     float4x4 matWorld;
+    float4 vSpeed;
     
     float	fMaxTime;
     float	fCurTime;

@@ -119,6 +119,12 @@ private:
     
     float           m_fJustMoveForce;
 
+        // effect
+    Ptr<CPrefab>    m_EffectParrying;
+    float           m_fParryingOffset;
+
+    Ptr<CPrefab>    m_EffectScreenFlash;
+
     // FSM function
 private:
     void CreateAnimNode();

@@ -144,9 +144,14 @@ void MaterialUI::render_update()
 
 				wstring strNamePath = {};
 
-				strNamePath = L"material\\";
-				strNamePath += pMtrl->GetName();
-				strNamePath += L".mtrl";
+				if (pMtrl->GetRelativePath().empty())
+				{
+					strNamePath = L"material\\";
+					strNamePath += pMtrl->GetName();
+					strNamePath += L".mtrl";
+				}
+				else
+					strNamePath = pMtrl->GetRelativePath();
 
 				if (strNamePath != pMtrl->GetKey())
 				{

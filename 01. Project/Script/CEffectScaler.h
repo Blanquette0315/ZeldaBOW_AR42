@@ -5,6 +5,7 @@ enum class SCALER_OPT
 {
     START_END,
     START_MIDDLE_END,
+    ONLY_TIMER,
 };
 
 class CEffectScaler :
@@ -23,11 +24,15 @@ class CEffectScaler :
     bool m_bDelayFlag;
     bool m_bDelay;
 
-    int m_iOption;
+    int m_iOption;     // 0 : Start - End, 1: Start - Middle - End 2 : Timer
+    int m_iLerpOption; // 0 : default, 1 : cos, 2 : circle
 
 private:
+    void SelectLerpType(float& _fRatio);
+
     void Start_End();
     void Start_Middle_End();
+    void Timer();
 
 public:
     virtual void begin() override;

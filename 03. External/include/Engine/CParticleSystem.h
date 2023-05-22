@@ -45,6 +45,9 @@ private:
     Ptr<CParticleUpdateShader>  m_UpdateCS;
 
     int                         m_Is3DParticle;
+    int                         m_iOption; // additional Option to shader
+
+    bool                       m_bFirstEntry; // check first entry
 
     // UI
 public:
@@ -52,6 +55,7 @@ public:
     void Set3DParticle(bool _b) { m_Is3DParticle = _b; }
 
 public:
+    virtual void begin() override;
     virtual void finaltick() override;
     virtual void render() override;
     virtual void render(UINT _iSubset) override;
@@ -72,6 +76,7 @@ public:
     void SetMinMaxSpeed(Vec2 _MinMaxSpeed) { m_vMinMaxSpeed = _MinMaxSpeed; }
     void SetWorldSpawn(bool _WorldSpwan) { m_WorldSpawn = (int)_WorldSpwan; }
     void SetAliveCount(UINT _iAliveCount) { m_iAliveCount = _iAliveCount; }
+    void SetOption(int _iOption) { m_iOption = _iOption; }
 
 public:
     UINT GetMaxCount() { return m_iMaxCount; }
@@ -86,6 +91,7 @@ public:
     float GetFrequency() { return m_Frequency; }
     bool GetWorldSpawn() { return (bool)m_WorldSpawn; }
     Ptr<CParticleUpdateShader> GetCS() { return m_UpdateCS; }
+    int GetOption() { return m_iOption; }
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

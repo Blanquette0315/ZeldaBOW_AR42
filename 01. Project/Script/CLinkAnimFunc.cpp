@@ -365,6 +365,20 @@ void CLinkAnimScript::Func_ShieldJustStart()
 {
 	m_fParryingAccTime = 0.f;
 	m_bParryingOnce = false;
+
+	Vec3 vInstPos = Transform()->GetRelativePos();
+	vInstPos += Transform()->GetRelativeDir(DIR::FRONT) * m_fParryingOffset;
+	vInstPos.y += 15.f;
+
+	if (m_EffectParrying.Get())
+	{
+		CGameObject* pInstObj = m_EffectParrying->Instantiate();
+		pInstObj->Transform()->SetRelativeRotation(Vec3(Transform()->GetRelativeRotation()));
+		Instantiate(pInstObj, vInstPos, 0);
+	}
+
+	if (m_EffectScreenFlash.Get())
+		Instantiate(m_EffectScreenFlash->Instantiate(), Vec3::Zero, 0);
 }
 
 void CLinkAnimScript::Func_ShieldJust()
@@ -476,7 +490,7 @@ void CLinkAnimScript::Func_JustAtkDash()
 		vDir.y = 0.f;
 		vDir.Normalize();
 
-		RigidBody()->SetVelocity(vDir * fLength);
+		RigidBody()->SetVelocity(vDir * fLength / 5.f);
 	}
 }
 
@@ -490,6 +504,7 @@ void CLinkAnimScript::Func_JustAtkEnd()
 	TimeSlowAffectedObj(true, GetOwner());
 	TimeSlow(false);
 	m_bInvincible = false;
+	m_bJustAtkEndOnce = false;
 
 	// monster set state 
 	// if(m_pLockOnRadar->GetLockOnTarget())

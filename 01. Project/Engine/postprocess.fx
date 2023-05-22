@@ -22,18 +22,18 @@ struct VS_OUT
     float2 vUV : TEXCOORD;
 };
 
-//VS_OUT VS_PostProcess(VS_IN _in)
-//{
-//    VS_OUT output = (VS_OUT) 0.f;
-//    
-//    // 전체 화면을 대상으로 하기 위해서 x는 2배로 곱해 NDC좌표 범위의 최대로 설정해주었다.
-//    // z축은 깊이 테스트는 하지 않지만 0이면 출력이 안될 수 있기 때문에 무난한 0.5를 주었다.
-//    // 동차좌표는 1을 주어 월드 이동이 가능하도록 만들었다.
-//    output.vPosition = float4(_in.vPos.xy * 2.f, 0.5f, 1.f);
-//    output.vUV = _in.vUV;
-//    
-//    return output;
-//}
+VS_OUT VS_PostProcess_ExtraFullScreen(VS_IN _in)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+    
+    // 전체 화면을 대상으로 하기 위해서 x는 2배로 곱해 NDC좌표 범위의 최대로 설정해주었다.
+    // z축은 깊이 테스트는 하지 않지만 0이면 출력이 안될 수 있기 때문에 무난한 0.5를 주었다.
+    // 동차좌표는 1을 주어 월드 이동이 가능하도록 만들었다.
+    output.vPosition = float4(_in.vPos.xy * 3.f, 0.5f, 1.f);
+    output.vUV = _in.vUV;
+    
+    return output;
+}
 
 //float4 PS_PostProcess(VS_OUT _in) : SV_Target
 //{
@@ -79,6 +79,20 @@ float4 PS_PostProcess(VS_OUT _in) : SV_Target
     
     return vColor;
 }
+
+#define ALPHA g_vec4_0.a
+#define Color g_vec4_0.rgb
+
+float4 PS_PostProcess_Flash(VS_OUT _in) : SV_Target
+{
+    float4 vColor = (float4) 0.f;
+    vColor.a = 1.f;
+    vColor.rgb += Color;
+    vColor.a *= ALPHA;
+    
+    return vColor;
+}
+
 
 
 #endif
