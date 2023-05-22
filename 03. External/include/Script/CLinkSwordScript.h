@@ -3,17 +3,24 @@
 
 class CGameObject;
 class CLinkAnimScript;
+class CPrefab;
+class CMonsterScript;
 
 class CLinkSwordScript :
     public CScript
 {
     // not save
 private:
-    CLinkAnimScript* m_pLinkAnimScr;
-    vector<CGameObject*> m_vecObjHit;
+    CLinkAnimScript*        m_pLinkAnimScr;
+    vector<CGameObject*>    m_vecObjHit;
+
+    // save
+private:
+    Ptr<CPrefab>            m_AttackEffectPref;
 
 private:
     bool IsAttackAnim();
+    void AttackEffect(CMonsterScript* _pMonsterScr);
 
 public:
     virtual void begin() override;
@@ -31,6 +38,7 @@ public:
 
 public:
     CLinkSwordScript();
+    CLinkSwordScript(const CLinkSwordScript& _origin);
     ~CLinkSwordScript();
 };
 

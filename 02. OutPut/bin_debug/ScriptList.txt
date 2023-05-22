@@ -5,6 +5,7 @@ CBossScript
 CCamScript
 CEffectScaler
 CEquipableScript
+CFlashEffectScript
 CGroundCheckScript
 CLinkAnimScript
 CLinkArrowScript

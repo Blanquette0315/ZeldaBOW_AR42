@@ -212,6 +212,9 @@
     <ClInclude Include="CEffectScaler.h">
       <Filter>Scripts\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="CFlashEffectScript.h">
+      <Filter>Scripts\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -328,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="CUIHeartScript.cpp" />
     <ClCompile Include="CEffectScaler.cpp">
+      <Filter>Scripts\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="CFlashEffectScript.cpp">
       <Filter>Scripts\Effect</Filter>
     </ClCompile>
   </ItemGroup>

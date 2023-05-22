@@ -27,6 +27,8 @@ private:
     Ptr<CParticleUpdateShader>  m_UpdateCS;
     Ptr<CMaterial>  m_Material;
 
+    int m_iOption;
+
 public:
     virtual void update() override;
     virtual void render_update() override;

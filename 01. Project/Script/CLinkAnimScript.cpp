@@ -62,6 +62,11 @@ CLinkAnimScript::CLinkAnimScript()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustAtk Time", &m_fJustAtkMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustMove Force", &m_fJustMoveForce, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "Bomb Prefab", &m_pBombPref);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Parrying Effect Prefab", &m_EffectParrying);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Offset", &m_fParryingOffset, 0.f, 100.f);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "ScreenFlash Effect Prefab", &m_EffectScreenFlash);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -97,6 +102,9 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_fJustAtkMaxTime(_origin.m_fJustAtkMaxTime)
 	, m_fJustMoveForce(_origin.m_fJustMoveForce)
 	, m_pBombPref(_origin.m_pBombPref)
+	, m_EffectParrying(_origin.m_EffectParrying)
+	, m_EffectScreenFlash(_origin.m_EffectScreenFlash)
+	, m_fParryingOffset(_origin.m_fParryingOffset)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Walk Speed", &m_fWalkSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Run Speed", &m_fRunSpeed, 0.f, 20.f);
@@ -110,6 +118,11 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustAtk Time", &m_fJustAtkMaxTime, 0.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "JustMove Force", &m_fJustMoveForce, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "Bomb Prefab", &m_pBombPref);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "Parrying Effect Prefab", &m_EffectParrying);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Offset", &m_fParryingOffset, 0.f, 100.f);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "ScreenFlash Effect Prefab", &m_EffectScreenFlash);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -416,7 +429,6 @@ void CLinkAnimScript::Timer()
 		if (m_fJustAtkAccTime > m_fJustAtkMaxTime)
 		{
 			Func_JustAtkEnd();
-			m_bJustAtkEndOnce = false;
 			RemoveBit(m_iCond, LAC_KEY_LBTN_COMBO);
 		}
 		else
@@ -781,7 +793,12 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Key << "Just Move Force";
 	_emitter << YAML::Value << m_fJustMoveForce;
 
-	SaveResourceRef(m_pBombPref, _emitter);
+	SaveResourceRefEX(m_pBombPref, _emitter, "Bomb");
+	SaveResourceRefEX(m_EffectParrying, _emitter, "Parrying");
+	_emitter << YAML::Key << "ParryingOffset";
+	_emitter << YAML::Value << m_fParryingOffset;
+
+	SaveResourceRefEX(m_EffectScreenFlash, _emitter, "ScreenFlash");
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -801,7 +818,11 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fJustAtkMaxTime, _node["JustATK Max Time"]);
 	SAFE_LOAD_FROM_YAML(float, m_fJustMoveForce, _node["Just Move Force"]);
 
-	LoadResourceRef(m_pBombPref, _node);
+	LoadResourceRefEX(m_pBombPref, _node, "Bomb");
+	LoadResourceRefEX(m_EffectParrying, _node, "Parrying");
+	SAFE_LOAD_FROM_YAML(float, m_fParryingOffset, _node["ParryingOffset"]);
+
+	LoadResourceRefEX(m_EffectScreenFlash, _node, "ScreenFlash");
 }
 
 

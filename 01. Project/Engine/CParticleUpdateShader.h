@@ -11,6 +11,7 @@ public:
     CStructuredBuffer* m_ParticleShare;
 
 public:
+    
     void SetParticleBuffer(CStructuredBuffer* _Buffer);
     void SetParticleShareData(CStructuredBuffer* _Buffer) { assert(_Buffer); m_ParticleShare = _Buffer; }
 
@@ -21,6 +22,8 @@ public:
     void SetMinMaxLifeTime(Vec2 _vLifeTime) { m_Param.v2Arr[1] = _vLifeTime; }
     void Set3DParticle(int _iOption) { m_Param.iArr[2] = _iOption; }
     void SetWorldMat(const Matrix& _mat) { m_Param.matArr[0] = _mat; }
+    void SetOption(int _iOption) { m_Param.iArr[3] = _iOption; }
+    void SetFirstEntry(bool _b) { m_Param.fArr[1] = (float)_b; }
 
 public:
     virtual void UpdateData() override;

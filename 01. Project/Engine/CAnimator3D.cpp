@@ -284,16 +284,16 @@ void CAnimator3D::SetBoneUpperAndElseLower(UINT _iStart, UINT _iEnd)
 {
 	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
 	std::fill(iter + _iStart, iter + _iEnd + 1, 1);
-	std::fill(iter, iter + _iStart, 1);
-	std::fill(iter + _iEnd + 1, m_vecBoneBlendCheck.end(), 1);
+	std::fill(iter, iter + _iStart, 2);
+	std::fill(iter + _iEnd + 1, m_vecBoneBlendCheck.end(), 2);
 }
 
 void CAnimator3D::SetBoneLowerAndElseUpper(UINT _iStart, UINT _iEnd)
 {
 	vector<int>::iterator iter = m_vecBoneBlendCheck.begin();
 	std::fill(iter + _iStart, iter + _iEnd + 1, 2);
-	std::fill(iter, iter + _iStart, 2);
-	std::fill(iter + _iEnd + 1, m_vecBoneBlendCheck.end(), 2);
+	std::fill(iter, iter + _iStart, 1);
+	std::fill(iter + _iEnd + 1, m_vecBoneBlendCheck.end(), 1);
 }
 
 void CAnimator3D::CreateBoneCheckBuffer()

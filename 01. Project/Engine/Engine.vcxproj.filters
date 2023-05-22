@@ -94,8 +94,17 @@
     <FxCompile Include="UI.fx">
       <Filter>HLSL\Render\3D</Filter>
     </FxCompile>
+    <FxCompile Include="std2deffect.fx">
+      <Filter>HLSL\Render\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="link_particle_spark_CS.fx">
+      <Filter>HLSL\Compute\ParticleUpdateShader\Link</Filter>
+    </FxCompile>
     <FxCompile Include="particle_spark_CS.fx">
-      <Filter>HLSL\Compute\ParticleUpdateShader</Filter>
+      <Filter>HLSL\Compute\ParticleUpdateShader\Link</Filter>
+    </FxCompile>
+    <FxCompile Include="link_particle_crash_CS.fx">
+      <Filter>HLSL\Compute\ParticleUpdateShader\Link</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -878,6 +887,9 @@
     </Filter>
     <Filter Include="Engine\07. Resource\02. Shader\02. ComputeShader">
       <UniqueIdentifier>{82b6de02-ca19-4c86-b486-0a7b0f3e0193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\ParticleUpdateShader\Link">
+      <UniqueIdentifier>{f3e35f41-f7d7-4a7f-a56b-e283542f54da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

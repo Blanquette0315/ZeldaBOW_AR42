@@ -15,6 +15,18 @@ struct VTX_IN
 	float2 vUV : TEXCOORD;
 };
 
+struct VTX_IN_INST
+{
+    float3 vPos : POSITION;
+    float2 vUV : TEXCOORD;
+	
+	// Per Instance Data
+    row_major matrix matWorld : WORLD;
+    row_major matrix matWV : WV;
+    row_major matrix matWVP : WVP;
+    uint iRowIndex : ROWINDEX;
+};
+
 struct VTX_OUT
 {
 	float4 vPos : SV_POSITION;
@@ -32,6 +44,18 @@ VTX_OUT VS_Std2D(VTX_IN _in)
 
 	return output;
 }
+
+VTX_OUT VS_Std2D_Inst(VTX_IN_INST _in)
+{
+    VTX_OUT output = (VTX_OUT) 0.f;
+	
+    output.vPos = mul(float4(_in.vPos, 1.f), _in.matWVP);
+    output.vWorldPos = mul(float4(_in.vPos, 1.f), _in.matWorld).xyz;
+    output.vUV = _in.vUV;
+
+    return output;
+}
+
 
 float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {

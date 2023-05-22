@@ -26,9 +26,13 @@ CParticleSystem::CParticleSystem()
 	, m_ParticleShare(nullptr)
 	, m_WorldSpawn(0)
 	, m_Is3DParticle(0)
+	, m_iOption(0)
+	, m_bFirstEntry(true)
 {
 	// 해당 파티클 시스템 랜더링은 무조건 재질을 파티클을 사용하기 때문에 이곳에서 메시와 재질을 그냥 지정해주는 것이다.
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
+	if (m_vecMtrls.empty())
+		m_vecMtrls.resize(1);
 
 	m_ParticleBuffer = new CStructuredBuffer;
 	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::UAV_INC, nullptr);
@@ -61,6 +65,8 @@ CParticleSystem::CParticleSystem(const CParticleSystem& _origin)
 	, m_WorldSpawn(_origin.m_WorldSpawn)
 	, m_Is3DParticle(_origin.m_Is3DParticle)
 	, m_UpdateCS (_origin.m_UpdateCS)
+	, m_iOption(_origin.m_iOption)
+	, m_bFirstEntry(true)
 {
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
 
@@ -78,6 +84,11 @@ CParticleSystem::~CParticleSystem()
 
 	if (nullptr != m_ParticleShare)
 		delete m_ParticleShare;
+}
+
+void CParticleSystem::begin()
+{
+	m_bFirstEntry = true;
 }
 
 void CParticleSystem::finaltick()
@@ -121,6 +132,18 @@ void CParticleSystem::finaltick()
 	m_UpdateCS->SetMinMaxLifeTime(m_vMinMaxLifeTime);
 	m_UpdateCS->Set3DParticle(m_Is3DParticle);
 	m_UpdateCS->SetWorldMat(Transform()->GetWorldMat());
+	m_UpdateCS->SetOption(m_iOption);
+
+	if (m_bFirstEntry)
+	{
+		m_UpdateCS->SetFirstEntry(true);
+		m_bFirstEntry = false;
+	}
+	else
+	{
+		m_UpdateCS->SetFirstEntry(false);
+	}
+
 	m_UpdateCS->Execute();
 }
 
@@ -217,6 +240,8 @@ void CParticleSystem::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_WorldSpawn;
 	_emitter << YAML::Key << "Is3DParticle";
 	_emitter << YAML::Value << m_Is3DParticle;
+	_emitter << YAML::Key << "Option";
+	_emitter << YAML::Value << m_iOption;
 
 	_emitter << YAML::EndMap;
 }
@@ -246,6 +271,7 @@ void CParticleSystem::LoadFromYAML(YAML::Node& _node)
 	m_fAccTime = node["AccTime"].as<float>();
 	m_WorldSpawn = node["WorldSpawn"].as<int>();
 	SAFE_LOAD_FROM_YAML(int, m_Is3DParticle, node["Is3DParticle"]);
+	SAFE_LOAD_FROM_YAML(int, m_iOption, node["Option"]);
 
 	if (m_ParticleBuffer)
 		delete m_ParticleBuffer;

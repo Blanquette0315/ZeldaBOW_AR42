@@ -41,6 +41,8 @@ void ParticleSystemUI::update()
         m_UpdateCS = GetTarget()->ParticleSystem()->GetCS();
 
         m_Material = GetTarget()->ParticleSystem()->GetCurMaterial();
+
+        m_iOption = GetTarget()->ParticleSystem()->GetOption();
 	}
 
     ComponentUI::update();
@@ -167,6 +169,7 @@ void ParticleSystemUI::render_update()
     ImGui::Text("Spawn Range "); ImGui::SameLine(); ImGui::InputFloat("##PTC_SpawnRange", &m_fSpawnRange, 1.0f, 10.f);
     ImGui::Text("Frequency   "); ImGui::SameLine(); ImGui::InputFloat("##PTC_Frequency", &m_Frequency, 1.0f, 10.f);
     ImGui::Text("World Spawn "); ImGui::SameLine(); ImGui::Checkbox("##PTC_WorldSpawn", &m_WorldSpawn);
+    ImGui::Text("Option"); ImGui::SameLine(); ImGui::InputInt("##Option", &m_iOption);
 
     if (GetTarget())
     {
@@ -179,7 +182,10 @@ void ParticleSystemUI::render_update()
         GetTarget()->ParticleSystem()->SetSpawnRange(m_fSpawnRange);
         GetTarget()->ParticleSystem()->SetFrequency(m_Frequency);
         GetTarget()->ParticleSystem()->SetWorldSpawn(m_WorldSpawn);
+        GetTarget()->ParticleSystem()->SetOption(m_iOption);
     }
+
+    
 }
 
 void ParticleSystemUI::SetTexture(DWORD_PTR _strTextureKey)
@@ -191,6 +197,7 @@ void ParticleSystemUI::SetTexture(DWORD_PTR _strTextureKey)
     assert(nullptr != pTexture);
 
     GetTarget()->ParticleSystem()->GetSharedMaterial()->SetTexParam(TEX_0, pTexture);
+    GetTarget()->ParticleSystem()->GetSharedMaterial()->Save(GetTarget()->ParticleSystem()->GetSharedMaterial()->GetRelativePath());
 }
 
 void ParticleSystemUI::SetMaterial(DWORD_PTR _strMaterialKey)
