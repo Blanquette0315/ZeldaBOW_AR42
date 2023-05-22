@@ -3,6 +3,7 @@
 
 CEffectScaler::CEffectScaler()
 	: CScript((int)SCRIPT_TYPE::EFFECTSCALER)
+	, m_fAccTime(0.f)
 {
 	AddScriptParam(SCRIPT_PARAM::INT, "Option", &m_iOption);
 
@@ -24,7 +25,7 @@ CEffectScaler::CEffectScaler(const CEffectScaler& _origin)
 	, m_fMiddleDelayTime(_origin.m_fMiddleDelayTime)
 	, m_fMaxTime(_origin.m_fMaxTime)
 	, m_iOption(_origin.m_iOption)
-
+	, m_fAccTime(0.f)
 {
 	AddScriptParam(SCRIPT_PARAM::INT, "Option", &m_iOption);
 

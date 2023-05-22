@@ -7,11 +7,13 @@ private:
     int         m_iSize;
     Vec3        m_vDir;
     Vec3        m_vBossPos;
+    Vec3        m_vPlayerPos;
 
 public:
     void Fire(Vec3 _vPlayerPos);
-    virtual void Parrying() override { m_eCurrentState = Monster_State::MISS; m_iMotion = 0; }
-    void setBossPos(Vec3 _vPos) { m_vBossPos = _vPos + Vec3(0.f, 5.f, 0.f); }
+    virtual void Parrying() override { m_eCurrentState = Monster_State::MISS; m_iMotion = 0; Collider()->DeleteColliderActor(); }
+    void setBossPos(Vec3 _vPos) { m_vBossPos = _vPos + Vec3(0.f, 20.f, 0.f); }
+    void Dead();
 
 public:
     virtual void begin() override;

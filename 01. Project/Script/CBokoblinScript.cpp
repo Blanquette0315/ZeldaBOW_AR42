@@ -19,6 +19,8 @@ void CBokoblinScript::Damage(int _iNumber, Vec3 _vPos)
 
 	if (m_iHP <= 0)
 	{
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\Dead.mp3");
+		pSound->Play(1, VOLUME, true, GetOwner());
 		m_eCurrentState = Monster_State::DEAD;
 		m_fAcctime = 0.f;
 		m_iMotion = 0;
@@ -36,6 +38,16 @@ void CBokoblinScript::Damage(int _iNumber, Vec3 _vPos)
 		}
 
 		GetOwner()->GetChildObject()[1]->Destroy();
+	}
+	else if (m_eCurrentState == Monster_State::RUN || _vPos.y == 10000.f)
+	{
+		m_eCurrentState = Monster_State::DAMAGED_SMALL;
+		m_fAcctime = 0.f;
+		m_iMotion = 0;
+		AI->Done(false);
+		Animator3D()->Play(L"damage_small", false);
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\SE_BC_V_ATTACK_L_2.mp3");
+		pSound->Play(1, VOLUME, true, GetOwner());
 	}
 }
 
@@ -78,6 +90,8 @@ void CBokoblinScript::tick()
 			else
 				m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 			Animator3D()->Play(L"jump", false);
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\Jump.mp3");
+			pSound->Play(1, VOLUME, true, GetOwner());
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 1.63333f && m_iMotion == 1)
@@ -89,7 +103,8 @@ void CBokoblinScript::tick()
 			else
 				m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 			Animator3D()->Play(L"attack_small", false);
-
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\Attack.mp3");
+			pSound->Play(1, VOLUME, true, GetOwner());
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 2.13333f && m_iMotion == 2)
@@ -138,6 +153,8 @@ void CBokoblinScript::tick()
 				m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 
 			Animator3D()->Play(L"jump", false);
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\Jump.mp3");
+			pSound->Play(1, VOLUME, true, GetOwner());
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 1.63333f && m_iMotion == 1)
@@ -194,6 +211,8 @@ void CBokoblinScript::tick()
 				m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 
 			Animator3D()->Play(L"rebound", false);
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\Rebound.mp3");
+			pSound->Play(1, VOLUME, true, GetOwner());
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 1.f && m_iMotion == 1)
@@ -206,6 +225,17 @@ void CBokoblinScript::tick()
 			AI->Done();
 			m_iMotion = 0;
 			m_fAcctime = 0;
+		}
+	}
+	else if (m_eCurrentState == Monster_State::DAMAGED_SMALL)
+	{
+		m_fAcctime += FDT;
+		if (m_fAcctime >= 0.6666f)
+		{
+			AI->Done();
+			m_iMotion = 0;
+			m_fAcctime = 0;
+			m_eCurrentState = Monster_State::IDLE;
 		}
 	}
 }

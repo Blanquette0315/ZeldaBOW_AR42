@@ -208,9 +208,11 @@
     <ClInclude Include="CLinkBombScript.h">
       <Filter>Scripts\Link\Bomb</Filter>
     </ClInclude>
-    <ClInclude Include="CUIHeartScript.h" />
     <ClInclude Include="CEffectScaler.h">
       <Filter>Scripts\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="CUIHeartScript.h">
+      <Filter>Scripts\UI\Heart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +328,11 @@
     <ClCompile Include="CLinkBombScript.cpp">
       <Filter>Scripts\Link\Bomb</Filter>
     </ClCompile>
-    <ClCompile Include="CUIHeartScript.cpp" />
     <ClCompile Include="CEffectScaler.cpp">
       <Filter>Scripts\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIHeartScript.cpp">
+      <Filter>Scripts\UI\Heart</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

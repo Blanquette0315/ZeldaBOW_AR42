@@ -855,8 +855,6 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
 	pShader->CreateGeometryShader(L"shader\\particlerender.fx", "GS_ParticleRender");
 	pShader->CreatePixelShader(L"shader\\particlerender.fx", "PS_ParticleRender");
-
-	// ���� �� Mesh�� ����ϱ� ������ Topology�� POINTLIST�� �������ش�. 
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
@@ -864,6 +862,19 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
+
+	// ParticleRenderAlphaShader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
+	pShader->CreateGeometryShader(L"shader\\particlerender.fx", "GS_ParticleRender");
+	pShader->CreatePixelShader(L"shader\\particlerender.fx", "PS_ParticleRender_Alpha");
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	AddRes<CGraphicsShader>(L"ParticleRenderAlphaShader", pShader);
 
 	// postprocess
 	pShader = new CGraphicsShader;
