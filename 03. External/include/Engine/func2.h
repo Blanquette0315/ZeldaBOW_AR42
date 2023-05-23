@@ -97,19 +97,19 @@ void Safe_Del_Array(T* (&_arr)[SIZE])
 	}
 }
 
-// Relative Path °¡Á®¿À±â
+// Relative Path ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath);
 
 string WStringToString(const wstring& _str);
-wstring StringToWString(const string& _str); // ¹Î¼ö Ãß°¡
+wstring StringToWString(const string& _str); // ï¿½Î¼ï¿½ ï¿½ß°ï¿½
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat);
 
-// °ÔÀÓ ¿ÀºêÁ§Æ® À¯È¿¼º °Ë»ç
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¿ï¿½ï¿½ ï¿½Ë»ï¿½
 class CGameObject;
 bool IsValid(CGameObject*& _pObj);
 
-// Ä¿Æ÷³ÍÆ®¿ë À¯È¿¼º Ã¼Å©
+// Ä¿ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ Ã¼Å©
 class CEntity;
 inline bool IsValid(CEntity* _pCom)
 {
@@ -129,17 +129,17 @@ void LoadStringFromFile(string& _str, FILE* _pFile);
 void SaveWStringToFile(const wstring& _str, FILE* _pFile);
 void LoadWStringFromFile(wstring& _str, FILE* _pFile);
 
-// ÀÚ½ÅÀÌ ¾î¶² ¸®¼Ò½º¸¦ ÂüÁ¶ÇÏ°í ÀÖ¾ú´ÂÁö ÀúÀåÇÏ´Â ÇÔ¼ö
+// ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 #include "CResMgr.h"
 #include "Ptr.h"
 template<typename T>
 void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 {
-	//// ÂüÁ¶ÁßÀÎ ¸®¼Ò½º°¡ ¾ø¾ú´Ù¸é ¾ø´Â´ë·Î nullptrÀÌ µé¾î°¥ °ÍÀÌ´Ù.
+	//// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½Â´ï¿½ï¿½ nullptrï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½ï¿½Ì´ï¿½.
 	//int bExist = !!_res.Get();
 	//_emitter << YAML::Key << "Exist";
 	//_emitter << YAML::Value << bExist;
-	//// ÂüÁ¶ÁßÀÎ ¸®¼Ò½º°¡ ÀÖ¾ú´Ù¸é, ¾î¶² ¸®¼Ò½º¸¦ °¡Áö°í ÀÖ¾ú´ÂÁö Å°¿Í °æ·Î¸¦ ÀúÀåÇÑ´Ù.
+	//// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ù¸ï¿½, ï¿½î¶² ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 
 	if (_res.Get())
 	{
@@ -153,11 +153,11 @@ void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 template<typename T>
 void SaveResourceRefEX(Ptr<T> _res, YAML::Emitter& _emitter, const string& _markingName)
 {
-	//// ÂüÁ¶ÁßÀÎ ¸®¼Ò½º°¡ ¾ø¾ú´Ù¸é ¾ø´Â´ë·Î nullptrÀÌ µé¾î°¥ °ÍÀÌ´Ù.
+	//// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½Â´ï¿½ï¿½ nullptrï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½ï¿½Ì´ï¿½.
 	//int bExist = !!_res.Get();
 	//_emitter << YAML::Key << "Exist";
 	//_emitter << YAML::Value << bExist;
-	//// ÂüÁ¶ÁßÀÎ ¸®¼Ò½º°¡ ÀÖ¾ú´Ù¸é, ¾î¶² ¸®¼Ò½º¸¦ °¡Áö°í ÀÖ¾ú´ÂÁö Å°¿Í °æ·Î¸¦ ÀúÀåÇÑ´Ù.
+	//// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ù¸ï¿½, ï¿½î¶² ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 
 	if (_res.Get())
 	{
@@ -210,7 +210,7 @@ void LoadResourceRefEX(Ptr<T>& _Res, YAML::Node& _node, const string& _markingNa
 	}
 }
 
-// Component, Resource Type enum class °ª¿¡ µû¸¥ char¿Í wchar·ÎÀÇ º¯È¯ ÇÔ¼ö
+// Component, Resource Type enum class ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ charï¿½ï¿½ wcharï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½Ô¼ï¿½
 const char* ToString(RES_TYPE);
 const wchar_t* ToWString(RES_TYPE);
 
@@ -218,7 +218,7 @@ const char* ToString(COMPONENT_TYPE);
 const wchar_t* ToWString(COMPONENT_TYPE);
 
 // ========================
-// =   Event °ü·Ã ÇÔ¼ö    =
+// =   Event ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½    =
 // ========================
 class CGameObject;
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);
@@ -241,7 +241,7 @@ void DeleteRes(CRes* _Res, RES_TYPE _Type);
 // =   Debug Draw   =
 // ==================
 #ifdef _DEBUG
-// Áö¼Ó ½Ã°£À» 0À¸·Î ³Ö¾îÁÖ´Â ÀÌÀ¯´Â Collider2D¿¡¼­ ¸Å Finaltick ¸¶´Ù È£ÃâÇØÁÖ±â ¶§¹®¿¡ 0ÀÌ µé¾î°¡Áö ¾ÊÀ¸¸é ÁßÃ¸ÀÌ ¹ß»ýÇÑ´Ù.
+// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Collider2Dï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Finaltick ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ ï¿½ï¿½î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¸ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ñ´ï¿½.
 void DebugDrawRect(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);
 void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDuration = 0.f);
 void DebugDrawCube(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);

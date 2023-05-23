@@ -99,5 +99,6 @@ public:
 
     friend class CResMgr;
     friend class CRenderMgr;
+    friend class CLandScape;
 };
 

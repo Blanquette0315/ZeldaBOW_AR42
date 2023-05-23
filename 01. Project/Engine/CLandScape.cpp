@@ -40,10 +40,16 @@ CLandScape::CLandScape()
 	m_pCrossBuffer->Create(sizeof(tRaycastOut), 1, SB_TYPE::UAV_INC, nullptr, true);
 
 	// 타일 텍스쳐(Color, Normal 혼합, 총 6장)	
-	m_pTileArrTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\tile\\TILE_ARRR.dds", L"texture\\tile\\TILE_ARRR.dds");
+	//m_pTileArrTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\tile\\TILE_ARRR.dds", L"texture\\tile\\TILE_ARRR.dds"); 
+	m_pTileArrTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\tile\\HATENO_TILE_ARR.dds", L"texture\\tile\\HATENO_TILE_ARR.dds");
 	m_pTileArrTex->GenerateMip(8);
 
+	m_pTileArrNTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\tile\\HATENO_TILE_ARR_N.dds", L"texture\\tile\\HATENO_TILE_ARR_N.dds");
+	m_pTileArrNTex->GenerateMip(8);
+
 	//m_pTileArrTex = CResMgr::GetInst()->LoadTexture(L"TileArrayTex", L"texture\\tile\\TILE_ARRR.dds", 8);
+
+	m_mat180Rot = XMMatrixRotationX(3.14159f);
 }
 
 CLandScape::~CLandScape()
@@ -63,14 +69,16 @@ CLandScape::~CLandScape()
 void CLandScape::begin()
 {
 	// LandStreamOut();
+
+	// CreateTexture();
 }
 
 void CLandScape::finaltick()
 {
-	if (KEY_TAP(KEY::NUM_5))
+	/*if (KEY_TAP(KEY::NUM_5))
 	{
 		LoadWeightData();
-	}
+	}*/
 
 	if (LANDSCAPE_MOD::NONE == m_eMod)
 	{
@@ -126,7 +134,7 @@ void CLandScape::finaltick()
 		if (LANDSCAPE_MOD::SPLAT == m_eMod)
 		{
 			m_iWeightIdx++;
-			if (3 <= m_iWeightIdx)
+			if (11 <= m_iWeightIdx)
 				m_iWeightIdx = 0;
 		}
 	}
@@ -134,6 +142,12 @@ void CLandScape::finaltick()
 
 void CLandScape::render()
 {
+	//if (KEY_TAP(KEY::NUM_8))
+	//{
+	//	SaveTileArray();
+	// 
+	//}
+
 	if (nullptr == GetMesh() || nullptr == GetCurMaterial())
 		return;
 
@@ -155,9 +169,11 @@ void CLandScape::render()
 		// 타일 배열 개수 전달
 		float m_fTileCount = float(m_pTileArrTex->GetArraySize() / 2); // 색상, 노말 합쳐져있어서 나누기 2 해줌
 		GetCurMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_1, &m_fTileCount);
+		GetCurMaterial()->SetScalarParam(SCALAR_PARAM::MAT_3, &m_mat180Rot);
 
 		// 타일 텍스쳐 전달
 		GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_ARR_0, m_pTileArrTex);
+		GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_ARR_1, m_pTileArrNTex);
 		GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_4, m_pRayMap);
 
 		// 업데이트
@@ -290,6 +306,79 @@ void CLandScape::LoadCookingData()
 	fclose(pFile);
 }
 
+void CLandScape::SaveTileArray()
+{
+	vector<Ptr<CTexture>> vecTileArr = {};
+	Ptr<CTexture> pTileTex = nullptr;
+
+	CTexture* pNewTexArr = new CTexture(true);
+	//CResMgr::GetInst()->CreateTexture(L"New_Tile_ArrTex", )
+	
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_0_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_4_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_11_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_13_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_16_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_18_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_26_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_31_.png");
+	//vecTileArr.push_back(pTileTex);
+	//
+	//pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialAlb_Slice_32_.png");
+	//vecTileArr.push_back(pTileTex);
+
+	// Normal
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_0_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_4_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_11_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_13_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_16_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_18_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_26_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_31_.png");
+	vecTileArr.push_back(pTileTex);
+	
+	pTileTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\Hateno\\MaterialCmb_Slice_32_.png");
+	vecTileArr.push_back(pTileTex);
+
+	pNewTexArr->CreateArrayTexture(vecTileArr, 1);
+
+	HRESULT hr = S_OK;
+	ScratchImage& pImage = pNewTexArr->GetScratchImage();
+	hr = DirectX::CaptureTexture(DEVICE, CONTEXT, pNewTexArr->GetTex2D().Get(), pImage);
+	wstring strFileName = CPathMgr::GetInst()->GetContentPath();
+	strFileName += L"texture\\tile\\HATENO_TILE_ARR_N.dds";
+	hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
+}
+
 void CLandScape::SaveHeightImage()
 {
 	// 높이 맵을 파일로 세이브
@@ -299,6 +388,21 @@ void CLandScape::SaveHeightImage()
 	wstring strFileName = CPathMgr::GetInst()->GetContentPath();
 	strFileName += L"texture\\landscape\\TempHight.dds";
 	hr = DirectX::SaveToDDSFile(pImage.GetImages(), pImage.GetImageCount(), pImage.GetMetadata(), DDS_FLAGS_NONE, strFileName.c_str());
+}
+
+void CLandScape::LoadHeightImage()
+{
+	m_pHeightMap = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\landscape\\TempHight.dds");
+	
+	Ptr<CTexture> pHightCopyTex = CResMgr::GetInst()->CreateTexture(L"HightMapCopyTex"
+		, (UINT)m_pHeightMap->GetWidth() , m_pHeightMap->GetHeight()
+		, DXGI_FORMAT_R32_FLOAT
+		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
+
+	CONTEXT->CopyResource(pHightCopyTex->GetTex2D().Get(), m_pHeightMap->GetTex2D().Get());
+	m_pHeightMap = pHightCopyTex;
+	m_LandScapeMtrl->SetTexParam(TEX_0, pHightCopyTex);
 }
 
 void CLandScape::SaveWeightData()
@@ -311,6 +415,7 @@ void CLandScape::SaveWeightData()
 	
 	// 경로
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+
 	wstring RelativePath = L"texture\\landscape\\TestWieghtMapData.buf";
 	strFilePath += RelativePath;
 
@@ -457,4 +562,32 @@ void CLandScape::LandStreamOut()
 
 	// Clear
 	CMaterial::Clear();
+}
+
+
+void CLandScape::SaveToYAML(YAML::Emitter& _emitter)
+{
+	_emitter << YAML::Key << "LANDSCAPE";
+	_emitter << YAML::Value << YAML::BeginMap;
+
+	_emitter << YAML::Key << "XFaceCount";
+	_emitter << YAML::Value << m_iXFaceCount;
+	_emitter << YAML::Key << "ZFaceCount";
+	_emitter << YAML::Value << m_iZFaceCount;
+
+	CRenderComponent::SaveToYAML(_emitter);
+	_emitter << YAML::EndMap;
+}
+
+void CLandScape::LoadFromYAML(YAML::Node& _node)
+{
+	YAML::Node node = _node["LANDSCAPE"];
+	SAFE_LOAD_FROM_YAML(UINT, m_iXFaceCount, _node["LANDSCAPE"]["XFaceCount"]);
+	SAFE_LOAD_FROM_YAML(UINT, m_iZFaceCount, _node["LANDSCAPE"]["ZFaceCount"]);
+
+	SetFaceCount(m_iXFaceCount, m_iZFaceCount);
+	CRenderComponent::LoadFromYAML(node);
+
+	LoadWeightData();
+	LoadHeightImage();
 }

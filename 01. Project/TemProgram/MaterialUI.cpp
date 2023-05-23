@@ -59,8 +59,8 @@ void MaterialUI::render_update()
 			wstring wNewName = wstring(NewName.begin(), NewName.end());
 			pMtrl->SetName(wNewName);
 
-			// ÀÌ¸§ÀÌ º¯°æµÇ¾ú´Ù¸é º¯°æµÈ ÀÌ¸§¿¡ ¾Ë¸ÂÀº °æ·Î·Î ÀúÀåÇÏ±â À§ÇØ¼­ true·Î º¯°æÇØÁØ´Ù.
-			// ÇØ´ç bool°ªÀº ÀúÀåÀ» ÇÏ°ÔµÇ¸é false°¡ µé¾î°¡°Ô µÈ´Ù.
+			// ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½ ï¿½ï¿½Î·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ trueï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+			// ï¿½Ø´ï¿½ boolï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï°ÔµÇ¸ï¿½ falseï¿½ï¿½ ï¿½ï¿½î°¡ï¿½ï¿½ ï¿½È´ï¿½.
 			pMtrl->ChangeName(true);
 			ImGui::CloseCurrentPopup();
 		}
@@ -88,14 +88,14 @@ void MaterialUI::render_update()
 	ImGui::SameLine();
 	ImGui::InputText("##ShaderName", (char*)strShaderKey.data(), strShaderKey.length(), ImGuiInputTextFlags_ReadOnly);
 
-	// Shader º¯°æ ¹× ¼±ÅÃ
+	// Shader ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	ImGui::SameLine();
 	if (ImGui::Button("##ShaderBtn", Vec2(15.f, 15.f)))
 	{
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
 		assert(pListUI);
 
-		// ¸ñ·ÏÀ» ¹Þ¾Æ¿Í¼­, ListUI¿¡ Àü´Þ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿Í¼ï¿½, ListUIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::GRAPHICS_SHADER);
 		static vector<wstring> vecRes;
 		vecRes.clear();
@@ -113,11 +113,11 @@ void MaterialUI::render_update()
 
 	if (ImGui::Button("Save Mtrl", ImVec2(90.f, 30.f)))
 	{
-		// ¾ØÁø ¸®¼Ò½º¶ó¸é ÀúÀåÇÏ¸é ¾ÈµÈ´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ÈµÈ´ï¿½.
 		if (!pMtrl->IsEngineRes())
 		{
-			// Ã³À½ ÀúÀåÇÏ´Â °Å¶ó¸é, °æ·Î±îÁö ÁöÁ¤À» ÇØ¼­ ÀúÀåÀ» ÇØÁÖ¾î¾ß ÇÑ´Ù.
-			// µ¤¾î ¾º¿ö ÀúÀåÇÑ´Ù¸é, °æ·Î¸¦ ÀçÁöÁ¤ ÇÏ¸é ¾ÈµÈ´Ù.
+			// Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Å¶ï¿½ï¿½, ï¿½ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½, ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ÈµÈ´ï¿½.
 			if (L"" == pMtrl->GetRelativePath())
 			{
 				wstring strRelativePath;
@@ -127,7 +127,7 @@ void MaterialUI::render_update()
 				strRelativePath += L".mtrl";
 				pMtrl->Save(strRelativePath);
 
-				// °æ·Î°¡ ¾ø´ø ÀÓ½Ã ÀçÁúÀº ÇØÁ¦ÇØ ÁÖ¾î¾ß ÇÑ´Ù.
+				// ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 				tEvent DelMtrl = {};
 				DelMtrl.eType = EVENT_TYPE::DELETE_RES;
 				DelMtrl.wParam = (DWORD_PTR)pMtrl->GetResType();
@@ -138,12 +138,9 @@ void MaterialUI::render_update()
 			}
 			else
 			{
-				// ÀÌ¸§°ú Å°°¡ ÀÏÄ¡ÇÏÁö ¾Ê´Â´Ù¸é ÀÌ¸§ °ªÀ¸·Î º¯°æÇØÁÖ¾î¾ß ÇÑ´Ù.
-				// ÀÌ¸§À» °æ·Î Ã³·³ º¯°æ ÇÏ°Å³ª °æ·Î¸¦ ÀÌ¸§ Ã³·³ º¯°æÇØ¼­ ºñ±³ÇØ¾ßÇÑ´Ù.
-				// ¿ì¼±Àº ÀÌ¸§À» °æ·ÎÃ³·³ º¯°æÇÏ´Â ¹æ½ÄÀ¸·Î ÁøÇàÇÒ °ÍÀÌ´Ù.
-
-				wstring strNamePath = {};
-
+				// ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½, ï¿½Ù²ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+                wstring strNamePath = {};
+                
 				if (pMtrl->GetRelativePath().empty())
 				{
 					strNamePath = L"material\\";
@@ -156,11 +153,11 @@ void MaterialUI::render_update()
 				if (strNamePath != pMtrl->GetKey())
 				{
 					pMtrl->Save(strNamePath);
-					// ÀúÀåÀÌ µÇ°í³ª¸é ÀÌ¸§ÀÌ ¾Æ¿¡ Á¤ÇØÁø °ÍÀÌ±â ¶§¹®¿¡ ´Ù½Ã false¸¦ ³Ö¾îÁÖ¾î¾ß ÇÑ´Ù.
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ falseï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 					pMtrl->ChangeName(false);
 				}
 
-				// ÀÌ¸§°ú Å°°ªÀÌ ÀÏÄ¡ÇÏ¸é ÀÌÀü °æ·Î ±×´ë·Î¸¦ ³Ö¾î µ¤¾î¾º¿î´Ù.
+				// ï¿½Ì¸ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½×´ï¿½Î¸ï¿½ ï¿½Ö¾ï¿½ ï¿½ï¿½ï¿½î¾ºï¿½ï¿½ï¿½.
 				else
 				{
 					pMtrl->Save(pMtrl->GetRelativePath());
@@ -173,7 +170,7 @@ void MaterialUI::render_update()
 	ImGui::NewLine();
 	ImGui::Text("Shader Parameter");
 
-	// Material¿¡ Shader°¡ ¼ÂÆÃµÇ¾î ÀÖÁö ¾Ê´Ù¸é
+	// Materialï¿½ï¿½ Shaderï¿½ï¿½ ï¿½ï¿½ï¿½ÃµÇ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Ù¸ï¿½
 	ShowShaderParam(pMtrl);
 }
 
@@ -186,7 +183,7 @@ void MaterialUI::SetTexture(DWORD_PTR _strTexKey)
 	assert(nullptr != pTex);
 
 	CMaterial* pMtrl = ((CMaterial*)GetTarget().Get());
-	// ÀÌ¶§ ¿ì¸®°¡ ¼±ÅÃÇß´ø TexParamÀÌ ¸î¹ø Â°ÀÎÁö ¾Ë±â À§ÇØ¼­ ¸â¹ö º¯¼ö·Î Ãß°¡ÇØÁÖ¾ú´ø °ÍÀÌ´Ù.
+	// ï¿½Ì¶ï¿½ ï¿½ì¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß´ï¿½ TexParamï¿½ï¿½ ï¿½ï¿½ï¿½ Â°ï¿½ï¿½ï¿½ï¿½ ï¿½Ë±ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
 	pMtrl->SetTexParam(m_eSelectTexParam, pTex);
 }
 

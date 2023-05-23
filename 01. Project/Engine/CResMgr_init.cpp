@@ -959,6 +959,8 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
+	pShader->AddScalarParam(INT_1, "Rotation Normal     ");
+	pShader->AddScalarParam(INT_2, "Sampler Type        ");
 	pShader->AddScalarParam(INT_3, "Shader Type         ");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
@@ -979,6 +981,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
 	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
+	pShader->AddScalarParam(INT_2, "Sampler Type        ");
 	pShader->AddScalarParam(INT_3, "Shader Type         ");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
@@ -998,6 +1001,10 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT);
 
 	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
+	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
+	pShader->AddScalarParam(INT_1, "Rotation Normal     ");
+	pShader->AddScalarParam(INT_2, "Sampler Type        ");
+	pShader->AddScalarParam(INT_3, "Shader Type         ");
 	pShader->AddTexureParam(TEX_0, "Output Texture      ");
 	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
 	pShader->AddTexureParam(TEX_2, "Specular Texture    ");

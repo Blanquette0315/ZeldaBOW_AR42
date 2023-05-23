@@ -17,6 +17,11 @@ void CLandScape::CreateMesh()
 	{
 		DeleteRes(pMesh, RES_TYPE::MESH);
 	}
+	else if (nullptr != CResMgr::GetInst()->FindRes<CMesh>(L"LandscapeMesh"))
+	{
+		pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"LandscapeMesh").Get();
+		DeleteRes(pMesh, RES_TYPE::MESH);
+	}
 
 	vector<Vtx> vecVtx;
 	vector<UINT> vecIdx;
@@ -82,71 +87,92 @@ void CLandScape::CreateMaterial()
 	// ======================
 	// 전용 쉐이더 및 재질 생성
 	// ======================	
-	Ptr<CGraphicsShader> pShader = new CGraphicsShader;
-	pShader->SetKey(L"LandScapeShader");
-	pShader->CreateVertexShader(L"shader\\landscape.fx", "VS_LandScape");
-	pShader->CreateHullShader(L"shader\\landscape.fx", "HS_LandScape");
-	pShader->CreateDomainShader(L"shader\\landscape.fx", "DS_LandScape");
-	pShader->CreatePixelShader(L"shader\\landscape.fx", "PS_LandScape");
+	if (CResMgr::GetInst()->FindRes<CGraphicsShader>(L"LandScapeShader") == nullptr
+		&& CResMgr::GetInst()->FindRes<CMaterial>(L"LandScapeMtrl") == nullptr)
+	{
+		Ptr<CGraphicsShader> pShader = new CGraphicsShader;
+		pShader->SetKey(L"LandScapeShader");
+		pShader->CreateVertexShader(L"shader\\landscape.fx", "VS_LandScape");
+		pShader->CreateHullShader(L"shader\\landscape.fx", "HS_LandScape");
+		pShader->CreateDomainShader(L"shader\\landscape.fx", "DS_LandScape");
+		pShader->CreatePixelShader(L"shader\\landscape.fx", "PS_LandScape");
 
-	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+		pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 
-	//pShader->SetRSType(RS_TYPE::WIRE_FRAME);
-	pShader->SetBSType(BS_TYPE::DEFAULT);
-	pShader->SetDSType(DS_TYPE::LESS);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+		//pShader->SetRSType(RS_TYPE::WIRE_FRAME);
+		pShader->SetBSType(BS_TYPE::DEFAULT);
+		pShader->SetDSType(DS_TYPE::LESS);
+		pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
 
-	pShader->AddScalarParam(INT_0, "Tess");
-	pShader->AddScalarParam(FLOAT_0, "Specular");
-	pShader->AddTexureParam(TEX_0, "HeightMap");
+		pShader->AddScalarParam(INT_0, "Tess");
+		pShader->AddScalarParam(FLOAT_0, "Specular");
+		pShader->AddTexureParam(TEX_0, "HeightMap");
 
-	// 추가
-	AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
+		// 추가
+		AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
 
-	// 재질
-	m_LandScapeMtrl = new CMaterial(true);
-	m_LandScapeMtrl->SetShader(pShader);
-	m_LandScapeMtrl->SetKey(L"LandScapeMtrl");
-	SetSharedMaterial(m_LandScapeMtrl);
+		// 재질
+		m_LandScapeMtrl = new CMaterial(true);
+		m_LandScapeMtrl->SetShader(pShader);
+		m_LandScapeMtrl->SetKey(L"LandScapeMtrl");
+		SetSharedMaterial(m_LandScapeMtrl);
 
-	// 추가
-	AddRes(m_LandScapeMtrl.Get(), RES_TYPE::MATERIAL);
+		// 추가
+		AddRes(m_LandScapeMtrl.Get(), RES_TYPE::MATERIAL);
+	}
+	else
+	{
+		m_LandScapeMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"LandScapeMtrl");
+		m_LandScapeMtrl->SetShader(CResMgr::GetInst()->FindRes<CGraphicsShader>(L"LandScapeShader"));
+		SetSharedMaterial(m_LandScapeMtrl);
+	}
 
 	// ================
 	// MaxTessMtrl
 	// ================
-	D3D11_SO_DECLARATION_ENTRY pDecl[] =
+
+	if (CResMgr::GetInst()->FindRes<CGraphicsShader>(L"MaxTessShader") == nullptr
+		&& CResMgr::GetInst()->FindRes<CMaterial>(L"MaxTessMtrl") == nullptr)
 	{
-		// semantic name, semantic index, start component, component count, output slot
-		{0, "POSITION", 0, 0, 3, 0 },
-	};
-	pShader = new CGraphicsShader;
+		D3D11_SO_DECLARATION_ENTRY pDecl[] =
+		{
+			// semantic name, semantic index, start component, component count, output slot
+			{0, "POSITION", 0, 0, 3, 0 },
+		};
+		Ptr<CGraphicsShader> pShader = new CGraphicsShader;
 
-	pShader->SetKey(L"MaxTessShader");
-	pShader->CreateVertexShader(L"shader\\maxlandscape.fx", "VS_MaxLandScape");
-	pShader->CreateHullShader(L"shader\\maxlandscape.fx", "HS_MaxLandScape");
-	pShader->CreateDomainShader(L"shader\\maxlandscape.fx", "DS_MaxLandScape");
-	pShader->CreateGeometryWithStreamOut(L"shader\\maxlandscape.fx", "GS_StreamOut", pDecl, _countof(pDecl));
+		pShader->SetKey(L"MaxTessShader");
+		pShader->CreateVertexShader(L"shader\\maxlandscape.fx", "VS_MaxLandScape");
+		pShader->CreateHullShader(L"shader\\maxlandscape.fx", "HS_MaxLandScape");
+		pShader->CreateDomainShader(L"shader\\maxlandscape.fx", "DS_MaxLandScape");
+		pShader->CreateGeometryWithStreamOut(L"shader\\maxlandscape.fx", "GS_StreamOut", pDecl, _countof(pDecl));
 
-	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+		pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 
-	pShader->SetBSType(BS_TYPE::DEFAULT);
-	pShader->SetDSType(DS_TYPE::LESS);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+		pShader->SetBSType(BS_TYPE::DEFAULT);
+		pShader->SetDSType(DS_TYPE::LESS);
+		pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
 
-	pShader->AddScalarParam(INT_0, "Tess");
-	pShader->AddScalarParam(FLOAT_0, "Specular");
-	pShader->AddTexureParam(TEX_0, "HeightMap");
+		pShader->AddScalarParam(INT_0, "Tess");
+		pShader->AddScalarParam(FLOAT_0, "Specular");
+		pShader->AddTexureParam(TEX_0, "HeightMap");
 
-	// 추가
-	AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
+		// 추가
+		AddRes(pShader.Get(), RES_TYPE::GRAPHICS_SHADER);
 
-	//// 재질
-	m_pMaxTessMtrl = new CMaterial(true);
-	m_pMaxTessMtrl->SetShader(pShader);
-	m_pMaxTessMtrl->SetKey(L"MaxTessMtrl");
+		//// 재질
+		m_pMaxTessMtrl = new CMaterial(true);
+		m_pMaxTessMtrl->SetShader(pShader);
+		m_pMaxTessMtrl->SetKey(L"MaxTessMtrl");
 
-	AddRes(m_pMaxTessMtrl.Get(), RES_TYPE::MATERIAL);
+		AddRes(m_pMaxTessMtrl.Get(), RES_TYPE::MATERIAL);
+	}
+	else
+	{
+		m_pMaxTessMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"MaxTessMtrl");
+		m_pMaxTessMtrl->SetShader(CResMgr::GetInst()->FindRes<CGraphicsShader>(L"MaxTessShader"));
+	}
+	
 
 	// =====================
 	// 지형 피킹 컴퓨트 쉐이더
@@ -173,7 +199,7 @@ void CLandScape::CreateMaterial()
 	// 높이 수정 컴퓨트 쉐이더
 	// ======================
 	m_pCSHeightMap = (CHeightMapShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"HeightMapShader").Get();
-	if (nullptr == m_pHeightMap)
+	if (nullptr == m_pCSHeightMap)
 	{
 		m_pCSHeightMap = new CHeightMapShader;
 		m_pCSHeightMap->CreateComputeShader(L"shader\\heightmap.fx", "CS_HeightMap");
@@ -189,6 +215,7 @@ void CLandScape::CreateMaterial()
 	{
 		m_pCSWeightMap = new CWeightMapShader;
 		m_pCSWeightMap->CreateComputeShader(L"shader\\weightmap.fx", "CS_WeightMap");
+		m_pCSWeightMap->SetKey(L"WeightMapShader");
 		AddRes(m_pCSWeightMap.Get(), RES_TYPE::COMPUTE_SHADER);
 	}
 }
@@ -197,15 +224,31 @@ void CLandScape::CreateTexture()
 {
 	// 높이맵 텍스쳐	
 	//m_pHeightMap = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\landscape\\HeightMap_01.jpg");
-	m_pHeightMap = CResMgr::GetInst()->CreateTexture(L"HeightMap"
-		, 2048, 2048
-		, DXGI_FORMAT_R32_FLOAT
-		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
 
-	m_pRayMap = CResMgr::GetInst()->CreateTexture(L"LandRayTexture"
-		, 2048, 2048
-		, DXGI_FORMAT_R32_FLOAT
-		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+	if (CResMgr::GetInst()->FindRes<CTexture>(L"HeightMap") == nullptr)
+	{
+		m_pHeightMap = CResMgr::GetInst()->CreateTexture(L"HeightMap"
+			, 2048, 2048
+			, DXGI_FORMAT_R32_FLOAT
+			, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+	}
+	else
+	{
+		m_pHeightMap = CResMgr::GetInst()->FindRes<CTexture>(L"HeightMap");
+	}
+	
+	if (CResMgr::GetInst()->FindRes<CTexture>(L"LandRayTexture") == nullptr)
+	{
+		m_pRayMap = CResMgr::GetInst()->CreateTexture(L"LandRayTexture"
+			, 2048, 2048
+			, DXGI_FORMAT_R32_FLOAT
+			, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+	}
+	else
+	{
+		m_pRayMap = CResMgr::GetInst()->FindRes<CTexture>(L"LandRayTexture");
+	}
+	
 
 
 	Ptr<CMaterial> pMtrl = GetSharedMaterial();

@@ -105,7 +105,7 @@ CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 		{
 			return NULL;
 		}
-
+		
 		pMesh->m_VB = pVB;
 		pMesh->m_tVBDesc = tVtxDesc;
 		pMesh->m_pVtxSys = pSys;

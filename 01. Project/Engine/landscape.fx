@@ -8,16 +8,24 @@
 // TessShader
 // Domain : DOMAIN_DEFERRED
 // =========================
+struct tWeight_4
+{
+    float4 arrWeight0;
+    float4 arrWeight1;
+    float4 arrWeight2;
+};
+
 #define                         FACE_X                          g_int_0
 #define                         FACE_Z                          g_int_1  
 
 #define                         HeightMap                       g_tex_0     // 높이맵
 #define                         HeightMapResolution             g_vec2_0    // 높이맵 해상도
 
-StructuredBuffer<float4> WEIGHT_MAP : register(t17); // 가중치 버퍼
+StructuredBuffer<tWeight_4> WEIGHT_MAP : register(t17); // 가중치 버퍼
 #define                         WeightMapResolution             g_vec2_1    // 가중치 버퍼 해상도
 
 #define                         TileTexArr                      g_texarr_0  // Tile 배열 택스쳐
+#define                         TileTexNArr                     g_texarr_1  // Tile Normal Tex Array
 #define                         TileCount                       g_float_1   // 배열 개수
 #define                         SpecPow                         g_float_0   // 반사광 세기
 
@@ -186,6 +194,7 @@ struct PS_OUT
     float4 vNormal : SV_Target1;
     float4 vPosition : SV_Target2;
     float4 vData : SV_Target3;
+    float4 vEmissiv : SV_Target4;
 };
 
 PS_OUT PS_LandScape(DS_OUT _in)
@@ -205,21 +214,45 @@ PS_OUT PS_LandScape(DS_OUT _in)
 
         // 타일 색상
         int2 iWeightIdx = (int2) (_in.vFullUV * WeightMapResolution);
-        float4 vWeight = WEIGHT_MAP[iWeightIdx.y * (int) WeightMapResolution.x + iWeightIdx.x];
+        float4 vWeight0 = WEIGHT_MAP[iWeightIdx.y * (int) WeightMapResolution.x + iWeightIdx.x].arrWeight0;
+        float4 vWeight1 = WEIGHT_MAP[iWeightIdx.y * (int) WeightMapResolution.x + iWeightIdx.x].arrWeight1;
+        float4 vWeight2 = WEIGHT_MAP[iWeightIdx.y * (int) WeightMapResolution.x + iWeightIdx.x].arrWeight2;
         float4 vColor = (float4) 0.f;
 
         int iMaxWeightIdx = -1;
         float fMaxWeight = 0.f;
        
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < 12; ++i)
         {
-            vColor += TileTexArr.SampleGrad(g_sam_0, float3(_in.vUV, i), derivX, derivY) * vWeight[i];
-            //vColor += TileTexArr.SampleLevel(g_sam_0, float3(_in.vUV, i), 7) * vWeight[i];
-
-            if (fMaxWeight < vWeight[i])
+            if(i >= 0 && i < 4)
             {
-                fMaxWeight = vWeight[i];
-                iMaxWeightIdx = i;
+                vColor += TileTexArr.SampleGrad(g_sam_0, float3(_in.vUV, i), derivX, derivY) * vWeight0[i];
+
+                if (fMaxWeight < vWeight0[i])
+                {
+                    fMaxWeight = vWeight0[i];
+                    iMaxWeightIdx = i;
+                }
+            }
+            else if (i >= 4 && i < 8)
+            {
+                vColor += TileTexArr.SampleGrad(g_sam_0, float3(_in.vUV, i), derivX, derivY) * vWeight1[i - 4];
+
+                if (fMaxWeight < vWeight1[i - 4])
+                {
+                    fMaxWeight = vWeight1[i - 4];
+                    iMaxWeightIdx = i;
+                }
+            }
+            else if (i >= 8 && i < 12)
+            {
+                vColor += TileTexArr.SampleGrad(g_sam_0, float3(_in.vUV, i), derivX, derivY) * vWeight2[i - 8];
+
+                if (fMaxWeight < vWeight2[i - 8])
+                {
+                    fMaxWeight = vWeight2[i - 8];
+                    iMaxWeightIdx = i;
+                }
             }
         }
         
@@ -235,18 +268,22 @@ PS_OUT PS_LandScape(DS_OUT _in)
         // 타일 노말
         if (-1 != iMaxWeightIdx)
         {
-            float3 vTangentSpaceNormal = TileTexArr.SampleGrad(g_sam_0, float3(_in.vUV, iMaxWeightIdx + TileCount), derivX, derivY).xyz;
+            float3 vTangentSpaceNormal = TileTexNArr.SampleGrad(g_sam_0, float3(_in.vUV, iMaxWeightIdx), derivX, derivY).xyz;
             //float3 vTangentSpaceNormal = TileTexArr.SampleLevel(g_sam_0, float3(_in.vUV, iMaxWeightIdx + TileCount), 7).xyz;
             vTangentSpaceNormal = vTangentSpaceNormal * 2.f - 1.f;
-
+            vTangentSpaceNormal = normalize(mul(float4(vTangentSpaceNormal, 0.f), g_mat_3)).xyz;
+            
             float3x3 matTBN = { _in.vViewTangent, _in.vViewBinormal, _in.vViewNormal };
             vViewNormal = normalize(mul(vTangentSpaceNormal, matTBN));
         }
     }
+    
+    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
       
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vNormal = float4(vViewNormal, 1.f);
     output.vData.x = SpecPow;
+    output.vEmissiv = vEmissiveColor;
             
     return output;
 }

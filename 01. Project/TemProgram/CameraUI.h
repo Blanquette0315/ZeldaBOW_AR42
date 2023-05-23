@@ -20,7 +20,6 @@ private:
     bool        m_bInit;
     bool        m_bShowDebugDraw;
 
-
 public:
     virtual void Open() override;
     virtual void update() override;

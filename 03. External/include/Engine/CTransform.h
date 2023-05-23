@@ -32,6 +32,7 @@ private:
     bool    m_bIgnParentScale;
 
     bool    m_bTurnY180;
+    bool    m_bBase270Rot;
 
 public:
     void SetRelativePos(Vec3 _vPos) { m_vRelativePos = _vPos; }
@@ -70,6 +71,9 @@ public:
 
     void SetTurnY180(bool _bTurn) { m_bTurnY180 = _bTurn; }
     bool GetTurnY180() { return m_bTurnY180; }
+
+    void SetBase270Rot(bool _b270Rot) { m_bBase270Rot = _b270Rot; }
+    bool GetBase270Rot() { return m_bBase270Rot; }
 
     const Matrix& GetLocalMat() { return m_matLocal; }
     const Matrix& GetWorldMat() { return m_matWorld; }

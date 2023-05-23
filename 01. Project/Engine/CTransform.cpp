@@ -9,6 +9,7 @@ CTransform::CTransform()
 	, m_vRelativeScale(Vec3(1.f,1.f,1.f))
 	, m_bIgnParentScale(false)
 	, m_bTurnY180(false)
+	, m_bBase270Rot(false)
 {
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3(1.f, 0.f, 0.f);
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3(0.f, 1.f, 0.f);
@@ -43,7 +44,15 @@ void CTransform::finaltick()
 
 	m_matTrans = XMMatrixTranslation(m_vRelativePos.x, m_vRelativePos.y, m_vRelativePos.z);
 	
-	m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
+	if (m_bBase270Rot)
+	{
+		m_matRot = XMMatrixRotationX(m_vRelativeRotation.x + 4.71239f);
+	}
+	else
+	{
+		m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
+	}
+	//m_matRot = XMMatrixRotationX(m_vRelativeRotation.x);
 	m_matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
 	m_matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
 
@@ -358,6 +367,8 @@ void CTransform::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_bIgnParentScale;
 	_emitter << YAML::Key << "TurnY180";
 	_emitter << YAML::Value << m_bTurnY180;
+	_emitter << YAML::Key << "Base270Rot";
+	_emitter << YAML::Value << m_bBase270Rot;
 
 	_emitter << YAML::EndMap;
 }
@@ -369,4 +380,5 @@ void CTransform::LoadFromYAML(YAML::Node& _node)
 	m_vRelativeRotation = _node["TRANSFORM"]["RelativeRotation"].as<Vec3>();
 	m_bIgnParentScale = _node["TRANSFORM"]["IgnParentScale"].as<bool>();
 	SAFE_LOAD_FROM_YAML(bool, m_bTurnY180, _node["TRANSFORM"]["TurnY180"]);
+	SAFE_LOAD_FROM_YAML(bool, m_bBase270Rot, _node["TRANSFORM"]["Base270Rot"]);
 }

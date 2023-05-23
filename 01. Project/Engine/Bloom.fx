@@ -93,7 +93,7 @@ float4 PS_Bright(VS_OUT _in) : SV_Target
 }
 
 // =========================
-// BloomBlur
+// BloomUpScale
 // mesh : RectMesh
 //
 // Parameter
@@ -121,55 +121,58 @@ PS_BU_OUT PS_BloomUpScale(VS_OUT _in)
     {
         float2 vUV = _in.vPosition.xy / g_vRenderResolution;
         
-        float2 GaussianPos = _in.vPosition.xy - float2(2.f, 2.f);
+        float4 vBrightColor = g_tex_0.SampleLevel(g_sam_2, vUV, k);
+        vOutColor += vBrightColor;
         
-        for (int j = 0; j < 5; j++)
-        {
-          
-            for (int i = 0; i < 5; i++)
-            {
-                float2 NewPos = GaussianPos + float2(j, i);
-                float2 GaussianUV = NewPos / g_vRenderResolution;
-                
-                if (GaussianUV.x > 1.f || GaussianUV.x < 0.f || GaussianUV.y > 1.f || GaussianUV.y < 0.f)
-                {
-                    continue;
-                }
-                
-                float4 vBrightColor = g_tex_0.SampleLevel(g_sam_2, GaussianUV, k);
-                vOutColor += vBrightColor * GaussianFilter[j][i];
-            }
+       //float2 GaussianPos = _in.vPosition.xy - float2(2.f, 2.f);
+       //
+       //for (int j = 0; j < 5; j++)
+       // {
+       //  
+       //     for (int i = 0; i < 5; i++)
+       //     {
+       //         float2 NewPos = GaussianPos + float2(j, i);
+       //         float2 GaussianUV = NewPos / g_vRenderResolution;
+       //        
+       //         if (GaussianUV.x > 1.f || GaussianUV.x < 0.f || GaussianUV.y > 1.f || GaussianUV.y < 0.f)
+       //         {
+       //             continue;
+       //         }
+       //        
+       //         float4 vBrightColor = g_tex_0.SampleLevel(g_sam_2, GaussianUV, k);
+       //         vOutColor += vBrightColor * GaussianFilter[j][i];
+       //     }
+       // }
             
-            switch (k)
-            {
-                case 0:
-                    _out.BBColor0 = vOutColor;
-                    break;
+        switch (k)
+        {
+            case 0:
+                _out.BBColor0 = vOutColor;
+                break;
         
-                case 1:
-                    _out.BBColor1 = vOutColor;
-                    break;
+            case 1:
+                _out.BBColor1 = vOutColor;
+                break;
         
-                case 2:
-                    _out.BBColor2 = vOutColor;
-                    break;
+            case 2:
+                _out.BBColor2 = vOutColor;
+                break;
         
-                case 3:
-                    _out.BBColor3 = vOutColor;
-                    break;
+            case 3:
+                _out.BBColor3 = vOutColor;
+                break;
         
-                case 4:
-                    _out.BBColor4 = vOutColor;
-                    break;
+            case 4:
+                _out.BBColor4 = vOutColor;
+                break;
         
-                case 5:
-                    _out.BBColor5 = vOutColor;
-                    break;
+            case 5:
+                _out.BBColor5 = vOutColor;
+                break;
                 
-                case 6:
-                    _out.BBColor6 = vOutColor;
-                    break;
-            }
+            case 6:
+                _out.BBColor6 = vOutColor;
+                break;
         }
     }
     

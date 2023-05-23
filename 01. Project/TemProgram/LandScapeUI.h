@@ -12,6 +12,8 @@ private:
     Vec2           m_vBrushScale;
     bool           m_bCurDataCooking;
 
+    bool           m_bChangeFaceCount;
+
 public:
     void SetTexture(DWORD_PTR _strTexKey);
 

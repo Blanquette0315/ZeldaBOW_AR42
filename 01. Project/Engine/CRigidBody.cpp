@@ -107,42 +107,42 @@ void CRigidBody::tick()
 
 void CRigidBody::finaltick()
 {
-	if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
-	{
+	//if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+	//{
 		// Velocity gathering update : Engine -> PhysX		
 
-		//if (m_bGround)
-		//{
-		//	if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
-		//	{
-		//		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
-		//		m_vSaveVelocity = m_vVelocity;
-		//		m_vVelocity = Vec3(0.f, 0.f, 0.f);
-		//	}
-		//	else
-		//	{
-		//		if (m_bKeyRelease)
-		//		{
-		//			m_vecPhysData[0]->SetVelocity(0.f, 0.f, 0.f);
-		//			m_vVelocity = Vec3(0.f, 0.f, 0.f);
-		//			m_vSaveVelocity = m_vVelocity;
-		//			m_bKeyRelease = false;
-		//		}
-		//	}
-		//}
-		//else
-		//{
-		//	if (m_vecPhysData[0]->m_vPxLinearVelocity.y != 0.f)
-		//	{
-		//		if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
-		//		{
-		//			m_vecPhysData[0]->SetVelocity(m_vSaveVelocity.x, m_vecPhysData[0]->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
-		//			m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
-		//		}
-		//	}
-		//}
+		if (m_bGround)
+		{
+			if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
+			{
+				m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+				m_vSaveVelocity = m_vVelocity;
+				m_vVelocity = Vec3(0.f, 0.f, 0.f);
+			}
+			else
+			{
+				if (m_bKeyRelease)
+				{
+					m_vecPhysData[0]->SetVelocity(0.f, 0.f, 0.f);
+					m_vVelocity = Vec3(0.f, 0.f, 0.f);
+					m_vSaveVelocity = m_vVelocity;
+					m_bKeyRelease = false;
+				}
+			}
+		}
+		else
+		{
+			if (m_vecPhysData[0]->m_vPxLinearVelocity.y != 0.f)
+			{
+				if (m_vSaveVelocity != Vec3(0.f, 0.f, 0.f))
+				{
+					m_vecPhysData[0]->SetVelocity(m_vSaveVelocity.x, m_vecPhysData[0]->m_vPxLinearVelocity.y, m_vSaveVelocity.z);
+					m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
+				}
+			}
+		}
 
-		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+		//m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
 
 		// ...
 		// will be added Force
@@ -150,7 +150,7 @@ void CRigidBody::finaltick()
 		m_vForce = Vec3(0.f, 0.f, 0.f);
 		
 		// ...
-	}
+	//}
 
 	// DebugDraw
 #ifdef _DEBUG
@@ -523,7 +523,7 @@ void CRigidBody::SetTerrainCollider(int _iVertexSize, Vector3* _vecVertexList, V
 	PxSize.z /= 100.f;
 
 	// 230400 is FaceCount(100) VertexCount
-	int iFacePerCount = 230400;
+	int iFacePerCount = 2304;
 	int iforCount = (int)ceil((float)_iVertexSize / iFacePerCount);
 
 	UINT* arrIndex = new UINT[iFacePerCount];
@@ -568,8 +568,16 @@ void CRigidBody::CallDebugDraw()
 
 	//FinalPos
 	Vec3 vObjectPos = Transform()->GetWorldPos();
-	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vColOffSet, Transform()->GetRotMat());
+	Vec3 vOriRot = Transform()->GetRelativeRotation();
+
+	Matrix matOriRot = XMMatrixRotationX(vOriRot.x);
+	matOriRot *= XMMatrixRotationX(vOriRot.y);
+	matOriRot *= XMMatrixRotationX(vOriRot.z);
+
+	Vec3 vColliderWorldOffset = XMVector3TransformNormal(m_vColOffSet, matOriRot);//Transform()->GetRotMat());
 	Vec3 vFinalPos = vColliderWorldOffset + vObjectPos;
+
+	//Vec3 vFinalPos = m_vColOffSet + vObjectPos;
 
 	Vec3 vRot = {};
 	QuaternionToEuler(GetWorldRoation(), vRot);

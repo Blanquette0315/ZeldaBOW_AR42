@@ -14,6 +14,7 @@ private:
     Matrix      m_matViewInv;  
     Matrix      m_matProj;     
     Matrix      m_matProjInv;  
+    Matrix      m_matRotX180;
 
     PROJ_TYPE   m_eProjType;
     float       m_fWidth;
