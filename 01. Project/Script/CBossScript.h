@@ -6,6 +6,7 @@ class CBossScript :
 private:
     UINT            m_iAttackMotion;
     CGameObject*    m_pFireball;
+    CGameObject*    m_pFlame;
     Ptr<CPrefab>    m_pFireball_small;
     Ptr<CPrefab>    m_pFireball_big;
 

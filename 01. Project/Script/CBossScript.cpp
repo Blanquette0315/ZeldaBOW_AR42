@@ -7,6 +7,7 @@ CBossScript::CBossScript()
 	: CMonsterScript(BOSSSCRIPT)
 	, m_iAttackMotion(0)
 	, m_pFireball(nullptr)
+	, m_pFlame(nullptr)
 	, m_pFireball_small(nullptr)
 	, m_pFireball_big(nullptr)
 {
@@ -49,6 +50,10 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
 		}
+		if (m_pFlame != nullptr)
+		{
+			m_pFlame->Destroy();
+		}
 
 		GetOwner()->GetChildObject()[1]->Destroy();
 	}
@@ -64,6 +69,10 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		if (m_pFireball != nullptr)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
+		}
+		if (m_pFlame != nullptr)
+		{
+			m_pFlame->Destroy();
 		}
 	}
 	else if (_vPos.y == 10000.f)
@@ -121,18 +130,18 @@ void CBossScript::tick()
 			m_iAttackMotion = 0;
 		}
 
-		if (m_iAttackMotion == 0)
-			Attack_Chemical();
-		else if (m_iAttackMotion == 1)
-			Attack_Chemical_Big();
-		else if (m_iAttackMotion == 2)
-			Attack_Chemical();
-		else if (m_iAttackMotion == 3)
-			Attack_Chemical();
-		else if (m_iAttackMotion == 4)
-			Attack_Chemical_Big();
+		//if (m_iAttackMotion == 0)
+		//	Attack_Chemical_Big();
+		//else if (m_iAttackMotion == 1)
+		//	Attack_Chemical_Big();
+		//else if (m_iAttackMotion == 2)
+		//	Attack_Chemical_Big();
+		//else if (m_iAttackMotion == 3)
+		//	Attack_Chemical_Big();
+		//else if (m_iAttackMotion == 4)
+		//	Attack_Chemical_Big();
 
-		/*if (m_iAttackMotion == 0)
+		if (m_iAttackMotion == 0)
 			Attack_Straight();
 		else if (m_iAttackMotion == 1)
 			Attack_Cross();
@@ -141,7 +150,7 @@ void CBossScript::tick()
 		else if (m_iAttackMotion == 3)
 			Attack_Rotate();
 		else if (m_iAttackMotion == 4)
-			Attack_Chemical_Big();*/
+			Attack_Chemical_Big();
 
 	}
 	else if (m_eCurrentState == Monster_State::RUN)
@@ -199,6 +208,7 @@ void CBossScript::tick()
 			AI->Done();
 			m_fAcctime = 0;
 			m_iMotion = 0;
+			++m_iAttackMotion;
 			m_eCurrentState = Monster_State::IDLE;
 		}
 	}
@@ -525,11 +535,11 @@ void CBossScript::Attack_Chemical_Big()
 		m_pFireball = m_pFireball_big->Instantiate();
 		Instantiate(m_pFireball, Vec3::Zero, 8);
 		AddChild(GetOwner(), m_pFireball);
-		CGameObject* pflame = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\flamecharge.pref", L"prefab\\flamecharge.pref")->Instantiate();
-		Instantiate(pflame, Vec3::Zero, 0);
-		AddChild(GetOwner(), pflame);
+		m_pFlame = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\flamecharge.pref", L"prefab\\flamecharge.pref")->Instantiate();
+		Instantiate(m_pFlame, Vec3::Zero, 0);
+		AddChild(GetOwner(), m_pFlame);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameTornade_Charge.wav");
-		pSound->Play(2, MONSTER_VOLUME, true, GetOwner());
+		pSound->Play(2, MONSTER_VOLUME, true, m_pFlame);
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 6.26666f && m_iMotion == 2)
