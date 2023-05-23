@@ -301,6 +301,7 @@ void CLinkAnimScript::ClearAnimNode()
 void CLinkAnimScript::init()
 {
 	m_pAnimator = Animator3D();
+	m_pAnimator->ResizeVecBone();
 	m_pAnimator->SetBoneUpperAndElseLower(0, LinkBodyDivPoint);
 	m_pAnimator->CreateBoneCheckBuffer();
 	m_mapAnim = m_pAnimator->GetMapAnimation();
