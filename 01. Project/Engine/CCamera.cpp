@@ -181,7 +181,7 @@ void CCamera::render()
 		}
 
 		// Bloom Effect
-		//render_Bloom();
+		render_Bloom();
 
 		// SwapChainMRT�� ����
 		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
