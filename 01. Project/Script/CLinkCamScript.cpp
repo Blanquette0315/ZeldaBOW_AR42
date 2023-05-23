@@ -411,7 +411,7 @@ void CLinkCamScript::BowChargeMove()
 	Vec3 vDir = m_pLinkScr->Transform()->GetRelativeDir(DIR::FRONT);
 	Vec3 vRot = GetEulerAngleFromDirection(vDir);
 	Transform()->SetRelativeRotation(vRot);
-	LBTNMove(true, XM_PI / 12.f, -XM_PI / 12.f, true, XM_PI / 12.f, -XM_PI / 12.f);
+	LBTNMove(true, XM_PI / 12.f, -XM_PI / 3.f, true, XM_PI / 12.f, -XM_PI / 12.f);
 
 	Transform()->AddRelativeRotation(m_vAddRot);
 
