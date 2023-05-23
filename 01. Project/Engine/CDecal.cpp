@@ -39,11 +39,13 @@ void CDecal::finaltick()
 
 void CDecal::render()
 {
+#ifdef _DEBUG
 	// Decal Debug Draw
 	if (Is_ShowDebugDraw())
 	{
 		DebugDrawCube(Vec4(0.2f, 0.8f, 0.2f, 1.f), Transform()->GetWorldPos(), Transform()->GetWorldScale(), Transform()->GetRelativeRotation());
 	}
+#endif
 
 	Transform()->UpdateData();
 

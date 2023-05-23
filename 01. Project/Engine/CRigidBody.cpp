@@ -605,7 +605,7 @@ void CRigidBody::CallDebugDraw()
 
 	Vec3 vFinalRot = {};
 	QuaternionToEuler(Q_Rot, vFinalRot);
-
+#ifdef _DEBUG
 	if (COLLIDER_TYPE::COLLIDER_CUBE == m_eRigidColliderType)
 	{
 		DebugDrawCube(vColor, vFinalPos, m_vBoxSize * 2.f, vFinalRot);
@@ -621,4 +621,5 @@ void CRigidBody::CallDebugDraw()
 		else
 			DebugDrawCylinder(vColor, vFinalPos, Vec3(m_vCapsuleSize.x * 2.f, m_vCapsuleSize.x * 2.f + m_vCapsuleSize.y, m_vCapsuleSize.x * 2.f), vFinalRot - Vec3(0.f, 0.f, XM_PI * 0.5f));
 	}
+#endif
 }

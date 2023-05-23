@@ -86,7 +86,7 @@ void CImGuiMgr::progress()
 {
     // 알림 확인
     ObserveContent();
-#ifdef _DEBUG
+
     // ImGui가 그려지기 위해 필요한 3가지 함수들
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -128,8 +128,6 @@ void CImGuiMgr::progress()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
     }
-#else
-#endif
 } 
 
 void CImGuiMgr::ObserveContent()
