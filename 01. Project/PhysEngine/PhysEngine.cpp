@@ -166,7 +166,6 @@ void  PhysEngine::Update_Actor(PhysData* data)
 		data->Rotation.z = Tr.q.z;
 		data->Rotation.w = Tr.q.w;
 	}
-
 }
 
 void PhysEngine::Delete_Actor(PhysData* data)
@@ -264,8 +263,9 @@ bool PhysEngine::CreateScene(PhysSceneData* SceneData)
 	sceneDesc.filterShader				= CustomLayerShader;
 	//sceneDesc.filterShader				= PxDefaultSimulationFilterShader;
 	sceneDesc.cudaContextManager		= m_CudaContextManager;
-	sceneDesc.broadPhaseType			= PxBroadPhaseType::eGPU;
-	//sceneDesc.broadPhaseType			= PxBroadPhaseType::eMBP;
+	// sceneDesc.broadPhaseType			= PxBroadPhaseType::eGPU;
+	// sceneDesc.broadPhaseType			= PxBroadPhaseType::eSAP;
+	sceneDesc.broadPhaseType			= PxBroadPhaseType::eMBP;
 	
 	sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
 	//sceneDesc.flags |= PxSceneFlag::eENABLE_CCD;

@@ -42,10 +42,10 @@ void CLinkSwordScript::AttackEffect(CMonsterScript* _pMonsterScr)
 
 		CTransform* pLinkTrans = GetOwner()->GetParent()->Transform();
 		Vec3 vRot = pLinkTrans->GetRelativeRotation();
-		Vec3 vDir = (pLinkTrans->GetRelativePos() - pMonsterTrans->GetRelativePos()).Normalize();
+
+		Vec3 vRandom = Vec3((float)g_random(g_gen) / 400.f, (float)g_random(g_gen) / 400.f, (float)g_random(g_gen) / 400.f);
+		Vec3 vDir = (pLinkTrans->GetRelativePos() - pMonsterTrans->GetRelativePos() + vRandom).Normalize();
 		Vec3 vInstPos = pMonsterTrans->GetRelativePos() + vDir * m_arrOffset[(UINT)MONSTER_OFFSET::BOKO];
-
-
 
 		vInstPos.y += 13.f;
 		pEffectObj->Transform()->SetRelativeRotation(vRot);
