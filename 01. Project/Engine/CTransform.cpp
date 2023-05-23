@@ -334,6 +334,12 @@ Vec3 CTransform::GetWorldRotation()
 	Vec3 vEuler;
 	XMMatrixDecompose(&vDummy, &vQuat, &vDummy2, m_matWorld);
 	QuaternionToEuler(vQuat, vEuler);
+
+	if (m_bBase270Rot)
+	{
+		vEuler.x -= 4.71239f;
+	}
+
 	return vEuler;
 }
 
