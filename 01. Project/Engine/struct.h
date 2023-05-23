@@ -77,7 +77,9 @@ struct tRaycastOut
 
 struct tWeight_4
 {
-	float arrWeight[4];
+	float arrWeight0[4];
+	float arrWeight1[4];
+	float arrWeight2[4];
 };
 
 // 레이어 충돌 설정 정보 구조체
@@ -251,6 +253,7 @@ struct tTransform
 
 	Matrix matWV;
 	Matrix matWVP;
+	Matrix matXRot180;
 };
 
 extern tTransform g_transform;

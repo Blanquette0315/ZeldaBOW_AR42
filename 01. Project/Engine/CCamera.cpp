@@ -38,6 +38,7 @@ CCamera::CCamera()
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
 	m_fWidth = vRenderResolution.x;
+	m_matRotX180 = XMMatrixRotationX(3.14159f);
 }
 
 CCamera::~CCamera()
@@ -156,6 +157,7 @@ void CCamera::render()
 	g_transform.matView = m_matView;
 	g_transform.matViewInv = m_matViewInv;
 	g_transform.matProj = m_matProj;
+	g_transform.matXRot180 = m_matRotX180;
 
 	// Shader Domain�� ���� ��ü �з�
 	SortObject();

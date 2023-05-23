@@ -610,6 +610,7 @@ void CFBXLoader::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int 
 {
 
 	UINT iUVCount  = _pMesh->GetElementUVCount();
+
 	// max -> 3
 	if (iUVCount > 4)
 	{

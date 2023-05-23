@@ -24,6 +24,7 @@ private:
     Ptr<CTexture>           m_pBrushTex;        // �귯���� �ؽ���
 
     Ptr<CTexture>           m_pTileArrTex;      // Ÿ�� �迭 �ؽ���
+    Ptr<CTexture>           m_pTileArrNTex;
 
     Ptr<CRaycastShader>     m_pCSRaycast;       // ��ŷ ���̴�
     CStructuredBuffer*      m_pCrossBuffer;	    // ���콺 ��ŷ�Ǵ� ���� ���� �޴� ����
@@ -55,6 +56,8 @@ private:
     UINT                        m_inumVertices;
     bool                        m_bCurDataCooking;
 
+    Matrix m_mat180Rot;
+
 
 public:
     virtual void begin() override;
@@ -83,6 +86,8 @@ public:
 
     void SaveCookingData();
     void LoadCookingData();
+
+    void SaveTileArray();
 
     void Cooking();
     void CreateActor();

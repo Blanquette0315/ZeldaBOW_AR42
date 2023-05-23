@@ -90,22 +90,26 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     
     vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
     
-    if (g_int_0 == 1 || g_int_0 == 3)
-    {
-        const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
-        vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
-    }
+    //if (g_int_0 == 1 || g_int_0 == 3)
+    //{
+    //    const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
+    //    vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+    //}
+    //
+    //if (g_int_0 >= 4)
+    //{
+    //    const float A = 6.2, B = 0.5, C = 6.2, D = 1.7, E = 0.06;
+    //    vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+    //}
+    //
+    //if (g_int_0 == 2 || g_int_0 == 3)
+    //{
+    //    vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
+    //}
     
-    if (g_int_0 >= 4)
-    {
-        const float A = 6.2, B = 0.5, C = 6.2, D = 1.7, E = 0.06;
-        vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
-    }
-    
-    if (g_int_0 == 2 || g_int_0 == 3)
-    {
-        vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
-    }
+    const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
+    vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+    vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
     
     return vOutColor;
 }

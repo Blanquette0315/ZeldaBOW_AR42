@@ -131,10 +131,13 @@ void SaveResourceRef(Ptr<T> _res, YAML::Emitter& _emitter)
 	//_emitter << YAML::Value << bExist;
 	//// 참조중인 리소스가 있었다면, 어떤 리소스를 가지고 있었는지 키와 경로를 저장한다.
 
-	_emitter << YAML::Key << "ResKey";
-	_emitter << YAML::Value << WStringToString(_res->GetKey());
-	_emitter << YAML::Key << "ResRelativePath";
-	_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
+	if (_res.Get())
+	{
+		_emitter << YAML::Key << "ResKey";
+		_emitter << YAML::Value << WStringToString(_res->GetKey());
+		_emitter << YAML::Key << "ResRelativePath";
+		_emitter << YAML::Value << WStringToString(_res->GetRelativePath());
+	}
 }
 
 template<typename T>

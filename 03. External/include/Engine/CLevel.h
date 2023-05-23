@@ -41,6 +41,7 @@ public:
     void FindObjectByName(const wstring& _name, vector<CGameObject*>& _out);
 
     const vector<CGameObject*> GetGameObjects();
+    const vector<CGameObject*> GetRigidObjects();
 
     vector<tLayerCollision> GetLayerCollsionSet() { return m_vecLayerCollsionSet; }
     void SetLayerCollsionSet(tLayerCollision _tLayerCollsion) { m_vecLayerCollsionSet.push_back(_tLayerCollsion); }

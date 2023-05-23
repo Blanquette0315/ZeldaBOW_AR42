@@ -37,13 +37,15 @@ void CPhysMgr::tick()
 	{
 		if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 		{
+			if (nullptr != vecGameObj[i]->LandScape())
+				continue;
 			if (nullptr != vecGameObj[i]->RigidBody())
 				vecGameObj[i]->RigidBody()->UpdatePhysResult();
 		}
-
+		
 		// == finaltick
 		vecGameObj[i]->Transform()->UpdateWorldTrans();
-
+		
 		if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 		{
 			if (nullptr != vecGameObj[i]->Collider())

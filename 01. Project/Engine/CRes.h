@@ -48,6 +48,7 @@ public:
     bool IsEngineRes() const { return m_bEngineRes; }
 
     void ChangeName(bool _Change) { m_bChangeName = _Change; }
+    bool IsChangeName() { return m_bChangeName; }
 
 protected:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; if (m_bEngineRes){SetName(m_strKey);} }

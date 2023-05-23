@@ -94,13 +94,13 @@ void CGameObject::tick()
 		if (nullptr != m_arrCom[i])
 			m_arrCom[i]->tick();
 	}
-
+	
 	// Script
 	for (size_t i = 0; i < m_vecScripts.size(); ++i)
 	{
 		m_vecScripts[i]->tick();
 	}
-
+	
 	// Child Object
 	for (size_t i = 0; i < m_vecChild.size(); ++i)
 	{

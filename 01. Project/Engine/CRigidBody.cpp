@@ -95,8 +95,8 @@ void CRigidBody::tick()
 
 void CRigidBody::finaltick()
 {
-	if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
-	{
+	//if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+	//{
 		// Velocity gathering update : Engine -> PhysX		
 
 		if (m_bGround)
@@ -137,7 +137,7 @@ void CRigidBody::finaltick()
 		m_vecPhysData[0]->AddForce(m_vForce.x, m_vForce.y, m_vForce.z);
 		m_vForce = Vec3(0.f, 0.f, 0.f);
 		// ...
-	}
+	//}
 
 	// DebugDraw
 #ifdef _DEBUG

@@ -34,6 +34,8 @@ void CreateTestLevel()
 	//pObj->ChangePrefab();
 	//// pLevel->AddGameObejct(pObj, 0);
 
+	//CLevel* pLevel = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Village.lv");
+
 	ChangeLevel(pLevel);
 
 	Ptr<CMeshData> pMeshData = nullptr;
@@ -203,7 +205,7 @@ void CreateTestLevel()
 	
 	pLevel->AddGameObject(pLandScape, 0);
 
-	return;
+	//return;
 
 	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\shop.mp3");
 	//pSound->Play(1, 0.3f, true, pObject);//Vec3(0.f, 500.f, 400.f));
@@ -245,17 +247,43 @@ void CreateTestLevel()
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
 
-		// DgnObj_FallDownPillar_A
+		// DgnObj_EntranceShutter_A
 		pMeshData = nullptr;
 		pObj = nullptr;
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_FallDownPillar_A.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_EntranceShutter_A.fbx");
 		pMeshData->Save(pMeshData->GetRelativePath());
 
 		pObj = pMeshData->Instantiate();
 		pObj->SetFrustumCul(false);
-		pObj->SetName(L"DgnObj_FallDownPillar_A");
+		pObj->SetName(L"DgnObj_EntranceShutter_A");
 		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 
+		pLevel->AddGameObject(pObj, 0);
+
+		// DgnObj_DungeonEntrance_B_01
+		pMeshData = nullptr;
+		pObj = nullptr;
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\DgnObj_DungeonEntrance_B_01.fbx");
+		pMeshData->Save(pMeshData->GetRelativePath());
+		
+		pObj = pMeshData->Instantiate();
+		pObj->SetFrustumCul(false);
+		pObj->SetName(L"DgnObj_DungeonEntrance_B_01");
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		
+		pLevel->AddGameObject(pObj, 0);
+		
+		// TwnObj_Village_HatenoWell_A
+		pMeshData = nullptr;
+		pObj = nullptr;
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\TwnObj_Village_HatenoWell_A.fbx");
+		pMeshData->Save(pMeshData->GetRelativePath());
+		
+		pObj = pMeshData->Instantiate();
+		pObj->SetFrustumCul(false);
+		pObj->SetName(L"TwnObj_Village_HatenoWell_A");
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		
 		pLevel->AddGameObject(pObj, 0);
 
 		//Ptr<CMeshData> pMeshData = nullptr;

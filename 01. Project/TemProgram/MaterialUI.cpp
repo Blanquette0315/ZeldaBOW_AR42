@@ -138,18 +138,15 @@ void MaterialUI::render_update()
 			}
 			else
 			{
-				// 이름과 키가 일치하지 않는다면 이름 값으로 변경해주어야 한다.
-				// 이름을 경로 처럼 변경 하거나 경로를 이름 처럼 변경해서 비교해야한다.
-				// 우선은 이름을 경로처럼 변경하는 방식으로 진행할 것이다.
-
-				wstring strNamePath = {};
-
-				strNamePath = L"material\\";
-				strNamePath += pMtrl->GetName();
-				strNamePath += L".mtrl";
-
-				if (strNamePath != pMtrl->GetKey())
+				// 이름이 변경되었었다면, 바뀐 이름으로 경로를 지정해 저장한다.
+				if (pMtrl->IsChangeName())
 				{
+					wstring strNamePath = {};
+
+					strNamePath = L"material\\";
+					strNamePath += pMtrl->GetName();
+					strNamePath += L".mtrl";
+
 					pMtrl->Save(strNamePath);
 					// 저장이 되고나면 이름이 아에 정해진 것이기 때문에 다시 false를 넣어주어야 한다.
 					pMtrl->ChangeName(false);

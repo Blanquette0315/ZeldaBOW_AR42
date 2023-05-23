@@ -15,6 +15,7 @@ cbuffer TRANSFORM : register(b0)
 
     row_major matrix g_matWV;
     row_major matrix g_matWVP;
+    row_major matrix g_matRotX180;
 };
 
 cbuffer MATERIAL : register(b1)
@@ -141,5 +142,6 @@ Texture2D g_PTCopyTex : register(t61);
 SamplerState g_sam_0 : register(s0); // Anisotropic Sampler
 SamplerState g_sam_1 : register(s1); // Point Sampler
 SamplerState g_sam_2 : register(s2);
+SamplerState g_sam_3 : register(s3);
 
 #endif
