@@ -37,6 +37,7 @@ public:
     Link_Func               Func_Start;
     Link_Func               Func_Steady;
     Link_Func               Func_End;
+    Link_Func               Func_Exit;
 
     // tAnimNode* arrReserveAnim[2];
 
@@ -45,6 +46,7 @@ public:
     void AddFuncStart(Link_Func _func) { Func_Start = _func; }
     void AddFuncSteady(Link_Func _func) { Func_Steady = _func; }
     void AddFuncEnd(Link_Func _func) { Func_End = _func; }
+    void AddFuncExit(Link_Func _func) { Func_Exit = _func; }
 
     UINT GetPreference() { return iPreferences; }
     const wstring& GetKey() { return pAnimKey; }

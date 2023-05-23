@@ -1,6 +1,14 @@
 #pragma once
 #include <Engine/CScript.h>
 
+enum class MONSTER_OFFSET
+{
+    BOKO,
+    HINOX,
+    GANON,
+    END,
+};
+
 class CGameObject;
 class CLinkAnimScript;
 class CPrefab;
@@ -15,6 +23,8 @@ private:
     vector<CGameObject*>    m_vecObjHit;
 
     // save
+    float                   m_arrOffset[(UINT)MONSTER_OFFSET::END];
+
 private:
     Ptr<CPrefab>            m_AttackEffectPref;
 

@@ -446,7 +446,7 @@ void CLinkAnimScript::Func_JustEvasion()
 		if (m_bInJustRigid && m_pInJustRigidObj && m_bEvasionOnce == false)
 		{
 			// time slow
-			TimeSlow(true, 3.f);
+			TimeSlow(true, 10.f);
 			CPhysMgr::GetInst()->SetPhysSlow(true);
 			m_bEvasionOnce = true;
 			m_bInvincible = true;	
@@ -457,8 +457,9 @@ void CLinkAnimScript::Func_JustEvasion()
 			m_fEvasionAccTime += FDT;
 		}
 	}
+
 	int i = m_pCurAnimNode->pAnim->GetCurFrame();
-	if (m_bEvasionOnce && m_pCurAnimNode->pAnim->GetCurFrame() > 1367 )
+	if (m_bEvasionOnce && m_pCurAnimNode->pAnim->GetCurFrame() > 1365 )
 	{
 		TimeSlowAffectedObj(false, GetOwner());
 		CPhysMgr::GetInst()->SetPhysSlow(false);
@@ -497,6 +498,12 @@ void CLinkAnimScript::Func_JustAtkDash()
 void CLinkAnimScript::Func_DisableCanJust()
 {
 	m_bCanJustAttackStart = false;
+
+}
+
+void CLinkAnimScript::Func_SetVelocityZero()
+{
+	RigidBody()->SetVelocity(Vec3::Zero);
 }
 
 void CLinkAnimScript::Func_JustAtkEnd()
@@ -504,6 +511,7 @@ void CLinkAnimScript::Func_JustAtkEnd()
 	TimeSlowAffectedObj(true, GetOwner());
 	TimeSlow(false);
 	m_bInvincible = false;
+	m_bCanJustAttackStart = false;
 	m_bJustAtkEndOnce = false;
 
 	// monster set state 

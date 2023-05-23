@@ -16,6 +16,9 @@ CLinkArrowScript::CLinkArrowScript()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "MaxGravity", &m_fMaxGravity, 0.f, 100.f, 0.1f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Speed", &m_vVelocity, 0.f, 1000.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "LifeTime", &m_fLifeMaxTime, 0.f, 20.f, 0.1f);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "TrailEffect", &m_TrailEffect);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "DamageEffect", &m_DamageEffect);
 }
 
 CLinkArrowScript::CLinkArrowScript(const CLinkArrowScript& _origin)
@@ -26,16 +29,39 @@ CLinkArrowScript::CLinkArrowScript(const CLinkArrowScript& _origin)
 	, m_fLifeMaxTime(_origin.m_fLifeMaxTime)
 	, m_fLifeAccTime(0.f)
 	, m_vDir(Vec3::Zero)
+	, m_TrailEffect(_origin.m_TrailEffect)
+	, m_DamageEffect(_origin.m_DamageEffect)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Gravity", &m_fGravity, 0.f, 100.f, 0.1f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Speed", &m_vVelocity, 0.f, 1000.f, 1.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "MaxGravity", &m_fMaxGravity, 0.f, 100.f, 0.1f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "LifeTime", &m_fLifeMaxTime, 0.f, 20.f, 0.1f);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "TrailEffect", &m_TrailEffect);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "DamageEffect", &m_DamageEffect);
 }
 
 CLinkArrowScript::~CLinkArrowScript()
 {
 
+}
+
+void CLinkArrowScript::AttackEffect(CMonsterScript* _pMonsterScr)
+{
+	if (m_DamageEffect.Get())
+	{
+		CTransform* pMonsterTrans = _pMonsterScr->GetOwner()->Transform();
+		CGameObject* pEffectObj = m_DamageEffect->Instantiate();
+
+		CTransform* pArrowTrans = GetOwner()->Transform();
+		//Vec3 vRot = pArrowTrans->GetRelativeRotation();
+		Vec3 vDir = pArrowTrans->GetRelativeDir(DIR::UP);
+		Vec3 vInstPos = pArrowTrans->GetRelativePos();
+		Vec3 vRot = GetEulerAngleFromDirection(vDir);
+		// vInstPos.y += 13.f;
+		pEffectObj->Transform()->SetRelativeRotation(vRot);
+		Instantiate(pEffectObj, vInstPos, 0);
+	}
 }
 
 void CLinkArrowScript::begin()
@@ -47,6 +73,15 @@ void CLinkArrowScript::tick()
 {
 	if (GetOwner()->GetParent() == nullptr)
 	{
+		if (!m_bTrailSpawn)
+		{
+			CGameObject* pTrail = m_TrailEffect->Instantiate();
+			Instantiate(pTrail, Vec3::Zero, 0);
+			AddChild(GetOwner(), pTrail);
+
+			m_bTrailSpawn = true;
+		}
+
 		Vec3 vPos = Transform()->GetRelativePos();
 		Vec3 vPosSave = vPos;
 		vPos += m_vDir * m_vVelocity * FDT;
@@ -83,6 +118,8 @@ void CLinkArrowScript::BeginOverlap(CGameObject* _pOther)
 	if (pMonsterScr)
 	{
 		_pOther->GetScript<CMonsterScript>()->Damage(2.f);
+		AttackEffect(pMonsterScr);
+		// DamageEffect
 		if(IsValid(GetOwner()))
 			Destroy();
 	}
@@ -112,6 +149,9 @@ void CLinkArrowScript::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "LifeMaxTime";
 	_emitter << YAML::Value << m_fLifeMaxTime;
+
+	SaveResourceRefEX(m_TrailEffect, _emitter, "TrailEffect");
+	SaveResourceRefEX(m_DamageEffect, _emitter, "DamageEffect");
 }
 
 void CLinkArrowScript::LoadFromYAML(YAML::Node& _node)
@@ -122,4 +162,7 @@ void CLinkArrowScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_vVelocity, _node["Speed"]);
 	SAFE_LOAD_FROM_YAML(float, m_fMaxGravity, _node["MaxGravity"]);
 	SAFE_LOAD_FROM_YAML(float, m_fLifeMaxTime, _node["LifeMaxTime"]);
+
+	LoadResourceRefEX(m_TrailEffect, _node, "TrailEffect");
+	LoadResourceRefEX(m_DamageEffect, _node, "DamageEffect");
 }

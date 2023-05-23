@@ -340,3 +340,5 @@ enum class LANDSCAPE_MOD
 	SPLAT,
 	NONE,
 };
+
+extern std::uniform_int_distribution<> g_random;

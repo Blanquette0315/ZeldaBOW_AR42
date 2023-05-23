@@ -6,6 +6,7 @@
 #include <string>
 #include <queue>
 #include <fstream>
+#include <random>
 
 using std::vector;
 using std::list;

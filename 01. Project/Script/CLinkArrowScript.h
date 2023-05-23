@@ -4,6 +4,8 @@
 
 class CRigidBody;
 class CCollider;
+class CPrefab;
+class CMonsterScript;
 
 class CLinkArrowScript :
     public CScript
@@ -14,7 +16,11 @@ class CLinkArrowScript :
     float m_fMaxGravity;
 
     float m_fLifeMaxTime;
-    
+
+    Ptr<CPrefab> m_TrailEffect;
+    bool m_bTrailSpawn;
+
+    Ptr<CPrefab> m_DamageEffect;
 
     // not save
 private:
@@ -26,6 +32,7 @@ private:
 
 public:
     void SetDir(Vec3 _vDir) { m_vDir = _vDir; }
+    void AttackEffect(CMonsterScript* _pMonsterScr);
 
 public:
     virtual void begin() override;
