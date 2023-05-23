@@ -28,7 +28,7 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 	if (m_iHP <= 0)
 	{
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\dead.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		m_eCurrentState = Monster_State::DEAD;
 		m_fAcctime = 0.f;
 		m_iMotion = 0;
@@ -52,7 +52,7 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 
 		GetOwner()->GetChildObject()[1]->Destroy();
 	}
-	else if (_vPos.z != 10000.f && Head->HeadCheck(_vPos))
+	else if (_vPos.z != 10000.f && Head->HeadCheck(_vPos) && m_eCurrentState != Monster_State::GROGGY)
 	{
 		m_eCurrentState = Monster_State::GROGGY;
 		m_fAcctime = 0.f;
@@ -60,7 +60,7 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		AI->Done(false);
 		Animator3D()->Play(L"Attack_Eye_End", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\FantomGanon_Vo_DamageHalfLife.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		if (m_pFireball != nullptr)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
@@ -74,7 +74,7 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		AI->Done(false);
 		Animator3D()->Play(L"Damage_Big", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\damage_big.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 	}
 	else if (m_eCurrentState == Monster_State::RUN)
 	{
@@ -84,7 +84,7 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		AI->Done(false);
 		Animator3D()->Play(L"Damage_Small", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\damage.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 	}
 }
 
@@ -285,7 +285,7 @@ void CBossScript::Attack_Cross()
 			m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 		Animator3D()->Play(L"Attack_Lsword_Cross", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\cross.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 		Transform()->SetRelativeRotation(m_vFront);
 	}
@@ -293,7 +293,7 @@ void CBossScript::Attack_Cross()
 	{
 		Weapon->setReady(true);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_CrossAttackSwing.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 2.6666f && m_iMotion == 2)
@@ -329,7 +329,7 @@ void CBossScript::Attack_Rotate()
 			m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 		Animator3D()->Play(L"Attack_Lsword_Rotate", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\rotate.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 		Transform()->SetRelativeRotation(m_vFront);
 	}
@@ -337,21 +337,21 @@ void CBossScript::Attack_Rotate()
 	{
 		Weapon->setReady(true);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_RotateAttackSwing_01.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 3.2f && m_iMotion == 2)
 	{
 		Weapon->setReady(true);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_RotateAttackSwing_02.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 3.6666f && m_iMotion == 3)
 	{
 		Weapon->setReady(true);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_RotateAttackSwing_03.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 4.f && m_iMotion == 4)
@@ -387,7 +387,7 @@ void CBossScript::Attack_Straight()
 			m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 		Animator3D()->Play(L"Attack_Lsword_Straight", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\Straight.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 		Transform()->SetRelativeRotation(m_vFront);
 	}
@@ -395,13 +395,13 @@ void CBossScript::Attack_Straight()
 	{
 		Weapon->setReady(true);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_StraightAttackSwing.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 3.1333f && m_iMotion == 2)
 	{
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBoss_SwordHitGround.wav");
-		pSound->Play(1, VOLUME * 0.5f, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME * 0.5f, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 4.3333f && m_iMotion == 3)
@@ -445,7 +445,7 @@ void CBossScript::Attack_Chemical()
 			m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 		Animator3D()->Play(L"Attack_Chemical_Start", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\flame.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 		Transform()->SetRelativeRotation(m_vFront);
 	}
@@ -456,7 +456,7 @@ void CBossScript::Attack_Chemical()
 		Instantiate(m_pFireball, Vec3::Zero, 8);
 		AddChild(GetOwner(), m_pFireball);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameBall_Appear.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 2.26666f && m_iMotion == 2)
@@ -476,7 +476,7 @@ void CBossScript::Attack_Chemical()
 		m_pFireball->GetScript<CBossFireballScript>()->setBossPos(Transform()->GetWorldPos());
 		m_pFireball->GetScript<CBossFireballScript>()->Fire(AI->FindPlayerPos());
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameBall_Throw.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 4.1f && m_iMotion == 4)
@@ -515,7 +515,7 @@ void CBossScript::Attack_Chemical_Big()
 			m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 		Animator3D()->Play(L"Attack_Chemical_Start", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\flame.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 		Transform()->SetRelativeRotation(m_vFront);
 	}
@@ -529,7 +529,7 @@ void CBossScript::Attack_Chemical_Big()
 		Instantiate(pflame, Vec3::Zero, 0);
 		AddChild(GetOwner(), pflame);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameTornade_Charge.wav");
-		pSound->Play(2, VOLUME, true, GetOwner());
+		pSound->Play(2, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 6.26666f && m_iMotion == 2)
@@ -549,7 +549,7 @@ void CBossScript::Attack_Chemical_Big()
 		m_pFireball->GetScript<CBossFireballScript>()->setBossPos(Transform()->GetWorldPos());
 		m_pFireball->GetScript<CBossFireballScript>()->Fire(AI->FindPlayerPos());
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameBall_Throw.wav");
-		pSound->Play(1, VOLUME, true, GetOwner());
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
 	}
 	else if (m_fAcctime >= 8.1f && m_iMotion == 4)

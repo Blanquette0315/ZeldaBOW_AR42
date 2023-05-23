@@ -18,6 +18,7 @@ public:
     Vec3 FindInitialPosDir();
     float GetPlayerDistance();
     Vec3 FindPlayerPos() { return m_pPlayer->Transform()->GetRelativePos(); }
+    CGameObject* GetPlayer() { return m_pPlayer; }
 
 public:
     virtual void begin() override;

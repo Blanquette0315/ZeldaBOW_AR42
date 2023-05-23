@@ -94,6 +94,9 @@
     <Filter Include="Scripts\Effect">
       <UniqueIdentifier>{1cc0432d-6ced-427f-9141-175394fa5303}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Monster\Hinox">
+      <UniqueIdentifier>{8697f918-3dcf-4c44-a165-73389a2f6928}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -214,6 +217,9 @@
     <ClInclude Include="CUIHeartScript.h">
       <Filter>Scripts\UI\Heart</Filter>
     </ClInclude>
+    <ClInclude Include="CHinoxScript.h">
+      <Filter>Scripts\Monster\Hinox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -333,6 +339,9 @@
     </ClCompile>
     <ClCompile Include="CUIHeartScript.cpp">
       <Filter>Scripts\UI\Heart</Filter>
+    </ClCompile>
+    <ClCompile Include="CHinoxScript.cpp">
+      <Filter>Scripts\Monster\Hinox</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

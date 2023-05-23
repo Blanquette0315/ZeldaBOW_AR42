@@ -6,6 +6,7 @@ CCamScript
 CEffectScaler
 CEquipableScript
 CGroundCheckScript
+CHinoxScript
 CLinkAnimScript
 CLinkArrowScript
 CLinkBombScript
