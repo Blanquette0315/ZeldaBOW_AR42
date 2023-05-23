@@ -374,7 +374,7 @@ CAnimation3D* CAnimator3D::FindAnimation(const wstring& _strKey)
 	return iter->second;
 }
 
-void CAnimator3D::Play(const wstring& _strKey, bool _bRepeat)
+void CAnimator3D::Play(const wstring& _strKey, bool _bRepeat, bool _bReset)
 {
 	// 실행할 애니메이션을 찾기
 	CAnimation3D* pCurAnim = FindAnimation(_strKey);
@@ -391,10 +391,11 @@ void CAnimator3D::Play(const wstring& _strKey, bool _bRepeat)
 	m_bRepeat = _bRepeat;
 
 	// 실행할 애니메이션 리셋
-	m_pCurAnim->Reset();
+	if(_bReset)
+		m_pCurAnim->Reset();
 }
 
-void CAnimator3D::PlayLowerAnim(const wstring& _strKey, bool _bRepeat)
+void CAnimator3D::PlayLowerAnim(const wstring& _strKey, bool _bRepeat , bool _bReset)
 {
 	// 실행할 애니메이션을 찾기
 	CAnimation3D* pCurLowerAnim = FindAnimation(_strKey);
@@ -408,7 +409,8 @@ void CAnimator3D::PlayLowerAnim(const wstring& _strKey, bool _bRepeat)
 	m_bRepeatLower = _bRepeat;
 
 	// 실행할 애니메이션 리셋
-	m_pCurAnimLower->Reset();
+	if (_bReset)
+		m_pCurAnimLower->Reset();
 }
 
 void CAnimator3D::ChangeAnimName(const wstring& _strOrignKey, const wstring& _strNewKey)

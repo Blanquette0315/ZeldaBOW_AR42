@@ -1,23 +1,31 @@
 #pragma once
 #include "CMonsterScript.h"
-class CBossScript :
+
+enum class Hinox_State
+{
+    SLEEP,
+    WAKE,
+    SEARCH_TREE,
+    NONE,
+};
+
+class CHinoxScript :
     public CMonsterScript
 {
 private:
-    UINT            m_iAttackMotion;
-    CGameObject*    m_pFireball;
-    Ptr<CPrefab>    m_pFireball_small;
-    Ptr<CPrefab>    m_pFireball_big;
+    Hinox_State         m_eHinoxState;
+    bool                m_bGetTree;
+    float               m_fGuardtime;
+    int                 m_iGuardMotion;
+    bool                m_bEyeGuard;
 
 private:
-    void Attack_Cross();
-    void Attack_Rotate();
-    void Attack_Straight();
-    void Attack_Chemical();
-    void Attack_Chemical_Big();
+    void SearchTree();
+    void GuardReset();
 
 public:
     virtual void Damage(int _iNumber, Vec3 _vPos = Vec3(0.f, 0.f, 10000.f)) override;
+    virtual void Parrying() override {}
 
 public:
     virtual void begin() override;
@@ -31,8 +39,10 @@ public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
     virtual void LoadFromYAML(YAML::Node& _node) override;
 
-    CLONE(CBossScript);
+
+    CLONE(CHinoxScript);
 public:
-    CBossScript();
-    ~CBossScript();
+    CHinoxScript();
+    //CHinoxScript(const CHinoxScript& _origin);
+    ~CHinoxScript();
 };

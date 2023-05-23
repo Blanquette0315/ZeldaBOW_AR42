@@ -3,6 +3,8 @@
 
 #include <Engine/CLevelMgr.h>
 #include <Engine/CLevel.h>
+#include "CLinkAnimScript.h"
+#include "CLinkHitScript.h"
 
 CBossFireballScript::CBossFireballScript()
 	: CMonsterScript(BOSSFIREBALLSCRIPT)
@@ -25,11 +27,25 @@ void CBossFireballScript::tick()
 		Vec3 vScale = Transform()->GetRelativeScale();
 		if (m_iSize == 0)
 		{
-			vScale += Vec3(1.f * FDT);
+			if (vScale.x >= 1.f)
+			{
+				vScale = Vec3(1.f);
+			}
+			else
+			{
+				vScale += Vec3(1.f * FDT);
+			}
 		}
 		else
 		{
-			vScale += Vec3(0.5f * FDT);
+			if (vScale.x >= 2.f)
+			{
+				vScale = Vec3(2.f);
+			}
+			else
+			{
+				vScale += Vec3(0.4f * FDT);
+			}
 		}
 		Transform()->SetRelativeScale(vScale);
 	}
@@ -37,19 +53,17 @@ void CBossFireballScript::tick()
 	{
 		if (m_iMotion == 0)
 		{
-			Transform()->SetRelativePos(Transform()->GetWorldPos());
-			if (m_iSize == 0)
-			{
-				Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-			}
-			else
-			{
-				Transform()->SetRelativeScale(20.f, 20.f, 20.f);
-			}
 			++m_iMotion;
 		}
+		else if (m_iMotion == 1)
+		{
+			++m_iMotion;
+			m_vDir = m_vPlayerPos + Vec3(0.f, 10.f, 0.f) - Transform()->GetWorldPos();
+			m_vDir.Normalize();
+			CLevelMgr::GetInst()->GetCurLevel()->ChangeObjectLayer(GetOwner(), 8);
+		}
 		Vec3 vPos = Transform()->GetRelativePos();
-		vPos += m_vDir * 1.f * FDT;
+		vPos += m_vDir * 50.f * FDT;
 		Transform()->SetRelativePos(vPos);
 	}
 	else if (m_eCurrentState == Monster_State::MISS)
@@ -61,19 +75,108 @@ void CBossFireballScript::tick()
 			m_vDir.Normalize();
 			++m_iMotion;
 		}
+		else if (m_iMotion == 1)
+		{
+			++m_iMotion;
+			Collider()->CreateColliderActor();
+		}
 
 		Vec3 vPos = Transform()->GetRelativePos();
-		vPos += m_vDir * 1.f * FDT;
+		vPos += m_vDir * 50.f * FDT;
 		Transform()->SetRelativePos(vPos);
 	}
 }
 
 void CBossFireballScript::BeginOverlap(CGameObject* _pOther)
 {
+	if (_pOther->GetLayerIdx() == 5)
+	{
+		CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
+		if (pMonsterScr == nullptr)
+			return;
+
+		assert(pMonsterScr); // not monster
+		// Set Damage to Monster Here
+		pMonsterScr->Damage(2, Vec3(10000.f));
+		Dead();
+	}
+	else if(_pOther->GetLayerIdx() == 9 || _pOther->GetLayerIdx() == 2)
+	{
+		CLinkHitScript* pHitScr = _pOther->GetScript<CLinkHitScript>();
+		if (pHitScr == nullptr)
+			return;
+
+		CLinkAnimScript* pLinkScr = pHitScr->GetLink()->GetScript<CLinkAnimScript>();
+
+		if (pHitScr->IsThisType(LINK_HITSCR_TYPE::JUST))
+		{
+			pLinkScr->SetGuardJustSuccess(true, GetOwner());
+		}
+		else
+		{
+			if (pLinkScr->IsGuardAnim())
+			{
+				pLinkScr->SetGuardSuccess(true);
+				Dead();
+			}
+			else
+			{
+				tLinkDamaged damage;
+				damage.iDamage = 2;
+				damage.eType = LINK_DAMAGED_TYPE::SMALL;
+				pLinkScr->SetDamage(damage);
+				Dead();
+			}
+		}
+	}
 }
 
 void CBossFireballScript::Overlap(CGameObject* _pOther)
 {
+	if (_pOther->GetLayerIdx() == 5)
+	{
+		CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
+		if (pMonsterScr == nullptr)
+			return;
+
+		assert(pMonsterScr); // not monster
+		// Set Damage to Monster Here
+		pMonsterScr->Damage(2, Vec3(10000.f));
+		Dead();
+	}
+	else if (_pOther->GetLayerIdx() == 9 || _pOther->GetLayerIdx() == 2)
+	{
+		CLinkHitScript* pHitScr = _pOther->GetScript<CLinkHitScript>();
+		if (pHitScr == nullptr)
+			return;
+
+		CLinkAnimScript* pLinkScr = pHitScr->GetLink()->GetScript<CLinkAnimScript>();
+
+		if (pHitScr->IsThisType(LINK_HITSCR_TYPE::JUST))
+		{
+			pLinkScr->SetGuardJustSuccess(true, GetOwner());
+		}
+		else
+		{
+			if (pLinkScr->IsGuardAnim())
+			{
+				pLinkScr->SetGuardSuccess(true);
+				Dead();
+			}
+			else
+			{
+				tLinkDamaged damage;
+				damage.iDamage = 2;
+				damage.eType = LINK_DAMAGED_TYPE::SMALL;
+				pLinkScr->SetDamage(damage);
+				Dead();
+			}
+		}
+	}
+	else
+	{
+		Dead();
+	}
 }
 
 void CBossFireballScript::EndOverlap(CGameObject* _pOther)
@@ -95,6 +198,18 @@ void CBossFireballScript::LoadFromYAML(YAML::Node& _node)
 
 void CBossFireballScript::Fire(Vec3 _vPlayerPos)
 {
-	MakeParent(GetOwner());
+	m_vPlayerPos = _vPlayerPos;
+	m_vDir = _vPlayerPos + Vec3(0.f, 5.f, 0.f) - Transform()->GetWorldPos();
+	m_vDir.Normalize();
+	MakeParentReserve(GetOwner());
 	m_eCurrentState = Monster_State::ATTACK;
+}
+
+void CBossFireballScript::Dead()
+{
+	Destroy();
+	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_BigFlameBall_Explosion.wav");
+	pSound->Play(1, MONSTER_VOLUME, true, nullptr, Transform()->GetWorldPos());
+	CGameObject* pflame = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\flame.pref", L"prefab\\flame.pref")->Instantiate();
+	Instantiate(pflame, Transform()->GetWorldPos(), 0);
 }

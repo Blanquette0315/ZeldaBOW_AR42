@@ -117,7 +117,7 @@ void CLinkArrowScript::BeginOverlap(CGameObject* _pOther)
 
 	if (pMonsterScr)
 	{
-		_pOther->GetScript<CMonsterScript>()->Damage(2.f);
+		_pOther->GetScript<CMonsterScript>()->Damage(2.f, Transform()->GetWorldPos());
 		AttackEffect(pMonsterScr);
 		// DamageEffect
 		if(IsValid(GetOwner()))

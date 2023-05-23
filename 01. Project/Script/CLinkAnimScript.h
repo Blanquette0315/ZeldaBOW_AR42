@@ -227,6 +227,7 @@ public:
     void ApplyDamage();
 
     bool IsGuardAnim() { return IsCurAnim(LAT_SWORD_GUARD_WAIT); }
+    bool IsBowAtkAnim() { return IsCurAnim(LAT_BOW_ATTACK_CHARGE); }
     void SetGuardSuccess(bool _bGuardSuccess) { m_bShieldGuard = _bGuardSuccess; }
     
     // bool IsGuardJustAnim() { return IsCurAnim(LAT_SWORD_GUARD_JUST); }

@@ -91,11 +91,11 @@ public:
     
     CAnimation3D* FindAnimation(const wstring& _strKey);
 
-    void Play(const wstring& _strKey, bool _bRepeat);
+    void Play(const wstring& _strKey, bool _bRepeat, bool _bReset = true);
     void Stop() { m_pCurAnim = nullptr; }
 
     // LowerAnim
-    void PlayLowerAnim(const wstring& _strKey, bool _bRepeat);
+    void PlayLowerAnim(const wstring& _strKey, bool _bRepeat, bool _bReset = true);
     void StopLowerAnim() { m_pCurAnimLower = nullptr; }
 
 

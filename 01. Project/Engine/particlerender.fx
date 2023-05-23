@@ -210,6 +210,19 @@ float4 PS_ParticleRender(GS_OUT _in) : SV_Target
     return vColor;
 }
 
+float4 PS_ParticleRender_Alpha(GS_OUT _in) : SV_Target
+{
+    float4 vColor = (float4) 0.f;
+    
+    //vColor = float4(1.f, 0.f, 0.f, 1.f);
+    vColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    
+    float fRatio = ParticleBuffer[_in.iInstance].fCurTime / ParticleBuffer[_in.iInstance].fMaxTime;
+    vColor *= lerp(StartColor, EndColor, fRatio);
+    
+    return vColor;
+}
+
 
 float4 PS_ShieldParticleRender(GS_OUT _in) : SV_Target
 {

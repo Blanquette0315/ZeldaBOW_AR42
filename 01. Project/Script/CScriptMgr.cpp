@@ -10,6 +10,7 @@
 #include "CEquipableScript.h"
 #include "CFlashEffectScript.h"
 #include "CGroundCheckScript.h"
+#include "CHinoxScript.h"
 #include "CLinkAnimScript.h"
 #include "CLinkArrowScript.h"
 #include "CLinkBombScript.h"
@@ -42,6 +43,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEquipableScript");
 	_vec.push_back(L"CFlashEffectScript");
 	_vec.push_back(L"CGroundCheckScript");
+	_vec.push_back(L"CHinoxScript");
 	_vec.push_back(L"CLinkAnimScript");
 	_vec.push_back(L"CLinkArrowScript");
 	_vec.push_back(L"CLinkBombScript");
@@ -84,6 +86,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CFlashEffectScript;
 	if (L"CGroundCheckScript" == _strScriptName)
 		return new CGroundCheckScript;
+	if (L"CHinoxScript" == _strScriptName)
+		return new CHinoxScript;
 	if (L"CLinkAnimScript" == _strScriptName)
 		return new CLinkAnimScript;
 	if (L"CLinkArrowScript" == _strScriptName)
@@ -157,6 +161,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::GROUNDCHECKSCRIPT:
 		return new CGroundCheckScript;
+		break;
+	case (UINT)SCRIPT_TYPE::HINOXSCRIPT:
+		return new CHinoxScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LINKANIMSCRIPT:
 		return new CLinkAnimScript;
@@ -260,6 +267,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::GROUNDCHECKSCRIPT:
 		return L"CGroundCheckScript";
+		break;
+
+	case SCRIPT_TYPE::HINOXSCRIPT:
+		return L"CHinoxScript";
 		break;
 
 	case SCRIPT_TYPE::LINKANIMSCRIPT:

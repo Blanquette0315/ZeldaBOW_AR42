@@ -3,6 +3,7 @@
 
 CEffectScaler::CEffectScaler()
 	: CScript((int)SCRIPT_TYPE::EFFECTSCALER)
+	, m_fAccTime(0.f)
 {
 	AddScriptParam(SCRIPT_PARAM::INT, "Option", &m_iOption);
 	AddScriptParam(SCRIPT_PARAM::INT, "LerpOption", &m_iLerpOption);
@@ -27,6 +28,7 @@ CEffectScaler::CEffectScaler(const CEffectScaler& _origin)
 	, m_iOption(_origin.m_iOption)
 	, m_iLerpOption(_origin.m_iLerpOption)
 
+	, m_fAccTime(0.f)
 {
 	AddScriptParam(SCRIPT_PARAM::INT, "Option", &m_iOption);
 	AddScriptParam(SCRIPT_PARAM::INT, "LerpOption", &m_iLerpOption);

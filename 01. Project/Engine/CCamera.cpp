@@ -275,7 +275,7 @@ void CCamera::SortObject()
 
 				if (vecObj[j]->IS_FrustumCul())
 				{
-					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 20.f))
+					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 200.f))
 					{
 						continue;
 					}

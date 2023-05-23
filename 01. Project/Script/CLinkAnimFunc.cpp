@@ -515,8 +515,8 @@ void CLinkAnimScript::Func_JustAtkEnd()
 	m_bJustAtkEndOnce = false;
 
 	// monster set state 
-	// if(m_pLockOnRadar->GetLockOnTarget())
-		// m_pLockOnRadar->GetLockOnTarget()->GetScript<CMonsterScript>()->Parrying();
+	if(m_pLockOnRadar->GetLockOnTarget())
+		 m_pLockOnRadar->GetLockOnTarget()->GetScript<CMonsterScript>()->Damage(0,Vec3(0.f, 10000.f, 0.f));
 }
 
 void CLinkAnimScript::Func_CreateBomb()
