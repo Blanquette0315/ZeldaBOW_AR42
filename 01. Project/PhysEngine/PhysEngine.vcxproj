@@ -48,7 +48,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -83,19 +83,18 @@
     <TargetName>$(ProjectName)_x64d</TargetName>
     <OutDir>$(SolutionDir)03. External\Library\$(ProjectName)\</OutDir>
     <ExternalIncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</ExternalIncludePath>
-    <IncludePath>
-    </IncludePath>
+    <IncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)_x64r</TargetName>
-    <IncludePath>
-    </IncludePath>
+    <IncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(SolutionDir)03. External\include\;$(IncludePath)</ExternalIncludePath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
+    <OutDir>$(SolutionDir)03. External\Library\$(ProjectName)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -190,9 +189,8 @@ call PhysXCopy.bat</Command>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy/Y "$(TargetDir)lib\*.lib" "$(SolutionDir)Library\lib"
-copy/Y "$(TargetDir)lib\*.dll" "$(SolutionDir)Library\lib"
-copy /Y "$(ProjectDir)Export\*.h" "$(SolutionDir)Library\inc\PhysX"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -38,7 +38,7 @@ using namespace std::experimental::filesystem;
 #ifdef _DEBUG
 #pragma comment(lib, "PhysEngine/PhysEngine_x64d.lib")
 #else
-#pragma comment(lib, "yaml_cpp/yaml-cpp.lib")
+#pragma comment(lib, "PhysEngine/PhysEngine_x64r.lib")
 #endif
 
 

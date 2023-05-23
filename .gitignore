@@ -470,3 +470,13 @@ GitIgnore/
 03. External/Library/Engine/TemProgram_debug.lib
 03. External/Library/Engine/Engine_debug.lib
 03. External/Library/Script/Script_debug.lib
+
+03. External/Library/PhysEngine/PhysEngine_x64r.lib
+
+03. External/Library/PhysEngine/PhysEngine_x64r.exp
+
+03. External/Library/PhysEngine/PhysEngine_x64r.dll
+
+03. External/Library/Engine/Engine.lib
+
+03. External/Library/Script/Script.lib

@@ -25,7 +25,11 @@ CPhysMgr::~CPhysMgr()
 
 void CPhysMgr::init()
 {
+#ifdef _DEBUG
 	PhysX_Initialize(1, true);
+#else
+	PhysX_Initialize(1, false);
+#endif
 }
 
 void CPhysMgr::tick()

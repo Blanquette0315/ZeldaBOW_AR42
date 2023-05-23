@@ -57,7 +57,7 @@ void CCamera::finaltick()
 	m_Frustum.finaltick();
 
 	CalRay();
-
+#ifdef _DEBUG
 	// Frustum DebugRender
 	if (Is_ShowDebugDraw())
 	{
@@ -65,6 +65,7 @@ void CCamera::finaltick()
 		Ptr<CMaterial> pCamMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"FrustumDebugDrawMtrl");
 		pCamMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &GetFrustum().GetMatInv());
 	}
+#endif
 }
 
 void CCamera::finaltick_module()
@@ -76,7 +77,7 @@ void CCamera::finaltick_module()
 	m_Frustum.finaltick();
 
 	CalRay();
-
+#ifdef _DEBUG
 	// Frustum DebugRender
 	if (Is_ShowDebugDraw())
 	{
@@ -84,6 +85,7 @@ void CCamera::finaltick_module()
 		Ptr<CMaterial> pCamMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"FrustumDebugDrawMtrl");
 		pCamMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &GetFrustum().GetMatInv());
 	}
+#endif
 }
 
 void CCamera::CalcViewMat()
