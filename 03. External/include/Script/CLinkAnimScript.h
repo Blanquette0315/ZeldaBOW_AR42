@@ -178,6 +178,7 @@ private:
     void Func_JustAtkStart();
     void Func_JustAtkDash();
     void Func_DisableCanJust();
+    void Func_SetVelocityZero();
     void Func_JustAtkEnd();
     void Func_CreateBomb();
     void Func_ThrowBombStart();

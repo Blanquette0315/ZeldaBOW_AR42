@@ -129,13 +129,13 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_DASH, LAC_ANIM_FINISHED);
 
 	// Jump
-	SetAnimNode(pAnimNode, LAT_JUMP_L); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
+	SetAnimNode(pAnimNode, LAT_JUMP_L, LAP_AIR); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
 	SetAnimTran(pAnimNode, LAT_LAND_L, LAC_ANIM_FINISHED | LAC_GROUNDED);
 
 	SetAnimNode(pAnimNode, LAT_LAND_L);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_JUMP_R); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
+	SetAnimNode(pAnimNode, LAT_JUMP_R, LAP_AIR); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
 	SetAnimTran(pAnimNode, LAT_LAND_R, LAC_ANIM_FINISHED | LAC_GROUNDED);
 
 	SetAnimNode(pAnimNode, LAT_LAND_R);
@@ -229,7 +229,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED, LAC_EQUIP_SWORD | LAC_EQUIP_BOW | LAC_EQUIP_SHIELD);
 	
 	// Just Evasion
-	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ST, LAP_INVINCIBLE | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_JustEvasionStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_JustEvasion); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_JustEvasionEnd);
+	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ST, LAP_INVINCIBLE | LAP_KEEP_LOCKON | LAP_AIR); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_JustEvasionStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_JustEvasion);
 	SetAnimTran(pAnimNode, LAT_LOCKON_JUMP_B_ED, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_LOCKON_JUMP_B_ED, LAP_INVINCIBLE | LAP_KEEP_LOCKON | LAP_JUST_ATK);
@@ -242,7 +242,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH1, LAC_ANIM_FINISHED | LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH1, LAP_COMBO | LAP_ATTACK | LAP_INVINCIBLE | LAP_KEEP_LOCKON | LAP_JUST_ATK);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH1, LAP_COMBO | LAP_ATTACK | LAP_INVINCIBLE | LAP_KEEP_LOCKON | LAP_JUST_ATK);  pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_SetVelocityZero);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_JUST_RUSH2, LAC_ANIM_FINISHED | LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 

@@ -1207,9 +1207,9 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader->CreateComputeShader(L"shader\\particleupdate.fx", "CS_ParticleUpdate");
 	AddRes<CComputeShader>(L"ParticleUpdateShader", pShader);
 
-	//pShader = new CParticleUpdateShader;
-	//pShader->CreateComputeShader(L"shader\\particle_spark_CS.fx", "CS_ParticleSpark");
-	//AddRes<CComputeShader>(L"ParticleSparkShader", pShader);
+	pShader = new CParticleUpdateShader;
+	pShader->CreateComputeShader(L"shader\\link_particle_arrow_CS.fx", "CS_ParticleArrow");
+	AddRes<CComputeShader>(L"ParticleArrowShader", pShader);
 
 	pShader = new CParticleUpdateShader;
 	pShader->CreateComputeShader(L"shader\\link_particle_spark_CS.fx", "CS_ParticleSpark");

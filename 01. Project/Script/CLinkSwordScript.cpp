@@ -10,6 +10,8 @@ CLinkSwordScript::CLinkSwordScript()
 	, m_pLinkAnimScr(nullptr)
 {
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "Attack Effect", &m_AttackEffectPref);
+
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Boko-Offset", &m_arrOffset[(UINT)MONSTER_OFFSET::BOKO], 0.f, 100.f, 1.f);
 }
 
 CLinkSwordScript::CLinkSwordScript(const CLinkSwordScript& _origin)
@@ -17,10 +19,13 @@ CLinkSwordScript::CLinkSwordScript(const CLinkSwordScript& _origin)
 	, m_AttackEffectPref(_origin.m_AttackEffectPref)
 {
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "Attack Effect", &m_AttackEffectPref);
+
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Boko-Offset", &m_arrOffset[(UINT)MONSTER_OFFSET::BOKO], 0.f, 100.f, 1.f);
 }
 
 CLinkSwordScript::~CLinkSwordScript()
 {
+	
 }
 
 bool CLinkSwordScript::IsAttackAnim()
@@ -37,8 +42,14 @@ void CLinkSwordScript::AttackEffect(CMonsterScript* _pMonsterScr)
 
 		CTransform* pLinkTrans = GetOwner()->GetParent()->Transform();
 		Vec3 vRot = pLinkTrans->GetRelativeRotation();
-		Vec3 vDir = -pLinkTrans->GetRelativeDir(DIR::FRONT);
-		// pEffectObj->
+		Vec3 vDir = (pLinkTrans->GetRelativePos() - pMonsterTrans->GetRelativePos()).Normalize();
+		Vec3 vInstPos = pMonsterTrans->GetRelativePos() + vDir * m_arrOffset[(UINT)MONSTER_OFFSET::BOKO];
+
+
+
+		vInstPos.y += 13.f;
+		pEffectObj->Transform()->SetRelativeRotation(vRot);
+		Instantiate(pEffectObj, vInstPos, 0);
 	}
 }
 
@@ -81,6 +92,7 @@ void CLinkSwordScript::BeginOverlap(CGameObject* _pOther)
 
 			// Set Damage to Monster Here
 			pMonsterScr->Damage(2);
+			AttackEffect(pMonsterScr);
 		}
 	}
 }
@@ -111,7 +123,8 @@ void CLinkSwordScript::Overlap(CGameObject* _pOther)
 			m_vecObjHit.push_back(_pOther);
 
 			// Set Damage to Monster Here
-			pMonsterScr->Damage(2);
+			pMonsterScr->Damage(1);
+			AttackEffect(pMonsterScr);
 		}
 	}
 }
@@ -124,12 +137,17 @@ void CLinkSwordScript::SaveToYAML(YAML::Emitter& _emitter)
 {
 	CScript::SaveToYAML(_emitter);
 	SaveResourceRefEX(m_AttackEffectPref, _emitter, "AttackEffect");
+	
+	_emitter << YAML::Key << "BokoOffset";
+	_emitter << YAML::Value << m_arrOffset[(UINT)MONSTER_OFFSET::BOKO];
 }
 
 void CLinkSwordScript::LoadFromYAML(YAML::Node& _node)
 {
 	CScript::LoadFromYAML(_node);
 	LoadResourceRefEX(m_AttackEffectPref, _node, "AttackEffect");
+
+	SAFE_LOAD_FROM_YAML(float, m_arrOffset[(UINT)MONSTER_OFFSET::BOKO], _node["BokoOffset"]);
 }
 
 

@@ -360,6 +360,10 @@ void CLinkAnimScript::begin()
 void CLinkAnimScript::tick()
 {
 	// PlayNextAnim();
+	if ((m_pCurAnimNode->iPreferences & LAP_AIR) == 0)
+		RigidBody()->SetVelocity(Vec3::Zero);
+
+
 	SetLinkCond();
 	Timer();
 	OperateAnimFuncAfter();
@@ -374,11 +378,6 @@ void CLinkAnimScript::OperateAnimFunc()
 	CalcMoveDirection();
 	SelectSpeed();
 
-	if (m_pCurAnimNode->Func_Steady)
-	{
-		(this->*m_pCurAnimNode->Func_Steady)();
-	}
-
 	// Func that only operate at anim start
 	if (m_bOnceAtAnimStart)
 	{
@@ -388,6 +387,11 @@ void CLinkAnimScript::OperateAnimFunc()
 		}
 
 		m_bOnceAtAnimStart = false;
+	}
+
+	if (m_pCurAnimNode->Func_Steady)
+	{
+		(this->*m_pCurAnimNode->Func_Steady)();
 	}
 
 	// Lower Body Blend 
@@ -682,6 +686,11 @@ void CLinkAnimScript::PlayNextAnim()
 			if (pNextNode == m_pCurAnimNode)
 				break;
 
+			if (m_pCurAnimNode->Func_Exit)
+			{
+				(this->*m_pCurAnimNode->Func_Exit)();
+			}
+
 			m_pPrevAnimNode = m_pCurAnimNode;
 			m_pCurAnimNode = m_mapAnimNode.find(m_pAnyStateNode->vecTranAnim[i]->pTargetAnimKey)->second;
 			//return;
@@ -715,9 +724,14 @@ void CLinkAnimScript::PlayNextAnim()
 
 		if (CalBit(iCmpBit, m_pCurAnimNode->vecTranAnim[i]->iTranCond, BIT_EQUAL))
 		{
+			if (m_pCurAnimNode->Func_Exit)
+			{
+				(this->*m_pCurAnimNode->Func_Exit)();
+			}
+
+
 			m_pPrevAnimNode = m_pCurAnimNode;
 			m_pCurAnimNode = m_mapAnimNode.find(m_pCurAnimNode->vecTranAnim[i]->pTargetAnimKey)->second;
-			//return;
 
 			if (CalBit(m_pCurAnimNode->iPreferences, LAP_REPEAT, BIT_FUNC_OPT::BIT_LEAST_ONE))
 			{
