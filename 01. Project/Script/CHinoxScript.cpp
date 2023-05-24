@@ -14,7 +14,12 @@ CHinoxScript::CHinoxScript()
 	, m_fGuardtime(0)
 	, m_iGuardMotion(0)
 	, m_bEyeGuard(false)
+	, m_iMaxHP(0)
+	, m_pBossName(nullptr)
+	, m_pBossHPUI(nullptr)
+	, m_pBossHPMaxUI(nullptr)
 {
+	m_pBossHP = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\UI_BossHP.pref", L"prefab\\UI_BossHP.pref");
 }
 
 //CHinoxScript::CHinoxScript(const CHinoxScript& _origin)
@@ -50,6 +55,11 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			return;
 
 		m_iHP -= _iNumber;
+		m_pBossHPUI->Destroy();
+		m_pBossHPUI = m_pBossHP->Instantiate();
+		float fCurHPbar = 400.f * m_iHP / m_iMaxHP;
+		m_pBossHPUI->Transform()->SetRelativeScale(fCurHPbar, 10, 1);
+		Instantiate(m_pBossHPUI, Vec3(-200.f + fCurHPbar / 2.f, 325, 1), 15);
 
 		if (m_iHP <= 0)
 		{
@@ -61,6 +71,9 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			AI->Done(false);
 			GuardReset();
 			Animator3D()->Play(L"Dead", false);
+			m_pBossHPMaxUI->Destroy();
+			m_pBossHPUI->Destroy();
+			m_pBossName->Destroy();
 
 			for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
 			{
@@ -138,6 +151,13 @@ void CHinoxScript::tick()
 		}
 		else if (m_fAcctime >= 9.23333f && m_iMotion == 2)
 		{
+			m_iMaxHP = m_iHP;
+			m_pBossHPMaxUI = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_BossHPMax.pref")->Instantiate();
+			m_pBossName = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_Hinox.pref")->Instantiate();
+			m_pBossHPUI = m_pBossHP->Instantiate();
+			Instantiate(m_pBossHPMaxUI, Vec3(0, 325, 2), 15);
+			Instantiate(m_pBossName, Vec3(0, 370, 1), 15);
+			Instantiate(m_pBossHPUI, Vec3(0, 325, 1), 15);
 			Animator3D()->Play(L"Wait_Battle", true);
 			m_iMotion = 0;
 			m_fAcctime = 0;

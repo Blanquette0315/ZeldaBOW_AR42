@@ -10,9 +10,14 @@ CBossScript::CBossScript()
 	, m_pFlame(nullptr)
 	, m_pFireball_small(nullptr)
 	, m_pFireball_big(nullptr)
+	, m_iMaxHP(0)
+	, m_pBossName(nullptr)
+	, m_pBossHPUI(nullptr)
+	, m_pBossHPMaxUI(nullptr)
 {
 	m_pFireball_small = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Fireball.pref", L"prefab\\Fireball.pref");
 	m_pFireball_big = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Fireball_Charged.pref", L"prefab\\Fireball_Charged.pref");
+	m_pBossHP = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\UI_BossHP.pref", L"prefab\\UI_BossHP.pref");
 }
 
 CBossScript::~CBossScript()
@@ -25,6 +30,11 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		return;
 
 	m_iHP -= _iNumber;
+	m_pBossHPUI->Destroy();
+	m_pBossHPUI = m_pBossHP->Instantiate();
+	float fCurHPbar = 400.f * m_iHP / m_iMaxHP;
+	m_pBossHPUI->Transform()->SetRelativeScale(fCurHPbar, 10, 1);
+	Instantiate(m_pBossHPUI, Vec3(-200.f + fCurHPbar / 2.f, 325, 1), 15);
 
 	if (m_iHP <= 0)
 	{
@@ -35,6 +45,9 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		m_iMotion = 0;
 		AI->Done(false);
 		Animator3D()->Play(L"Stagger", false);
+		m_pBossHPMaxUI->Destroy();
+		m_pBossHPUI->Destroy();
+		m_pBossName->Destroy();
 
 		for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
 		{
@@ -167,6 +180,13 @@ void CBossScript::tick()
 	}
 	else if (m_eCurrentState == Monster_State::FIND)
 	{
+		m_iMaxHP = m_iHP;
+		m_pBossHPMaxUI = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_BossHPMax.pref")->Instantiate();
+		m_pBossName = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_Boss.pref")->Instantiate();
+		m_pBossHPUI = m_pBossHP->Instantiate();
+		Instantiate(m_pBossHPMaxUI, Vec3(0, 325, 2), 15);
+		Instantiate(m_pBossName, Vec3(0, 370, 1), 15);
+		Instantiate(m_pBossHPUI, Vec3(0, 325, 1), 15);
 		AI->Done();
 	}
 	else if (m_eCurrentState == Monster_State::RETURN)

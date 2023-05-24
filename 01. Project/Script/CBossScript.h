@@ -4,11 +4,16 @@ class CBossScript :
     public CMonsterScript
 {
 private:
+    int             m_iMaxHP;
     UINT            m_iAttackMotion;
     CGameObject*    m_pFireball;
     CGameObject*    m_pFlame;
     Ptr<CPrefab>    m_pFireball_small;
     Ptr<CPrefab>    m_pFireball_big;
+    Ptr<CPrefab>    m_pBossHP;
+    CGameObject*    m_pBossName;
+    CGameObject*    m_pBossHPUI;
+    CGameObject*    m_pBossHPMaxUI;
 
 private:
     void Attack_Cross();
