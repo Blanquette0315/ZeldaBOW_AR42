@@ -18,8 +18,8 @@ float4 PaperBurn(in float4 _vDiffuse, float2 _vUV)
         
     float fCurRampUV = saturate(1.f - fCurAlpha) * 1.5f;
         
-    float4 vRamp = arrtex_burn_ramp.SampleLevel(g_sam_0, float3(fCurRampUV, 0.5f, 0), 0);
-        
+    float4 vRamp = g_texarr_0.SampleLevel(g_sam_0, float3(fCurRampUV, 0.5f, g_float_3), 0);
+    
     if (fCurRampUV > 0.f)
     {
         _vDiffuse.rgb = vRamp.rgb;

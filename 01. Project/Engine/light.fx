@@ -21,9 +21,10 @@
 
 #define DepthMap        g_tex_3
 #define LightVP         g_mat_0
+#define StaticDepthMap  g_tex_7
 
-#define DepthMapResolution 4096
-#define Bias               0.0003f
+#define DepthMapResolution 2048
+#define Bias               0.0001f
 
 struct VS_IN
 {
@@ -92,7 +93,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
                 {
                     vDepthMapUV.x = (float) (iUV.x + (j - 2) * (g_int_3 + 1)) / DepthMapResolution;
                     vDepthMapUV.y = (float) (iUV.y + (i - 2) * (g_int_3 + 1)) / DepthMapResolution;
-                    float fDepth = encode(g_tex_4.Sample(g_sam_1, vDepthMapUV));
+                    float fDepth = encode(g_tex_4.Sample(g_sam_0, vDepthMapUV));
             
                     if (0.f != fDepth
                 && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
@@ -106,7 +107,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         }
         else
         {
-            float fDepth = encode(g_tex_4.Sample(g_sam_1, vDepthMapUV));
+            float fDepth = encode(g_tex_4.Sample(g_sam_0, vDepthMapUV));
     
             if (0.f != fDepth
         && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
@@ -123,27 +124,27 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         {
             int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
 
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 3; j++)
             {
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * (g_int_3 + 1)) / DepthMapResolution;
-                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * (g_int_3 + 1)) / DepthMapResolution;
-                    float fDepth = encode(DepthMap.Sample(g_sam_1, vDepthMapUV));
+                    vDepthMapUV.x = (float) (iUV.x + (j - 1) * (g_int_3 + 1)) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 1) * (g_int_3 + 1)) / DepthMapResolution;
+                    float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
             
                     if (0.f != fDepth
                 && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
                 && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
                 && vLightProj.z >= fDepth + Bias)
                     {
-                        fShadowPow += 0.9f * GaussianFilter[j][i];
+                        fShadowPow += 0.9f * GaussianFilter33[j][i];
                     }
                 }
             }
         }
         else
         {
-            float fDepth = encode(DepthMap.Sample(g_sam_1, vDepthMapUV));
+            float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
     
             if (0.f != fDepth
         && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
@@ -155,16 +156,6 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         }
     }
         
-    //// 그림자 판정
-    //if (g_int_3 <= 0)
-    //{
-    //    fShadowPow = g_tex_2.Sample(g_sam_0, vUV).y;
-    //}
-    //else
-    //{
-    //    fShadowPow = ShadowGaussianSample(vUV, g_int_3);
-    //}
-    
     // Emissive Tex Sample
     float4 vEmissive = float4(0.f, 0.f, 0.f, 1.f);
     if (g_btex_5)
@@ -354,11 +345,11 @@ VS_DEPTH_OUT VS_DepthMap(VS_DEPTH_IN _in)
 }
 
 
-float4 PS_DepthMap(VS_DEPTH_OUT _in) : SV_Target
+float PS_DepthMap(VS_DEPTH_OUT _in) : SV_Target
 {
     float fOut = 0.f;
     fOut = _in.vProjPos.z / _in.vProjPos.w;
-    return decode(fOut);
+    return fOut;
 }
 
 #endif

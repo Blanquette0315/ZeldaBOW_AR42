@@ -50,7 +50,6 @@ private:
 	void UpdateNoiseTexture();
 	void UpdateLight2D();
 	void UpdateLight3D();
-	void UpdateEffectTexture();
 
 	void CreateMRT();
 	void ClearMRT();

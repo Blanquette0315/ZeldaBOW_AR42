@@ -57,8 +57,6 @@ void CRenderMgr::render()
 
 	UpdateNoiseTexture();
 
-	UpdateEffectTexture();
-
 	UpdateLight2D();
 
 	UpdateLight3D();
@@ -195,13 +193,6 @@ void CRenderMgr::UpdateLight3D()
 
 	// ���� ���� �۷ι� �����Ϳ� ������Ʈ
 	g_global.iLight3DCount = (UINT)m_vecLight3D.size();
-}
-
-void CRenderMgr::UpdateEffectTexture()
-{
-	Ptr<CTexture> BurnRampTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\burn\\BurnRamp.dds");
-	BurnRampTex->UpdateData(16, PIPELINE_STAGE::ALL_STAGE);
-	BurnRampTex->UpdateData_CS(16, true);
 }
 
 void CRenderMgr::CopyRenderTarget()

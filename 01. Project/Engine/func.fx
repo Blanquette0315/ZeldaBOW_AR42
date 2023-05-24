@@ -216,6 +216,13 @@ static float GaussianFilter[5][5] =
     0.003f, 0.0133f, 0.0219f, 0.0133f, 0.003f,
 };
 
+static float GaussianFilter33[3][3] =
+{
+    0.0625f, 0.125f, 0.0625f,
+    0.125f, 0.25f, 0.125f,
+    0.0625f, 0.125f, 0.0625f,
+};
+
 // 가우시안 샘플링 함수
 // 직접 만든 샘플러는 WRAP이 없어서 직접 구현을 해주어야 한다.
 float4 GaussianSample(float2 _UV)

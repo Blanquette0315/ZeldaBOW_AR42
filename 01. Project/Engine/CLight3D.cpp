@@ -53,6 +53,13 @@ void CLight3D::finaltick()
 
 	// RenderMgr에 등록시킨 후, 인덱스를 리턴 받는다.
 	m_iLightIdx = CRenderMgr::GetInst()->RegisterLight3D(this);
+
+	if (LIGHT_TYPE::DIRECTIONAL == m_Info.iLightType)
+	{
+		m_pLightCam->Transform()->SetRelativePos(Transform()->GetWorldPos());
+		m_pLightCam->Transform()->SetRelativeRotation(DecomposeRotMat(Transform()->GetWorldRotMat()));
+		m_pLightCam->finaltick_module();
+	}
 }
 
 void CLight3D::render()
@@ -72,13 +79,6 @@ void CLight3D::render()
 
 	if (nullptr == m_pLightMtrl)
 		return;
-
-	if (LIGHT_TYPE::DIRECTIONAL == m_Info.iLightType)
-	{
-		m_pLightCam->Transform()->SetRelativePos(CRenderMgr::GetInst()->GetMainCam()->Transform()->GetRelativePos() - m_Info.vWorldDir * 5000.f);
-		m_pLightCam->Transform()->SetRelativeRotation(DecomposeRotMat(Transform()->GetWorldRotMat()));
-		m_pLightCam->finaltick_module();
-	}
 
 	// Transform Update
 	Transform()->UpdateData();
@@ -141,9 +141,9 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 		m_pLightMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DirLightMtrl");
 
 		m_pLightCam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHICS);
-		m_pLightCam->Camera()->SetWidth(4096.f);
+		m_pLightCam->Camera()->SetWidth(2048.f);
 		m_pLightCam->Camera()->SetAspectRatio(1.f);
-		m_pLightCam->Camera()->SetFar(20000.f);
+		m_pLightCam->Camera()->SetFar(500.f);
 	}
 
 	else if (LIGHT_TYPE::POINT == m_Info.iLightType)
