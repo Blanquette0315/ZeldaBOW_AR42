@@ -99,6 +99,9 @@ public:
 	Vector3 m_vPxLinearVelocity;
 	//bool m_bGround;
 
+	bool m_bRigidBodyData = false;
+	void SetRigidBodyData(bool _RigidBodyData);
+
 private:
 	uint32_t m_iFilterData0; // word0 is PxU32(uint32_t)
 	uint32_t m_iFilterData1;

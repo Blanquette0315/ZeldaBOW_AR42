@@ -174,17 +174,17 @@ void PhysEngine::Delete_Actor(PhysData* data)
 	//한개의 엑터 삭제
 	if (data->ActorObj != nullptr)
 	{
-		if (data->mCollider != nullptr)
-		{
-			delete data->mCollider;
-			data->mCollider = nullptr;
-		}
-
-		if (data->mMeterial != nullptr)
-		{
-			delete data->mMeterial;
-			data->mMeterial = nullptr;
-		}
+		//if (data->mCollider != nullptr)
+		//{
+		//	delete data->mCollider;
+		//	data->mCollider = nullptr;
+		//}
+		//
+		//if (data->mMeterial != nullptr)
+		//{
+		//	delete data->mMeterial;
+		//	data->mMeterial = nullptr;
+		//}
 		PxRigidStatic* rig = reinterpret_cast<PxRigidStatic*>(data->ActorObj);
 		m_Scene->removeActor(*rig);
 
@@ -195,8 +195,11 @@ void PhysEngine::Delete_Actor(PhysData* data)
 	data->ActorObj = nullptr;
 	data->BOWObj = nullptr;
 
-	delete data;
-	data = nullptr;
+	if (!data->m_bRigidBodyData)
+	{
+		delete data;
+		data = nullptr;
+	}
 
 }
 

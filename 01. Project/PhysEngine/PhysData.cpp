@@ -141,6 +141,11 @@ bool PhysData::GetTriggerExit()
 	return off;
 }
 
+void PhysData::SetRigidBodyData(bool _RigidBodyData)
+{
+	m_bRigidBodyData = _RigidBodyData;
+}
+
 void PhysData::SetFilterData0(FILTER_GROUP _eFilterGroup)
 {
 	m_iFilterData0 |= (uint32_t)_eFilterGroup;

@@ -23,6 +23,7 @@ CRigidBody::CRigidBody()
 {
 	// base is m_vecPhysData[0]
 	m_vecPhysData.push_back(new PhysData);
+	m_vecPhysData[0]->SetRigidBodyData(true);
 }
 
 CRigidBody::CRigidBody(const CRigidBody& _origin)
@@ -61,6 +62,8 @@ CRigidBody::CRigidBody(const CRigidBody& _origin)
 	Vec3 vLockAxisRot = _origin.m_vecPhysData[0]->GetLockAxis_Rotation();
 	m_vecPhysData[0]->SetLockAxis_Position(vLockAxisPos.x, vLockAxisPos.y, vLockAxisPos.z);
 	m_vecPhysData[0]->SetLockAxis_Rotation(vLockAxisRot.x, vLockAxisRot.y, vLockAxisRot.z);
+
+	m_vecPhysData[0]->SetRigidBodyData(true);
 }
 
 CRigidBody::~CRigidBody()
@@ -72,6 +75,8 @@ CRigidBody::~CRigidBody()
 			if (nullptr != m_vecPhysData[i])
 			{
 				PhysX_Delete_Actor(m_vecPhysData[i]);
+				delete m_vecPhysData[i];
+				//m_vecPhysData[i] = nullptr;
 			}
 		}
 	}
@@ -388,6 +393,7 @@ void CRigidBody::UpdatePhysDataVec()
 		m_vecPhysData[i]->WorldPosition = m_vecPhysData[0]->WorldPosition;
 		m_vecPhysData[i]->SetFilterData0(GetLayerBitFromIdx(GetOwner()->GetLayerIdx()));
 		m_vecPhysData[i]->SetFilterData1(GetLayerMaskBitFromIdx(GetOwner()->GetLayerIdx()));
+		m_vecPhysData[i]->SetRigidBodyData(true);
 	}
 }
 
@@ -461,7 +467,6 @@ void CRigidBody::SetMeshCollider()
 	PxSize.x /= 100.f;
 	PxSize.y /= 100.f;
 	PxSize.z /= 100.f;
-
 	if (10 < iSubsetCount)
 	{
 		int iCount = (int)ceil((float)iSubsetCount / 10.f);
@@ -527,7 +532,6 @@ void CRigidBody::SetTerrainCollider(int _iVertexSize, Vector3* _vecVertexList, V
 	int iforCount = (int)ceil((float)_iVertexSize / iFacePerCount);
 
 	UINT* arrIndex = new UINT[iFacePerCount];
-
 	for (int i = 0; i < iforCount; ++i)
 	{
 		if (0 != i)

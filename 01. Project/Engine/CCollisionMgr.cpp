@@ -46,7 +46,8 @@ void CCollisionMgr::tick()
 					{
 						PhysData* TargetData = pPhysData->TriggerExit_List[i];
 						if (TargetData == nullptr) { continue; }
-						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd)
+						if ((unsigned long long)TargetData->BOWObj == 0xdddddddddddddddd
+							|| (unsigned long long)TargetData->BOWObj == 0x0000000000000000)
 						{
 							pPhysData->TriggerExit_List[i] = nullptr;
 							pPhysData->Exit_Count--;
