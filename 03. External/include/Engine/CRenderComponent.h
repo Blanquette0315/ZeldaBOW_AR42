@@ -20,6 +20,7 @@ protected:
 
     bool                    m_bIsDynamicMtrl;
     bool                    m_bDynamicShadow;
+    bool                    m_bStaticShadow;
 
     bool                    m_bIsRender;
 
@@ -44,6 +45,7 @@ public:
 
     void SetDynamicShadow(bool _bSet) { m_bDynamicShadow = _bSet; }
     bool IsDynamicShadow() { return m_bDynamicShadow; }
+    bool IsStaticShadow() { return m_bStaticShadow; }
 
     ULONG64 GetInstID(UINT _iMtrlIdx);
 

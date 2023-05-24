@@ -102,6 +102,7 @@ protected:
 public:
     void SortObject();
     void SortShadowObject();
+    void SortStaticShadowObject();
     void render_deferred();
     void render_deferred_transparent();
     void render_deferreddecal();

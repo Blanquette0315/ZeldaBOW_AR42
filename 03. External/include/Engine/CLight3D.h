@@ -44,6 +44,7 @@ public:
     virtual void finaltick() override;
     void render();
     void render_depthmap();
+    void render_staticdepthmap();
 
 public:
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;

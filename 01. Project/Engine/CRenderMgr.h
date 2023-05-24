@@ -41,6 +41,7 @@ public:
 	void init();
 	void tick();
 	void render();
+	void render_static_shadowdepth();
 
 private:
 	void render_game();

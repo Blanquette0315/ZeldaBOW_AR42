@@ -23,7 +23,7 @@ private:
 
 public:
 	// 0 (무한반복) 0 ~ 1(Volume)
-	int Play(int _iRoopCount, float _fVolume = 1.f, bool _bOverlap = false, CGameObject* _pObj = nullptr, Vec3 _vPos = Vec3::Zero, Vec2 _v3DMinMaxDistance = Vec2(10.f, 100.f));
+	int Play(int _iRoopCount, float _fVolume = 1.f, bool _bOverlap = false, CGameObject* _pObj = nullptr, Vec3 _vPos = Vec3::Zero, Vec2 _v3DMinMaxDistance = Vec2(100.f, 200.f));
 	int PlayBGM(float _fVolume = 1.f);
 	void Stop();
 

@@ -96,6 +96,7 @@ void CLight3D::render()
 		m_pLightMtrl->SetScalarParam(SCALAR_PARAM::MAT_0, &matLightVP);
 		m_pLightMtrl->SetTexParam(TEX_PARAM::TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"DepthMapTex"));
 		m_pLightMtrl->SetTexParam(TEX_PARAM::TEX_5, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
+		m_pLightMtrl->SetTexParam(TEX_PARAM::TEX_7, CResMgr::GetInst()->FindRes<CTexture>(L"StaticDepthMapTex"));
 	}
 
 	// ·£´õ¸µ
@@ -105,6 +106,12 @@ void CLight3D::render()
 void CLight3D::render_depthmap()
 {
 	m_pLightCam->Camera()->SortShadowObject();
+	m_pLightCam->Camera()->render_depthmap();
+}
+
+void CLight3D::render_staticdepthmap()
+{
+	m_pLightCam->Camera()->SortStaticShadowObject();
 	m_pLightCam->Camera()->render_depthmap();
 }
 
@@ -143,7 +150,7 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 		m_pLightCam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHICS);
 		m_pLightCam->Camera()->SetWidth(2048.f);
 		m_pLightCam->Camera()->SetAspectRatio(1.f);
-		m_pLightCam->Camera()->SetFar(500.f);
+		m_pLightCam->Camera()->SetFar(2000.f);
 	}
 
 	else if (LIGHT_TYPE::POINT == m_Info.iLightType)

@@ -100,6 +100,20 @@ void CRenderMgr::render()
 	}
 }
 
+void CRenderMgr::render_static_shadowdepth()
+{
+	m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW]->Clear();
+	m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW]->OMSet();
+
+	for (size_t i = 0; i < m_vecLight3D.size(); ++i)
+	{
+		if (LIGHT_TYPE::DIRECTIONAL == m_vecLight3D[i]->GetLightType())
+		{
+			m_vecLight3D[i]->render_staticdepthmap();
+		}
+	}
+}
+
 void CRenderMgr::render_game()
 {
 	// Dir 광원 시점에서 Shadow맵핑을 위한 DepthMap 생성
