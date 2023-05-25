@@ -109,6 +109,9 @@
     <FxCompile Include="link_particle_arrow_CS.fx">
       <Filter>HLSL\Compute\ParticleUpdateShader\Link</Filter>
     </FxCompile>
+    <FxCompile Include="Monster_particle_dust_CS.fx">
+      <Filter>HLSL\Compute\ParticleUpdateShader\Monster</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -893,6 +896,9 @@
     </Filter>
     <Filter Include="HLSL\Compute\ParticleUpdateShader\Link">
       <UniqueIdentifier>{f3e35f41-f7d7-4a7f-a56b-e283542f54da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\ParticleUpdateShader\Monster">
+      <UniqueIdentifier>{39da6428-6434-4242-91ba-3b9807c20d12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

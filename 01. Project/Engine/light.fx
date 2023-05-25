@@ -69,7 +69,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     
     tLightColor LightColor = (tLightColor) 0.f;
     CalcLight3D(vViewPos.xyz, vViewNormal.xyz, g_int_0, LightColor);
-        
+    
     // shadow
     // ViewPos -> WorldPos
     float3 vWorldPos = mul(float4(vViewPos.xyz, 1.f), g_matViewInv).xyz;
@@ -121,24 +121,26 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     
     if (fShadowPow <= 0.4f)
     {
+        fShadowPow = 0.f;
+        
         if (g_int_3 > -1)
         {
             int2 iUV = vDepthMapUV.xy * int2(DepthMapResolution, DepthMapResolution);
 
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 5; j++)
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 5; i++)
                 {
-                    vDepthMapUV.x = (float) (iUV.x + (j - 1) * (g_int_3 + 1)) / DepthMapResolution;
-                    vDepthMapUV.y = (float) (iUV.y + (i - 1) * (g_int_3 + 1)) / DepthMapResolution;
-                    float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
+                    vDepthMapUV.x = (float) (iUV.x + (j - 2) * (g_int_3 + 1)) / DepthMapResolution;
+                    vDepthMapUV.y = (float) (iUV.y + (i - 2) * (g_int_3 + 1)) / DepthMapResolution;
+                    float fDepth = DepthMap.Sample(g_sam_1, vDepthMapUV).r;
             
                     if (0.f != fDepth
-                && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
-                && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+                && 0.f < vDepthMapUV.x && vDepthMapUV.x < 0.99f
+                && 0.f < vDepthMapUV.y && vDepthMapUV.y < 0.99f
                 && vLightProj.z >= fDepth + Bias)
                     {
-                        fShadowPow += 0.9f * GaussianFilter33[j][i];
+                        fShadowPow += 0.9f * GaussianFilter[j][i];
                     }
                 }
             }
@@ -146,10 +148,10 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         else
         {
             float fDepth = DepthMap.Sample(g_sam_0, vDepthMapUV).r;
-    
+            
             if (0.f != fDepth
-        && 0.f <= vDepthMapUV.x && vDepthMapUV.x <= 1.f
-        && 0.f <= vDepthMapUV.y && vDepthMapUV.y <= 1.f
+        && 0.f < vDepthMapUV.x && vDepthMapUV.x < 0.99f
+        && 0.f < vDepthMapUV.y && vDepthMapUV.y < 0.99f
         && vLightProj.z >= fDepth + Bias)
             {
                 fShadowPow = 0.9f;

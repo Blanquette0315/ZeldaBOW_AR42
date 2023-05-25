@@ -1233,6 +1233,10 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader->CreateComputeShader(L"shader\\link_particle_spark_CS.fx", "CS_ParticleSpark");
 	AddRes<CComputeShader>(L"ParticleSparkShader", pShader);
 
+	pShader = new CParticleUpdateShader;
+	pShader->CreateComputeShader(L"shader\\Monster_particle_dust_CS.fx", "CS_ParticleSpark");
+	AddRes<CComputeShader>(L"ParticleDustShader", pShader);
+
 	// Animation3D Update Shader	
 	pShader = new CAnimation3DShader;
 	pShader->CreateComputeShader(L"shader\\animation3d.fx", "CS_Animation3D");

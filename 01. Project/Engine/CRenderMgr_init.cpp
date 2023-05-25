@@ -283,7 +283,7 @@ void CRenderMgr::CreateMRT()
 				 Vec4(0.f, 0.f, 0.f, 0.f)
 		};
 
-		// Depth Stencil Texture �����
+		// Depth Stencil Texture 만들기
 		Ptr<CTexture> pDepthStencilTex
 			= CResMgr::GetInst()->CreateTexture(L"DepthMapDSTex"
 				, 2048, 2048

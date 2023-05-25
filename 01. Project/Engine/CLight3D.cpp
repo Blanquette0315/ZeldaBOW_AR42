@@ -150,7 +150,7 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 		m_pLightCam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHICS);
 		m_pLightCam->Camera()->SetWidth(2048.f);
 		m_pLightCam->Camera()->SetAspectRatio(1.f);
-		m_pLightCam->Camera()->SetFar(2000.f);
+		m_pLightCam->Camera()->SetFar(100000.f);
 	}
 
 	else if (LIGHT_TYPE::POINT == m_Info.iLightType)
