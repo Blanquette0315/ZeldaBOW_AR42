@@ -59,14 +59,14 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 			pMaterial->SetScalarParam(FLOAT_2, &alltime);
 		}
 
-		if (m_pFireball != nullptr)
-		{
-			m_pFireball->GetScript<CBossFireballScript>()->Dead();
-		}
-		if (m_pFlame != nullptr)
-		{
-			m_pFlame->Destroy();
-		}
+		//if (m_pFireball != nullptr)
+		//{
+		//	m_pFireball->GetScript<CBossFireballScript>()->Dead();
+		//}
+		//if (m_pFlame != nullptr)
+		//{
+		//	m_pFlame->Destroy();
+		//}
 
 		GetOwner()->GetChildObject()[1]->Destroy();
 	}
@@ -82,10 +82,14 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		if (m_pFireball != nullptr)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
+			m_pFireball = nullptr;
 		}
 		if (m_pFlame != nullptr)
 		{
 			m_pFlame->Destroy();
+			m_pFlame = nullptr;
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameTornade_Charge.wav");
+			pSound->Stop();
 		}
 	}
 	else if (_vPos.y == 10000.f)
@@ -430,6 +434,10 @@ void CBossScript::Attack_Straight()
 	}
 	else if (m_fAcctime >= 3.1333f && m_iMotion == 2)
 	{
+		Vec3 vPos = Transform()->GetRelativePos();
+		vPos.x += Transform()->GetRelativeDir(DIR::FRONT).x * 100.f;
+		vPos.z += Transform()->GetRelativeDir(DIR::FRONT).z * 100.f;
+		Instantiate(CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Dust_Particle_boss.pref", L"prefab\\Dust_Particle_boss.pref")->Instantiate(), vPos, 0);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBoss_SwordHitGround.wav");
 		pSound->Play(1, MONSTER_VOLUME * 0.5f, true, GetOwner());
 		++m_iMotion;
@@ -578,6 +586,7 @@ void CBossScript::Attack_Chemical_Big()
 	{
 		m_pFireball->GetScript<CBossFireballScript>()->setBossPos(Transform()->GetWorldPos());
 		m_pFireball->GetScript<CBossFireballScript>()->Fire(AI->FindPlayerPos());
+		m_pFlame = nullptr;
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameBall_Throw.wav");
 		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;
