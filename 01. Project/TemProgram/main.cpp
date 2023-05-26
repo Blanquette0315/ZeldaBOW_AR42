@@ -94,7 +94,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 #ifdef _DEBUG
                 fDeltaTime -= FDT_TICK * ( floor(fDeltaTime / FDT_TICK) );
 #else
-                fDeltaTime -= FDT;
+                fDeltaTime -= FDT_TICK * (floor(fDeltaTime / FDT_TICK));
+                //fDeltaTime -= FDT;
 #endif
                 // 게임 Engine 매 프레임 마다 실행.
                 CEngine::GetInst()->progress();
