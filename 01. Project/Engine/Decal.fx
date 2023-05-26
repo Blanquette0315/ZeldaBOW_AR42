@@ -169,7 +169,6 @@ DeferredPS_OUT PS_DeferredDecal(VS_OUT _in)
         vLocalPos = mul(mul(vViewPos, g_matViewInv), g_matWorldInv);
     }
      
-    
     // 우리가 큐브를 설계할때 가로 세로 0.5로 배치해 길이 1짜리로 잡았기 때문에 이걸로 판별이 가능하다.
     // 즉, x,y,z가 0.5 범위 내에 있는지만 체크해 주면 된다. 하지만 우리가 -0.5~0.5로 잡았기 때문에 절대값을 이용해주어야 한다.
     if (abs(vLocalPos.x) > 0.5f || abs(vLocalPos.y) > 0.5f || abs(vLocalPos.z) > 0.5f)

@@ -372,6 +372,7 @@
     <ClCompile Include="CFBXLoader.cpp">
       <Filter>Engine\07. Resource\07. MeshData</Filter>
     </ClCompile>
+    <ClCompile Include="CTrailEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DetourAlloc.h">
@@ -656,6 +657,7 @@
     <ClInclude Include="CFBXLoader.h">
       <Filter>Engine\07. Resource\07. MeshData</Filter>
     </ClInclude>
+    <ClInclude Include="CTrailEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -893,6 +895,9 @@
     </Filter>
     <Filter Include="HLSL\Compute\ParticleUpdateShader\Link">
       <UniqueIdentifier>{f3e35f41-f7d7-4a7f-a56b-e283542f54da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\Trail">
+      <UniqueIdentifier>{977cf88a-51a3-4fc2-9413-d4c1f9d94e8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

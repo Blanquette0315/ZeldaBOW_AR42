@@ -257,6 +257,10 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 			case COMPONENT_TYPE::LANDSCAPE:
 				pComponent = new CLandScape;
 				break;
+			case COMPONENT_TYPE::TRAILEFFECT:
+				pComponent = new CTrailE;
+				break;
+
 			}
 			YAML::Node componentNode = _node["Component"];
 			pObject->AddComponent(pComponent);
