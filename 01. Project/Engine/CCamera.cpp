@@ -35,11 +35,17 @@ CCamera::CCamera()
 	, m_iCamIdx(0)
 	, m_ray{}
 	, m_bUseDeferred(true)
+	, m_tCamEffect{}
+	, m_pCamEffectMtrl(nullptr)
+	, m_pCamEffMesh(nullptr)
+	, m_bIsCamEffect(false)
 {
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
 	m_fWidth = vRenderResolution.x;
 	m_matRotX180 = XMMatrixRotationX(3.14159f);
+
+	m_pCamEffMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
 }
 
 CCamera::~CCamera()
@@ -205,6 +211,7 @@ void CCamera::render()
 	render_postprocess();
 
 	render_UI();
+	render_CamEffect();
 }
 
 void CCamera::SetLayerMask(const wstring& _strLayerName)
@@ -879,6 +886,45 @@ void CCamera::render_UI()
 	for (size_t i = 0; i < m_vecUI.size(); ++i)
 	{
 		m_vecUI[i]->render();
+	}
+}
+
+void CCamera::render_CamEffect()
+{
+	switch (m_tCamEffect.eEffect)
+	{
+	case CAM_EFFECT::NONE:
+		break;
+
+	case CAM_EFFECT::FADE_IN:
+	{
+		m_pCamEffectMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"CamEffFadeInMtrl");
+		m_bIsCamEffect = true;
+	}
+		break;
+
+	case CAM_EFFECT::FADE_OUT:
+	{
+		m_pCamEffectMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"CamEffFadeOutMtrl");
+		m_bIsCamEffect = true;
+	}
+		break;
+	}
+
+	if (m_tCamEffect.eEffect != CAM_EFFECT::NONE && m_bIsCamEffect)
+	{
+		m_tCamEffect.fAccTime += FDT;
+		m_fCamEffAcctime = (m_tCamEffect.fAccTime / m_tCamEffect.fDuration);
+
+		if (1.f <= m_fCamEffAcctime)
+		{
+			m_fCamEffAcctime = 1.f;
+			m_tCamEffect = {};
+			m_bIsCamEffect = false;
+		}
+		m_pCamEffectMtrl->SetScalarParam(SCALAR_PARAM::FLOAT_0, &m_fCamEffAcctime);
+		m_pCamEffectMtrl->UpdateData();
+		m_pCamEffMesh->render();
 	}
 }
 

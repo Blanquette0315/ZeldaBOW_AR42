@@ -65,13 +65,21 @@ void CLevelMgr::ChangeLevel(CLevel* _NextLevel)
 		m_pCurLevel->SetState(LEVEL_STATE::STOP);
 		pPrevLevel = m_pCurLevel;
 	}
-	
+
 	m_pCurLevel = _NextLevel;
 	// 변경될 Level이 지닌 Collsion 충돌 설정 값으로 변경해준다.
 	_NextLevel->RefreshCollsionSet();
 
 	if (nullptr != pPrevLevel)
 		delete pPrevLevel;
+
+#ifdef _DEBUG
+#else 
+	tEvent EVT = {};
+	EVT.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
+	EVT.wParam = (DWORD_PTR)LEVEL_STATE::PLAY;
+	CEventMgr::GetInst()->AddEvent(EVT);
+#endif
 }
 
 void CLevelMgr::ChangeLevelState(LEVEL_STATE _State)

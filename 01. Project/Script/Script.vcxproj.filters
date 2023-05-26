@@ -97,6 +97,9 @@
     <Filter Include="Scripts\Monster\Hinox">
       <UniqueIdentifier>{8697f918-3dcf-4c44-a165-73389a2f6928}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Dgn">
+      <UniqueIdentifier>{a44d2d27-5e2a-4be9-80c9-ab8ef86218b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -223,6 +226,15 @@
     <ClInclude Include="CHinoxScript.h">
       <Filter>Scripts\Monster\Hinox</Filter>
     </ClInclude>
+    <ClInclude Include="CDgnEtTriggerScript.h">
+      <Filter>Scripts\Dgn</Filter>
+    </ClInclude>
+    <ClInclude Include="CDgnEnterScript.h">
+      <Filter>Scripts\Dgn</Filter>
+    </ClInclude>
+    <ClInclude Include="CDgnBeginScript.h">
+      <Filter>Scripts\Dgn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -348,6 +360,15 @@
     </ClCompile>
     <ClCompile Include="CHinoxScript.cpp">
       <Filter>Scripts\Monster\Hinox</Filter>
+    </ClCompile>
+    <ClCompile Include="CDgnEtTriggerScript.cpp">
+      <Filter>Scripts\Dgn</Filter>
+    </ClCompile>
+    <ClCompile Include="CDgnEnterScript.cpp">
+      <Filter>Scripts\Dgn</Filter>
+    </ClCompile>
+    <ClCompile Include="CDgnBeginScript.cpp">
+      <Filter>Scripts\Dgn</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

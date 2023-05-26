@@ -128,6 +128,13 @@ enum PIPELINE_STAGE
 	ALL_STAGE = VS | HS | DS | GS | PS,
 };
 
+enum class CAM_EFFECT
+{
+	NONE,
+	FADE_IN,
+	FADE_OUT,
+};
+
 enum class SHADER_DOMAIN
 {
 	DOMAIN_DEFERRED_OPAQUE,	
