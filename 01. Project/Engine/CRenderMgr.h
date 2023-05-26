@@ -28,8 +28,9 @@ private:
 	Ptr<CTexture>			m_RTCopyTex;		// 랜더 타겟 복사 텍스처
 												// PostProcess를 수행하기 위해서 랜더 타겟 텍스처가 필요한데, RenderTargetView이면서, SRV인것은 말이 안되기 때문에 복사본을 하나 만들어
 												// 해당 사본이 SRV의 역할을 하고, RTT는 그대로 RTV로 바인딩을 건다.
-
+	
 	Ptr<CTexture>			m_PTCopyTex;
+	Ptr<CTexture>			m_DataCopyTex;
 
 	vector<tFont>			m_arrFont;			// 폰트 출력을 위한 vector
 
@@ -76,6 +77,7 @@ public:
 
 	// 실험용 코드 PositionTargetTex 복사
 	void CopyPositionTarget();
+	void CopyDataTarget();
 
 	// DebugDraw는 릴리즈 버전에서는 제외 되어야 하므로 ifdef을 이용해 처리해주었다.
 	void DebugDraw(DEBUG_SHAPE _eShape, Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fRadius, float _fAngle, float _fDuration)

@@ -76,8 +76,8 @@ cbuffer MATERIAL : register(b1)
     int g_iTex2UV;
     int g_iTex3UV;
     int g_iTex4UV;
-    int g_iTex5UV;
-    int g_iTex6UV;
+    int g_bInstancing;
+    int g_iLayerIdx;
 };
 
 cbuffer GLOBAL : register(b2)
@@ -146,5 +146,7 @@ SamplerState g_sam_0 : register(s0); // Anisotropic Sampler
 SamplerState g_sam_1 : register(s1); // Point Sampler
 SamplerState g_sam_2 : register(s2);
 SamplerState g_sam_3 : register(s3);
+
+#define Layer_Map 0
 
 #endif

@@ -173,6 +173,7 @@ struct tInstancingData
 	Matrix matWorld;
 	Matrix matWV;
 	Matrix matWVP;
+	Matrix matWInv;
 	int    iRowIdx;
 };
 
@@ -271,7 +272,9 @@ struct tMtrlConst
 	int HasTex[(UINT)TEX_PARAM::TEX_END]; // 해당 멤버는 해당 텍스처 배열에 바인딩이 걸린게 있는지 확인하기 위한 멤버이다.
 	int	arrAnimData[4];	// 3D Animation 정보
 	int iUVCount;
-	int iTexUVIndex[7]; // UV index that Tex uses 
+	int iTexUVIndex[5]; // UV index that Tex uses 
+	int bInstancing;
+	int iLayerIdx;
 };
 
 struct tGlobalData

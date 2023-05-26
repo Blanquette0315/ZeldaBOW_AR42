@@ -13,6 +13,8 @@ private:
     Ptr<CGraphicsShader> m_pShader;
 
 public:
+    void SetLayerIdx(int _iIdx) { m_tConst.iLayerIdx = _iIdx; }
+    void SetInstancing(bool _b) { m_tConst.bInstancing = _b; }
     void SetScalarParam(SCALAR_PARAM _eScalarType, void* _pData);
     void GetScalarParam(SCALAR_PARAM _eScalarType, void* _pOut);
 

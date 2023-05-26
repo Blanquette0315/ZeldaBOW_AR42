@@ -587,6 +587,23 @@ void CLinkAnimScript::Func_LastSwing()
 	CResMgr::GetInst()->FindRes<CSound>(strKey)->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
 }
 
+void CLinkAnimScript::Func_CreateFootStep(int _iCurFrame, LINK_BONE_STRING _eLeftRightToe)
+{
+	if (m_EffectFootStep.Get() == nullptr)
+		return;
+
+	const tMTBone& pBone = m_pAnimator->GetBoneByIdx((UINT)_eLeftRightToe);
+	Vec3 vPos = pBone.vecKeyFrame[_iCurFrame].vTranslate;
+
+	CGameObject* m_pFootStepDecal = m_EffectFootStep->Instantiate();
+	vPos = XMVector3TransformCoord(vPos,Transform()->GetWorldMat());
+	
+	Vec3 vRot = Transform()->GetRelativeRotation();
+	m_pFootStepDecal->Transform()->SetRelativeRotation(vRot);
+	// vPos += Transform()->GetRelativePos();
+	Instantiate(m_pFootStepDecal, vPos, 0);
+}
+
 void CLinkAnimScript::Func_BowDrawSound()
 {
 	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Bow_Draw0.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
@@ -698,53 +715,79 @@ void CLinkAnimScript::Func_LowerFootstepSound()
 	if (m_pCurAnimNodeLower == nullptr)
 		return;
 
+	static int iCheck = -1;
+
 	int iFrameIdx = m_pCurAnimNodeLower->pAnim->GetCurFrame();
 
-	if (iFrameIdx == 499 || iFrameIdx == 522 || iFrameIdx == 545 || iFrameIdx == 567)
+	if (iCheck != iFrameIdx)
 	{
-		Func_WalkSound_R();
-	}
-	else if (iFrameIdx == 511 || iFrameIdx == 534 || iFrameIdx == 557 || iFrameIdx == 579)
-	{
-		Func_WalkSound_L();
-	}
-	else if (iFrameIdx == 596 || iFrameIdx == 616 || iFrameIdx == 642 || iFrameIdx == 667)
-	{
-		Func_RunSound_R();
-	}
-	else if (iFrameIdx == 607 || iFrameIdx == 628 || iFrameIdx == 654 || iFrameIdx == 679)
-	{
-		Func_RunSound_L();
+		if (iFrameIdx == 499 || iFrameIdx == 522 || iFrameIdx == 545 || iFrameIdx == 567)
+		{
+			Func_WalkSound_R();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_R);
+		}
+		else if (iFrameIdx == 511 || iFrameIdx == 534 || iFrameIdx == 557 || iFrameIdx == 579)
+		{
+			Func_WalkSound_L();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_L);
+		}
+		else if (iFrameIdx == 596 || iFrameIdx == 616 || iFrameIdx == 642 || iFrameIdx == 667)
+		{
+			Func_RunSound_R();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_R);
+		}
+		else if (iFrameIdx == 607 || iFrameIdx == 628 || iFrameIdx == 654 || iFrameIdx == 679)
+		{
+			Func_RunSound_L();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_L);
+		}
+		iCheck = iFrameIdx;
 	}
 }
 
 void CLinkAnimScript::Func_UpperFootstepSound()
 {
+	if (m_pCurAnimNodeLower)
+		return;
+
 	int iFrameIdx = m_pCurAnimNode->pAnim->GetCurFrame();
 
-	if (iFrameIdx == 53)
+	static int iCheck = -1;
+
+	if (iCheck != iFrameIdx)
 	{
-		Func_WalkSound_R();
-	}
-	else if (iFrameIdx == 66)
-	{
-		Func_WalkSound_L();
-	}
-	else if (iFrameIdx == 115 || iFrameIdx == 475 || iFrameIdx == 1817)
-	{
-		Func_RunSound_R();
-	}
-	else if (iFrameIdx == 127 || iFrameIdx == 487 || iFrameIdx == 1829)
-	{
-		Func_RunSound_L();
-	}
-	else if (iFrameIdx == 190)
-	{
-		Func_DashSound_R();
-	}
-	else if (iFrameIdx == 202)
-	{
-		Func_DashSound_L();
+		if (iFrameIdx == 53)
+		{
+			Func_WalkSound_R();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_R);
+		}
+		else if (iFrameIdx == 66)
+		{
+			Func_WalkSound_L();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_L);
+		}
+		else if (iFrameIdx == 115 || iFrameIdx == 475 || iFrameIdx == 1817)
+		{
+			Func_RunSound_R();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_R);
+		}
+		else if (iFrameIdx == 127 || iFrameIdx == 487 || iFrameIdx == 1829)
+		{
+			Func_RunSound_L();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_L);
+		}
+		else if (iFrameIdx == 190)
+		{
+			Func_DashSound_R();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_R);
+		}
+		else if (iFrameIdx == 202)
+		{
+			Func_DashSound_L();
+			Func_CreateFootStep(iFrameIdx, LINK_BONE_STRING::Toe_L);
+		}
+
+		iCheck = iFrameIdx;
 	}
 }
 

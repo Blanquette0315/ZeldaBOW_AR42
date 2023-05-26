@@ -20,6 +20,7 @@
 #include "CKeyMgr.h"
 #include "CInstancingBuffer.h"
 #include "CAnimator3D.h"
+#include "CDecal.h"
 
 CCamera::CCamera()
 	: CComponent(COMPONENT_TYPE::CAMERA)
@@ -242,6 +243,8 @@ void CCamera::SortObject()
 {
 	for (auto& pair : m_mapInstGroup_D)
 		pair.second.clear();
+	for (auto& pair : m_mapInstGroup_DD)
+		pair.second.clear();
 	for (auto& pair : m_mapInstGroup_F)
 		pair.second.clear();
 	for (auto& pair : m_mapInstGroup_FT)
@@ -308,6 +311,7 @@ void CCamera::SortObject()
 						case SHADER_DOMAIN::DOMAIN_OPAQUE:
 						case SHADER_DOMAIN::DOMAIN_MASK:
 						case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
+						case  SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
 						{
 							map<ULONG64, vector<tInstObj>>* pMap = NULL;
 							Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
@@ -327,6 +331,10 @@ void CCamera::SortObject()
 								}
 
 								pMap = &m_mapInstGroup_D;
+							}
+							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL)
+							{
+								pMap = &m_mapInstGroup_DD;
 							}
 							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
 								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_MASK
@@ -363,11 +371,11 @@ void CCamera::SortObject()
 							}
 						}
 						break;
-						case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
-						{
-							m_vecDeferredDecal.push_back(vecObj[j]);
-						}
-							break;
+						//case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
+						//{
+						//	m_vecDeferredDecal.push_back(vecObj[j]);
+						//}
+							//break;
 						case SHADER_DOMAIN::DOMAIN_DECAL:
 						{
 							m_vecDecal.push_back(vecObj[j]);
@@ -547,9 +555,108 @@ void CCamera::render_deferred_transparent()
 
 void CCamera::render_deferreddecal()
 {
-	for (size_t i = 0; i < m_vecDeferredDecal.size(); ++i)
+	for (auto& pair : m_mapSingleObj)
 	{
-		m_vecDeferredDecal[i]->render();
+		pair.second.clear();
+	}
+
+	tInstancingData tInstData = {};
+
+	for (auto& pair : m_mapInstGroup_DD)
+	{
+		if (pair.second.empty())
+			continue;
+
+		if (pair.second.size() <= 1
+			|| pair.second[0].pObj->Animator2D()
+			|| pair.second[0].pObj->GetRenderComponent()->GetCurMaterial(pair.second[0].iMtrlIdx)->GetShader()->GetVSInst() == nullptr)
+		{
+			for (UINT i = 0; i < pair.second.size(); ++i)
+			{
+				map<INT_PTR, vector<tInstObj>>::iterator iter
+					= m_mapSingleObj.find((INT_PTR)pair.second[i].pObj);
+
+				if (iter != m_mapSingleObj.end())
+				{
+					iter->second.push_back(pair.second[i]);
+				}
+				else
+				{
+					m_mapSingleObj.insert(make_pair((INT_PTR)pair.second[i].pObj, vector<tInstObj>{pair.second[i]}));
+				}
+			}
+			continue;
+		}
+
+		CGameObject* pObj = pair.second[0].pObj;
+		Ptr<CMesh> pMesh = pObj->GetRenderComponent()->GetMesh();
+		Ptr<CMaterial> pMtrl = pObj->GetRenderComponent()->GetCurMaterial(pair.second[0].iMtrlIdx);
+
+		// Instancing
+		CInstancingBuffer::GetInst()->Clear();
+
+		int iRowIdx = 0;
+		bool bHasAnim3D = false;
+		for (UINT i = 0; i < pair.second.size(); ++i)
+		{
+			tInstData.matWorld = pair.second[i].pObj->Transform()->GetWorldMat();
+			tInstData.matWV = tInstData.matWorld * m_matView;
+			tInstData.matWVP = tInstData.matWV * m_matProj;
+			tInstData.matWInv = pair.second[i].pObj->Transform()->GetWorldMatInv();
+
+			if (pair.second[i].pObj->Animator3D())
+			{
+				pair.second[i].pObj->Animator3D()->UpdateData();
+				tInstData.iRowIdx = iRowIdx++;
+				CInstancingBuffer::GetInst()->AddInstancingBoneMat(pair.second[i].pObj->Animator3D()->GetFinalBoneMat());
+				bHasAnim3D = true;
+			}
+			else
+				tInstData.iRowIdx = -1;
+
+			CInstancingBuffer::GetInst()->AddInstancingData(tInstData);
+		}
+
+		CInstancingBuffer::GetInst()->SetData();
+
+		if (bHasAnim3D)
+		{
+			pMtrl->SetAnim3D(true);
+			pMtrl->SetBoneCount(pMesh->GetBoneCount());
+		}
+
+		if (pObj->Decal())
+		{
+			CRenderMgr::GetInst()->CopyPositionTarget();
+			CRenderMgr::GetInst()->CopyDataTarget();
+			pMtrl->SetTexParam(TEX_1, pObj->Decal()->GetDecalTexture());
+			pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PTCopyTex"));
+			pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DataCopyTex"));
+			pMtrl->SetInstancing(true);
+		}
+		pMtrl->UpdateData_Inst();
+		pMesh->render_instancing(pair.second[0].iMtrlIdx);
+
+		if (bHasAnim3D)
+		{
+			pMtrl->SetAnim3D(false);
+			pMtrl->SetBoneCount(0);
+		}
+	}
+
+	for (auto& pair : m_mapSingleObj)
+	{
+		if (pair.second.empty())
+			continue;
+
+		pair.second[0].pObj->Transform()->UpdateData();
+		pair.second[0].pObj->GetRenderComponent()->GetCurMaterial()->SetInstancing(false);
+		pair.second[0].pObj->GetRenderComponent()->render();
+
+		if (pair.second[0].pObj->Animator3D())
+		{
+			pair.second[0].pObj->Animator3D()->ClearData();
+		}
 	}
 }
 

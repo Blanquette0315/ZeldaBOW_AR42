@@ -755,6 +755,11 @@ void CResMgr::CreateDefaultGrapicsShader()
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WVP", 1, 2);
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WVP", 1, 3);
 
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 0);
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 1);
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 2);
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 3);
+
 	AddInputLayout(DXGI_FORMAT_R32_UINT, "ROWINDEX", 1, 0);
 
 	CGraphicsShader* pShader = nullptr;
