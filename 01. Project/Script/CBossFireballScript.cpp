@@ -60,7 +60,6 @@ void CBossFireballScript::tick()
 			++m_iMotion;
 			m_vDir = m_vPlayerPos + Vec3(0.f, 10.f, 0.f) - Transform()->GetWorldPos();
 			m_vDir.Normalize();
-			CLevelMgr::GetInst()->GetCurLevel()->ChangeObjectLayer(GetOwner(), 8);
 		}
 		Vec3 vPos = Transform()->GetRelativePos();
 		vPos += m_vDir * 50.f * FDT;
@@ -89,7 +88,7 @@ void CBossFireballScript::tick()
 
 void CBossFireballScript::BeginOverlap(CGameObject* _pOther)
 {
-	if (_pOther->GetLayerIdx() == 5)
+	if (_pOther->GetLayerIdx() == 5 && m_eCurrentState == Monster_State::MISS)
 	{
 		CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
 		if (pMonsterScr == nullptr)
@@ -133,7 +132,7 @@ void CBossFireballScript::BeginOverlap(CGameObject* _pOther)
 
 void CBossFireballScript::Overlap(CGameObject* _pOther)
 {
-	if (_pOther->GetLayerIdx() == 5)
+	if (_pOther->GetLayerIdx() == 5 && m_eCurrentState == Monster_State::MISS)
 	{
 		CMonsterScript* pMonsterScr = _pOther->GetScript<CMonsterScript>();
 		if (pMonsterScr == nullptr)
@@ -175,7 +174,8 @@ void CBossFireballScript::Overlap(CGameObject* _pOther)
 	}
 	else
 	{
-		Dead();
+		if(m_eCurrentState != Monster_State::IDLE)
+			Dead();
 	}
 }
 

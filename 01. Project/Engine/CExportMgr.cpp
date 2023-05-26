@@ -45,7 +45,6 @@ void CExportMgr::SaveForNavMesh(CGameObject* _pObj, std::ofstream& _file)
 	
 	Ptr<CMesh> pMesh = _pObj->GetRenderComponent()->GetMesh();
 	ComPtr<ID3D11Buffer> pVB = pMesh->GetVB();
-	ComPtr<ID3D11Buffer> pIB = pMesh->GetIB();
 
 	// vertex pos
 
@@ -75,26 +74,31 @@ void CExportMgr::SaveForNavMesh(CGameObject* _pObj, std::ofstream& _file)
 	// vertex index
 
 	// D3D11_BUFFER_DESC desc;
-	pIB->GetDesc(&desc);
-	UINT numIndices = desc.ByteWidth / sizeof(DWORD);
-
-	CreateBuffer(desc.ByteWidth);
-
-	CONTEXT->CopyResource(m_pCopyBuffer.Get(), pIB.Get());
-
-	DWORD* arrIndice = new DWORD[numIndices];
-	CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
-	memcpy(arrIndice, m_MappedResource.pData, sizeof(DWORD) * numIndices);
-	CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
-
-	for (UINT i = 0; i < numIndices; i += 3)
+	for (UINT j = 0; j < pMesh->GetvecIndexInfo().size(); ++j)
 	{
-		_file << "f" <<
-			" " << arrIndice[i] + 1 + m_iAccumVtxCount <<
-			" " << arrIndice[i + 1] + 1 + m_iAccumVtxCount <<
-			" " << arrIndice[i + 2] + 1  + m_iAccumVtxCount << "\n";
+		ComPtr<ID3D11Buffer> pIB = pMesh->GetIB(j);
+		pIB->GetDesc(&desc);
+		UINT numIndices = desc.ByteWidth / sizeof(DWORD);
+
+		CreateBuffer(desc.ByteWidth);
+
+		CONTEXT->CopyResource(m_pCopyBuffer.Get(), pIB.Get());
+
+		DWORD* arrIndice = new DWORD[numIndices];
+		CONTEXT->Map(m_pCopyBuffer.Get(), 0, D3D11_MAP_READ, 0, &m_MappedResource);
+		memcpy(arrIndice, m_MappedResource.pData, sizeof(DWORD) * numIndices);
+		CONTEXT->Unmap(m_pCopyBuffer.Get(), 0);
+
+		for (UINT i = 0; i < numIndices; i += 3)
+		{
+			_file << "f" <<
+				" " << arrIndice[i] + 1 + m_iAccumVtxCount <<
+				" " << arrIndice[i + 1] + 1 + m_iAccumVtxCount <<
+				" " << arrIndice[i + 2] + 1 + m_iAccumVtxCount << "\n";
+		}
+
+		delete[] arrIndice;
 	}
-	delete[] arrIndice;
 
 	m_iAccumVtxCount += numVertices;
 }

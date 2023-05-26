@@ -2,6 +2,8 @@
 #include "CHinoxScript.h"
 #include "CLinkAnimScript.h"
 
+#include <Engine/CNavMgr.h>
+
 #define Hip GetOwner()->GetChildObject()[1]->GetScript<CMonWeaponScript>()
 #define arm_left GetOwner()->GetChildObject()[3]->GetScript<CMonWeaponScript>()
 #define arm_right GetOwner()->GetChildObject()[4]->GetScript<CMonWeaponScript>()
@@ -47,6 +49,7 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 {
 	if (m_eHinoxState == Hinox_State::SLEEP)
 	{
+		m_iMotion = 0;
 		m_eHinoxState = Hinox_State::WAKE;
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Damage.mp3");
 		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
@@ -105,6 +108,8 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			Animator3D()->Play(L"Damage_Eye_Start", false);
 			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DamageEye.mp3");
 			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\EnemyHit_Critical.wav");
+			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		}
 		else if (_vPos.y == 10000.f)
 		{
@@ -128,6 +133,7 @@ void CHinoxScript::begin()
 	Animator3D()->SetBoneUpperAndElseLower(9, 22);
 	Animator3D()->CreateBoneCheckBuffer();
 	//RigidBody()->SetGround(true);
+	CNavMgr::GetInst()->init(L"mesh\\world_navmesh.bin");
 }
 
 void CHinoxScript::tick()
@@ -144,8 +150,9 @@ void CHinoxScript::tick()
 			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
 			pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Sleep.mp3");
-			pSound->Play(0, MONSTER_VOLUME, false, nullptr, Transform()->GetWorldPos());
+			pSound->Play(0, MONSTER_VOLUME * 0.8f, false, nullptr, Transform()->GetWorldPos());
 			Animator3D()->Play(L"Sleep_Loop", true);
+			++m_iMotion;
 		}
 		return;
 	}

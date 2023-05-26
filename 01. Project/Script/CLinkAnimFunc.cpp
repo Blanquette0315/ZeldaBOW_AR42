@@ -639,7 +639,7 @@ void CLinkAnimScript::Func_JustGuardSound()
 
 void CLinkAnimScript::Func_SwordSwingSound()
 {
-	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\SE_ESf_SWING_SWORD_S.mp3")->Play(1, LINK_VOLUME * 1.f, true, GetOwner());
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\SE_ESf_SWING_SWORD_S.mp3")->Play(1, LINK_VOLUME * 0.7f, true, GetOwner());
 }
 
 void CLinkAnimScript::Func_TimeSlowSound()

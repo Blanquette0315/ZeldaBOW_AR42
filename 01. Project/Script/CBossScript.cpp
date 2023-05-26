@@ -2,6 +2,7 @@
 #include "CBossScript.h"
 
 #include "CBossFireballScript.h"
+#include <Engine/CNavMgr.h>
 
 CBossScript::CBossScript()
 	: CMonsterScript(BOSSSCRIPT)
@@ -79,6 +80,8 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		Animator3D()->Play(L"Attack_Eye_End", false);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\FantomGanon_Vo_DamageHalfLife.wav");
 		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\EnemyHit_Critical.wav");
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		if (m_pFireball != nullptr)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
@@ -119,6 +122,7 @@ void CBossScript::begin()
 	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
 	pSound->Stop();
 	RigidBody()->SetGround(true);
+	CNavMgr::GetInst()->init(L"mesh\\Dgn_navmesh.bin");
 }
 
 void CBossScript::tick()
@@ -194,7 +198,7 @@ void CBossScript::tick()
 		Instantiate(m_pBossName, Vec3(0, 370, 1), 15);
 		Instantiate(m_pBossHPUI, Vec3(0, 325, 1), 15);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\BGM_SpBattle_RemainsFireBoss.wav");
-		pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
+		pSound->Play(0, 0.8f, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 		AI->Done();
 	}
 	else if (m_eCurrentState == Monster_State::RETURN)
@@ -245,6 +249,8 @@ void CBossScript::tick()
 		m_fAcctime += FDT;
 		if (m_fAcctime >= 4.f)
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\BGM_SpBattle_RemainsFireBoss.wav");
+			pSound->Stop();
 			GetOwner()->Destroy();
 		}
 		else

@@ -155,6 +155,10 @@ void CBokoblinScript::tick()
 			Animator3D()->Play(L"jump", false);
 			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bokoblin\\Jump.mp3");
 			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+			pSound->Stop();
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Battle.mp3");
+			pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 1.63333f && m_iMotion == 1)
@@ -187,6 +191,10 @@ void CBokoblinScript::tick()
 		if (m_fAcctime >= 4.5f)
 		{
 			GetOwner()->Destroy();
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Battle.mp3");
+			pSound->Stop();
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+			pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 		}
 		else
 		{

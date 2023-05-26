@@ -23,7 +23,6 @@ CMonsterAIScript::~CMonsterAIScript()
 
 void CMonsterAIScript::begin()
 {
-	CNavMgr::GetInst()->init(L"mesh\\all_tiles_navmesh.bin");
 	m_vInitialPos = Transform()->GetWorldPos();
 }
 
