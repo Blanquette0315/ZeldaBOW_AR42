@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine/CScript.h>
+#include <Engine/CRenderMgr.h>
 #include "CScriptMgr.h"
 #include "CMonsterAIScript.h"
 #include "CMonWeaponScript.h"

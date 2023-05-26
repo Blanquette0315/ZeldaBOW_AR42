@@ -116,6 +116,8 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 
 void CBossScript::begin()
 {
+	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+	pSound->Stop();
 	RigidBody()->SetGround(true);
 }
 
@@ -191,6 +193,8 @@ void CBossScript::tick()
 		Instantiate(m_pBossHPMaxUI, Vec3(0, 325, 2), 15);
 		Instantiate(m_pBossName, Vec3(0, 370, 1), 15);
 		Instantiate(m_pBossHPUI, Vec3(0, 325, 1), 15);
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\BGM_SpBattle_RemainsFireBoss.wav");
+		pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 		AI->Done();
 	}
 	else if (m_eCurrentState == Monster_State::RETURN)
