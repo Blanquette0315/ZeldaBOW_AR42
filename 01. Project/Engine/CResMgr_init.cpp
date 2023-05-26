@@ -440,6 +440,52 @@ void CResMgr::CreateDefaultMesh()
 	CreateCylinder(0.5f, 0.5f, 1.f, 50, 1, vecVtx, vecIdx);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"CylinderMesh", pMesh);
+
+	// ===============
+	// LandScape Mesh
+	// ===============
+	// 정점 배치
+	for (UINT row = 0; row < 1 + 1; ++row)
+	{
+		for (UINT col = 0; col < 1 + 1; ++col)
+		{
+			v.vPos = Vec3((float)col, 0.f, (float)row);
+			v.vUV0 = Vec2(col, 1 - row);
+
+			v.vNormal = Vec3(0.f, 1.f, 0.f);
+			v.vTangent = Vec3(1.f, 0.f, 0.f);
+			v.vBinormal = Vec3(0.f, 0.f, -1.f);
+
+			v.vColor = Vec4(1.f, 0.f, 1.f, 1.f);
+
+			vecVtx.push_back(v);
+		}
+	}
+
+	// 인덱스
+	for (UINT row = 0; row < 1; ++row)
+	{
+		for (UINT col = 0; col < 1; ++col)
+		{
+			// 0
+			// | \
+			// 2--1
+			vecIdx.push_back(row * (1 + 1) + col + 1 + 1);
+			vecIdx.push_back(row * (1 + 1) + col + 1);
+			vecIdx.push_back(row * (1 + 1) + col);
+
+			// 1--2
+			//  \ |
+			//    0
+			vecIdx.push_back(row * (1 + 1) + col + 1);
+			vecIdx.push_back(row * (1 + 1) + col + 1 + 1);
+			vecIdx.push_back(row * (1 + 1) + col + 1 + 1 + 1);
+		}
+	}
+
+	pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	AddRes<CMesh>(L"LandscapeMesh", pMesh);
 }
 
 namespace
@@ -1231,12 +1277,65 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::NONE);
 
 	AddRes<CGraphicsShader>(L"CamEffFadeOutShader", pShader);
+
+
+	// LandScape
+	// LandScape Shader
+	pShader = new CGraphicsShader;
+	pShader->SetKey(L"LandScapeShader");
+	pShader->CreateVertexShader(L"shader\\landscape.fx", "VS_LandScape");
+	pShader->CreateHullShader(L"shader\\landscape.fx", "HS_LandScape");
+	pShader->CreateDomainShader(L"shader\\landscape.fx", "DS_LandScape");
+	pShader->CreatePixelShader(L"shader\\landscape.fx", "PS_LandScape");
+	
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+	
+	//pShader->SetRSType(RS_TYPE::WIRE_FRAME);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+	
+	pShader->AddScalarParam(INT_0, "Tess");
+	pShader->AddScalarParam(FLOAT_0, "Specular");
+	pShader->AddTexureParam(TEX_0, "HeightMap");
+	
+	AddRes<CGraphicsShader>(L"LandScapeShader", pShader);
+
+	// MaxTess Shader (LandScape)
+	D3D11_SO_DECLARATION_ENTRY pDecl[] =
+	{
+		// semantic name, semantic index, start component, component count, output slot
+		{0, "POSITION", 0, 0, 3, 0 },
+	};
+	pShader = new CGraphicsShader;
+
+	pShader->SetKey(L"MaxTessShader");
+	pShader->CreateVertexShader(L"shader\\maxlandscape.fx", "VS_MaxLandScape");
+	pShader->CreateHullShader(L"shader\\maxlandscape.fx", "HS_MaxLandScape");
+	pShader->CreateDomainShader(L"shader\\maxlandscape.fx", "DS_MaxLandScape");
+	pShader->CreateGeometryWithStreamOut(L"shader\\maxlandscape.fx", "GS_StreamOut", pDecl, _countof(pDecl));
+
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+
+	pShader->AddScalarParam(INT_0, "Tess");
+	pShader->AddScalarParam(FLOAT_0, "Specular");
+	pShader->AddTexureParam(TEX_0, "HeightMap");
+
+	AddRes(L"MaxTessShader", pShader);
 }
 
 #include "CPaintShader.h"
 #include "CParticleUpdateShader.h"
 #include "CAnimation3DShader.h"
 #include "CCopyBoneShader.h"
+#include "CRaycastShader.h"
+#include "CRaymapShader.h"
+#include "CHeightMapShader.h"
+#include "CWeightMapShader.h"
 void CResMgr::CreateDefaultComputeShader()
 {
 	CComputeShader* pShader = nullptr;
@@ -1267,6 +1366,26 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader = new CCopyBoneShader;
 	pShader->CreateComputeShader(L"shader\\copybone.fx", "CS_CopyBoneMatrix");
 	AddRes<CComputeShader>(L"CopyBoneShader", pShader);
+
+	// Raycast Shader (LandScape)
+	pShader = new CRaycastShader;
+	pShader->CreateComputeShader(L"shader\\raycast.fx", "CS_Raycast");
+	AddRes<CComputeShader>(L"RaycastShader", pShader);
+
+	// Raycast Shader (LandScape)
+	pShader = new CRaymapShader;
+	pShader->CreateComputeShader(L"shader\\raymap.fx", "CS_RayMap");
+	AddRes<CComputeShader>(L"RayMapShader", pShader);
+
+	// HeightMap Shader (LandScape)
+	pShader = new CHeightMapShader;
+	pShader->CreateComputeShader(L"shader\\heightmap.fx", "CS_HeightMap");
+	AddRes<CComputeShader>(L"HeightMapShader", pShader);
+
+	// WeightMap Shader (LandScape)
+	pShader = new CWeightMapShader;
+	pShader->CreateComputeShader(L"shader\\weightmap.fx", "CS_WeightMap");
+	AddRes<CComputeShader>(L"WeightMapShader", pShader);
 }
 
 void CResMgr::CreateDefaultMaterial()
@@ -1378,6 +1497,14 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"CamEffFadeOutShader"));
 	AddRes<CMaterial>(L"CamEffFadeOutMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"LandScapeShader"));
+	AddRes<CMaterial>(L"LandScapeMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"MaxTessShader"));
+	AddRes<CMaterial>(L"MaxTessMtrl", pMtrl);
 }
 
 void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName, UINT _iSlotNum, UINT _iSemanticIndex)

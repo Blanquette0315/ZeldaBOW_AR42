@@ -22,7 +22,7 @@
 
 void CreateTestLevel()
 {
-	CLevel* pLevel = new CLevel;
+	//CLevel* pLevel = new CLevel;
 
 	//Ptr<CMeshData> pMeshData = nullptr;
 	//CGameObject* pObj = nullptr;
@@ -34,9 +34,10 @@ void CreateTestLevel()
 	//pObj->ChangePrefab();
 	//// pLevel->AddGameObejct(pObj, 0);
 
-	//CLevel* pLevel = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Village.lv");
+	CLevel* pLevel = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Village.lv");
 
 	ChangeLevel(pLevel);
+	return;
 
 	Ptr<CMeshData> pMeshData = nullptr;
 	CGameObject* pObj = nullptr;
@@ -244,21 +245,21 @@ void CreateTestLevel()
 	// FBX Loading
 	// ============	
 	{
-		 Ptr<CMeshData> pMeshData = nullptr;
-		 CGameObject* pObj = nullptr;
-		 
-		 // TwnObj_Village_HatenoHouse_A_S_02
-		 pMeshData = nullptr;
-		 pObj = nullptr;
-		 pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\TwnObj_Village_HatenoHouse_A_S_02.fbx");
-		 pMeshData->Save(pMeshData->GetRelativePath());
-		 
-		 pObj = pMeshData->Instantiate();
-		 pObj->SetFrustumCul(false);
-		 pObj->SetName(L"TwnObj_Village_HatenoHouse_A_S_02");
-		 pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-		 
-		 pLevel->AddGameObject(pObj, 0);
+		// Ptr<CMeshData> pMeshData = nullptr;
+		// CGameObject* pObj = nullptr;
+		// 
+		// // TwnObj_Village_HatenoHouse_A_S_02
+		// pMeshData = nullptr;
+		// pObj = nullptr;
+		// pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\TwnObj_Village_HatenoHouse_A_S_02.fbx");
+		// pMeshData->Save(pMeshData->GetRelativePath());
+		// 
+		// pObj = pMeshData->Instantiate();
+		// pObj->SetFrustumCul(false);
+		// pObj->SetName(L"TwnObj_Village_HatenoHouse_A_S_02");
+		// pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
+		// 
+		// pLevel->AddGameObject(pObj, 0);
 		// 
 		// // DgnObj_DungeonEntrance_B_01
 		// pMeshData = nullptr;

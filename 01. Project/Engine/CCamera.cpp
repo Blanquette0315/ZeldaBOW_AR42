@@ -298,7 +298,6 @@ void CCamera::SortObject()
 
 				for (UINT iMtrl = 0; iMtrl < iMtrlCount; ++iMtrl)
 				{
-
 					if (nullptr != pRenderCom->GetCurMaterial(iMtrl) || nullptr != pRenderCom->GetCurMaterial(iMtrl)->GetShader())
 					{
 						Ptr<CGraphicsShader> pShader = pRenderCom->GetCurMaterial(iMtrl)->GetShader();
@@ -321,16 +320,6 @@ void CCamera::SortObject()
 								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
 								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
 							{
-								if (vecObj[j]->GetName() == L"Map")
-								{
-									int Testcount = vecObj[j]->GetTestCount();
-									if (Testcount != -1)
-									{
-										if (pMtrl->GetRelativePath() != pRenderCom->GetCurMaterial(Testcount)->GetRelativePath())
-											break;
-									}
-								}
-
 								pMap = &m_mapInstGroup_D;
 							}
 							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
@@ -358,6 +347,8 @@ void CCamera::SortObject()
 							bool b = pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_TRANSPARENT;
 
 							map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uID.llID);
+							
+							
 							if (iter == pMap->end())
 							{
 								pMap->insert(make_pair(uID.llID, vector<tInstObj>{tInstObj{ vecObj[j], iMtrl }}));
