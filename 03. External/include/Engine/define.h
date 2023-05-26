@@ -39,7 +39,7 @@ typedef Vector4 Vec4;
 
 #define LINK_VOLUME 0.8f
 #define MONSTER_VOLUME 0.8f
-#define BGM_VOLUME 0.4f
+#define BGM_VOLUME 0.2f
 
 enum class EQUIPABLE_TYPE
 {
