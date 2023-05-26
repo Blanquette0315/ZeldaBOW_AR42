@@ -407,6 +407,8 @@ void CLandScape::LoadHeightImage()
 	CONTEXT->CopyResource(pHightCopyTex->GetTex2D().Get(), m_pHeightMap->GetTex2D().Get());
 	m_pHeightMap = pHightCopyTex;
 	m_LandScapeMtrl->SetTexParam(TEX_0, pHightCopyTex);
+
+	DeleteRes(pHightCopyTex.Get(), RES_TYPE::TEXTURE);
 }
 
 void CLandScape::SaveWeightData()
@@ -589,8 +591,8 @@ void CLandScape::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(UINT, m_iXFaceCount, _node["LANDSCAPE"]["XFaceCount"]);
 	SAFE_LOAD_FROM_YAML(UINT, m_iZFaceCount, _node["LANDSCAPE"]["ZFaceCount"]);
 
-	SetFaceCount(m_iXFaceCount, m_iZFaceCount);
 	CRenderComponent::LoadFromYAML(node);
+	SetFaceCount(m_iXFaceCount, m_iZFaceCount);
 
 	LoadWeightData();
 	LoadHeightImage();
