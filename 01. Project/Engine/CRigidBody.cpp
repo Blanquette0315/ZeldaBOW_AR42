@@ -111,7 +111,7 @@ void CRigidBody::finaltick()
 	//{
 		// Velocity gathering update : Engine -> PhysX		
 
-		if (m_bGround)
+		/*if (m_bGround)
 		{
 			if (m_vVelocity != Vec3(0.f, 0.f, 0.f)) 
 			{
@@ -140,9 +140,9 @@ void CRigidBody::finaltick()
 					m_vSaveVelocity = Vec3(0.f, 0.f, 0.f);
 				}
 			}
-		}
+		}*/
 
-		//m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
+		m_vecPhysData[0]->SetVelocity(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z);
 
 		// ...
 		// will be added Force
@@ -523,7 +523,7 @@ void CRigidBody::SetTerrainCollider(int _iVertexSize, Vector3* _vecVertexList, V
 	PxSize.z /= 100.f;
 
 	// 230400 is FaceCount(100) VertexCount
-	int iFacePerCount = 2304;
+	int iFacePerCount = 230400;
 	int iforCount = (int)ceil((float)_iVertexSize / iFacePerCount);
 
 	UINT* arrIndex = new UINT[iFacePerCount];

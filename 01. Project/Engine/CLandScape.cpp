@@ -101,11 +101,15 @@ void CLandScape::finaltick()
 
 			if (KEY_PRESSED(KEY::LCTRL))
 			{
-				m_pCSHeightMap->IsDecrease(true);
+				m_pCSHeightMap->IsDecrease(1);
+			}
+			else if (KEY_PRESSED(KEY::Z))
+			{
+				m_pCSHeightMap->IsDecrease(2);
 			}
 			else
 			{
-				m_pCSHeightMap->IsDecrease(false);
+				m_pCSHeightMap->IsDecrease(0);
 			}
 
 			// 교점 위치정보를 토대로 높이를 수정 함

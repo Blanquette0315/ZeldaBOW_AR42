@@ -173,6 +173,9 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CBonesocketScript.h" />
     <ClInclude Include="CBossFireballScript.h" />
     <ClInclude Include="CBossScript.h" />
+    <ClInclude Include="CDgnBeginScript.h" />
+    <ClInclude Include="CDgnEnterScript.h" />
+    <ClInclude Include="CDgnEtTriggerScript.h" />
     <ClInclude Include="CEffectScaler.h" />
     <ClInclude Include="CFlashEffectScript.h" />
     <ClInclude Include="CHinoxScript.h" />
@@ -214,6 +217,9 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CBonesocketScript.cpp" />
     <ClCompile Include="CBossFireballScript.cpp" />
     <ClCompile Include="CBossScript.cpp" />
+    <ClCompile Include="CDgnBeginScript.cpp" />
+    <ClCompile Include="CDgnEnterScript.cpp" />
+    <ClCompile Include="CDgnEtTriggerScript.cpp" />
     <ClCompile Include="CEffectScaler.cpp" />
     <ClCompile Include="CFlashEffectScript.cpp" />
     <ClCompile Include="CHinoxScript.cpp" />

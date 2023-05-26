@@ -46,6 +46,14 @@ private:
     vector<CGameObject*>    m_vecUI;
 
     int                     m_iCamIdx;
+    tCamEffectInfo          m_tCamEffect;
+    Ptr<CMaterial>          m_pCamEffectMtrl;
+    Ptr<CMesh>              m_pCamEffMesh;
+    bool                    m_bIsCamEffect;
+    float                   m_fCamEffAcctime = 0.f;
+
+public:
+    void SetCamEffect(tCamEffectInfo _tCamEffect) { m_tCamEffect = _tCamEffect; }
 
     // ui method
 public:
@@ -116,6 +124,7 @@ public:
     void render_postprocess();
     void render_depthmap();
     void render_UI();
+    void render_CamEffect();
 
 public:
     virtual void finaltick();

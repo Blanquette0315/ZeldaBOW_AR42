@@ -149,6 +149,16 @@ struct tMTAnimClip
 };
 
 // ===========
+// CAM EFFECT
+// ===========
+struct tCamEffectInfo
+{
+	float		fAccTime;	// 누적 진행 시간
+	float		fDuration;	// 이펙트 총 재생시간
+	CAM_EFFECT	eEffect;	// 카메라 효과 타입
+};
+
+// ===========
 // Instancing
 // ===========
 union uInstID

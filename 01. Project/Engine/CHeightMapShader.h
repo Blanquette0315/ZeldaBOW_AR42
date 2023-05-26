@@ -12,7 +12,7 @@ private:
     Vec2                m_vScale; // ���� Brush ũ��
     int                 m_iBrushIdx;
     CStructuredBuffer*  m_pInput; // Ray �浹 ��ġ
-    bool                m_bDecrease;    // ture�� ��� ���̸� ���� ���
+    int                m_bDecrease;    // ture�� ��� ���̸� ���� ���
 
 public:
     void SetHeightMap(Ptr<CTexture> _pTex) { m_pHeightMap = _pTex; }
@@ -20,7 +20,7 @@ public:
     void SetBrushScale(Vec2 _vScale) { m_vScale = _vScale; }
     void SetBrushIndex(int _iIdx) { m_iBrushIdx = _iIdx; }
     void SetInputBuffer(CStructuredBuffer* _pInput) { m_pInput = _pInput; }
-    void IsDecrease(bool _bool) { m_bDecrease = _bool; }
+    void IsDecrease(int _bool) { m_bDecrease = _bool; }
 
 public:
     virtual void UpdateData();

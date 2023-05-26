@@ -12,6 +12,7 @@
 
 #include <Script/CScriptMgr.h>
 #include <Engine/CScript.h>
+#include <Script/CDgnEnterScript.h>
 
 CSaveLoadMgr::CSaveLoadMgr()
 {
@@ -25,6 +26,7 @@ void CSaveLoadMgr::init()
 {
 	CPrefab::Save_GameObject_Func = &CSaveLoadMgr::SaveGameObject;
 	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;
+	CDgnEnterScript::Load_Level_Func = &CSaveLoadMgr::LoadLevel;
 }
 
 void CSaveLoadMgr::SaveLevel(CLevel* _Level, const wstring& _customName)

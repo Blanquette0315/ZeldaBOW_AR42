@@ -47,9 +47,13 @@ void CS_HeightMap(int3 _iThreadID : SV_DispatchThreadID)
     {
         HEIGHT_MAP[_iThreadID.xy] += g_fDT * vBrushColor.a * 0.2f; // 브러쉬 알파값으로 높이 설정
     }
-    else
+    else if (g_int_3 == 1)
     {
         HEIGHT_MAP[_iThreadID.xy] -= g_fDT * vBrushColor.a * 0.2f;
+    }
+    else if (g_int_3 == 2)
+    {
+        HEIGHT_MAP[_iThreadID.xy] = 0.f;
     }
 
     // cos 그래프로 높이 설정

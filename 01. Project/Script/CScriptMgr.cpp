@@ -6,6 +6,9 @@
 #include "CBossFireballScript.h"
 #include "CBossScript.h"
 #include "CCamScript.h"
+#include "CDgnBeginScript.h"
+#include "CDgnEnterScript.h"
+#include "CDgnEtTriggerScript.h"
 #include "CEffectScaler.h"
 #include "CEquipableScript.h"
 #include "CFlashEffectScript.h"
@@ -39,6 +42,9 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CBossFireballScript");
 	_vec.push_back(L"CBossScript");
 	_vec.push_back(L"CCamScript");
+	_vec.push_back(L"CDgnBeginScript");
+	_vec.push_back(L"CDgnEnterScript");
+	_vec.push_back(L"CDgnEtTriggerScript");
 	_vec.push_back(L"CEffectScaler");
 	_vec.push_back(L"CEquipableScript");
 	_vec.push_back(L"CFlashEffectScript");
@@ -78,6 +84,12 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CBossScript;
 	if (L"CCamScript" == _strScriptName)
 		return new CCamScript;
+	if (L"CDgnBeginScript" == _strScriptName)
+		return new CDgnBeginScript;
+	if (L"CDgnEnterScript" == _strScriptName)
+		return new CDgnEnterScript;
+	if (L"CDgnEtTriggerScript" == _strScriptName)
+		return new CDgnEtTriggerScript;
 	if (L"CEffectScaler" == _strScriptName)
 		return new CEffectScaler;
 	if (L"CEquipableScript" == _strScriptName)
@@ -149,6 +161,15 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::CAMSCRIPT:
 		return new CCamScript;
+		break;
+	case (UINT)SCRIPT_TYPE::DGNBEGINSCRIPT:
+		return new CDgnBeginScript;
+		break;
+	case (UINT)SCRIPT_TYPE::DGNENTERSCRIPT:
+		return new CDgnEnterScript;
+		break;
+	case (UINT)SCRIPT_TYPE::DGNETTRIGGERSCRIPT:
+		return new CDgnEtTriggerScript;
 		break;
 	case (UINT)SCRIPT_TYPE::EFFECTSCALER:
 		return new CEffectScaler;
@@ -251,6 +272,18 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::CAMSCRIPT:
 		return L"CCamScript";
+		break;
+
+	case SCRIPT_TYPE::DGNBEGINSCRIPT:
+		return L"CDgnBeginScript";
+		break;
+
+	case SCRIPT_TYPE::DGNENTERSCRIPT:
+		return L"CDgnEnterScript";
+		break;
+
+	case SCRIPT_TYPE::DGNETTRIGGERSCRIPT:
+		return L"CDgnEtTriggerScript";
 		break;
 
 	case SCRIPT_TYPE::EFFECTSCALER:

@@ -109,6 +109,9 @@
     <FxCompile Include="link_particle_arrow_CS.fx">
       <Filter>HLSL\Compute\ParticleUpdateShader\Link</Filter>
     </FxCompile>
+    <FxCompile Include="CamEffect.fx">
+      <Filter>HLSL\Render\3D\CamEffect</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -893,6 +896,9 @@
     </Filter>
     <Filter Include="HLSL\Compute\ParticleUpdateShader\Link">
       <UniqueIdentifier>{f3e35f41-f7d7-4a7f-a56b-e283542f54da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Render\3D\CamEffect">
+      <UniqueIdentifier>{5e120df0-3ac8-45d1-8cab-7d1faaf849bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

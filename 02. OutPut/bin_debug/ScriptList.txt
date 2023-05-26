@@ -3,6 +3,9 @@ CBonesocketScript
 CBossFireballScript
 CBossScript
 CCamScript
+CDgnBeginScript
+CDgnEnterScript
+CDgnEtTriggerScript
 CEffectScaler
 CEquipableScript
 CFlashEffectScript
