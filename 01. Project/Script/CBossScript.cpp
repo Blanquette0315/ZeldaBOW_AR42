@@ -4,6 +4,8 @@
 #include "CBossFireballScript.h"
 #include <Engine/CNavMgr.h>
 
+#include "CEffectScaler.h"
+
 CBossScript::CBossScript()
 	: CMonsterScript(BOSSSCRIPT)
 	, m_iAttackMotion(0)
@@ -82,12 +84,12 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\EnemyHit_Critical.wav");
 		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
-		if (m_pFireball != nullptr)
+		if (m_pFireball != nullptr && m_pFireball->GetScript<CBossFireballScript>() != nullptr)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
 			m_pFireball = nullptr;
 		}
-		if (m_pFlame != nullptr)
+		if (m_pFlame != nullptr && m_pFlame->GetScript<CEffectScaler>() != nullptr)
 		{
 			m_pFlame->Destroy();
 			m_pFlame = nullptr;
