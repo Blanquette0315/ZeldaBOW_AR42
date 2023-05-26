@@ -414,13 +414,17 @@ void CLinkCamScript::BowChargeMove()
 	LBTNMove(true, XM_PI / 12.f, -XM_PI / 3.f, true, XM_PI / 12.f, -XM_PI / 12.f);
 
 	Transform()->AddRelativeRotation(m_vAddRot);
+	Transform()->finaltick();
 
 	Vec3 vDirToCamFromObj = -Transform()->GetRelativeDir(DIR::FRONT);
 	Vec3 vDirToObjFromCamXZ = Vec3(-vDirToCamFromObj.x, 0.f, -vDirToCamFromObj.z).Normalize();
 
-	Vec3 vFinalPos = vArrowPos + vDirToObjFromCamXZ * m_fFrontDistFromLink + vDirToCamFromObj * m_fCameraRadiusCur;
+	Vec3 vFinalPos = vArrowPos +  vDirToObjFromCamXZ * m_fFrontDistFromLink + vDirToCamFromObj * m_fCameraRadiusCur;
+	
 	vFinalPos.y += m_fPosUp;
-
+	if (m_vAddRot.x < 0)
+		vFinalPos.y += fabsf(sinf(m_vAddRot.x)) * m_fCameraRadiusCur;
+	
 	Transform()->SetRelativePos(vFinalPos);
 }
 
@@ -472,7 +476,6 @@ void CLinkCamScript::BowChargeStartMove()
 	Vec3 vFinalRot = Vec3::Lerp(vLerpStartRot, vLerpEndRot, fRatio);
 
 	Transform()->SetRelativePos(vFinalPos);
-
 
 	Transform()->SetRelativeRotation(vFinalRot);
 

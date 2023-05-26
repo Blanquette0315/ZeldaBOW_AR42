@@ -72,7 +72,7 @@ PS_OUT PS_Decal(VS_OUT _in)
     // 때문에 -0.5 ~ 0.5, 0.5 ~ -0.5 범위를 0 ~ 1로 만들어 주면 된다.
     // x는 -0.5 ~ 0.5 범위 이므로 0.5를 더해주면 0~1의 범위가 나온다.
     // y는 0.5 ~ -0.5 범위 이므로 0.5를 더해준 다음에 1에서 빼주면 된다.
-    float2 vDecalUV = float2(vLocalPos.x + 0.5f, 1 - (vLocalPos.y + 0.5f));
+    float2 vDecalUV = float2(vLocalPos.x + 0.5f, 1 - (vLocalPos.z + 0.5f));
     float4 vDecalColor = g_tex_1.Sample(g_sam_0, vDecalUV);
     output.vOutColor = vDecalColor;
     
@@ -154,7 +154,7 @@ DeferredPS_OUT PS_DeferredDecal(VS_OUT _in)
     }
     
     // 데칼의 UV를 구한다.
-    float2 vDecalUV = float2(vLocalPos.x + 0.5f, 1 - (vLocalPos.y + 0.5f));
+    float2 vDecalUV = float2(vLocalPos.x + 0.5f, 1 - (vLocalPos.z + 0.5f));
     float4 vDecalColor = g_tex_1.Sample(g_sam_0, vDecalUV);
     output.vOutColor = vDecalColor;
     

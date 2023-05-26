@@ -380,7 +380,18 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 	case COMPONENT_TYPE::SKYBOX:
 		break;
 	case COMPONENT_TYPE::DECAL:
-		break;
+	{
+		if (_Select)
+
+		{
+			_Target->AddComponent(new CDecal);
+		}
+		else
+		{
+			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::DECAL));
+		}
+	}
+	break;
 
 	case COMPONENT_TYPE::LANDSCAPE:
 		/*if (_Select)

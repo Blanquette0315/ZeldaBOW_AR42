@@ -79,6 +79,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_iMode(_origin.m_iMode)
 	, m_fWalkSpeed(_origin.m_fWalkSpeed)
 	, m_fRunSpeed(_origin.m_fRunSpeed)
+	, m_fDashSpeed(_origin.m_fDashSpeed)
 	, m_fJumpSpeed(_origin.m_fJumpSpeed)
 	, m_bOnceAtAnimStart(_origin.m_bOnceAtAnimStart)
 	, m_fComboAccTime(0.f)
@@ -344,11 +345,11 @@ void CLinkAnimScript::begin()
 	m_pSwordObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SWORD]);
 	m_pShieldObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SHIELD]);
 	m_pShieldObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_SHIELD]);
-	Func_SwordEquipOff();
+	Func_SwordEquipOffForced();
 
 	m_pBowObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_BOW]);
 	m_pBowObj = GetOwner()->GetChildObjByName(LINK_STRING_WCHAR[LINK_STRING_BOW]);
-	Func_BowEquipOff();
+	Func_BowEquipOffForced();
 
 	m_tLinkStatus.iHP = 16;
 	m_tLinkDamaged.eType = LINK_DAMAGED_TYPE::NONE;
@@ -399,11 +400,13 @@ void CLinkAnimScript::OperateAnimFunc()
 	if (CalBit(m_pCurAnimNode->iPreferences, LAP_BLEND, BIT_LEAST_ONE))
 	{
 		Func_LowerBodyBlend();
+		Func_LowerFootstepSound();
 	}
 	else
 	{
 		m_pCurAnimNodeLower = nullptr;
 		m_pAnimator->StopLowerAnim();
+		Func_UpperFootstepSound();
 	}
 }
 
@@ -616,12 +619,14 @@ void CLinkAnimScript::SetLinkCond()
 			case LINK_DAMAGED_TYPE::SMALL:
 			{
 				AddBit(m_iCond, LAC_DAMAGED_SMALL);
+				Func_DamageSmallSound();
 			}
 			break;
 
 			case LINK_DAMAGED_TYPE::MEDIUM:
 			{
 				AddBit(m_iCond, LAC_DAMAGED_MEDIUM);
+				Func_DamageSmallSound();
 			}
 			break;
 

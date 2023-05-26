@@ -132,20 +132,20 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimNode(pAnimNode, LAT_JUMP_L, LAP_AIR); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
 	SetAnimTran(pAnimNode, LAT_LAND_L, LAC_ANIM_FINISHED | LAC_GROUNDED);
 
-	SetAnimNode(pAnimNode, LAT_LAND_L);
+	SetAnimNode(pAnimNode, LAT_LAND_L); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_LandSound);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_JUMP_R, LAP_AIR); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_Jump);
 	SetAnimTran(pAnimNode, LAT_LAND_R, LAC_ANIM_FINISHED | LAC_GROUNDED);
 
-	SetAnimNode(pAnimNode, LAT_LAND_R);
+	SetAnimNode(pAnimNode, LAT_LAND_R); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_LandSound);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_GROUNDED | LAC_ANIM_FINISHED);
 
 	// Sword
 	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_ON, LAP_BLEND | LAP_EQUIP_SWORD | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOn);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordEquipOff);
+	SetAnimNode(pAnimNode, LAT_SWORD_EQUIP_OFF, LAP_BLEND | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordUnEquipSound); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_SwordEquipOff);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAP_REPEAT | LAP_BLEND | LAP_EQUIP_SWORD | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordLockOnWait);
@@ -170,7 +170,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED, LAC_KEY_LBTN_COMBO);
 	SetAnimTran(pAnimNode, LAT_SWORD_ATTACK_SF, LAC_KEY_LBTN_COMBO | LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF, LAP_ATTACK | LAP_EQUIP_SWORD | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_SwordAttackMove);
+	SetAnimNode(pAnimNode, LAT_SWORD_ATTACK_SF, LAP_ATTACK | LAP_EQUIP_SWORD | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_LastSwing);
 	SetAnimTran(pAnimNode, LAT_SWORD_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 	// Bow
@@ -182,7 +182,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAC_KEY_WSAD, LAC_MODE_LOCKON);
 	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_KEY_LBTN);
 
-	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF, LAP_BLEND | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowEquipOff);
+	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_OFF, LAP_BLEND | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowUnEquipSound); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_BowEquipOff);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_BOW_MOVE_RUN_UPPER, LAP_REPEAT | LAP_EQUIP_BOW); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_BowRun);
@@ -192,10 +192,10 @@ void CLinkAnimScript::MakeFSM()
 	//SetAnimNode(pAnimNode, LAT_BOW_ATTACK_LOAD, LAP_BLEND | LAP_EQUIP_BOW);
 	//SetAnimTran(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAC_ANIM_FINISHED);
 
-	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAP_BLEND | LAP_EQUIP_BOW | LAP_KEEP_LOCKON | LAP_BOW_CHARGE);
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_CHARGE, LAP_BLEND | LAP_EQUIP_BOW | LAP_KEEP_LOCKON | LAP_BOW_CHARGE); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowDrawSound);
 	SetAnimTran(pAnimNode, LAT_BOW_ATTACK_SHOOT, 0, LAC_KEY_LBTN);
 
-	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT, LAP_EQUIP_BOW | LAP_KEEP_LOCKON);
+	SetAnimNode(pAnimNode, LAT_BOW_ATTACK_SHOOT, LAP_EQUIP_BOW | LAP_KEEP_LOCKON); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_BowShootSound);
 	SetAnimTran(pAnimNode, LAT_BOW_LOCKON_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_BOW_EQUIP_ON_RUN);
@@ -209,7 +209,7 @@ void CLinkAnimScript::MakeFSM()
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_JUST, LAC_KEY_F);
 	SetAnimTran(pAnimNode, LAT_LOCKON_JUMP_B_ST, LAC_KEY_SPACE);
 
-	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_HIT, LAP_KEEP_LOCKON | LAP_INVINCIBLE);
+	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_HIT, LAP_KEEP_LOCKON | LAP_INVINCIBLE); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_GuardHitSound);
 	SetAnimTran(pAnimNode, LAT_SWORD_GUARD_WAIT, LAC_ANIM_FINISHED);
 
 	SetAnimNode(pAnimNode, LAT_SWORD_GUARD_JUST, LAP_KEEP_LOCKON ); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ShieldJustStart); pAnimNode->AddFuncSteady(&CLinkAnimScript::Func_ShieldJust); pAnimNode->AddFuncEnd(&CLinkAnimScript::Func_ShieldJustEnd);
@@ -271,7 +271,6 @@ void CLinkAnimScript::MakeFSM()
 
 	SetAnimNode(pAnimNode, LAT_BOMB_THROW_SPHERE); pAnimNode->AddFuncStart(&CLinkAnimScript::Func_ThrowBombStart);
 	SetAnimTran(pAnimNode, LAT_WAIT, LAC_ANIM_FINISHED);
-
 
 	// Any State Node
 	tAnimNode* pAnyStateNode = new tAnimNode();

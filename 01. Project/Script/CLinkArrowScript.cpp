@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CLinkArrowScript.h"
 #include "CMonsterScript.h"
+#include <Engine/CSound.h>
 
 
 CLinkArrowScript::CLinkArrowScript()
@@ -119,6 +120,7 @@ void CLinkArrowScript::BeginOverlap(CGameObject* _pOther)
 	{
 		_pOther->GetScript<CMonsterScript>()->Damage(2.f, Transform()->GetWorldPos());
 		AttackEffect(pMonsterScr);
+		CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\arrowimpact.mp3")->Play(1, LINK_VOLUME * 1.f, true, nullptr, Transform()->GetWorldPos());
 		// DamageEffect
 		if(IsValid(GetOwner()))
 			Destroy();

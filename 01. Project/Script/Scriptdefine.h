@@ -4,6 +4,7 @@
 #define LerpCos(ratio)  (1.f - cosf(ratio * XM_PI)) / 2.f
 #define LerpCircle(ratio) (1.f - sqrtf(1.f - ratio * ratio))
 
+
 enum class CAMERA_SELECTION
 {
     LINK,
