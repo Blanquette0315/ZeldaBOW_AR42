@@ -10,9 +10,14 @@ CBossScript::CBossScript()
 	, m_pFlame(nullptr)
 	, m_pFireball_small(nullptr)
 	, m_pFireball_big(nullptr)
+	, m_iMaxHP(0)
+	, m_pBossName(nullptr)
+	, m_pBossHPUI(nullptr)
+	, m_pBossHPMaxUI(nullptr)
 {
 	m_pFireball_small = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Fireball.pref", L"prefab\\Fireball.pref");
 	m_pFireball_big = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Fireball_Charged.pref", L"prefab\\Fireball_Charged.pref");
+	m_pBossHP = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\UI_BossHP.pref", L"prefab\\UI_BossHP.pref");
 }
 
 CBossScript::~CBossScript()
@@ -25,6 +30,11 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		return;
 
 	m_iHP -= _iNumber;
+	m_pBossHPUI->Destroy();
+	m_pBossHPUI = m_pBossHP->Instantiate();
+	float fCurHPbar = 400.f * m_iHP / m_iMaxHP;
+	m_pBossHPUI->Transform()->SetRelativeScale(fCurHPbar, 10, 1);
+	Instantiate(m_pBossHPUI, Vec3(-200.f + fCurHPbar / 2.f, 325, 1), 15);
 
 	if (m_iHP <= 0)
 	{
@@ -35,6 +45,9 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		m_iMotion = 0;
 		AI->Done(false);
 		Animator3D()->Play(L"Stagger", false);
+		m_pBossHPMaxUI->Destroy();
+		m_pBossHPUI->Destroy();
+		m_pBossName->Destroy();
 
 		for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
 		{
@@ -46,14 +59,14 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 			pMaterial->SetScalarParam(FLOAT_2, &alltime);
 		}
 
-		if (m_pFireball != nullptr)
-		{
-			m_pFireball->GetScript<CBossFireballScript>()->Dead();
-		}
-		if (m_pFlame != nullptr)
-		{
-			m_pFlame->Destroy();
-		}
+		//if (m_pFireball != nullptr)
+		//{
+		//	m_pFireball->GetScript<CBossFireballScript>()->Dead();
+		//}
+		//if (m_pFlame != nullptr)
+		//{
+		//	m_pFlame->Destroy();
+		//}
 
 		GetOwner()->GetChildObject()[1]->Destroy();
 	}
@@ -69,10 +82,14 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 		if (m_pFireball != nullptr)
 		{
 			m_pFireball->GetScript<CBossFireballScript>()->Dead();
+			m_pFireball = nullptr;
 		}
 		if (m_pFlame != nullptr)
 		{
 			m_pFlame->Destroy();
+			m_pFlame = nullptr;
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameTornade_Charge.wav");
+			pSound->Stop();
 		}
 	}
 	else if (_vPos.y == 10000.f)
@@ -99,6 +116,8 @@ void CBossScript::Damage(int _iNumber, Vec3 _vPos)
 
 void CBossScript::begin()
 {
+	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+	pSound->Stop();
 	RigidBody()->SetGround(true);
 }
 
@@ -167,6 +186,15 @@ void CBossScript::tick()
 	}
 	else if (m_eCurrentState == Monster_State::FIND)
 	{
+		m_iMaxHP = m_iHP;
+		m_pBossHPMaxUI = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_BossHPMax.pref")->Instantiate();
+		m_pBossName = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_Boss.pref")->Instantiate();
+		m_pBossHPUI = m_pBossHP->Instantiate();
+		Instantiate(m_pBossHPMaxUI, Vec3(0, 325, 2), 15);
+		Instantiate(m_pBossName, Vec3(0, 370, 1), 15);
+		Instantiate(m_pBossHPUI, Vec3(0, 325, 1), 15);
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\BGM_SpBattle_RemainsFireBoss.wav");
+		pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 		AI->Done();
 	}
 	else if (m_eCurrentState == Monster_State::RETURN)
@@ -410,6 +438,10 @@ void CBossScript::Attack_Straight()
 	}
 	else if (m_fAcctime >= 3.1333f && m_iMotion == 2)
 	{
+		Vec3 vPos = Transform()->GetRelativePos();
+		vPos.x += Transform()->GetRelativeDir(DIR::FRONT).x * 100.f;
+		vPos.z += Transform()->GetRelativeDir(DIR::FRONT).z * 100.f;
+		Instantiate(CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Dust_Particle_boss.pref", L"prefab\\Dust_Particle_boss.pref")->Instantiate(), vPos, 0);
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBoss_SwordHitGround.wav");
 		pSound->Play(1, MONSTER_VOLUME * 0.5f, true, GetOwner());
 		++m_iMotion;
@@ -558,6 +590,7 @@ void CBossScript::Attack_Chemical_Big()
 	{
 		m_pFireball->GetScript<CBossFireballScript>()->setBossPos(Transform()->GetWorldPos());
 		m_pFireball->GetScript<CBossFireballScript>()->Fire(AI->FindPlayerPos());
+		m_pFlame = nullptr;
 		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_FlameBall_Throw.wav");
 		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		++m_iMotion;

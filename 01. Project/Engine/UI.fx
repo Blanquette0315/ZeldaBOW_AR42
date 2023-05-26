@@ -39,7 +39,7 @@ float4 PS_UI(VTX_OUT _in) : SV_Target
         vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
     }
     
-    if (Color.a >= 0.f)
+    if (Color.a > 0.f)
         vOutColor.rgb = Color.rgb;
     
     if (vOutColor.a <= 0.f)

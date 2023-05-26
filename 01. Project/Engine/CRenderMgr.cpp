@@ -57,8 +57,6 @@ void CRenderMgr::render()
 
 	UpdateNoiseTexture();
 
-	UpdateEffectTexture();
-
 	UpdateLight2D();
 
 	UpdateLight3D();
@@ -99,6 +97,20 @@ void CRenderMgr::render()
 									m_arrFont[i].vecPos.y, m_arrFont[i].fSize,
 									FONT_RGBA(m_arrFont[i].vecColor.x, m_arrFont[i].vecColor.y,
 									m_arrFont[i].vecColor.z, m_arrFont[i].vecColor.w));
+	}
+}
+
+void CRenderMgr::render_static_shadowdepth()
+{
+	m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW]->Clear();
+	m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW]->OMSet();
+
+	for (size_t i = 0; i < m_vecLight3D.size(); ++i)
+	{
+		if (LIGHT_TYPE::DIRECTIONAL == m_vecLight3D[i]->GetLightType())
+		{
+			m_vecLight3D[i]->render_staticdepthmap();
+		}
 	}
 }
 
@@ -195,13 +207,6 @@ void CRenderMgr::UpdateLight3D()
 
 	// ���� ���� �۷ι� �����Ϳ� ������Ʈ
 	g_global.iLight3DCount = (UINT)m_vecLight3D.size();
-}
-
-void CRenderMgr::UpdateEffectTexture()
-{
-	Ptr<CTexture> BurnRampTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\burn\\BurnRamp.dds");
-	BurnRampTex->UpdateData(16, PIPELINE_STAGE::ALL_STAGE);
-	BurnRampTex->UpdateData_CS(16, true);
 }
 
 void CRenderMgr::CopyRenderTarget()

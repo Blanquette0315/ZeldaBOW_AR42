@@ -39,6 +39,7 @@ typedef Vector4 Vec4;
 
 #define MONSTER_VOLUME 1.f
 #define LINK_VOLUME 1.f
+#define BGM_VOLUME 1.f
 
 enum class EQUIPABLE_TYPE
 {
@@ -342,6 +343,7 @@ enum class MRT_TYPE
 	BLOOM_UPSCALING,
 	BLOOM_MARGE,
 	BLOOM,
+	STATICSHADOW,
 	END,
 };
 

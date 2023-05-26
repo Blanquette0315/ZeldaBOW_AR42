@@ -14,7 +14,12 @@ CHinoxScript::CHinoxScript()
 	, m_fGuardtime(0)
 	, m_iGuardMotion(0)
 	, m_bEyeGuard(false)
+	, m_iMaxHP(0)
+	, m_pBossName(nullptr)
+	, m_pBossHPUI(nullptr)
+	, m_pBossHPMaxUI(nullptr)
 {
+	m_pBossHP = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\UI_BossHP.pref", L"prefab\\UI_BossHP.pref");
 }
 
 //CHinoxScript::CHinoxScript(const CHinoxScript& _origin)
@@ -43,6 +48,8 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 	if (m_eHinoxState == Hinox_State::SLEEP)
 	{
 		m_eHinoxState = Hinox_State::WAKE;
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Damage.mp3");
+		pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 	}
 	else if (m_eHinoxState == Hinox_State::NONE)
 	{
@@ -50,17 +57,27 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			return;
 
 		m_iHP -= _iNumber;
+		m_pBossHPUI->Destroy();
+		m_pBossHPUI = m_pBossHP->Instantiate();
+		float fCurHPbar = 400.f * m_iHP / m_iMaxHP;
+		m_pBossHPUI->Transform()->SetRelativeScale(fCurHPbar, 10, 1);
+		Instantiate(m_pBossHPUI, Vec3(-200.f + fCurHPbar / 2.f, 325, 1), 15);
 
 		if (m_iHP <= 0)
 		{
-			//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\dead.wav");
-			//pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Run.mp3");
+			pSound->Stop();
 			m_eCurrentState = Monster_State::DEAD;
 			m_fAcctime = 0.f;
 			m_iMotion = 0;
 			AI->Done(false);
 			GuardReset();
 			Animator3D()->Play(L"Dead", false);
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Dead.mp3");
+			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			m_pBossHPMaxUI->Destroy();
+			m_pBossHPUI->Destroy();
+			m_pBossName->Destroy();
 
 			for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
 			{
@@ -77,6 +94,8 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 		}
 		else if (_vPos.z != 10000.f && Head->HeadCheck(_vPos) && m_eCurrentState != Monster_State::GROGGY && !m_bEyeGuard)
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Run.mp3");
+			pSound->Stop();
 			m_eCurrentState = Monster_State::GROGGY;
 			m_fAcctime = 0.f;
 			m_iMotion = 0;
@@ -84,19 +103,21 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			GuardReset();
 			m_bEyeGuard = true;
 			Animator3D()->Play(L"Damage_Eye_Start", false);
-			//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\FantomGanon_Vo_DamageHalfLife.wav");
-			//pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DamageEye.mp3");
+			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		}
 		else if (_vPos.y == 10000.f)
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Run.mp3");
+			pSound->Stop();
 			m_eCurrentState = Monster_State::DAMAGED_BIG;
 			m_fAcctime = 0.f;
 			m_iMotion = 0;
 			AI->Done(false);
 			GuardReset();
 			Animator3D()->Play(L"damage", false);
-			//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\damage_big.wav");
-			//pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Damage.mp3");
+			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		}
 	}
 }
@@ -118,7 +139,14 @@ void CHinoxScript::tick()
 		break;
 	case Hinox_State::SLEEP:
 	{
-		Animator3D()->Play(L"Sleep_Loop", true);
+		if (m_iMotion == 0)
+		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+			pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Sleep.mp3");
+			pSound->Play(0, MONSTER_VOLUME, false, nullptr, Transform()->GetWorldPos());
+			Animator3D()->Play(L"Sleep_Loop", true);
+		}
 		return;
 	}
 		break;
@@ -128,16 +156,33 @@ void CHinoxScript::tick()
 
 		if (m_iMotion == 0)
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Sleep.mp3");
+			pSound->Stop();
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DownRecover.mp3");
+			pSound->Play(1, MONSTER_VOLUME * 0.8f, true, GetOwner());
 			Animator3D()->Play(L"Sleep_End", false);
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 4.73333f && m_iMotion == 1)
 		{
 			Animator3D()->Play(L"cry", false);
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Cry.mp3");
+			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+			pSound->Stop();
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\BGM_Hinox.mp3");
+			pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 			++m_iMotion;
 		}
 		else if (m_fAcctime >= 9.23333f && m_iMotion == 2)
 		{
+			m_iMaxHP = m_iHP;
+			m_pBossHPMaxUI = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_BossHPMax.pref")->Instantiate();
+			m_pBossName = CResMgr::GetInst()->FindRes<CPrefab>(L"prefab\\UI_Hinox.pref")->Instantiate();
+			m_pBossHPUI = m_pBossHP->Instantiate();
+			Instantiate(m_pBossHPMaxUI, Vec3(0, 325, 2), 15);
+			Instantiate(m_pBossName, Vec3(0, 370, 1), 15);
+			Instantiate(m_pBossHPUI, Vec3(0, 325, 1), 15);
 			Animator3D()->Play(L"Wait_Battle", true);
 			m_iMotion = 0;
 			m_fAcctime = 0;
@@ -172,7 +217,7 @@ void CHinoxScript::tick()
 		else
 			Transform()->SetRelativeRotation(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 
-		RigidBody()->SetVelocity(vPlayerDir * m_fSpeed * 0.5f);
+		RigidBody()->SetVelocity(vPlayerDir * m_fSpeed);
 
 		if (m_iGuardMotion >= 1)
 		{
@@ -191,6 +236,8 @@ void CHinoxScript::tick()
 			{
 				Animator3D()->PlayLowerAnim(L"run", true, false);
 				Animator3D()->Play(L"Guard_Eye_Start", false);
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Guard.mp3");
+				pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 				++m_iGuardMotion;
 			}
 			else if (m_fGuardtime >= 1.6666f && m_iGuardMotion == 2)
@@ -217,6 +264,8 @@ void CHinoxScript::tick()
 		else
 		{
 			Animator3D()->Play(L"run", true);
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Run.mp3");
+			pSound->Play(0, MONSTER_VOLUME * 0.5f, false, GetOwner());
 		}
 
 		if (AI->GetPlayer()->GetScript<CLinkAnimScript>()->IsBowAtkAnim() && m_iGuardMotion == 0)
@@ -297,6 +346,8 @@ void CHinoxScript::tick()
 		{
 			if (m_iMotion == 0)
 			{
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_Run.mp3");
+				pSound->Stop();
 				Vec3 vPlayerDir = AI->FindPlayerDir();
 				Vec3 vDir = Vec3(vPlayerDir.x, 0, vPlayerDir.z).Normalize();
 				if (vDir.x >= 0)
@@ -313,6 +364,8 @@ void CHinoxScript::tick()
 				if (AI->GetPlayerDistance() <= 68.f)
 				{
 					Animator3D()->Play(L"Attack_Hipdrop", false);
+					Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_HipDrop.mp3");
+					pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 					++m_iMotion;
 				}
 				else
@@ -324,22 +377,39 @@ void CHinoxScript::tick()
 					else
 						m_vFront = Vec3(0.f, -acosf(vDir.z) + XM_PI, 0.f);
 					Animator3D()->Play(L"Attack_Clap", false);
+					Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_AttackHand.mp3");
+					pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 					m_iMotion = 5;
 				}
 			}
-			else if (m_fAcctime >= 1.8f && m_iMotion == 5)
+			else if (m_fAcctime >= 1.6f && m_iMotion == 5)
+			{
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_AttackHandClap.mp3");
+				pSound->Play(1, MONSTER_VOLUME * 0.8f, true, GetOwner());
+				++m_iMotion;
+			}
+			else if (m_fAcctime >= 1.8f && m_iMotion == 6)
 			{
 				arm_left->setReady(true);
 				arm_right->setReady(true);
 				++m_iMotion;
 			}
-			else if (m_fAcctime >= 2.1f && m_iMotion == 6)
+			else if (m_fAcctime >= 1.9f && m_iMotion == 7)
+			{
+				Vec3 vClapPos = Transform()->GetRelativePos();
+				vClapPos.y += 8.f;
+				vClapPos.x += Transform()->GetRelativeDir(DIR::FRONT).x * 70.f;
+				vClapPos.z += Transform()->GetRelativeDir(DIR::FRONT).z * 70.f;
+				Instantiate(CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Dust_Particle_clap.pref", L"prefab\\Dust_Particle_clap.pref")->Instantiate(), vClapPos, 0);
+				++m_iMotion;
+			}
+			else if (m_fAcctime >= 2.1f && m_iMotion == 8)
 			{
 				arm_left->setReady(false);
 				arm_right->setReady(false);
 				++m_iMotion;
 			}
-			else if (m_fAcctime >= 5.1f && m_iMotion == 7)
+			else if (m_fAcctime >= 5.1f && m_iMotion == 9)
 			{
 				Animator3D()->Play(L"Wait_Battle", true);
 				++m_iMotion;
@@ -347,6 +417,9 @@ void CHinoxScript::tick()
 			else if (m_fAcctime >= 2.9 && m_iMotion == 2)
 			{
 				Hip->setReady(true);
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DownHip.mp3");
+				Instantiate(CResMgr::GetInst()->Load<CPrefab>(L"prefab\\Dust_Particle.pref", L"prefab\\Dust_Particle.pref")->Instantiate(), Transform()->GetRelativePos(), 0);
+				pSound->Play(1, MONSTER_VOLUME * 0.8f, true, GetOwner());
 				++m_iMotion;
 			}
 			else if (m_iMotion == 3)
@@ -357,9 +430,9 @@ void CHinoxScript::tick()
 			else if (m_fAcctime >= 6.3666f && m_iMotion == 4)
 			{
 				Animator3D()->Play(L"Wait_Battle", true);
-				m_iMotion = 8;
+				m_iMotion = 10;
 			}
-			else if (m_fAcctime >= 7.5f && m_iMotion == 8)
+			else if (m_fAcctime >= 7.5f && m_iMotion == 10)
 			{
 				AI->Done();
 				m_fAcctime = 0;
@@ -391,17 +464,25 @@ void CHinoxScript::tick()
 	else if (m_eCurrentState == Monster_State::GROGGY)
 	{
 		m_fAcctime += FDT;
-		if (m_fAcctime >= 2.3666f && m_iMotion == 0)
+		if (m_fAcctime >= 2.f && m_iMotion == 0)
+		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DamageEyeDown.mp3");
+			pSound->Play(1, MONSTER_VOLUME * 0.8f, true, GetOwner());
+			++m_iMotion;
+		}
+		else if (m_fAcctime >= 2.3666f && m_iMotion == 1)
 		{
 			Animator3D()->Play(L"Damage_Eye_Loop", true);
 			++m_iMotion;
 		}
-		else if (m_fAcctime >= 4.8666 && m_iMotion == 1)
+		else if (m_fAcctime >= 4.8666 && m_iMotion == 2)
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DownRecover.mp3");
+			pSound->Play(1, MONSTER_VOLUME * 0.8f, true, GetOwner());
 			Animator3D()->Play(L"Damage_Eye_End", false);
 			++m_iMotion;
 		}
-		else if (m_fAcctime >= 7.9332 && m_iMotion == 2)
+		else if (m_fAcctime >= 7.9332 && m_iMotion == 3)
 		{
 			AI->Done();
 			m_fAcctime = 0;
@@ -415,6 +496,10 @@ void CHinoxScript::tick()
 		m_fAcctime += FDT;
 		if (m_fAcctime >= 4.8f)
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\BGM_Hinox.mp3");
+			pSound->Stop(); 
+			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\bgm\\Field_Day.mp3");
+			pSound->Play(0, BGM_VOLUME, false, CRenderMgr::GetInst()->GetMainCam()->GetOwner());
 			GetOwner()->Destroy();
 		}
 		else

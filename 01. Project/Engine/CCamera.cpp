@@ -418,20 +418,54 @@ void CCamera::SortShadowObject()
 		{
 			CRenderComponent* pRenderCom = vecObj[j]->GetRenderComponent();
 
-			if (vecObj[j]->IS_FrustumCul())
-			{
-				//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
-				if (vecObj[j]->Transform() != nullptr)
-				{
-					if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 20.f))
-					{
-						continue;
-					}
-				}
-			}
-
 			if (pRenderCom && pRenderCom->IsDynamicShadow())
 			{
+				if (vecObj[j]->IS_FrustumCul())
+				{
+					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
+					if (vecObj[j]->Transform() != nullptr)
+					{
+						if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 20.f))
+						{
+							continue;
+						}
+					}
+				}
+			
+				m_vecDynamicShadow.push_back(vecObj[j]);
+			}
+		}
+	}
+}
+
+void CCamera::SortStaticShadowObject()
+{
+	m_vecDynamicShadow.clear();
+
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
+
+	for (UINT i = 0; i < 1; ++i)
+	{
+		CLayer* pLayer = pCurLevel->GetLayer(i);
+		const vector<CGameObject*>& vecObj = pLayer->GetObjects();
+
+		for (size_t j = 0; j < vecObj.size(); ++j)
+		{
+			CRenderComponent* pRenderCom = vecObj[j]->GetRenderComponent();
+			if (pRenderCom && pRenderCom->IsStaticShadow())
+			{
+				if (vecObj[j]->IS_FrustumCul())
+				{
+					//if (!m_Frustum.CheckFrustum(vecObj[j]->Transform()->GetWorldPos()))
+					if (vecObj[j]->Transform() != nullptr)
+					{
+						if (!m_Frustum.CheckFrustumRadius(vecObj[j]->Transform()->GetWorldPos(), vecObj[j]->Transform()->GetWorldScale().x * 0.5f + 50.f))
+						{
+							continue;
+						}
+					}
+				}
+
 				m_vecDynamicShadow.push_back(vecObj[j]);
 			}
 		}

@@ -8,6 +8,7 @@ CRenderComponent::CRenderComponent(COMPONENT_TYPE _eType)
 	: CComponent(_eType)
 	, m_bIsDynamicMtrl(false)
 	, m_bDynamicShadow(true)
+	, m_bStaticShadow(false)
 	, m_bIsRender(true)
 {
 }
@@ -17,6 +18,7 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 	, m_pMesh(_origin.m_pMesh)
 	, m_bIsDynamicMtrl(_origin.m_bIsDynamicMtrl)
 	, m_bDynamicShadow(_origin.m_bDynamicShadow)
+	, m_bStaticShadow(_origin.m_bStaticShadow)
 	, m_bIsRender(true)
 {
 	if (false == _origin.m_vecMtrls.empty())
@@ -168,6 +170,8 @@ void CRenderComponent::SaveToYAML(YAML::Emitter& _emitter)
 
 	_emitter << YAML::Key << "RenderComponent_IsDynamicShadow";
 	_emitter << YAML::Value << m_bDynamicShadow;
+	_emitter << YAML::Key << "RenderComponent_IsStaticShadow";
+	_emitter << YAML::Value << m_bStaticShadow;
 }
 
 void CRenderComponent::LoadFromYAML(YAML::Node& _node)
@@ -194,4 +198,5 @@ void CRenderComponent::LoadFromYAML(YAML::Node& _node)
 	}
 
 	m_bDynamicShadow = _node["RenderComponent_IsDynamicShadow"].as<bool>();
+	SAFE_LOAD_FROM_YAML(bool, m_bStaticShadow, _node["RenderComponent_IsStaticShadow"]);
 }

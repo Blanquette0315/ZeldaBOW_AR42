@@ -41,6 +41,7 @@ public:
 	void init();
 	void tick();
 	void render();
+	void render_static_shadowdepth();
 
 private:
 	void render_game();
@@ -50,7 +51,6 @@ private:
 	void UpdateNoiseTexture();
 	void UpdateLight2D();
 	void UpdateLight3D();
-	void UpdateEffectTexture();
 
 	void CreateMRT();
 	void ClearMRT();

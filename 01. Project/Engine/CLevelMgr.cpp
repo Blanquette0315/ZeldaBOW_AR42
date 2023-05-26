@@ -4,6 +4,7 @@
 #include "CEventMgr.h"
 #include "CResMgr.h"
 #include "CCollisionMgr.h"
+#include "CRenderMgr.h"
 
 #include "CLevel.h"
 #include "CGameObject.h"
@@ -92,4 +93,8 @@ void CLevelMgr::ChangeLevelState(LEVEL_STATE _State)
 		m_pCurLevel->begin();
 
 	m_pCurLevel->SetState(_State);
+	if (LEVEL_STATE::PLAY == _State)
+	{
+		CRenderMgr::GetInst()->render_static_shadowdepth();
+	}
 }

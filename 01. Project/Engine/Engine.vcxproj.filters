@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <FxCompile Include="func.fx">
@@ -111,6 +111,9 @@
     </FxCompile>
     <FxCompile Include="CamEffect.fx">
       <Filter>HLSL\Render\3D\CamEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Monster_particle_dust_CS.fx">
+      <Filter>HLSL\Compute\ParticleUpdateShader\Monster</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -899,6 +902,9 @@
     </Filter>
     <Filter Include="HLSL\Render\3D\CamEffect">
       <UniqueIdentifier>{5e120df0-3ac8-45d1-8cab-7d1faaf849bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\ParticleUpdateShader\Monster">
+      <UniqueIdentifier>{39da6428-6434-4242-91ba-3b9807c20d12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

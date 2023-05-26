@@ -13,11 +13,16 @@ class CHinoxScript :
     public CMonsterScript
 {
 private:
+    int                 m_iMaxHP;
     Hinox_State         m_eHinoxState;
     bool                m_bGetTree;
     float               m_fGuardtime;
     int                 m_iGuardMotion;
     bool                m_bEyeGuard;
+    Ptr<CPrefab>        m_pBossHP;
+    CGameObject*        m_pBossName;
+    CGameObject*        m_pBossHPUI;
+    CGameObject*        m_pBossHPMaxUI;
 
 private:
     void SearchTree();
