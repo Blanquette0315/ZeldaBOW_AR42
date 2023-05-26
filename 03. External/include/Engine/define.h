@@ -38,6 +38,7 @@ typedef Vector4 Vec4;
 #define SAFE_LOAD_FROM_YAML(type, variable, node) if(node.IsDefined()) { variable = node.as<type>(); }
 
 #define MONSTER_VOLUME 1.f
+#define LINK_VOLUME 1.f
 
 enum class EQUIPABLE_TYPE
 {

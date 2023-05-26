@@ -263,9 +263,9 @@ bool PhysEngine::CreateScene(PhysSceneData* SceneData)
 	sceneDesc.filterShader				= CustomLayerShader;
 	//sceneDesc.filterShader				= PxDefaultSimulationFilterShader;
 	sceneDesc.cudaContextManager		= m_CudaContextManager;
-	// sceneDesc.broadPhaseType			= PxBroadPhaseType::eGPU;
+	sceneDesc.broadPhaseType			= PxBroadPhaseType::eGPU;
 	// sceneDesc.broadPhaseType			= PxBroadPhaseType::eSAP;
-	sceneDesc.broadPhaseType			= PxBroadPhaseType::eMBP;
+	// sceneDesc.broadPhaseType			= PxBroadPhaseType::eMBP;
 	
 	sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
 	//sceneDesc.flags |= PxSceneFlag::eENABLE_CCD;

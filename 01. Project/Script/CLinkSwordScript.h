@@ -31,6 +31,7 @@ private:
 private:
     bool IsAttackAnim();
     void AttackEffect(CMonsterScript* _pMonsterScr);
+    void Func_SwordImpactSound();
 
 public:
     virtual void begin() override;

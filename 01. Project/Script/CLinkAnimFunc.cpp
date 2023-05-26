@@ -67,12 +67,6 @@ void CLinkAnimScript::MoveToDir(DIR _eDir, bool _bReverse)
 	}
 
 	RigidBody()->SetVelocity(vDir * m_fSelectedSpeed);
-	/*if (IsCurAnim(LAT_DASH))
-		RigidBody()->SetVelocity(vDir * m_fDashSpeed);
-	else if (m_iMode == (UINT)LINK_MODE::LINK_MODE_WALK)
-		RigidBody()->SetVelocity(vDir * m_fWalkSpeed);
-	else if (m_iMode == (UINT)LINK_MODE::LINK_MODE_RUN)
-		RigidBody()->SetVelocity(vDir * m_fRunSpeed);*/
 }
 
 void CLinkAnimScript::MoveToDirAdd(DIR _eDir, bool _bReverse)
@@ -104,6 +98,28 @@ void CLinkAnimScript::Func_WalkRunDash()
 {
 	MoveRotation(GetCombinedDir());
 	MoveToDir(DIR::FRONT);
+
+	int iFrameIdx = m_pCurAnimNode->pAnim->GetCurFrame();
+
+	if (m_fSelectedSpeed == m_fWalkSpeed)
+	{
+		if (iFrameIdx == 53)
+		{
+			
+		}
+		if (iFrameIdx == 53 + 12)
+		{
+
+		}
+	}
+	else if (m_fSelectedSpeed == m_fRunSpeed)
+	{
+
+	}
+	else if (m_fSelectedSpeed == m_fDashSpeed)
+	{
+
+	}
 }
 
 void CLinkAnimScript::Func_LockOnMove()
@@ -157,6 +173,7 @@ void CLinkAnimScript::Func_TurnBack()
 void CLinkAnimScript::Func_Jump()
 {
 	RigidBody()->AddVelocity(Vec3(0.f, m_fJumpSpeed, 0.f));
+	Func_JumpStartSound();
 }
 
 void CLinkAnimScript::Func_LowerBodyBlend()
@@ -292,22 +309,29 @@ void CLinkAnimScript::Func_BowEquipOn()
 	pBoneScr->ClearOffset();
 
 	m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW] = true;
+
+	Func_BowEquipSound();
 }
 
 void CLinkAnimScript::Func_BowEquipOff()
 {
-	CBonesocketScript* pBoneScr = m_pBowObj->GetScript<CBonesocketScript>();
-	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
-	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, -0.07f));
-	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -45.f));
+	if (m_pCurAnimNode->pAnim->GetCurFrame() == 707)
+	{
+		CBonesocketScript* pBoneScr = m_pBowObj->GetScript<CBonesocketScript>();
+		pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+		pBoneScr->setOffsetPos(Vec3(0.f, 0.f, -0.07f));
+		pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -45.f));
 
-	m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW] = false;
+		m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW] = false;
+	}
 }
 
 void CLinkAnimScript::Func_SwordAttackMove()
 {
 	Vec3 vDir = Transform()->GetRelativeDir(DIR::FRONT);
 	RigidBody()->SetVelocity(vDir * m_fWalkSpeed);
+
+	Func_SwordSwingSound();
 }
 
 void CLinkAnimScript::Func_SwordEquipOn()
@@ -321,21 +345,26 @@ void CLinkAnimScript::Func_SwordEquipOn()
 	pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
 	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Weapon_L);
 	pBoneScr->ClearOffset();
+
+	Func_SwordEquipSound();
 }
 
 void CLinkAnimScript::Func_SwordEquipOff()
 {
-	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
-	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
-	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
-	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 60.f));
+	if (m_pCurAnimNode->pAnim->GetCurFrame() == 317)
+	{
+		CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
+		pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+		pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
+		pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 60.f));
 
-	m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = false;
+		m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = false;
 
-	pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
-	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
-	pBoneScr->setOffsetPos(Vec3(-0.2f, 0.08f, -0.04f));
-	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 0.f));
+		pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
+		pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+		pBoneScr->setOffsetPos(Vec3(-0.2f, 0.08f, -0.04f));
+		pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 0.f));
+	}
 }
 
 void CLinkAnimScript::Func_BowChargeMove()
@@ -365,8 +394,6 @@ void CLinkAnimScript::Func_ShieldJustStart()
 {
 	m_fParryingAccTime = 0.f;
 	m_bParryingOnce = false;
-
-
 }
 
 void CLinkAnimScript::Func_ShieldJust()
@@ -400,6 +427,8 @@ void CLinkAnimScript::Func_ShieldJust()
 
 			if (m_EffectScreenFlash.Get())
 				Instantiate(m_EffectScreenFlash->Instantiate(), Vec3::Zero, 0);
+
+			Func_JustGuardSound();
 		}
 
 		m_fParryingAccTime += FDT;
@@ -453,6 +482,7 @@ void CLinkAnimScript::Func_JustEvasion()
 			m_bEvasionOnce = true;
 			m_bInvincible = true;	
 			m_bCanJustAttackStart = true;
+			Func_TimeSlowSound();
 		}
 		else
 		{
@@ -460,7 +490,6 @@ void CLinkAnimScript::Func_JustEvasion()
 		}
 	}
 
-	int i = m_pCurAnimNode->pAnim->GetCurFrame();
 	if (m_bEvasionOnce && m_pCurAnimNode->pAnim->GetCurFrame() > 1365 )
 	{
 		TimeSlowAffectedObj(false, GetOwner());
@@ -546,4 +575,200 @@ void CLinkAnimScript::Func_ThrowBombStart()
 	vDir.Normalize();
 	m_pBombObj->GetScript<CLinkBombScript>()->SetDir(vDir);
 	m_pBombObj = nullptr;
+}
+
+void CLinkAnimScript::Func_LastSwing()
+{
+	Func_SwordAttackMove();
+
+	int idx =  g_random(g_gen) % 3;
+	wstring strKey = L"sound\\link\\Link_Voice_LastAttack_";
+	strKey += std::to_wstring(idx) + L".mp3";
+	CResMgr::GetInst()->FindRes<CSound>(strKey)->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_BowDrawSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Bow_Draw0.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_BowShootSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Bow_Release0.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_GuardHitSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Guard_Wood_Metal_0.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_JumpStartSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_Jump_00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_LandSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_Land_01.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_SwordEquipSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Weapon_Sword_Metal_Equip00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_SwordUnEquipSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Weapon_Sword_Metal_UnEquip00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_BowEquipSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Pl_Equip_Bow00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_BowUnEquipSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Pl_UnEquip_Bow00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_JustGuardSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Shield_JustGuard.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_SwordSwingSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\SE_ESf_SWING_SWORD_S.mp3")->Play(1, LINK_VOLUME * 1.f, true, GetOwner());
+}
+
+void CLinkAnimScript::Func_TimeSlowSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\SE_Scene_SlowLoop.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+
+
+void CLinkAnimScript::Func_DamageSmallSound()
+{
+	int idx = g_random(g_gen) % 4;
+	wstring strKey = L"sound\\link\\Link_Voice_Hit_Small_";
+	strKey += std::to_wstring(idx) + L".mp3";
+
+	CResMgr::GetInst()->FindRes<CSound>(strKey)->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_DamageMediumSound()
+{
+
+}
+
+void CLinkAnimScript::Func_WalkSound_L()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_MoveSlow_ToeL00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_WalkSound_R()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_MoveSlow_ToeR00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_RunSound_L()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_MoveNormal_ToeL00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_RunSound_R()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_MoveNormal_ToeR00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_DashSound_L()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_MoveFast_ToeL00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_DashSound_R()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\Mt_Grass_Pl_MoveFast_ToeR00.mp3")->Play(1, LINK_VOLUME * 1.f, false, GetOwner());
+}
+
+void CLinkAnimScript::Func_LowerFootstepSound()
+{
+	if (m_pCurAnimNodeLower == nullptr)
+		return;
+
+	int iFrameIdx = m_pCurAnimNodeLower->pAnim->GetCurFrame();
+
+	if (iFrameIdx == 499 || iFrameIdx == 522 || iFrameIdx == 545 || iFrameIdx == 567)
+	{
+		Func_WalkSound_R();
+	}
+	else if (iFrameIdx == 511 || iFrameIdx == 534 || iFrameIdx == 557 || iFrameIdx == 579)
+	{
+		Func_WalkSound_L();
+	}
+	else if (iFrameIdx == 596 || iFrameIdx == 616 || iFrameIdx == 642 || iFrameIdx == 667)
+	{
+		Func_RunSound_R();
+	}
+	else if (iFrameIdx == 607 || iFrameIdx == 628 || iFrameIdx == 654 || iFrameIdx == 679)
+	{
+		Func_RunSound_L();
+	}
+}
+
+void CLinkAnimScript::Func_UpperFootstepSound()
+{
+	int iFrameIdx = m_pCurAnimNode->pAnim->GetCurFrame();
+
+	if (iFrameIdx == 53)
+	{
+		Func_WalkSound_R();
+	}
+	else if (iFrameIdx == 66)
+	{
+		Func_WalkSound_L();
+	}
+	else if (iFrameIdx == 115 || iFrameIdx == 475 || iFrameIdx == 1817)
+	{
+		Func_RunSound_R();
+	}
+	else if (iFrameIdx == 127 || iFrameIdx == 487 || iFrameIdx == 1829)
+	{
+		Func_RunSound_L();
+	}
+	else if (iFrameIdx == 190)
+	{
+		Func_DashSound_R();
+	}
+	else if (iFrameIdx == 202)
+	{
+		Func_DashSound_L();
+	}
+}
+
+void CLinkAnimScript::Func_SwordEquipOffForced()
+{
+	CBonesocketScript* pBoneScr = m_pSwordObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, 0.f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 60.f));
+
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::SWORD] = false;
+
+	pBoneScr = m_pShieldObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+	pBoneScr->setOffsetPos(Vec3(-0.2f, 0.08f, -0.04f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, 0.f));
+}
+
+void CLinkAnimScript::Func_BowEquipOffForced()
+{
+	CBonesocketScript* pBoneScr = m_pBowObj->GetScript<CBonesocketScript>();
+	pBoneScr->setBoneIdx((UINT)LINK_BONE_STRING::Pod_A);
+	pBoneScr->setOffsetPos(Vec3(0.f, 0.f, -0.07f));
+	pBoneScr->setOffsetRot(Vec3(0.f, 0.f, -45.f));
+
+	m_bArrEquip[(UINT)EQUIPMENT_STATE::BOW] = false;
 }

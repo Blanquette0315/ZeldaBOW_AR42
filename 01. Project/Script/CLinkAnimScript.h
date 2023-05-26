@@ -182,6 +182,40 @@ private:
     void Func_JustAtkEnd();
     void Func_CreateBomb();
     void Func_ThrowBombStart();
+    void Func_LastSwing();
+
+    // sound
+    void Func_BowDrawSound();
+    void Func_BowShootSound();
+    void Func_GuardHitSound();
+    void Func_JumpStartSound();
+    void Func_LandSound();
+    void Func_SwordEquipSound();
+    void Func_SwordUnEquipSound();
+    void Func_BowEquipSound();
+    void Func_BowUnEquipSound();
+    void Func_JustGuardSound();
+    void Func_SwordSwingSound();
+    void Func_TimeSlowSound();
+    
+
+    void Func_DamageSmallSound();
+    void Func_DamageMediumSound();
+
+    void Func_WalkSound_L();
+    void Func_WalkSound_R();
+    void Func_RunSound_L();
+    void Func_RunSound_R();
+    void Func_DashSound_L();
+    void Func_DashSound_R();
+
+    void Func_LowerFootstepSound();
+    void Func_UpperFootstepSound();
+
+    void Func_SwordEquipOffForced();
+    void Func_BowEquipOffForced();
+
+
 
     // convenience function
 private:

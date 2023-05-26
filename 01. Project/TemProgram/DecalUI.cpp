@@ -134,21 +134,23 @@ void DecalUI::render_update()
 	ImGui::SameLine();
 	ImGui::Text("Dynamic"); ImGui::SameLine(); if (ImGui::RadioButton("##DynamicMtrl", m_bIsDyanmicMtrl)) { GetTarget()->Decal()->GetDynamicMaterial(); };
 
-	if (m_bIsDyanmicMtrl)
-	{
-		ShowShaderParam(m_Material.Get());
-	}
-	else
-	{
-		if (nullptr != m_DecalTexture)
-		{
-			ImGui::Image(m_DecalTexture->GetSRV().Get(), ImVec2(100.f, 100.f));
-		}
-		else
-		{
-			ImGui::Image(nullptr, ImVec2(100.f, 100.f));
-		}
-	}
+	ShowShaderParam(m_Material.Get());
+
+	//if (m_bIsDyanmicMtrl)
+	//{
+	//	// ShowShaderParam(m_Material.Get());
+	//}
+	//else
+	//{
+	//	if (nullptr != m_DecalTexture)
+	//	{
+	//		ImGui::Image(m_DecalTexture->GetSRV().Get(), ImVec2(100.f, 100.f));
+	//	}
+	//	else
+	//	{
+	//		ImGui::Image(nullptr, ImVec2(100.f, 100.f));
+	//	}
+	//}
 }
 
 void DecalUI::SetMesh(DWORD_PTR _strMeshKey)
@@ -182,7 +184,8 @@ void DecalUI::SetTexture(DWORD_PTR _strTexKey)
 	assert(nullptr != pTex);
 
 	// 이때 우리가 선택했던 TexParam이 몇번 째인지 알기 위해서 멤버 변수로 추가해주었던 것이다.
-	m_Material->SetTexParam(m_eSelectTexParam, pTex);
+	// m_Material->SetTexParam(m_eSelectTexParam, pTex);
+	GetTarget()->Decal()->SetDecalTexture(pTex);
 }
 
 void DecalUI::ShowShaderParam(CMaterial* _pMtrl)

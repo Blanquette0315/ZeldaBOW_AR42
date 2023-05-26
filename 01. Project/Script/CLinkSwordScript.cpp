@@ -51,6 +51,12 @@ void CLinkSwordScript::AttackEffect(CMonsterScript* _pMonsterScr)
 		pEffectObj->Transform()->SetRelativeRotation(vRot);
 		Instantiate(pEffectObj, vInstPos, 0);
 	}
+	Func_SwordImpactSound();
+}
+
+void CLinkSwordScript::Func_SwordImpactSound()
+{
+	CResMgr::GetInst()->FindRes<CSound>(L"sound\\link\\SwordImpact.mp3")->Play(1, LINK_VOLUME * 1.f, true, GetOwner());
 }
 
 void CLinkSwordScript::begin()
@@ -96,6 +102,7 @@ void CLinkSwordScript::BeginOverlap(CGameObject* _pOther)
 		}
 	}
 }
+
 
 void CLinkSwordScript::Overlap(CGameObject* _pOther)
 {
