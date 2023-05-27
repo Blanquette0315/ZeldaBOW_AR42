@@ -67,11 +67,12 @@ Vec3 CMonsterAIScript::FindPlayerDir()
 {
 	Vec3 MonsterPos = GetOwner()->GetParent()->Transform()->GetRelativePos();
 	Vec3 PlayerPos = m_pPlayer->Transform()->GetRelativePos();
-	Vec3 vDir;
-	if (!CNavMgr::GetInst()->FindNextMoveDir(MonsterPos, PlayerPos, vDir))
+	Vec3 vDir = PlayerPos - MonsterPos;
+	vDir.Normalize();
+	/*if (!CNavMgr::GetInst()->FindNextMoveDir(MonsterPos, PlayerPos, vDir))
 	{
 		return Vec3::Zero;
-	}
+	}*/
 	return vDir;
 }
 
