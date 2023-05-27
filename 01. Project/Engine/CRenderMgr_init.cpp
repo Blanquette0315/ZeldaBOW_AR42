@@ -275,7 +275,7 @@ void CRenderMgr::CreateMRT()
 		Ptr<CTexture> arrRTTex[8] =
 		{
 			CResMgr::GetInst()->CreateTexture(L"DepthMapTex"
-											, 2048, 2048
+											, 8192, 8192
 											, DXGI_FORMAT_R32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
@@ -286,36 +286,21 @@ void CRenderMgr::CreateMRT()
 		// Depth Stencil Texture 만들기
 		Ptr<CTexture> pDepthStencilTex
 			= CResMgr::GetInst()->CreateTexture(L"DepthMapDSTex"
-				, 2048, 2048
+				, 8192, 8192
 				, DXGI_FORMAT_D32_FLOAT, D3D11_BIND_DEPTH_STENCIL);
 
 		m_arrMRT[(UINT)MRT_TYPE::SHADOW] = new CMRT;
 		m_arrMRT[(UINT)MRT_TYPE::SHADOW]->Create(arrRTTex, arrClear, pDepthStencilTex);
-	}
 
-	// =============
-	// StaticShadowMap MRT
-	// =============
-	{
-		Ptr<CTexture> arrRTTex[8] =
+		Ptr<CTexture> arrRTTex2[8] =
 		{
 			CResMgr::GetInst()->CreateTexture(L"StaticDepthMapTex"
-											, 2048, 2048
+											, 8192, 8192
 											, DXGI_FORMAT_R32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		Vec4 arrClear[8] = {
-				 Vec4(0.f, 0.f, 0.f, 0.f)
-		};
-
-		// Depth Stencil Texture �����
-		Ptr<CTexture> pDepthStencilTex
-			= CResMgr::GetInst()->CreateTexture(L"StaticDepthMapDSTex"
-				, 2048, 2048
-				, DXGI_FORMAT_D32_FLOAT, D3D11_BIND_DEPTH_STENCIL);
-
 		m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW] = new CMRT;
-		m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW]->Create(arrRTTex, arrClear, pDepthStencilTex);
+		m_arrMRT[(UINT)MRT_TYPE::STATICSHADOW]->Create(arrRTTex2, arrClear, pDepthStencilTex);
 	}
 }
 
