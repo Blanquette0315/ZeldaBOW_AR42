@@ -57,6 +57,7 @@ private:
     bool                        m_bCurDataCooking;
 
     Matrix m_mat180Rot;
+    CMesh* m_pLandDepthMesh;
 
 
 public:
@@ -64,6 +65,7 @@ public:
     virtual void finaltick() override;
     virtual void render() override;
     virtual void render(UINT _iSubset) override;
+    virtual void render_depthmap() override;
 
 public:
     void SetFaceCount(UINT _X, UINT _Z);
@@ -77,6 +79,8 @@ public:
     Vec2 GetBrushScale() { return m_vBrushScale; }
     Ptr<CTexture> GetBrushTex() { return m_pBrushTex; }
     bool IsCurDataCooking() { return m_bCurDataCooking; }
+
+    void CreateMaxMesh();
 
     void SaveHeightImage();
     void LoadHeightImage();

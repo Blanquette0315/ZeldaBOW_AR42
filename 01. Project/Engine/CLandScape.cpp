@@ -196,6 +196,23 @@ void CLandScape::render(UINT _iSubset)
 	render();
 }
 
+void CLandScape::render_depthmap()
+{
+	if (m_pLandDepthMesh == nullptr)
+		return;
+
+	Transform()->UpdateData();
+
+	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DepthMapMtrl");
+
+	pMtrl->UpdateData();
+
+	m_pLandDepthMesh->render();
+
+	DeleteRes(m_pLandDepthMesh, RES_TYPE::MESH);
+	m_pLandDepthMesh = nullptr;
+}
+
 void CLandScape::SetFaceCount(UINT _X, UINT _Z)
 {
 	m_iXFaceCount = _X;
@@ -256,8 +273,39 @@ void CLandScape::Cooking()
 		idx++;
 	}
 
+	CreateMaxMesh();
+
 	delete[] arrTessVtx;
 	m_bCurDataCooking = true;
+}
+
+void CLandScape::CreateMaxMesh()
+{
+	vector<Vtx> vecVtx;
+	vector<UINT> vecIdx;
+	Vtx v;
+	// 정점 배치
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		v.vPos = Vec3(m_arrVertexPos[i].x, m_arrVertexPos[i].y, m_arrVertexPos[i].z);
+		vecVtx.push_back(v);
+	}
+
+	// 인덱스
+	for (int i = 0; i < m_inumVertices; ++i)
+	{
+		vecIdx.push_back(i);
+	}
+
+	CMesh* pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	pMesh->SetKey(L"LandDepthMapMesh");
+
+	tEvent evn = {};
+
+	// 추가
+	AddRes(pMesh, RES_TYPE::MESH);
+	m_pLandDepthMesh = pMesh;
 }
 
 void CLandScape::CreateActor()
