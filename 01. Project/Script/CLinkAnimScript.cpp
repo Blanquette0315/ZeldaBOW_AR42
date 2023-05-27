@@ -362,7 +362,7 @@ void CLinkAnimScript::begin()
 void CLinkAnimScript::tick()
 {
 	// PlayNextAnim();
-	if ((m_pCurAnimNode->iPreferences & LAP_AIR) == 0)
+	if ((m_pCurAnimNode->iPreferences & LAP_AIR) == 0 && m_pGroundChecker->IsGround())
 		RigidBody()->SetVelocity(Vec3::Zero);
 
 

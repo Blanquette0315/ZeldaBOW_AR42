@@ -184,6 +184,7 @@ struct tInstancingData
 	Matrix matWV;
 	Matrix matWVP;
 	int    iRowIdx;
+	int	   iPadding[3];
 };
 
 // ======================

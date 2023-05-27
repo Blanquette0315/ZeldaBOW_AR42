@@ -46,7 +46,8 @@ void CInstancingBuffer::SetData()
 
 	D3D11_MAPPED_SUBRESOURCE tMap = {};
 
-	CONTEXT->Map(m_pInstancingBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &tMap);
+	HRESULT result = CONTEXT->Map(m_pInstancingBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &tMap);
+
 	memcpy(tMap.pData, &m_vecData[0], sizeof(tInstancingData) * m_vecData.size());
 	CONTEXT->Unmap(m_pInstancingBuffer.Get(), 0);
 

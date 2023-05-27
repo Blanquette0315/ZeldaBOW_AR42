@@ -86,7 +86,7 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     
     // ±¤¿ø Àû¿ë
     float4 vDiffuse = g_tex_2.SampleLevel(g_sam_0, vUV, g_int_2);
-    vDiffuse = round(vDiffuse * 10) / 10.0f;
+    vDiffuse = round(vDiffuse * 5) / 5.0f;
     float4 vSpecular = g_tex_3.Sample(g_sam_0, vUV);
     
     vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
