@@ -140,4 +140,107 @@ void CS_ParticleSpark(uint3 _id : SV_DispatchThreadID)
         }
     }
 }
+
+[numthreads(128, 1, 1)]
+void CS_ParticleDust_Clap(uint3 _id : SV_DispatchThreadID)
+{
+    // 지금 스레드를 1차원으로 사용중이기 때문에 x만 증가한다.
+    if ((uint) PARTICLE_MAX <= _id.x)
+        return;
+    
+    if (FirstEntry)
+    {
+        Particle.iActive = 0;
+    }
+    
+    if (0 == Particle.iActive)
+    {
+        while (0 < ShareData.iAliveCount)
+        {
+            int iOriginValue = ShareData.iAliveCount;
+            int iExchange = iOriginValue - 1;
+
+            InterlockedCompareExchange(ShareData.iAliveCount, iOriginValue, iExchange, iExchange);
+            
+            if (iOriginValue == iExchange)
+            {
+                Particle.iActive = 1;
+                break;
+            }
+        }
+        
+        if (Particle.iActive)
+        {
+            float4 vRandom = (float4) 0.f;
+            
+
+            float2 vUV = float2((float) _id.x / PARTICLE_MAX, 0.5f);
+            vUV.x += g_fAccTime;
+
+            vUV.y += sin((vUV.x + g_fAccTime) * 3.141592f * 2.f * 10.f) * 0.5;
+
+            vRandom = float4(GaussianSample(vUV + float2(0.f, 0.f)).x, GaussianSample(vUV + float2(0.1f, 0.f)).x, GaussianSample(vUV + float2(0.2f, 0.f)).x, GaussianSample(vUV + float2(0.3f, 0.f)).x);
+            
+            vRandom.x = 87.l * vRandom.x;
+            vRandom.x = frac(vRandom.x);
+            
+            vRandom.y = 87.l * vRandom.y;
+            vRandom.y = frac(vRandom.y);
+            
+            vRandom.z = 87.l * vRandom.z;
+            vRandom.z = frac(vRandom.z);
+            
+            float fTheta = vRandom.x * 3.141592f * 2.f;
+
+
+            float fSpawnRange = SpawnRange * (1 - vRandom.y * 0.5);
+            
+            Particle.vRelativePos.xyz = float3(float2(cos(fTheta), sin(fTheta)) * vRandom.y, vRandom.z * 2.f - 1.f) * SpawnRange;
+
+            Particle.vDir.xyz = normalize(float3(0.f, 1.f, 0.f));
+
+            if (IsWorldSpawn)
+            {
+                if (Is3DParticle == 0)
+                {
+                    Particle.vRelativePos.xyz += ObjectWorldPos.xyz;
+                }
+                else
+                {
+                    Particle.matWorld = WorldMatrix;
+                }
+
+            }
+            Particle.fSpeed = vRandom.z * (MaxSpeed - MinSpeed) + MinSpeed;
+            Particle.vSpeed = Particle.vDir * Particle.fSpeed;
+            
+            Particle.fCurTime = 0.f;
+            Particle.fMaxTime = vRandom.w * (MaxLife - MinLife) + MinLife;
+        }
+    }
+    else if (Particle.iActive == 1)
+    {
+        Particle.fCurTime += g_fDT;
+        if (Particle.fMaxTime < Particle.fCurTime)
+        {
+            tParticle reset = (tParticle) 0.f;
+            Particle = reset;
+            Particle.iActive = 2;
+        }
+        else
+        {
+            // 자신의 속도에 DT를 곱해 이번 DT만큼 이동을하는데, 방향을 곱해서 해당 방향으로 이동하게 만들어 주었다.
+            float4 vPrevPos = Particle.vRelativePos;
+            
+            if (Option & GRAVITY_ON)
+            {
+                Particle.vSpeed.y -= GravityForce * g_fDT;
+                Particle.vDir = normalize(Particle.vSpeed);
+            }
+            
+            Particle.vRelativePos += Particle.vSpeed * g_fDT;
+        }
+    }
+}
+
 #endif

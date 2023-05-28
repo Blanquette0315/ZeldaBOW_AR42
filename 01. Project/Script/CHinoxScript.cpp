@@ -81,7 +81,7 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			m_pBossHPMaxUI->Destroy();
 			m_pBossHPUI->Destroy();
 			m_pBossName->Destroy();
-
+			MeshRender()->SetDynamicShadow(false);
 			for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
 			{
 				Ptr<CMaterial> pMaterial = MeshRender()->GetCurMaterial(i);
