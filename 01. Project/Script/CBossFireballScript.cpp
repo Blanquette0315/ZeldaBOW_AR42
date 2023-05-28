@@ -210,6 +210,14 @@ void CBossFireballScript::Dead()
 	Destroy();
 	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\boss\\SiteBossLsword_BigFlameBall_Explosion.wav");
 	pSound->Play(1, MONSTER_VOLUME, true, nullptr, Transform()->GetWorldPos());
-	CGameObject* pflame = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\flame.pref", L"prefab\\flame.pref")->Instantiate();
-	Instantiate(pflame, Transform()->GetWorldPos(), 0);
+	if (m_iSize == 0)
+	{
+		CGameObject* pflame = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\flame.pref", L"prefab\\flame.pref")->Instantiate();
+		Instantiate(pflame, Transform()->GetWorldPos(), 0);
+	}
+	else
+	{
+		CGameObject* pflame = CResMgr::GetInst()->Load<CPrefab>(L"prefab\\flame_big.pref", L"prefab\\flame_big.pref")->Instantiate();
+		Instantiate(pflame, Transform()->GetWorldPos(), 0);
+	}
 }

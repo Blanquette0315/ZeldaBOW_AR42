@@ -26,7 +26,7 @@ void CBokoblinScript::Damage(int _iNumber, Vec3 _vPos)
 		m_iMotion = 0;
 		AI->Done(false);
 		Animator3D()->Play(L"sleep_start", false);
-
+		MeshRender()->SetDynamicShadow(false);
 		for (UINT i = 0; i < MeshRender()->GetMtrlCount(); ++i)
 		{
 			Ptr<CMaterial> pMaterial = MeshRender()->GetCurMaterial(i);
