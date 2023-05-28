@@ -15,6 +15,9 @@ StructuredBuffer<tParticle> ParticleBuffer : register(t16);
 #define IsWorldSpawn    g_int_1
 #define Is3DParticle    g_int_2
 
+#define EmsvCoeff_RG    g_vec2_0
+#define EmsvCoeff_BA    g_vec2_1
+
 #define StartScale      g_vec4_0
 #define EndScale        g_vec4_1
 #define StartColor      g_vec4_2
@@ -208,6 +211,35 @@ float4 PS_ParticleRender(GS_OUT _in) : SV_Target
     vColor.rgb *= lerp(StartColor, EndColor, fRatio).rgb;
     
     return vColor;
+}
+
+struct PS_OUT
+{
+    float4 vColor : SV_Target0;
+    float4 vEmissiv : SV_Target4;
+};
+
+PS_OUT PS_ParticleRender_Emissive_A(GS_OUT _in)
+{
+    PS_OUT output = (PS_OUT) 0.f;
+    float4 vColor = (float4) 0.f;
+    float4 vEmsvColor = (float4) 0.f;
+    
+    vColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    
+    float fRatio = ParticleBuffer[_in.iInstance].fCurTime / ParticleBuffer[_in.iInstance].fMaxTime;
+    vColor *= lerp(StartColor, EndColor, fRatio);
+    
+    vEmsvColor = vColor;
+    
+    vEmsvColor.r *= EmsvCoeff_RG.x;
+    vEmsvColor.g *= EmsvCoeff_RG.y;
+    vEmsvColor.b *= EmsvCoeff_BA.x;
+    
+    output.vColor = vColor;
+    output.vEmissiv = vEmsvColor;
+    
+    return output;
 }
 
 float4 PS_ParticleRender_Alpha(GS_OUT _in) : SV_Target

@@ -27,6 +27,9 @@ void ParticleSystemUI::update()
         m_vStartScale = GetTarget()->ParticleSystem()->GetStartScale();
         m_vEndScale = GetTarget()->ParticleSystem()->GetEndScale();
 
+        m_vEmsvCoeff_RG = GetTarget()->ParticleSystem()->GetEmsvCoeff_RG();
+        m_vEmsvCoeff_BA = GetTarget()->ParticleSystem()->GetEmsvCoeff_BA();
+
         m_vStartColor = GetTarget()->ParticleSystem()->GetStartColor();
         m_vEndColor = GetTarget()->ParticleSystem()->GetEndColor();
 
@@ -156,6 +159,9 @@ void ParticleSystemUI::render_update()
     ImGui::Text("Start Scale "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_StartScale", m_vStartScale);
     ImGui::Text("End Scale   "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_EndScale", m_vEndScale);
 
+    ImGui::Text("Emsv Coef RG"); ImGui::SameLine(); ImGui::InputFloat2("##PTC_EmsvCoeffRG", m_vEmsvCoeff_RG);
+    ImGui::Text("Emsv Coef BA"); ImGui::SameLine(); ImGui::InputFloat2("##PTC_EmsvCoeffBA", m_vEmsvCoeff_BA);
+
     ImGui::Text("Start Color "); ImGui::SameLine(); ImGui::InputFloat3("##PTC_StartColor", m_vStartColor);
     ImGui::Text("            "); ImGui::SameLine(); CommonUI::CreateColorPicker(m_vStartColor);
 
@@ -175,6 +181,8 @@ void ParticleSystemUI::render_update()
     {
         GetTarget()->ParticleSystem()->SetMaxCount(m_iMaxCount);
         GetTarget()->ParticleSystem()->SetAliveCount(m_iAliveCount);
+        GetTarget()->ParticleSystem()->SetEmsvCoeff_RG(m_vEmsvCoeff_RG);
+        GetTarget()->ParticleSystem()->SetEmsvCoeff_BA(m_vEmsvCoeff_BA);
         GetTarget()->ParticleSystem()->Set_SE_Color(m_vStartColor, m_vEndColor);
         GetTarget()->ParticleSystem()->Set_SE_Scale(m_vStartScale, m_vEndScale);
         GetTarget()->ParticleSystem()->SetMinMaxSpeed(m_vMinMaxSpeed);

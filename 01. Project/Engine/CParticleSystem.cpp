@@ -17,6 +17,8 @@ CParticleSystem::CParticleSystem()
 	, m_vEndScale{}
 	, m_vStartColor{}
 	, m_vEndColor{}
+	, m_vEmsvCoeff_RG{}
+	, m_vEmsvCoeff_BA{}
 	, m_vMinMaxSpeed{}
 	, m_vMinMaxLifeTime{}
 	, m_Frequency(0.f)
@@ -55,6 +57,8 @@ CParticleSystem::CParticleSystem(const CParticleSystem& _origin)
 	, m_vEndScale(_origin.m_vEndScale)
 	, m_vStartColor(_origin.m_vStartColor)
 	, m_vEndColor(_origin.m_vEndColor)
+	, m_vEmsvCoeff_RG(_origin.m_vEmsvCoeff_RG)
+	, m_vEmsvCoeff_BA(_origin.m_vEmsvCoeff_BA)
 	, m_vMinMaxSpeed(_origin.m_vMinMaxSpeed)
 	, m_vMinMaxLifeTime(_origin.m_vMinMaxLifeTime)
 	, m_Frequency(_origin.m_Frequency)
@@ -168,6 +172,8 @@ void CParticleSystem::render()
 	// 결과 FPS가 1000대였던 것이 4000에 가까히 증가했다.
 
 	GetCurMaterial()->SetScalarParam(INT_1, &m_WorldSpawn);
+	GetCurMaterial()->SetScalarParam(VEC2_0, &m_vEmsvCoeff_RG);
+	GetCurMaterial()->SetScalarParam(VEC2_1, &m_vEmsvCoeff_BA);
 	GetCurMaterial()->SetScalarParam(VEC4_0, &m_vStartScale);
 	GetCurMaterial()->SetScalarParam(VEC4_1, &m_vEndScale);
 	GetCurMaterial()->SetScalarParam(VEC4_2, &m_vStartColor);
@@ -222,6 +228,10 @@ void CParticleSystem::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_vStartScale;
 	_emitter << YAML::Key << "EndScale";
 	_emitter << YAML::Value << m_vEndScale;
+	_emitter << YAML::Key << "EmsvCoeff_RG";
+	_emitter << YAML::Value << m_vEmsvCoeff_RG;
+	_emitter << YAML::Key << "EmsvCoeff_BA";
+	_emitter << YAML::Value << m_vEmsvCoeff_BA;
 	_emitter << YAML::Key << "StartColor";
 	_emitter << YAML::Value << m_vStartColor;
 	_emitter << YAML::Key << "EndColor";
@@ -262,6 +272,8 @@ void CParticleSystem::LoadFromYAML(YAML::Node& _node)
 	m_iAliveCount = node["AliveCount"].as<UINT>();
 	m_vStartScale = node["StartScale"].as<Vec4>();
 	m_vEndScale = node["EndScale"].as<Vec4>();
+	SAFE_LOAD_FROM_YAML(Vec2, m_vEmsvCoeff_RG, node["EmsvCoeff_RG"]);
+	SAFE_LOAD_FROM_YAML(Vec2, m_vEmsvCoeff_BA, node["EmsvCoeff_BA"]);
 	m_vStartColor = node["StartColor"].as<Vec4>();
 	m_vEndColor = node["EndColor"].as<Vec4>();
 	m_vMinMaxSpeed = node["MinMaxSpeed"].as<Vec2>();

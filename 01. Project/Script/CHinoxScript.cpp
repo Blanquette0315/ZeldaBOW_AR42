@@ -88,6 +88,8 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 				int j = 1;
 				pMaterial->SetScalarParam(INT_0, &j);
 				pMaterial->SetScalarParam(FLOAT_1, &m_fAcctime);
+				pMaterial->SetScalarParam(FLOAT_3, &m_fBurnTexIdx);
+				pMaterial->SetScalarParam(VEC2_3, &m_vBurnEmsvCoeff);
 				float alltime = 4.8f;
 				pMaterial->SetScalarParam(FLOAT_2, &alltime);
 			}

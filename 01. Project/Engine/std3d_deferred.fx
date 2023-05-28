@@ -146,7 +146,7 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     }
     
     float4 vObjColor = float4(1.f, 0.f, 1.f, 1.f);
-    
+    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
     if (g_btex_0)
     {
         // Sampler Type
@@ -159,13 +159,32 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
             vObjColor = g_tex_0.Sample(g_sam_3, SelectUV(g_iTex0UV, _in));
         }
       
-        
-        if(g_int_3 != 0.f)
+        // Shader Type
+        // RGB(0.f,0.f,0.f) Masking Type
+        if (g_int_3 == 1)
         {
             if (vObjColor.r == 0.f && vObjColor.g == 0.f && vObjColor.b == 0.f)
             {
                 discard;
             }
+        }
+        // Alb Color(0.f,0.f,0.f) = Emissive Color Type
+        else if (g_int_3 == 2)
+        {
+            if (vObjColor.r == 0.f && vObjColor.g == 0.f && vObjColor.b == 0.f)
+            {
+                vObjColor.x = vAddEmissiveColor.x;
+                vObjColor.y = vAddEmissiveColor.y;
+                vObjColor.z = vAddEmissiveColor.z;
+            }
+        }
+        if (g_int_3 == 3)
+        {
+            vEmissiveColor = float4(1.f, 1.f, 1.f, 1.f);
+            
+            vEmissiveColor.x = vObjColor.x * vAddEmissiveColor.x;
+            vEmissiveColor.y = vObjColor.y * vAddEmissiveColor.y;
+            vEmissiveColor.z = vObjColor.z * vAddEmissiveColor.z;
         }
     }
 
@@ -204,7 +223,6 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     }
 
     // if Binding EmissiveTex
-    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
     if(g_btex_3)
     {
         vEmissiveColor = g_tex_3.Sample(g_sam_0, SelectUV(g_iTex3UV, _in));
@@ -225,7 +243,20 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     // PaperBurn Effect
     if(g_int_0 == 1)
     {
-        output.vColor = PaperBurn(output.vColor, SelectUV(g_iTex0UV, _in));
+        float4 vBurnColor = PaperBurn(output.vColor, SelectUV(g_iTex0UV, _in));
+        
+        if (output.vColor.r != vBurnColor.r
+            && output.vColor.g != vBurnColor.g
+            && output.vColor.b != vBurnColor.b)
+        {
+            output.vEmissiv = vBurnColor;
+            
+            output.vEmissiv.r *= g_vec2_3.x;
+            output.vEmissiv.g *= g_vec2_3.x;
+            output.vEmissiv.b *= g_vec2_3.x;
+        }
+        
+        output.vColor = vBurnColor;
     }
     
     return output;
