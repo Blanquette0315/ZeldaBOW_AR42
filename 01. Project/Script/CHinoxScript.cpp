@@ -60,6 +60,12 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			return;
 
 		m_iHP -= _iNumber;
+		if (_vPos.z != 10000.f && Head->HeadCheck(_vPos) && m_eCurrentState != Monster_State::GROGGY && !m_bEyeGuard)
+		{
+			m_iHP -= 3;
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\EnemyHit_Critical.wav");
+			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
+		}
 		m_pBossHPUI->Destroy();
 		m_pBossHPUI = m_pBossHP->Instantiate();
 		float fCurHPbar = 400.f * m_iHP / m_iMaxHP;
@@ -109,8 +115,6 @@ void CHinoxScript::Damage(int _iNumber, Vec3 _vPos)
 			m_bEyeGuard = true;
 			Animator3D()->Play(L"Damage_Eye_Start", false);
 			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\hinox\\Hinox_DamageEye.mp3");
-			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
-			pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\EnemyHit_Critical.wav");
 			pSound->Play(1, MONSTER_VOLUME, true, GetOwner());
 		}
 		else if (_vPos.y == 10000.f)

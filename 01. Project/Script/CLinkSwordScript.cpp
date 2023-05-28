@@ -130,7 +130,7 @@ void CLinkSwordScript::Overlap(CGameObject* _pOther)
 			m_vecObjHit.push_back(_pOther);
 
 			// Set Damage to Monster Here
-			pMonsterScr->Damage(1);
+			pMonsterScr->Damage(2);
 			AttackEffect(pMonsterScr);
 		}
 	}
