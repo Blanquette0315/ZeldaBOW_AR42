@@ -30,6 +30,9 @@ private:
     Vec4                        m_vStartColor;  // 처음 시작시 파티클의 색상
     Vec4                        m_vEndColor;    // 마지막 소멸 직전의 파티클 색상
 
+    Vec2                        m_vEmsvCoeff_RG;
+    Vec2                        m_vEmsvCoeff_BA;
+
     Vec2                        m_vMinMaxSpeed;
     Vec2                        m_vMinMaxLifeTime; // 파티클 최소 생존 시간, 파티클 최대 생존 시간 (최대 최소 시간사이 랜덤하게 설정되도록 만들 것이다.)
 
@@ -70,6 +73,9 @@ public:
 
     void SetMaxCount(UINT _MaxCount);
 
+    void SetEmsvCoeff_RG(Vec2 _EmsvCoeff_RG) { m_vEmsvCoeff_RG = _EmsvCoeff_RG; }
+    void SetEmsvCoeff_BA(Vec2 _EmsvCoeff_BA) { m_vEmsvCoeff_BA = _EmsvCoeff_BA; }
+
     void Set_SE_Scale(Vec4 _StartScale, Vec4 _EndScale) { m_vStartScale = _StartScale; m_vEndScale = _EndScale; }
     void Set_SE_Color(Vec4 _StartColor, Vec4 _EndColor) { m_vStartColor = _StartColor; m_vEndColor = _EndColor; }
     void SetMinMaxLifeTime(Vec2 _MinMaxTime) { m_vMinMaxLifeTime = _MinMaxTime; }
@@ -81,6 +87,8 @@ public:
 public:
     UINT GetMaxCount() { return m_iMaxCount; }
     UINT GetAliveCount() { return m_iAliveCount; }
+    Vec2 GetEmsvCoeff_RG() { return m_vEmsvCoeff_RG; }
+    Vec2 GetEmsvCoeff_BA() { return m_vEmsvCoeff_BA; }
     Vec4 GetStartColor() { return m_vStartColor; }
     Vec4 GetEndColor() { return m_vEndColor; }
     Vec4 GetStartScale() { return m_vStartScale; }

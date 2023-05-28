@@ -13,6 +13,9 @@ private:
     Vec4 m_vStartScale;
     Vec4 m_vEndScale;
 
+    Vec2 m_vEmsvCoeff_RG;
+    Vec2 m_vEmsvCoeff_BA;
+
     Vec4 m_vStartColor;
     Vec4 m_vEndColor;
 

@@ -34,6 +34,9 @@ protected:
     float               m_fSpeed;
     int                 m_iMotion;
     Vec3                m_vFront;
+    Vec2                m_vBurnEmsvCoeff = Vec2(0.f, 0.f);
+    float               m_fBurnTexIdx = 0.f;
+    
 
 public:
     void setState(Monster_State _eState) { m_eCurrentState = _eState; }
@@ -43,6 +46,7 @@ public:
 
 public:
     virtual void tick() override {};
+    virtual void finaltick() override;
 
     virtual void SaveToYAML(YAML::Emitter& _emitter) override;
     virtual void LoadFromYAML(YAML::Node& _node) override;

@@ -176,6 +176,7 @@ void CCamera::render()
 		// Domain �з��� ���� ���� ȣ��
 		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet();
 		render_deferred();
+		render_deferred_transparent();
 
 		render_deferreddecal();
 
@@ -249,6 +250,8 @@ void CCamera::SortObject()
 {
 	for (auto& pair : m_mapInstGroup_D)
 		pair.second.clear();
+	for (auto& pair : m_mapInstGroup_DT)
+		pair.second.clear();
 	for (auto& pair : m_mapInstGroup_F)
 		pair.second.clear();
 	for (auto& pair : m_mapInstGroup_FT)
@@ -319,10 +322,13 @@ void CCamera::SortObject()
 							Ptr<CMaterial> pMtrl = pRenderCom->GetCurMaterial(iMtrl);
 
 							if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE
-								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK
-								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
+								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_MASK)
 							{
 								pMap = &m_mapInstGroup_D;
+							}
+							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT)
+							{
+								pMap = &m_mapInstGroup_DT;
 							}
 							else if (pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_OPAQUE
 								|| pShader->GetDomain() == SHADER_DOMAIN::DOMAIN_MASK
@@ -575,6 +581,104 @@ void CCamera::render_deferred_transparent()
 	{
 		m_vecDeferredTransparent[i]->render();
 	}*/
+
+	for (auto& pair : m_mapSingleObj)
+	{
+		pair.second.clear();
+	}
+
+	// Deferred object render
+	tInstancingData tInstData = {};
+
+	for (auto& pair : m_mapInstGroup_DT)
+	{
+		if (pair.second.empty())
+			continue;
+
+		if (pair.second.size() <= 1
+			|| pair.second[0].pObj->Animator2D()
+			|| pair.second[0].pObj->GetRenderComponent()->GetCurMaterial(pair.second[0].iMtrlIdx)->GetShader()->GetVSInst() == nullptr)
+		{
+			for (UINT i = 0; i < pair.second.size(); ++i)
+			{
+				map<INT_PTR, vector<tInstObj>>::iterator iter
+					= m_mapSingleObj.find((INT_PTR)pair.second[i].pObj);
+
+				if (iter != m_mapSingleObj.end())
+				{
+					iter->second.push_back(pair.second[i]);
+				}
+				else
+				{
+					m_mapSingleObj.insert(make_pair((INT_PTR)pair.second[i].pObj, vector<tInstObj>{pair.second[i]}));
+				}
+			}
+			continue;
+		}
+
+		CGameObject* pObj = pair.second[0].pObj;
+		Ptr<CMesh> pMesh = pObj->GetRenderComponent()->GetMesh();
+		Ptr<CMaterial> pMtrl = pObj->GetRenderComponent()->GetCurMaterial(pair.second[0].iMtrlIdx);
+
+		// Instancing ���� Ŭ����
+		CInstancingBuffer::GetInst()->Clear();
+
+		int iRowIdx = 0;
+		bool bHasAnim3D = false;
+		for (UINT i = 0; i < pair.second.size(); ++i)
+		{
+			tInstData.matWorld = pair.second[i].pObj->Transform()->GetWorldMat();
+			tInstData.matWV = tInstData.matWorld * m_matView;
+			tInstData.matWVP = tInstData.matWV * m_matProj;
+
+			if (pair.second[i].pObj->Animator3D())
+			{
+				pair.second[i].pObj->Animator3D()->UpdateData();
+				tInstData.iRowIdx = iRowIdx++;
+				CInstancingBuffer::GetInst()->AddInstancingBoneMat(pair.second[i].pObj->Animator3D()->GetFinalBoneMat());
+				bHasAnim3D = true;
+			}
+			else
+				tInstData.iRowIdx = -1;
+
+			CInstancingBuffer::GetInst()->AddInstancingData(tInstData);
+		}
+
+		// �ν��Ͻ̿� �ʿ��� �����͸� ����(SysMem -> GPU Mem)
+		CInstancingBuffer::GetInst()->SetData();
+
+		if (bHasAnim3D)
+		{
+			pMtrl->SetAnim3D(true); // Animation Mesh �˸���
+			pMtrl->SetBoneCount(pMesh->GetBoneCount());
+		}
+
+		pMtrl->UpdateData_Inst();
+		pMesh->render_instancing(pair.second[0].iMtrlIdx);
+
+		// ����
+		if (bHasAnim3D)
+		{
+			pMtrl->SetAnim3D(false); // Animation Mesh �˸���
+			pMtrl->SetBoneCount(0);
+		}
+	}
+
+	// ���� ������
+	for (auto& pair : m_mapSingleObj)
+	{
+		if (pair.second.empty())
+			continue;
+
+		pair.second[0].pObj->Transform()->UpdateData();
+
+		pair.second[0].pObj->GetRenderComponent()->render();
+
+		if (pair.second[0].pObj->Animator3D())
+		{
+			pair.second[0].pObj->Animator3D()->ClearData();
+		}
+	}
 }
 
 void CCamera::render_deferreddecal()

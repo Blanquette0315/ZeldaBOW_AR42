@@ -13,7 +13,7 @@ float4 PaperBurn(in float4 _vDiffuse, float2 _vUV)
     float4 vNoise = g_Noise.SampleLevel(g_sam_0, _vUV, 0);
         
     float fCurAlpha = vNoise.r * -1.f + (fCurTime * 2.f);
-        
+    
     fCurAlpha = saturate(1.f - fCurAlpha);
         
     float fCurRampUV = saturate(1.f - fCurAlpha) * 1.5f;

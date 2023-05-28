@@ -35,6 +35,8 @@ void CBokoblinScript::Damage(int _iNumber, Vec3 _vPos)
 			pMaterial->SetScalarParam(FLOAT_1, &m_fAcctime);
 			float alltime = 4.5f;
 			pMaterial->SetScalarParam(FLOAT_2, &alltime);
+			pMaterial->SetScalarParam(FLOAT_3, &m_fBurnTexIdx);
+			pMaterial->SetScalarParam(VEC2_3, &m_vBurnEmsvCoeff);
 		}
 
 		GetOwner()->GetChildObject()[1]->Destroy();
