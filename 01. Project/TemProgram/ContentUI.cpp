@@ -297,7 +297,7 @@ void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 
 	while (FindNextFile(hFindHandle, &data))
 	{
-		if (FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes && wcscmp(data.cFileName, L".."))
+		if ((FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes || 48 == data.dwFileAttributes) && wcscmp(data.cFileName, L".."))
 		{
 			FindContentFileName(_strFolderPath + data.cFileName + L"\\");
 		}
