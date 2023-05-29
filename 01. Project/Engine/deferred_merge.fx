@@ -54,11 +54,6 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
 {
     float4 vOutColor = (float4) 0.f;
     
-    if (g_int_0 >= 2)
-    {
-        vOutColor.rgb = pow(vOutColor.rgb, 2.2);
-    }
-    
     // 우리가 VS에 전달해준 정보는 포지션 뿐인데, SwapChainMRT에 DeferredMRT의 랜더 타겟들을 병합하기 위해서는
     // UV를 알아야 한다.
     // 정점만으로 UV를 계산할 수 있는 이유는 정점을 화면 최대범위로 잡았기 때문에
@@ -84,6 +79,8 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     
     vOutColor = g_tex_0.Sample(g_sam_0, vUV);
     
+  
+    
     // 광원 적용
     float4 vDiffuse = g_tex_2.SampleLevel(g_sam_0, vUV, g_int_2);
     float4 vSpecular = g_tex_3.Sample(g_sam_0, vUV);
@@ -94,8 +91,14 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     }
     else
     {
+        if (g_vec2_0.y != 0.f)
+        {
+            vOutColor.rgb = pow(vOutColor.rgb, 2.2);
+        }
+        
         vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
-        if(g_vec2_0.x != 0.f)
+        
+        if (g_vec2_0.x != 0.f)
         {
             const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
             vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
@@ -103,6 +106,11 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
         if (g_vec2_0.y != 0.f)
         {
             vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
+        }
+    
+        if (g_float_0 != 0.f)
+        {
+            vOutColor.rgb = pow(vOutColor.rgb, 1 / 1.85);
         }
     }
     

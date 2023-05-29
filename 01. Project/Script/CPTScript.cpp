@@ -12,6 +12,7 @@ CPTScript::CPTScript()
 	, m_bGamma(true)
 	, m_bToonShading(true)
 	, m_bShadow(true)
+	, m_bFilter(true)
 {
 }
 
@@ -45,6 +46,8 @@ void CPTScript::tick()
 			m_pMainCam->Camera()->SetPTOption_ToonShading(m_bToonShading);
 			m_bShadow = !m_bShadow;
 			m_pMainCam->Camera()->SetPTOption_Shadow(m_bShadow);
+			m_bFilter = !m_bFilter;
+			m_pMainCam->Camera()->SetPTOption_Filter(m_bFilter);
 		}
 
 		// ToneMapping
@@ -70,6 +73,13 @@ void CPTScript::tick()
 		{
 			m_bShadow = !m_bShadow;
 			m_pMainCam->Camera()->SetPTOption_Shadow(m_bShadow);
+		}
+
+		// Filter
+		else if (KEY_TAP(KEY::NUM_4))
+		{
+			m_bFilter = !m_bFilter;
+			m_pMainCam->Camera()->SetPTOption_Filter(m_bFilter);
 		}
 	}
 }

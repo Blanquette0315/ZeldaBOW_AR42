@@ -11,6 +11,7 @@ private:
     bool            m_bGamma;
     bool            m_bToonShading;
     bool            m_bShadow;
+    bool            m_bFilter;
 
 public:
     virtual void begin() override;

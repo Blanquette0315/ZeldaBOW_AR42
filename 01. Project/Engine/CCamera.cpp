@@ -46,6 +46,7 @@ CCamera::CCamera()
 	, m_bToon_ONOFF(true)
 	, m_bBloom_ONOFF(true)
 	, m_bShadow_ONOFF(true)
+	, m_bFilter_ONOFF(true)
 {
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
@@ -217,6 +218,16 @@ void CCamera::render()
 		{
 			Vec2 ScalarParam = Vec2(m_bToneMap_ONOFF, m_bGamma_ONOFF);
 			pMergeMtrl->SetScalarParam(VEC2_0, &ScalarParam);
+			if (m_bFilter_ONOFF)
+			{
+				float Param = 1.f;
+				pMergeMtrl->SetScalarParam(FLOAT_0, &Param);
+			}
+			else
+			{
+				float Param = 0.f;
+				pMergeMtrl->SetScalarParam(FLOAT_0, &Param);
+			}
 		}
 		pMergeMtrl->UpdateData();
 		pMergeMesh->render();

@@ -282,7 +282,7 @@ PS_OUT PS_LandScape(DS_OUT _in)
       
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vNormal = float4(vViewNormal, 1.f);
-    output.vData.x = SpecPow;
+    output.vData.x = 0.f;
     output.vEmissiv = vEmissiveColor;
             
     return output;

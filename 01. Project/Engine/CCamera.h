@@ -62,6 +62,7 @@ private:
     bool m_bToon_ONOFF;
     bool m_bBloom_ONOFF;
     bool m_bShadow_ONOFF;
+    bool m_bFilter_ONOFF;
 
 public:
     void SetCamEffect(tCamEffectInfo _tCamEffect) { m_tCamEffect = _tCamEffect; }
@@ -144,6 +145,7 @@ public:
     void SetPTOption_Gamma(bool _bPT_Gamma) { m_bGamma_ONOFF = _bPT_Gamma; }
     void SetPTOption_ToonShading(bool _bPT_Toon) { m_bToon_ONOFF = _bPT_Toon; }
     void SetPTOption_Shadow(bool _bShadoow) { m_bShadow_ONOFF = _bShadoow; }
+    void SetPTOption_Filter(bool _bFilter) { m_bFilter_ONOFF = _bFilter; }
 
 public:
     virtual void finaltick();

@@ -217,7 +217,10 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     // Spec ∏ ¿Ã ¿÷¿∏∏È
     if (g_btex_2)
     {
-        vSpecCoeff *= g_tex_2.Sample(g_sam_0, SelectUV(g_iTex2UV, _in));
+        float4 vSampleColor = g_tex_2.Sample(g_sam_0, SelectUV(g_iTex2UV, _in));
+        if (vSampleColor.a == 0.f)
+            vSampleColor = (float4) 0.f;
+        vSpecCoeff *= vSampleColor;
     }
     else
     {
@@ -234,7 +237,7 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
         vEmissiveColor.z = vEmissiveColor.z * vAddEmissiveColor.z;
     }
     
-    output.vColor = vObjColor * g_vDiff;
+    output.vColor = vObjColor;
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vEmissiv = vEmissiveColor;
@@ -387,7 +390,7 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
     
     if (g_int_3 != 4)
     {
-        output.vColor = vObjColor * g_vDiff;
+        output.vColor = vObjColor;
     }
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
