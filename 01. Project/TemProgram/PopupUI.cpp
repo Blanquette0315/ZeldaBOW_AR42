@@ -403,6 +403,18 @@ void PopupUI::AddReleaseComponent(COMPONENT_TYPE _type, bool _Select, CGameObjec
 			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::LANDSCAPE));
 		}*/
 		break;
+	case COMPONENT_TYPE::TRAILEFFECT:
+	{
+		if (_Select)
+		{
+			_Target->AddComponent(new CTrailEffect);
+		}
+		else
+		{
+			_Target->ReleaseComponent(_Target->GetComponent(COMPONENT_TYPE::TRAILEFFECT));
+		}
+	}
+		break;
 	}
 
 	// ���� �������� �÷����� ����ΰ� ���� �̺κ���.

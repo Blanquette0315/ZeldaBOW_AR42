@@ -109,6 +109,12 @@
     <FxCompile Include="link_particle_arrow_CS.fx">
       <Filter>HLSL\Compute\ParticleUpdateShader\Link</Filter>
     </FxCompile>
+    <FxCompile Include="traileffect.fx">
+      <Filter>HLSL\Render\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="trailupdate.fx">
+      <Filter>HLSL\Compute\Trail</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -372,7 +378,12 @@
     <ClCompile Include="CFBXLoader.cpp">
       <Filter>Engine\07. Resource\07. MeshData</Filter>
     </ClCompile>
-    <ClCompile Include="CTrailEffect.cpp" />
+    <ClCompile Include="CTrailUpdateShader.cpp">
+      <Filter>HLSL\Compute\Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="CTrailEffect.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\Trail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DetourAlloc.h">
@@ -657,7 +668,12 @@
     <ClInclude Include="CFBXLoader.h">
       <Filter>Engine\07. Resource\07. MeshData</Filter>
     </ClInclude>
-    <ClInclude Include="CTrailEffect.h" />
+    <ClInclude Include="CTrailUpdateShader.h">
+      <Filter>HLSL\Compute\Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="CTrailEffect.h">
+      <Filter>Engine\06. Component\02. RenderComponent\Trail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -898,6 +914,9 @@
     </Filter>
     <Filter Include="Engine\06. Component\02. RenderComponent\Trail">
       <UniqueIdentifier>{977cf88a-51a3-4fc2-9413-d4c1f9d94e8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\Trail">
+      <UniqueIdentifier>{f9563821-58c4-4939-b913-5e223f033722}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

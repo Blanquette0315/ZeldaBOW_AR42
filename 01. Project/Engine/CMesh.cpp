@@ -44,6 +44,14 @@ void CMesh::render(UINT _iSubset)
 	CONTEXT->DrawIndexed(m_vecIdxInfo[_iSubset].iIdxCount, 0, 0);
 }
 
+void CMesh::render_trail(UINT _iCount, UINT _iStartIdx)
+{
+	UpdateData();
+
+	_iCount -= _iStartIdx;
+	CONTEXT->DrawIndexed(_iCount, _iStartIdx, 0);
+}
+
 void CMesh::render_instancing(UINT _iSubset)
 {
 	UpdateData_Inst(_iSubset);
@@ -57,7 +65,21 @@ void CMesh::render_particle(UINT _iCount)
 	// IA 단계에 Mesh 전달하기
 	UpdateData();
 	// 인스턴싱을 이용한 Draw 요청
+
 	CONTEXT->DrawIndexedInstanced(m_vecIdxInfo[0].iIdxCount, _iCount, 0, 0, 0);
+}
+
+void CMesh::EditIdxBuffer(const vector<UINT>& _vecIdx, UINT _idx)
+{
+	if (_vecIdx.empty())
+		return;
+
+	tIndexInfo& tInfo = m_vecIdxInfo[_idx];
+
+	D3D11_MAPPED_SUBRESOURCE temMapSub = {};
+	CONTEXT->Map(tInfo.pIB.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &temMapSub);
+	memcpy(temMapSub.pData, _vecIdx.data(), _vecIdx.size() * sizeof(UINT));
+	CONTEXT->Unmap(tInfo.pIB.Get(), 0);
 }
 
 CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
@@ -555,7 +577,7 @@ void CMesh::InjectRecursive(tMTBone& _tBone)
 	}
 }
 
-int CMesh::Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount)
+int CMesh::Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount, bool _IdxCPUWrite)
 {
 	m_iVtxCount = _iVtxCount;
 
@@ -566,6 +588,7 @@ int CMesh::Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iId
 	m_tVBDesc.ByteWidth = sizeof(Vtx) * _iVtxCount;
 
 	// 정점 버퍼는 처음 생성이후에 버퍼를 수정하지 않는다.
+
 	m_tVBDesc.CPUAccessFlags = 0;
 	m_tVBDesc.Usage = D3D11_USAGE_DEFAULT;
 
@@ -587,8 +610,17 @@ int CMesh::Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iId
 	IndexInfo.tIBDesc.ByteWidth = sizeof(UINT) * _iIdxCount;
 
 	// 버퍼 생성 이후에도, 버퍼의 내용을 수정 할 수 있는 옵션
-	IndexInfo.tIBDesc.CPUAccessFlags = 0;
-	IndexInfo.tIBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+
+	if (_IdxCPUWrite)
+	{
+		IndexInfo.tIBDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		IndexInfo.tIBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
+	}
+	else
+	{
+		IndexInfo.tIBDesc.CPUAccessFlags = 0;
+		IndexInfo.tIBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+	}
 
 	// 정점을 저장하는 목적의 버퍼 임을 알림
 	IndexInfo.tIBDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_INDEX_BUFFER;

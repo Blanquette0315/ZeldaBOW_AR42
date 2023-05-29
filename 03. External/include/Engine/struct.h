@@ -1,5 +1,11 @@
 #pragma once
 
+
+struct tTwoDot
+{
+	Vec4 vFirstDot;
+	Vec4 vSecondDot;
+};
 // 폰트 사용을 위한 구조체
 struct tFont
 {

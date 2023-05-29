@@ -131,7 +131,8 @@ void CGameObject::finaltick()
 	{
 		for (int i = 0; i < m_pRenderComponent->GetMtrlCount(); ++i)
 		{
-			m_pRenderComponent->GetCurMaterial(i)->SetLayerIdx(m_iLayerIdx);
+			if(m_pRenderComponent->GetCurMaterial(i).Get())
+				m_pRenderComponent->GetCurMaterial(i)->SetLayerIdx(m_iLayerIdx);
 		}
 		
 	}

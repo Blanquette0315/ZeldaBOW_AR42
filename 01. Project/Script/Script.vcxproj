@@ -125,7 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MinFilesInUnityFile>10</MinFilesInUnityFile>
       <MaxFilesInUnityFile>20</MaxFilesInUnityFile>
@@ -151,7 +151,7 @@ call CodeGen.exe</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MinFilesInUnityFile>10</MinFilesInUnityFile>
       <MaxFilesInUnityFile>20</MaxFilesInUnityFile>
@@ -199,6 +199,7 @@ call ScriptCopy.bat</Command>
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CScriptMgr.h" />
     <ClInclude Include="CTestSCR.h" />
+    <ClInclude Include="CTrailEffectScript.h" />
     <ClInclude Include="CUIHeartScript.h" />
     <ClInclude Include="CUIScript.h" />
     <ClInclude Include="framework.h" />
@@ -243,6 +244,7 @@ call ScriptCopy.bat</Command>
     <ClCompile Include="CScriptMgr.cpp" />
     <ClCompile Include="CNavTestSCR.cpp" />
     <ClCompile Include="CTestSCR.cpp" />
+    <ClCompile Include="CTrailEffectScript.cpp" />
     <ClCompile Include="CUIHeartScript.cpp" />
     <ClCompile Include="CUIScript.cpp" />
     <ClCompile Include="FSMNode.cpp" />

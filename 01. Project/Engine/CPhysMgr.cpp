@@ -55,7 +55,7 @@ void CPhysMgr::tick()
 		}
 		
 		// == finaltick
-		vecGameObj[i]->Transform()->UpdateWorldTrans();
+		vecGameObj[i]->Transform()->finaltick();
 		
 		if (CLevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 		{

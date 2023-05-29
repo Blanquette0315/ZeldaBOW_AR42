@@ -223,6 +223,9 @@
     <ClInclude Include="CHinoxScript.h">
       <Filter>Scripts\Monster\Hinox</Filter>
     </ClInclude>
+    <ClInclude Include="CTrailEffectScript.h">
+      <Filter>Scripts\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -348,6 +351,9 @@
     </ClCompile>
     <ClCompile Include="CHinoxScript.cpp">
       <Filter>Scripts\Monster\Hinox</Filter>
+    </ClCompile>
+    <ClCompile Include="CTrailEffectScript.cpp">
+      <Filter>Scripts\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

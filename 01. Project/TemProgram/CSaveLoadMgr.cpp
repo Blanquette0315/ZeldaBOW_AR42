@@ -258,7 +258,7 @@ CGameObject* CSaveLoadMgr::LoadGameObject(YAML::Node& _node)
 				pComponent = new CLandScape;
 				break;
 			case COMPONENT_TYPE::TRAILEFFECT:
-				pComponent = new CTrailE;
+				pComponent = new CTrailEffect;
 				break;
 
 			}
