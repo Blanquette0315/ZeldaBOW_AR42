@@ -283,6 +283,8 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
     PSALPHA_OUT output = (PSALPHA_OUT) 0.f;
     
     float4 vObjColor = float4(1.f, 0.f, 1.f, 0.f);
+    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
+    
     
     if (g_btex_0)
     {
@@ -296,12 +298,39 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
             vObjColor = g_tex_0.Sample(g_sam_3, SelectUV(g_iTex0UV, _in));
         }
         
-        if (g_int_3 != 0.f)
+        if (g_int_3 == 1)
         {
             if (vObjColor.r == 0.f && vObjColor.g == 0.f && vObjColor.b == 0.f)
             {
                 discard;
             }
+        }
+         // Alb Color(0.f,0.f,0.f) = Emissive Color Type
+        else if (g_int_3 == 2)
+        {
+            if (vObjColor.r == 0.f && vObjColor.g == 0.f && vObjColor.b == 0.f)
+            {
+                vObjColor.x = vAddEmissiveColor.x;
+                vObjColor.y = vAddEmissiveColor.y;
+                vObjColor.z = vAddEmissiveColor.z;
+            }
+        }
+        if (g_int_3 == 3)
+        {
+            vEmissiveColor = float4(1.f, 1.f, 1.f, 1.f);
+            
+            vEmissiveColor.x = vObjColor.x * vAddEmissiveColor.x;
+            vEmissiveColor.y = vObjColor.y * vAddEmissiveColor.y;
+            vEmissiveColor.z = vObjColor.z * vAddEmissiveColor.z;
+        }
+        if (g_int_3 == 4)
+        {
+            //vObjColor.a = vAddEmissiveColor.a;
+            vEmissiveColor.x = vObjColor.x * vAddEmissiveColor.x;
+            vEmissiveColor.y = vObjColor.y * vAddEmissiveColor.y;
+            vEmissiveColor.z = vObjColor.z * vAddEmissiveColor.z;
+            vObjColor.rgba = float4(0.f, 0.f, 0.f, 1.f);
+            
         }
     }
 
@@ -328,7 +357,6 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
     }
     
     // if Binding EmissiveTex
-    float4 vEmissiveColor = float4(0.f, 0.f, 0.f, 1.f);
     if (g_btex_3)
     {
         vEmissiveColor = g_tex_3.Sample(g_sam_0, SelectUV(g_iTex3UV, _in));
@@ -352,7 +380,10 @@ PSALPHA_OUT PS_Std3DAlpha_Deferred(VS_OUT _in) : SV_Target
         vObjColor.a = vMasking.a;
     }
     
-    output.vColor = vObjColor * g_vDiff;
+    if (g_int_3 != 4)
+    {
+        output.vColor = vObjColor * g_vDiff;
+    }
     output.vNormal = float4(vNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vEmissiv = vEmissiveColor;

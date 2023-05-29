@@ -909,7 +909,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	AddRes<CGraphicsShader>(L"ParticleRenderAlphaShader", pShader);
 
-	// ParticleRenderAlphaShader
+	// ParticleRenderAlpha Emissive Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
 	pShader->CreateGeometryShader(L"shader\\particlerender.fx", "GS_ParticleRender");
@@ -1083,6 +1083,29 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_4, "Masking Texture     ");
 
 	AddRes<CGraphicsShader>(L"Std3DAlpha_DeferredShader", pShader);
+
+	// Std3DAlpha_Deferred Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std3d_deferred.fx", "VS_Std3D_Deferred");
+	pShader->CreatePixelShader(L"shader\\std3d_deferred.fx", "PS_Std3DAlpha_Deferred");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_OPAQUE);
+
+	pShader->AddScalarParam(FLOAT_0, "Specular Coefficient");
+	pShader->AddScalarParam(VEC4_3, "Emissive Color      ");
+	pShader->AddScalarParam(INT_1, "Rotation Normal     ");
+	pShader->AddScalarParam(INT_2, "Sampler Type        ");
+	pShader->AddScalarParam(INT_3, "Shader Type         ");
+	pShader->AddTexureParam(TEX_0, "Output Texture      ");
+	pShader->AddTexureParam(TEX_1, "Normal Texture      ");
+	pShader->AddTexureParam(TEX_2, "Specular Texture    ");
+	pShader->AddTexureParam(TEX_3, "Emissive Texture    ");
+	pShader->AddTexureParam(TEX_4, "Masking Texture     ");
+
+	AddRes<CGraphicsShader>(L"Std3D_DSN_BSA_DeferredShader", pShader);
 
 	// DirLight Shader
 	pShader = new CGraphicsShader;
