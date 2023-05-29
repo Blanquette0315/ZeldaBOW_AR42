@@ -10,6 +10,7 @@ CSkyBox::CSkyBox()
 	SetType(m_eSkyBoxType);
 	SetSkyMesh();
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"));
+	//SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DeferredSkyBoxMtrl"));
 	SetDynamicShadow(false);
 }
 
@@ -52,6 +53,8 @@ void CSkyBox::render()
 		GetCurMaterial()->SetTexParam(TEX_0, nullptr);
 		GetCurMaterial()->SetTexParam(TEX_CUBE_0, m_pSkyBoxTex);
 	}
+
+	GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
 
 	GetCurMaterial()->UpdateData();
 

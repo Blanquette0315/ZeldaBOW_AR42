@@ -35,6 +35,7 @@ private:
     map<ULONG64, vector<tInstObj>>      m_mapInstGroup_FT;      // Forward (Transparent)
     map<INT_PTR, vector<tInstObj>>		m_mapSingleObj;		    // Single Object
 
+    vector<CGameObject*>    m_vecDeferredSkyBox;
     vector<CGameObject*>    m_vecDeferred;
     //vector<CGameObject*>    m_vecDeferredTransparent;
     vector<CGameObject*>    m_vecDeferredDecal;
@@ -112,6 +113,7 @@ public:
     void SortObject();
     void SortShadowObject();
     void SortStaticShadowObject();
+    void render_deferredSkyBox();
     void render_deferred();
     void render_deferred_transparent();
     void render_deferreddecal();

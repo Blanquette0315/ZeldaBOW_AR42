@@ -213,6 +213,19 @@ float4 PS_ParticleRender(GS_OUT _in) : SV_Target
     return vColor;
 }
 
+float4 PS_ParticleRender_Alpha(GS_OUT _in) : SV_Target
+{
+    float4 vColor = (float4) 0.f;
+    
+    //vColor = float4(1.f, 0.f, 0.f, 1.f);
+    vColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    
+    float fRatio = ParticleBuffer[_in.iInstance].fCurTime / ParticleBuffer[_in.iInstance].fMaxTime;
+    vColor.rgb *= lerp(StartColor, EndColor, fRatio).rgb;
+    
+    return vColor;
+}
+
 struct PS_OUT
 {
     float4 vColor : SV_Target0;
@@ -228,7 +241,7 @@ PS_OUT PS_ParticleRender_Emissive_A(GS_OUT _in)
     vColor = g_tex_0.Sample(g_sam_0, _in.vUV);
     
     float fRatio = ParticleBuffer[_in.iInstance].fCurTime / ParticleBuffer[_in.iInstance].fMaxTime;
-    vColor *= lerp(StartColor, EndColor, fRatio);
+    vColor.rgb *= lerp(StartColor, EndColor, fRatio).rgb;
     
     vEmsvColor = vColor;
     
@@ -240,19 +253,6 @@ PS_OUT PS_ParticleRender_Emissive_A(GS_OUT _in)
     output.vEmissiv = vEmsvColor;
     
     return output;
-}
-
-float4 PS_ParticleRender_Alpha(GS_OUT _in) : SV_Target
-{
-    float4 vColor = (float4) 0.f;
-    
-    //vColor = float4(1.f, 0.f, 0.f, 1.f);
-    vColor = g_tex_0.Sample(g_sam_0, _in.vUV);
-    
-    float fRatio = ParticleBuffer[_in.iInstance].fCurTime / ParticleBuffer[_in.iInstance].fMaxTime;
-    vColor *= lerp(StartColor, EndColor, fRatio);
-    
-    return vColor;
 }
 
 

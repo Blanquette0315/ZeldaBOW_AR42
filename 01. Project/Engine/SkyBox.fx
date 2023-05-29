@@ -74,4 +74,87 @@ float4 PS_SkyBox(VS_OUT _in) : SV_Target
     return vOutColor;
 }
 
+// ======================
+// Deferred SkyBox Shader
+// ======================
+
+struct PS_OUT
+{
+    float4 vColor : SV_Target0;
+    //float4 vNormal : SV_Target1;
+    //float4 vPosition : SV_Target2;
+    //float4 vData : SV_Target3;
+    //float4 vEmissiv : SV_Target4;
+};
+
+PS_OUT PS_SkyBoxDeferred(VS_OUT _in)
+{
+    PS_OUT output = (PS_OUT) 0.f;
+    
+    float4 vOutColor = float4(0.f, 0.f, 0.f, 1.f);
+    
+    // SphereType SkyBox인 경우
+    if (g_int_0 == 0)
+    {
+        if (g_btex_0)
+        {
+            vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        }
+    }
+    
+    // CubeType SkyBox인 경우
+    else if (g_int_0 == 1)
+    {
+        if (g_btexcube_0)
+        {
+            vOutColor = g_texcube_0.Sample(g_sam_0, _in.vCubeUV);
+        }
+    }
+    
+    output.vColor = vOutColor;
+    
+    return output;
+
+}
+
+//struct PS_OUT
+//{
+//    float4 vDiffuse : SV_Target0;
+//    float4 vSpecular : SV_Target1;
+//};
+//
+//PS_OUT PS_SkyBoxDeferred(VS_OUT _in)
+//{
+//    PS_OUT output = (PS_OUT) 0.f;
+//    
+//    float4 vViewPos = float4(0.f, 0.f, 0.f, 1.f);
+//    float2 vUV = _in.vPosition.xy / g_vRenderResolution;
+//    vViewPos = g_tex_1.Sample(g_sam_0, vUV);
+//    if (vViewPos.a == 1.f)
+//        discard;
+//    
+//    float4 vOutColor = float4(0.f, 0.f, 0.f, 1.f);
+//    // SphereType SkyBox인 경우
+//    if (g_int_0 == 0)
+//    {
+//        if (g_btex_0)
+//        {
+//            vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+//        }
+//    }
+//    
+//    // CubeType SkyBox인 경우
+//    else if (g_int_0 == 1)
+//    {
+//        if (g_btexcube_0)
+//        {
+//            vOutColor = g_texcube_0.Sample(g_sam_0, _in.vCubeUV);
+//        }
+//    }
+//    
+//    output.vDiffuse = vOutColor;
+//    
+//    return output;
+//}
+
 #endif

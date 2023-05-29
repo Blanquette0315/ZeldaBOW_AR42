@@ -175,6 +175,7 @@ void CCamera::render()
 	{
 		// Domain �з��� ���� ���� ȣ��
 		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet();
+		render_deferredSkyBox();
 		render_deferred();
 		render_deferred_transparent();
 
@@ -182,6 +183,7 @@ void CCamera::render()
 
 		// Deferred ���� ó��
 		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::LIGHT)->OMSet();
+
 		const vector<CLight3D*>& vecLight3D = CRenderMgr::GetInst()->GetLight3D();
 
 		for (size_t i = 0; i < vecLight3D.size(); ++i)
@@ -205,12 +207,12 @@ void CCamera::render()
 	// Forward Rendering
 	render_Forward();
 	render_Forward_T();
-
+	
 	render_decal();
-
+	
 	render_transparent();
 	render_postprocess();
-
+	
 	render_UI();
 	render_CamEffect();
 }
@@ -257,6 +259,7 @@ void CCamera::SortObject()
 	for (auto& pair : m_mapInstGroup_FT)
 		pair.second.clear();
 
+	m_vecDeferredSkyBox.clear();
 	m_vecDeferred.clear();
 	m_vecDeferredDecal.clear();
 	m_vecDecal.clear();
@@ -367,6 +370,11 @@ void CCamera::SortObject()
 							}
 						}
 						break;
+						case SHADER_DOMAIN::DOMAIN_DEFERRED_SKYBOX:
+						{
+							m_vecDeferredSkyBox.push_back(vecObj[j]);
+						}
+						break;
 						case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
 						{
 							m_vecDeferredDecal.push_back(vecObj[j]);
@@ -466,6 +474,14 @@ void CCamera::SortStaticShadowObject()
 				m_vecDynamicShadow.push_back(vecObj[j]);
 			}
 		}
+	}
+}
+
+void CCamera::render_deferredSkyBox()
+{
+	for (size_t i = 0; i < m_vecDeferredSkyBox.size(); ++i)
+	{
+		m_vecDeferredSkyBox[i]->render();
 	}
 }
 

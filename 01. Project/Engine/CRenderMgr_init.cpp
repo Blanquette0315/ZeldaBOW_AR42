@@ -57,6 +57,8 @@ void CRenderMgr::init()
 
 	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"BrightMtrl");
 	pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
+	pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
+	pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
 }
 
 void CRenderMgr::CreateMRT()

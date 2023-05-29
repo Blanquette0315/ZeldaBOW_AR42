@@ -220,7 +220,7 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     else
     {
         vSpecCoeff *= g_vSpec;
-    }
+    } 
 
     // if Binding EmissiveTex
     if(g_btex_3)

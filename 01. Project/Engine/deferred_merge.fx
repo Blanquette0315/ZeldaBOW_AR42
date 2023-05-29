@@ -79,17 +79,27 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     // 이때, 포지션 정보의 a값이 0일 경우 아무런 물체가 존재하지 않는다는 것을 의미하는 것으로 설계했다.
     // 때문에 포지션을 먼저 샘플링한 뒤 a를 확인에 1.f가 아니라면,
     // 즉, 물체가 없다면 컬러를 샘플링할 필요가 없다는 뜻이므로 discard를 해주었다.
-    if(1.f != vViewPos.a)
-        discard;
+    //if(1.f != vViewPos.a)
+    //    discard;
     
     vOutColor = g_tex_0.Sample(g_sam_0, vUV);
     
     // 광원 적용
     float4 vDiffuse = g_tex_2.SampleLevel(g_sam_0, vUV, g_int_2);
-    vDiffuse = round(vDiffuse * 5) / 5.0f;
     float4 vSpecular = g_tex_3.Sample(g_sam_0, vUV);
     
-    vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
+    if (1.f != vViewPos.a)
+    {
+        vOutColor.rgb += vDiffuse.rgb;
+    }
+    else
+    {
+        vDiffuse = round(vDiffuse * 5) / 5.0f;
+        vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
+        const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
+        vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+        vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
+    }
     
     //if (g_int_0 == 1 || g_int_0 == 3)
     //{
@@ -108,9 +118,9 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     //    vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
     //}
     
-    const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
-    vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
-    vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
+    //const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
+    //vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
+    //vOutColor.rgb = pow(vOutColor.rgb, 1 / 2.2);
     
     return vOutColor;
 }

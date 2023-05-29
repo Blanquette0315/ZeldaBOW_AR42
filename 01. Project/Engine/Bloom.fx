@@ -75,14 +75,26 @@ float4 PS_AlphaBloom(VS_OUT _in) : SV_Target
 // Parameter
 // === Texture ===
 // g_tex_0 : DiffuseTargetTex
-// #define DiffuseTex g_tex_0
+// g_tex_1 : PositionTargetTex
+// g_tex_2 : EmissiveTargetTex
 // ==========================
 
 float4 PS_Bright(VS_OUT _in) : SV_Target
 {
     float4 BrightColor = float4(0.f, 0.f, 0.f, 0.f);
+    float4 FragColor = float4(0.f, 0.f, 0.f, 0.f);
+    
     float2 vUV = _in.vPosition.xy / g_vRenderResolution;
-    float4 FragColor = DiffuseTex.Sample(g_sam_0, vUV);
+    
+    float4 CheckObj = g_tex_1.Sample(g_sam_0, vUV);
+    if (CheckObj.a != 1.f)
+    {
+        FragColor = g_tex_2.Sample(g_sam_0, vUV);
+    }
+    else
+    {
+        FragColor = DiffuseTex.Sample(g_sam_0, vUV);
+    }
     
     float brightness = dot(FragColor.rgb, float3(0.2125f, 0.7154f, 0.0721f));
     if (brightness > 0.99)

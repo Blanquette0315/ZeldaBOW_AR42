@@ -984,6 +984,18 @@ void CResMgr::CreateDefaultGrapicsShader()
 
 	AddRes<CGraphicsShader>(L"SkyBoxShader", pShader);
 
+	// Deferred SkyBox Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\SkyBox.fx", "VS_SkyBox");
+	pShader->CreatePixelShader(L"shader\\SkyBox.fx", "PS_SkyBoxDeferred");
+
+	pShader->SetRSType(RS_TYPE::CULL_FRONT);			// ��ī�� �ڽ� ���ο��� ���� �ű� ������ CULL_BACK�� �ϸ� �ȵȴ�.
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);		// ��ī�� �ڽ��� ī�޶��� far���� ��ġ�ϱ� ������ LESS�� �ϸ� ©����. �ڻ��� �����ϸ�, TargetClear�� ���̸� 1�� �������ִµ�, �Ž��� ǥ���� 1�� �ɸ��� ������ �ش� �κ��� Depth Test�� ������� ���� �������� ���� �ʰ� �ȴ�.
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_SKYBOX);	// ���� ��ī�� �ڽ��� Forward ������ ������� �ϱ� ������ DOMAIN_OPAQUE�� �־��ش�.
+
+	AddRes<CGraphicsShader>(L"DeferredSkyBoxShader", pShader);
+
 	// Tess Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\Tess.fx", "VS_TESS");
@@ -1255,6 +1267,23 @@ void CResMgr::CreateDefaultGrapicsShader()
 	AddRes<CGraphicsShader>(L"Effect2DShader", pShader);
 
 	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2deffect.fx", "VS_Std2D_Effect");
+	pShader->CreatePixelShader(L"shader\\std2deffect.fx", "PS_Std2D_Effect_Emsv");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::LESS);
+	//pShader->SetDSType(DS_TYPE::NO_WRITE);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED_TRANSPARENT);
+
+	pShader->AddScalarParam(INT_0, "Option");
+	pShader->AddScalarParam(VEC4_0, "Color management");
+	pShader->AddScalarParam(VEC4_3, "Emissive Coeff  ");
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+
+	AddRes<CGraphicsShader>(L"Effect2D_Emsv_Shader", pShader);
+
+	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_PostProcess_ExtraFullScreen");
 	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_PostProcess_Flash");
 
@@ -1484,8 +1513,13 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes<CMaterial>(L"Deferred_DecalMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindRes<CGraphicsShader>(L"SkyBoxShader"));
+	//pMtrl->SetShader(FindRes<CGraphicsShader>(L"SkyBoxShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DeferredSkyBoxShader"));
 	AddRes<CMaterial>(L"SkyBoxMtrl", pMtrl);
+
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DeferredSkyBoxShader"));
+	AddRes<CMaterial>(L"DeferredSkyBoxMtrl", pMtrl);
 
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TessShader"));
