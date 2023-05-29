@@ -94,7 +94,6 @@ float4 PS_Merge(VS_OUT _in) : SV_Target0
     }
     else
     {
-        vDiffuse = round(vDiffuse * 5) / 5.0f;
         vOutColor.rgb = (vOutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
         const float A = 2.51, B = 0.03, C = 2.43, D = 0.59, E = 0.14;
         vOutColor.rgb = saturate((vOutColor.rgb * (A * vOutColor.rgb + B)) / (vOutColor.rgb * (C * vOutColor.rgb + D) + E));
