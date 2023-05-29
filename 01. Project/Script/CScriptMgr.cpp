@@ -30,6 +30,7 @@
 #include "CMonWeaponScript.h"
 #include "CNavTestSCR.h"
 #include "CPlayerScript.h"
+#include "CPTScript.h"
 #include "CRayCastScript.h"
 #include "CTestSCR.h"
 #include "CTrailEffectScript.h"
@@ -67,6 +68,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CMonWeaponScript");
 	_vec.push_back(L"CNavTestSCR");
 	_vec.push_back(L"CPlayerScript");
+	_vec.push_back(L"CPTScript");
 	_vec.push_back(L"CRayCastScript");
 	_vec.push_back(L"CTestSCR");
 	_vec.push_back(L"CTrailEffectScript");
@@ -134,6 +136,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CNavTestSCR;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if (L"CPTScript" == _strScriptName)
+		return new CPTScript;
 	if (L"CRayCastScript" == _strScriptName)
 		return new CRayCastScript;
 	if (L"CTestSCR" == _strScriptName)
@@ -237,6 +241,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
+		break;
+	case (UINT)SCRIPT_TYPE::PTSCRIPT:
+		return new CPTScript;
 		break;
 	case (UINT)SCRIPT_TYPE::RAYCASTSCRIPT:
 		return new CRayCastScript;
@@ -375,6 +382,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::PLAYERSCRIPT:
 		return L"CPlayerScript";
+		break;
+
+	case SCRIPT_TYPE::PTSCRIPT:
+		return L"CPTScript";
 		break;
 
 	case SCRIPT_TYPE::RAYCASTSCRIPT:

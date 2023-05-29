@@ -55,6 +55,14 @@ private:
     bool                    m_bIsCamEffect;
     float                   m_fCamEffAcctime = 0.f;
 
+private:
+    bool m_bPT_ONOFF;
+    bool m_bToneMap_ONOFF;
+    bool m_bGamma_ONOFF;
+    bool m_bToon_ONOFF;
+    bool m_bBloom_ONOFF;
+    bool m_bShadow_ONOFF;
+
 public:
     void SetCamEffect(tCamEffectInfo _tCamEffect) { m_tCamEffect = _tCamEffect; }
 
@@ -130,6 +138,12 @@ public:
     void render_depthmap();
     void render_UI();
     void render_CamEffect();
+
+public:
+    void SetPTOption_ToneMapping(bool _bPT_Tonemap) { m_bToneMap_ONOFF = _bPT_Tonemap; }
+    void SetPTOption_Gamma(bool _bPT_Gamma) { m_bGamma_ONOFF = _bPT_Gamma; }
+    void SetPTOption_ToonShading(bool _bPT_Toon) { m_bToon_ONOFF = _bPT_Toon; }
+    void SetPTOption_Shadow(bool _bShadoow) { m_bShadow_ONOFF = _bShadoow; }
 
 public:
     virtual void finaltick();

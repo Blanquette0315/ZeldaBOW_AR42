@@ -238,6 +238,9 @@
     <ClInclude Include="CDgnBeginScript.h">
       <Filter>Scripts\Dgn</Filter>
     </ClInclude>
+    <ClInclude Include="CPTScript.h">
+      <Filter>Scripts\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -375,6 +378,9 @@
     </ClCompile>
     <ClCompile Include="CDgnBeginScript.cpp">
       <Filter>Scripts\Dgn</Filter>
+    </ClCompile>
+    <ClCompile Include="CPTScript.cpp">
+      <Filter>Scripts\Test</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

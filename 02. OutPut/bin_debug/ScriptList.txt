@@ -27,6 +27,7 @@ CMonsterScript
 CMonWeaponScript
 CNavTestSCR
 CPlayerScript
+CPTScript
 CRayCastScript
 CTestSCR
 CTrailEffectScript

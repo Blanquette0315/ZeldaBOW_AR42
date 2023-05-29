@@ -16,6 +16,9 @@ private:
     int             m_iLightIdx;    // 광원 버퍼에서의 인덱스를 알기 위함. (MRT 구조로 랜더링을 바꾸면서 for문을 돌지 않으니 알아주어야 한다.)
 
     CGameObject*    m_pLightCam;    // 광원 시점용 카메라
+    
+    bool            m_bToon_ONOFF;
+    bool            m_bShadow_ONOFF;
 
 public:
     const tLightInfo& GetLightInfo() { return m_Info; }
@@ -39,6 +42,10 @@ public:
     float GetOutAngle() { return m_Info.fOutAngle; }
 
     void CalcuRelativeScale();
+
+public:
+    void SetPTOption_Shadow(bool _bShadoow) { m_bShadow_ONOFF = _bShadoow; }
+    void SetPTOption_Toon(bool _bToon) { m_bToon_ONOFF = _bToon; }
 
 public:
     virtual void finaltick() override;

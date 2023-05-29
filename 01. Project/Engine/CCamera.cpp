@@ -40,6 +40,12 @@ CCamera::CCamera()
 	, m_pCamEffectMtrl(nullptr)
 	, m_pCamEffMesh(nullptr)
 	, m_bIsCamEffect(false)
+	, m_bPT_ONOFF(true)
+	, m_bToneMap_ONOFF(true)
+	, m_bGamma_ONOFF(true)
+	, m_bToon_ONOFF(true)
+	, m_bBloom_ONOFF(true)
+	, m_bShadow_ONOFF(true)
 {
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
@@ -189,11 +195,17 @@ void CCamera::render()
 
 		for (size_t i = 0; i < vecLight3D.size(); ++i)
 		{
+			if (m_bPT_ONOFF)
+			{
+				vecLight3D[i]->SetPTOption_Shadow(m_bShadow_ONOFF);
+				vecLight3D[i]->SetPTOption_Toon(m_bToon_ONOFF);
+			}
 			vecLight3D[i]->render();
 		}
 
 		// Bloom Effect
 		render_Bloom();
+		
 
 		// SwapChainMRT�� ����
 		CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
@@ -201,6 +213,11 @@ void CCamera::render()
 		// DeferredMrt -> SwapChainMRT�� ����
 		static Ptr<CMaterial> pMergeMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Deferred_MergeMtrl");
 		static Ptr<CMesh> pMergeMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+		if (m_bPT_ONOFF)
+		{
+			Vec2 ScalarParam = Vec2(m_bToneMap_ONOFF, m_bGamma_ONOFF);
+			pMergeMtrl->SetScalarParam(VEC2_0, &ScalarParam);
+		}
 		pMergeMtrl->UpdateData();
 		pMergeMesh->render();
 	}

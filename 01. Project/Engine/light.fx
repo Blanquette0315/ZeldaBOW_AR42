@@ -80,7 +80,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     float fShadowPow = 0.f;
     float2 vDepthMapUV = float2((vLightProj.x / 2.f) + 0.5f, -(vLightProj.y / 2.f) + 0.5f);
     
-    if (g_btex_7)
+    if (g_btex_7 && g_int_2 != 0)
     {
         //if (g_int_3 > -1)
         //{
@@ -166,7 +166,14 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
         vEmissive = g_tex_5.Sample(g_sam_0, vUV);
     }
     
-    output.vDiffuse = (round(LightColor.vDiff * 5) / 5.0f) * (1.f - fShadowPow) + (round(LightColor.vEmb * 5) / 5.0f) + (round(vEmissive * 5) / 5.0f);
+    if(g_int_1 != 0)
+    {
+        output.vDiffuse = (round(LightColor.vDiff * 5) / 5.0f) * (1.f - fShadowPow) + (round(LightColor.vEmb * 5) / 5.0f) + (round(vEmissive * 5) / 5.0f);
+    }
+    else
+    {
+        output.vDiffuse = LightColor.vDiff * (1.f - fShadowPow) + LightColor.vEmb+ vEmissive;
+    }
     // deferred MRT의 Data RenderTarget에 a자리에 스페큘러 계수를 넣어두었었다.
     float SpecCoef = g_tex_2.Sample(g_sam_1, vUV).x;
     float4 vSpec = decode(SpecCoef);

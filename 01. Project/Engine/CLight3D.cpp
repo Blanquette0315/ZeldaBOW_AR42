@@ -9,6 +9,8 @@ CLight3D::CLight3D()
 	: CComponent(COMPONENT_TYPE::LIGHT3D)
 	, m_iLightIdx(-1)
 	, m_pLightCam(nullptr)
+	, m_bShadow_ONOFF(true)
+	, m_bToon_ONOFF(true)
 {
 	m_pLightCam = new CGameObject;
 	m_pLightCam->AddComponent(new CTransform);
@@ -20,6 +22,8 @@ CLight3D::CLight3D(const CLight3D& _origin)
 	, m_Info(_origin.m_Info)
 	, m_iLightIdx(-1)
 	, m_pLightCam(nullptr)
+	, m_bShadow_ONOFF(true)
+	, m_bToon_ONOFF(true)
 {
 	m_pLightCam = _origin.m_pLightCam->Clone();
 }
@@ -85,6 +89,8 @@ void CLight3D::render()
 
 	// 재질을 통해서 본인의 라이트 인덱스를 전달
 	m_pLightMtrl->SetScalarParam(INT_0, &m_iLightIdx);
+	m_pLightMtrl->SetScalarParam(INT_1, &m_bToon_ONOFF);
+	m_pLightMtrl->SetScalarParam(INT_2, &m_bShadow_ONOFF);
 
 	// 재질 바인딩 (셰이더, 상수, 텍스쳐(Target) 등등)
 	m_pLightMtrl->UpdateData();
