@@ -3,6 +3,7 @@
 
 #include "CSound.h"
 
+
 void CResMgr::init()
 {
 	InitSound();
@@ -119,8 +120,6 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	//���� �޽� �����
-	// �߽���
 	v.vPos = Vec3(0.f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 	v.vUV0 = Vec2(0.5f, 0.5f);
@@ -441,6 +440,10 @@ void CResMgr::CreateDefaultMesh()
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"CylinderMesh", pMesh);
 
+
+	// Trail Mesh
+	CreateTrailMesh();
+
 	// ===============
 	// LandScape Mesh
 	// ===============
@@ -486,6 +489,44 @@ void CResMgr::CreateDefaultMesh()
 	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddRes<CMesh>(L"LandscapeMesh", pMesh);
+}
+
+void CResMgr::CreateTrailMesh()
+{
+	vector<Vtx> vecVtx;
+	vecVtx.resize(240); // 120/s * 2
+	for (int i = 0; i < vecVtx.size(); ++i)
+	{
+		vecVtx[i].vPos.x = (float)i;
+	}
+
+
+	vector<UINT> vecIdx;
+	vecIdx.reserve(714); // 119 * 6
+
+	// 0 -- 2 -- 4
+	// | /  | /	 |
+	// 1 -- 3 -- 5
+
+	for (int i = 2; i < 240; i ++)
+	{
+		if (i % 2) // odd
+		{
+			vecIdx.push_back(i -2);
+			vecIdx.push_back(i -1);
+			vecIdx.push_back(i);
+		}
+		else
+		{
+			vecIdx.push_back(i);
+			vecIdx.push_back(i-1);
+			vecIdx.push_back(i-2);
+		}
+	}
+	
+	CMesh* pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size(), true);
+	AddRes<CMesh>(L"TrailMesh", pMesh);
 }
 
 namespace
@@ -737,26 +778,6 @@ void CResMgr::BuildCylinderBottomCap(float bottomRadius, float topRadius, float 
 
 void CResMgr::CreateDefaultTexture()
 {
-	// �ε�
-	// Texture �ε� 
-	//CResMgr::GetInst()->Load<CTexture>(L"Player", L"texture\\CharmanderUI.png");
-	//CResMgr::GetInst()->Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
-	//
-	//Load<CTexture>(L"SmokeParticle", L"texture\\particle\\smokeparticle.png");
-	//Load<CTexture>(L"Bubbles50px", L"texture\\particle\\Bubbles50px.png");
-	//
-	//Load<CTexture>(L"TILEAtlas", L"texture\\TILE.bmp");
-	//Load<CTexture>(L"TerrainTiles", L"texture\\terrainTiles_default.png");
-	//Load<CTexture>(L"Alina_Bandit", L"texture\\Alina_Bandit.png");
-	//
-	//// �ִϸ��̼� �ε� 
-	//CResMgr::GetInst()->Load<CTexture>(L"link", L"texture\\link.png");
-	//Load<CTexture>(L"CardUpgradeEffAtlas", L"texture\\CardUpgradeEffAtlas.png"); // 36, 3, 12 size 164 178
-	//Load<CTexture>(L"MonsterAtlas", L"texture\\MonsterAtlas.png");
-	//Load<CTexture>(L"KillBossAnim", L"texture\\KillBossAnim.png"); // 130 13 10 size 198 90 
-	//
-	// NoiseTexture
-	// Noise_01�� ���� Ÿ���� ���� �� ������ �������� �ʴ� ������ �ִ�.
 	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
 	Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
 	Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
@@ -785,7 +806,6 @@ void CResMgr::CreateDefaultGrapicsShader()
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "BLENDWEIGHT", 0, 0);
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "BLENDINDICES", 0, 0);
 
-
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WORLD", 1, 0);
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WORLD", 1, 1);
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WORLD", 1, 2);
@@ -800,6 +820,11 @@ void CResMgr::CreateDefaultGrapicsShader()
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WVP", 1, 1);
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WVP", 1, 2);
 	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WVP", 1, 3);
+
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 0);
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 1);
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 2);
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "WInv", 1, 3);
 
 	AddInputLayout(DXGI_FORMAT_R32_UINT, "ROWINDEX", 1, 0);
 
@@ -1391,10 +1416,26 @@ void CResMgr::CreateDefaultGrapicsShader()
 	pShader->AddTexureParam(TEX_0, "HeightMap");
 
 	AddRes(L"MaxTessShader", pShader);
+
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\traileffect.fx", "VS_Trail");
+	//pShader->CreateGeometryShader(L"shader\\traileffect.fx", "GS_Trail");
+	pShader->CreatePixelShader(L"shader\\traileffect.fx", "PS_Trail");
+
+	// pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POST_PROCESS);
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+	pShader->AddScalarParam(VEC4_0, "Color management");
+
+	AddRes<CGraphicsShader>(L"TrailEffectShader", pShader);
 }
 
 #include "CPaintShader.h"
 #include "CParticleUpdateShader.h"
+#include "CTrailUpdateShader.h"
 #include "CAnimation3DShader.h"
 #include "CCopyBoneShader.h"
 #include "CRaycastShader.h"
@@ -1429,6 +1470,10 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader = new CParticleUpdateShader;
 	pShader->CreateComputeShader(L"shader\\Monster_particle_dust_CS.fx", "CS_ParticleDust_Clap");
 	AddRes<CComputeShader>(L"ParticleClapDustShader", pShader);
+
+	pShader = new CTrailUpdateShader;
+	pShader->CreateComputeShader(L"shader\\trailupdate.fx", "CS_TrailUpdate");
+	AddRes<CComputeShader>(L"TrailUpdateShader", pShader);
 
 	// Animation3D Update Shader	
 	pShader = new CAnimation3DShader;

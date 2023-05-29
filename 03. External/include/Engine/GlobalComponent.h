@@ -12,6 +12,7 @@
 #include "CDecal.h"
 #include "CSkyBox.h"
 #include "CLandScape.h"
+#include "CTrailEffect.h"
 #include "CRigidBody.h"
 #include "CAnimator3D.h"
 

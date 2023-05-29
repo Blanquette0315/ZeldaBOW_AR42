@@ -22,6 +22,12 @@ void CRenderMgr::init()
 
 	m_PTCopyTex->UpdateData(61, PIPELINE_STAGE::PS);
 
+	m_DataCopyTex = CResMgr::GetInst()->CreateTexture(L"DataCopyTex"
+		, (UINT)vRenderResol.x, (UINT)vRenderResol.y
+		, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_SHADER_RESOURCE);
+
+	m_DataCopyTex->UpdateData(62, PIPELINE_STAGE::PS);
+
 	// MRT ����
 	CreateMRT();
 
@@ -106,7 +112,6 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Ŭ���� ���� ���ϱ�
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),
@@ -124,9 +129,6 @@ void CRenderMgr::CreateMRT()
 
 	// ============
 	//   Light MRT
-	//  �ش� MRT�� ���� ���� ó���ؼ� ���� �������� ���� Ÿ���̴�.
-	// RenderTargetTexture�� ��� ���ݻ籤�� �ݻ籤 �̷��� 2���� ���� ���̴�.
-	// �̹̽ú��� ��� ��ü�� ��ü�̱� ������ �̰��� �ƴ� DeferredMRT���� ���� ���̴�.
 	// ============
 	{
 		Ptr<CTexture> arrRTTex[8] =
@@ -139,13 +141,11 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R32G32B32A32_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Ŭ���� ���� ���ϱ�
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f)
 		};
 
-		// ���� �ؽ�ó�� �ʿ������ ���־���.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::LIGHT] = new CMRT;
@@ -206,7 +206,6 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Ŭ���� ���� ���ϱ�
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f),
 			Vec4(0.f,0.f,0.f,0.f),
@@ -217,7 +216,6 @@ void CRenderMgr::CreateMRT()
 			Vec4(0.f,0.f,0.f,0.f),
 		};
 
-		// ���� �ؽ�ó�� �ʿ������ ���־���.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::BLOOM_UPSCALING] = new CMRT;
@@ -258,12 +256,10 @@ void CRenderMgr::CreateMRT()
 											, DXGI_FORMAT_R16G16B16A16_FLOAT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
 		};
 
-		// Ŭ���� ���� ���ϱ�
 		Vec4 arrClear[8] = {
 			Vec4(0.f,0.f,0.f,0.f)
 		};
 
-		// ���� �ؽ�ó�� �ʿ������ ���־���.
 		Ptr<CTexture> pDSTex = nullptr;
 
 		m_arrMRT[(UINT)MRT_TYPE::BLOOM] = new CMRT;

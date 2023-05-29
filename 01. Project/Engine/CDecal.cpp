@@ -50,8 +50,10 @@ void CDecal::render()
 	Transform()->UpdateData();
 
 	CRenderMgr::GetInst()->CopyPositionTarget();
+	CRenderMgr::GetInst()->CopyDataTarget();
 	GetCurMaterial()->SetTexParam(TEX_1, m_pDecalTex);
 	GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PTCopyTex"));
+	GetCurMaterial()->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DataCopyTex"));
 	GetCurMaterial()->UpdateData();
 
 	GetMesh()->render();

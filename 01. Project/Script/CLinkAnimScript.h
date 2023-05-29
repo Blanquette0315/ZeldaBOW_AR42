@@ -125,6 +125,8 @@ private:
 
     Ptr<CPrefab>    m_EffectScreenFlash;
 
+    Ptr<CPrefab>    m_EffectFootStep;
+
     // FSM function
 private:
     void CreateAnimNode();
@@ -184,7 +186,10 @@ private:
     void Func_ThrowBombStart();
     void Func_LastSwing();
 
+    void Func_CreateFootStep(int _iCurFrame, LINK_BONE_STRING _eLeftRightToe);
+
     // sound
+private:    
     void Func_BowDrawSound();
     void Func_BowShootSound();
     void Func_GuardHitSound();
@@ -198,7 +203,6 @@ private:
     void Func_SwordSwingSound();
     void Func_TimeSlowSound();
     
-
     void Func_DamageSmallSound();
     void Func_DamageMediumSound();
 

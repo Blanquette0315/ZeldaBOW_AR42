@@ -6,8 +6,10 @@
 #include "func.fx"
 #include "effect.fx"
 
-#define fSpecCoefficent g_float_0
-#define vAddEmissiveColor g_vec4_3
+#define fSpecCoefficent     g_float_0
+#define vAddEmissiveColor   g_vec4_3
+#define LayerIdx g_iLayerIdx
+
 //-----------------------------------
 // g_float_1 = Acctime
 // g_float_2 = Maxtime
@@ -72,7 +74,7 @@ VS_OUT VS_Std3D_Deferred(VS_IN _in)
     {
         Skinning(_in.vPos, _in.vTangent, _in.vBinormal, _in.vNormal, _in.vWeights, _in.vIndices, 0);
     }
-    
+        
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vUV0 = _in.vUV0;
     output.vUV1 = _in.vUV1;
@@ -237,8 +239,11 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in) : SV_Target
     output.vPosition = float4(_in.vViewPos, 1.f);
     output.vEmissiv = vEmissiveColor;
 
-    
     output.vData.x = encode(vSpecCoeff);
+
+    output.vData.y = g_iLayerIdx;
+    output.vData.a = 1.f;
+
     
     // PaperBurn Effect
     if(g_int_0 == 1)

@@ -31,6 +31,9 @@ private:
     CStructuredBuffer*      m_pBoneOffset;	    // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 
 public:
+    void EditIdxBuffer(const vector<UINT>& _vecIdx, UINT _idx = 0 );
+
+public:
     Vtx* GetVtxSysMem() { return (Vtx*)m_pVtxSys; }
     UINT GetAllVtxCount() { return  m_iVtxCount; }
     D3D11_BUFFER_DESC* GetVBDesc() { return &m_tVBDesc; }
@@ -50,11 +53,12 @@ public:
     void InjectRecursive(tMTBone& _tBone);
 
 public:
-    int Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount);
+    int Create(void* _pVtxSys, size_t _iVtxCount, void* _pIdxSys, size_t _iIdxCount, bool _IdxCPUWrite = false);
     void UpdateData(UINT _iSubset = 0);
     void UpdateData_Inst(UINT _iSubset);
 
     void render(UINT _iSubset = 0);
+    void render_trail( UINT _iCount, UINT _iStartIdx);
     // 인스턴싱용 render 함수
     void render_instancing(UINT _iSubset);
     void render_particle(UINT _iCount);

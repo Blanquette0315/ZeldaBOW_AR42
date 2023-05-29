@@ -55,6 +55,11 @@ void CAnimation3D::Create(const wstring& _Key, const tMTAnimClip* _pClip, int _i
 	m_sClip = *_pClip;
 }
 
+float CAnimation3D::GetRatioEX()
+{
+	return  (float)(m_iFrameIdx - m_sClip.iStartFrame) / (float)(m_sClip.iEndFrame - m_sClip.iStartFrame);
+}
+
 void CAnimation3D::ResetClip()
 {
 	m_sClip.iFrameLength = m_sClip.iEndFrame - m_sClip.iStartFrame;

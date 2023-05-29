@@ -31,6 +31,7 @@ private:
 
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_D;	    // Deferred
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_DT;	    // Deferred Transparent
+    map<ULONG64, vector<tInstObj>>		m_mapInstGroup_DD;	    // Deferred Decal
     map<ULONG64, vector<tInstObj>>		m_mapInstGroup_F;	    // Foward ( Opaque, Mask )
     map<ULONG64, vector<tInstObj>>      m_mapInstGroup_FT;      // Forward (Transparent)
     map<INT_PTR, vector<tInstObj>>		m_mapSingleObj;		    // Single Object

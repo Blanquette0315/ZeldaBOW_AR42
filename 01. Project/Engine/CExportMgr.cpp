@@ -47,7 +47,6 @@ void CExportMgr::SaveForNavMesh(CGameObject* _pObj, std::ofstream& _file)
 	ComPtr<ID3D11Buffer> pVB = pMesh->GetVB();
 
 	// vertex pos
-
 	D3D11_BUFFER_DESC desc;
 	pVB->GetDesc(&desc);
 	UINT numVertices = desc.ByteWidth / sizeof(Vtx);

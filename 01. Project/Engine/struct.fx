@@ -1,6 +1,12 @@
 #ifndef _STRUCT
 #define _STRUCT
 
+struct tTwoDot
+{
+    float4 vFar;
+    float4 vNear;
+};
+
 struct tLightColor
 {
 	float4 vDiff;	// ³­¹Ý»ç ±¤

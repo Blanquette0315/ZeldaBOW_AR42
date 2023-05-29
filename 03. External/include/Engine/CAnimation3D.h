@@ -38,6 +38,7 @@ public:
     int GetCurFrame() { return m_iFrameIdx; }
     int GetNextFrame() { return m_iNextFrameIdx; }
     float GetRatio() { return m_fRatio; }
+    float GetRatioEX();
 
 private:
     void ResetClip();

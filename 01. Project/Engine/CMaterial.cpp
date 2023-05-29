@@ -240,8 +240,8 @@ void CMaterial::Save(const wstring& _strRelativePath)
 			emitter << YAML::Key << "MaterialShaderTexture" + std::to_string(i);
 			emitter << YAML::Value << YAML::BeginMap;
 			SaveResourceRef(m_arrTex[i], emitter);
-			// arr size -> 7
-			if (i < 7)
+			// arr size -> 5
+			if (i < 5)
 			{
 				emitter << YAML::Key << "ConstTexUVIndex";
 				emitter << YAML::Value << m_tConst.iTexUVIndex[i];
@@ -297,7 +297,7 @@ int CMaterial::Load(const wstring& _strFilePath)
 			node = rootNode["MaterialShaderTexture" + std::to_string(i)];
 			LoadResourceRef(m_arrTex[i], node);
 
-			if(i < 7)
+			if(i < 5)
 				SAFE_LOAD_FROM_YAML(int, m_tConst.iTexUVIndex[i], node["ConstTexUVIndex"]);
 		}
 	}

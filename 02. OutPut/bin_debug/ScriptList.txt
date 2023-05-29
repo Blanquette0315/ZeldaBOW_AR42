@@ -29,5 +29,6 @@ CNavTestSCR
 CPlayerScript
 CRayCastScript
 CTestSCR
+CTrailEffectScript
 CUIHeartScript
 CUIScript

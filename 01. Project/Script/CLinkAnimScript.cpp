@@ -67,6 +67,7 @@ CLinkAnimScript::CLinkAnimScript()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Offset", &m_fParryingOffset, 0.f, 100.f);
 
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "ScreenFlash Effect Prefab", &m_EffectScreenFlash);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "FootStep Effect Prefab", &m_EffectFootStep);
 }
 
 CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
@@ -106,6 +107,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	, m_EffectParrying(_origin.m_EffectParrying)
 	, m_EffectScreenFlash(_origin.m_EffectScreenFlash)
 	, m_fParryingOffset(_origin.m_fParryingOffset)
+	, m_EffectFootStep(_origin.m_EffectFootStep)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Walk Speed", &m_fWalkSpeed, 0.f, 20.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Run Speed", &m_fRunSpeed, 0.f, 20.f);
@@ -124,6 +126,7 @@ CLinkAnimScript::CLinkAnimScript(const CLinkAnimScript& _origin)
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Parrying Offset", &m_fParryingOffset, 0.f, 100.f);
 
 	AddScriptParam(SCRIPT_PARAM::PREFAB, "ScreenFlash Effect Prefab", &m_EffectScreenFlash);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, "FootStep Effect Prefab", &m_EffectFootStep);
 }
 
 CLinkAnimScript::~CLinkAnimScript()
@@ -819,6 +822,7 @@ void CLinkAnimScript::SaveToYAML(YAML::Emitter& _emitter)
 	_emitter << YAML::Value << m_fParryingOffset;
 
 	SaveResourceRefEX(m_EffectScreenFlash, _emitter, "ScreenFlash");
+	SaveResourceRefEX(m_EffectFootStep, _emitter, "FootStep");
 }
 
 void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
@@ -843,6 +847,7 @@ void CLinkAnimScript::LoadFromYAML(YAML::Node& _node)
 	SAFE_LOAD_FROM_YAML(float, m_fParryingOffset, _node["ParryingOffset"]);
 
 	LoadResourceRefEX(m_EffectScreenFlash, _node, "ScreenFlash");
+	LoadResourceRefEX(m_EffectFootStep, _node, "FootStep");
 }
 
 

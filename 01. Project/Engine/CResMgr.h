@@ -66,6 +66,7 @@ public:
 private:
 	void InitSound();
 	void CreateDefaultMesh();
+	void CreateTrailMesh();
 	void CreateDefaultTexture();
 	void CreateDefaultGrapicsShader();
 	void CreateDefaultComputeShader();

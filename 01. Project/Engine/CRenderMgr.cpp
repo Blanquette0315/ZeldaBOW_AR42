@@ -229,20 +229,26 @@ void CRenderMgr::CopyRenderTarget()
 
 void CRenderMgr::CopyPositionTarget()
 {
-	// static�� ����ϸ� ó�� �ѹ��� ResMgr�� FindRes�� ȣ���� �ѹ��� ã�� �����Ѵ�.
 	static Ptr<CTexture> PTTex = CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex");
 
-	// ���ε� ����
 	ID3D11ShaderResourceView* SRV = nullptr;
 	CONTEXT->PSSetShaderResources(61, 1, &SRV);
 
-	// ����Ÿ�� ���� �ޱ�
-	// CopyResource�� �� �ؽ�ó�� �ػ󵵰� ���� �ٸ��� ������ �߻��ϴ� �����ؾ� �Ѵ�.
-	// ù ���ڴ� ������, �ι�° ���ڴ� ����̴�.
 	CONTEXT->CopyResource(m_PTCopyTex->GetTex2D().Get(), PTTex->GetTex2D().Get());
 
-	// t61 �������� ���ε�
 	m_PTCopyTex->UpdateData(61, PIPELINE_STAGE::ALL_STAGE);
+}
+
+void CRenderMgr::CopyDataTarget()
+{
+	static Ptr<CTexture> DataTex = CResMgr::GetInst()->FindRes<CTexture>(L"DataTargetTex");
+
+	ID3D11ShaderResourceView* SRV = nullptr;
+	CONTEXT->PSSetShaderResources(62, 1, &SRV);
+
+	CONTEXT->CopyResource(m_DataCopyTex->GetTex2D().Get(), DataTex->GetTex2D().Get());
+
+	m_DataCopyTex->UpdateData(62, PIPELINE_STAGE::ALL_STAGE);
 }
 
 CCamera* CRenderMgr::GetMainCam()

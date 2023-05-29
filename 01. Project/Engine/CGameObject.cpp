@@ -126,6 +126,18 @@ void CGameObject::finaltick()
 		m_fTimeRatioSave = g_timeslow.fRatio;
 		g_timeslow.fRatio = 1.f;
 	}
+
+	if (m_pRenderComponent)
+	{
+		for (int i = 0; i < m_pRenderComponent->GetMtrlCount(); ++i)
+		{
+			if(m_pRenderComponent->GetCurMaterial(i).Get())
+				m_pRenderComponent->GetCurMaterial(i)->SetLayerIdx(m_iLayerIdx);
+		}
+		
+	}
+		
+
 	// Component
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -200,7 +212,9 @@ void CGameObject::render()
 		return;
 
 	if (m_bRender)
+	{
 		m_pRenderComponent->render();
+	}
 
 	if (!m_bTimeSlow)
 	{
