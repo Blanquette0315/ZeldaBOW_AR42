@@ -181,7 +181,7 @@ DeferredPS_OUT PS_DeferredDecal(VS_OUT _in)
     
     float4 vDecalColor = g_tex_1.Sample(g_sam_0, vDecalUV);
     vDecalColor.rgb *= 0.1f;
-    vDecalColor.a *= 0.4f;
+    vDecalColor.a *= 0.7f;
     output.vOutColor = vDecalColor;
     
     return output;
