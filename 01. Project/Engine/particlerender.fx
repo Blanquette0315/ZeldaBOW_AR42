@@ -221,7 +221,7 @@ float4 PS_ParticleRender_Alpha(GS_OUT _in) : SV_Target
     vColor = g_tex_0.Sample(g_sam_0, _in.vUV);
     
     float fRatio = ParticleBuffer[_in.iInstance].fCurTime / ParticleBuffer[_in.iInstance].fMaxTime;
-    vColor.rgb *= lerp(StartColor, EndColor, fRatio).rgb;
+    vColor *= lerp(StartColor, EndColor, fRatio);
     
     return vColor;
 }
