@@ -147,7 +147,7 @@ DSMAX_OUT DS_MaxLandScape(PatchMaxTess _tessFactor
 
 struct GS_OUT
 {
-    float3 vPosition : POSITION;
+    float4 vPosition : SV_Position;
 };
 
 [maxvertexcount(3)]
@@ -157,7 +157,7 @@ void GS_StreamOut(triangle DSMAX_OUT _in[3], inout TriangleStream<GS_OUT> _outpu
     for (int i = 0; i < 3; ++i)
     {
         GS_OUT output;
-        output.vPosition = _in[i].vPosition;
+        output.vPosition = float4(_in[i].vPosition.xyz, 0.f);
         _outputStream.Append(output);
     }
 }

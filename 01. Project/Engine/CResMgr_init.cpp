@@ -1395,7 +1395,7 @@ void CResMgr::CreateDefaultGrapicsShader()
 	D3D11_SO_DECLARATION_ENTRY pDecl[] =
 	{
 		// semantic name, semantic index, start component, component count, output slot
-		{0, "POSITION", 0, 0, 3, 0 },
+		{0, "SV_Position", 0, 0, 3, 0 },
 	};
 	pShader = new CGraphicsShader;
 

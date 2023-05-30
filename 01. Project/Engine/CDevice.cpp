@@ -61,7 +61,7 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 		return E_FAIL;
 	}
 
-	//m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetTex->GetRTV().GetAddressOf(), m_pDepthStencilTex->GetDSV().Get());
+	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetTex->GetRTV().GetAddressOf(), m_pDepthStencilTex->GetDSV().Get());
 
 	// ViewPort
 	m_tViewPort.TopLeftX = 0;

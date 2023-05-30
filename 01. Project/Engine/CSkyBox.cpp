@@ -44,8 +44,8 @@ void CSkyBox::render()
 
 	if (m_eSkyBoxType == SKYBOX_TYPE::SPHERE)
 	{
-		GetCurMaterial()->SetTexParam(TEX_CUBE_0, nullptr);
 		GetCurMaterial()->SetTexParam(TEX_0, m_pSkyBoxTex);
+		GetCurMaterial()->SetTexParam(TEX_CUBE_0, nullptr);
 	}
 
 	else if (m_eSkyBoxType == SKYBOX_TYPE::CUBE)
@@ -54,7 +54,7 @@ void CSkyBox::render()
 		GetCurMaterial()->SetTexParam(TEX_CUBE_0, m_pSkyBoxTex);
 	}
 
-	GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
+	//GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
 
 	GetCurMaterial()->UpdateData();
 

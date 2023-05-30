@@ -33,6 +33,8 @@ struct Vtx
 
 	Vec4 vWeights;
 	Vec4 vIndices;
+
+
 };
 
 struct tEvent

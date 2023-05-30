@@ -123,6 +123,4 @@ void CTimeMgr::render()
 		m_fAccTime = 0.f;
 		iCount = 0;
 	}
-
-	CFontMgr::GetInst()->DrawFont(szFloat, 10.f, 30.f, 20, FONT_RGBA(255, 20, 20, 127));
 }
